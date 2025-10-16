@@ -16,8 +16,8 @@ namespace LLStudy_Models
         string comment;
         string book_ID;
         string userName;
-        [IsDigits(ErrorMessage = "ID must contain only digits.")]
-        [Required]
+        //[IsDigits(ErrorMessage = "ID must contain only digits.")]
+        //[Required]
         public string Review_ID { get { return review_ID; } set { review_ID = value; } }
         [IsDigits(ErrorMessage = "ID must contain only digits.")]
         [Required]

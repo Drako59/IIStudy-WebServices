@@ -15,8 +15,8 @@ namespace LLStudy_Models
         bool delivered;
         string location;
         double total_price;
-        [IsDigits(ErrorMessage = "ID must contain only digits.")]
-        [Required]
+        //[IsDigits(ErrorMessage = "ID must contain only digits.")]
+        //[Required]
         public string Order_ID { get { return order_ID; } set { order_ID = value; } }
         [Required]
         public string User_name { get { return user_name; } set { user_name = value; } }

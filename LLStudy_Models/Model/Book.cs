@@ -20,8 +20,8 @@ namespace LLStudy_Models.Model
         string subjectID;
         string pdf_url_book;
         string name;
-        [Required]
-        [IsDigits(ErrorMessage = "ID must contain only digits.")]
+        //[Required]
+        //[IsDigits(ErrorMessage = "ID must contain only digits.")]
         public string Book_ID {  get { return book_ID; } set {  book_ID = value; } }
         [Required(ErrorMessage = "Name was not set")]
         [StringLength(20,MinimumLength = 2, ErrorMessage ="Lenght is not between 2 and 20 characters.")]
