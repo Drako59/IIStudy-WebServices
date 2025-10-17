@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.Validation
 {
-    internal class FIrstCapitalChar: ValidationAttribute
+    public class FIrstCapitalChar: ValidationAttribute
     {
         public override bool IsValid(object? value)
         {
