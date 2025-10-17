@@ -14,9 +14,9 @@ namespace LLStudy_Models.Validation
             string word = value.ToString();
             char firstLetter = word[0];
             if (!(firstLetter >= 'A' && firstLetter <= 'Z'))
-                return true;
+                return false;
            
-            return false;
+            return true;
         }
     }
 }

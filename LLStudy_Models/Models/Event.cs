@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 
 
-namespace LLStudy_Models.Model
+namespace LLStudy_Models.Models
 {
-	public class Event
+	public class Event: Model
 	{
 		string event_name;
 		string date_event;

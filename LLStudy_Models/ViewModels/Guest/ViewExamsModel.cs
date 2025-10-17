@@ -1,4 +1,4 @@
-﻿using LLStudy_Models.Model;
+﻿using LLStudy_Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

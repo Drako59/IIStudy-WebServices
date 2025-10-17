@@ -6,9 +6,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using LLStudy_Models.Validation;
-namespace LLStudy_Models
+namespace LLStudy_Models.Models
 {
-    public class Solution
+    public class Solution: Model
     {
         string solution_ID;
         string catregoryID;

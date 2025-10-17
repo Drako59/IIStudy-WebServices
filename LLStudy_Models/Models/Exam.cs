@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace LLStudy_Models.Model
+namespace LLStudy_Models.Models
 {
-    public class Exam
+    public class Exam: Model
     {
       
         string exam_ID;

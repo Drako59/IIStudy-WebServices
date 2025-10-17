@@ -6,9 +6,9 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace LLStudy_Models
+namespace LLStudy_Models.Models
 {
-    public class Order
+    public class Order: Model
     {
         string order_ID;
         string user_name;

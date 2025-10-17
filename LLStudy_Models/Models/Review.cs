@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LLStudy_Models
+namespace LLStudy_Models.Models
 {
-    public class Review
+    public class Review:Model
     {
 
         string review_ID;
