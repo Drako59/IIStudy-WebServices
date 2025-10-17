@@ -9,6 +9,7 @@ namespace LLStudy_Models.ViewModels.Registerd
 {
     internal class ViewOwnedBooksModel
     {
+        Registered User;
         List<Book> Books { get; set; }
     }
 }

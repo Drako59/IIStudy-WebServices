@@ -7,6 +7,7 @@ using LLStudy_Models.Model;
 
 namespace LLStudy_Models.ViewModels.Registerd
 {
+    //XXXXXXXXXXXXXXXXXxxx
     internal class ViewProfileModel
     {
         Registered user;

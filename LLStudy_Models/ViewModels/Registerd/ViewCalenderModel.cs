@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LLStudy_Models.Model;
-namespace LLStudy_Models.ViewModels.Guest
+namespace LLStudy_Models.ViewModels.Registerd
 {
-    public class ViewBooksModel
+    public class ViewCalenderModel
     {
-        List<Book> Books { get; set; }
+        List<Event> Events { get; set; }
+
     }
 }

@@ -7,8 +7,9 @@ using LLStudy_Models.Model;
 
 namespace LLStudy_Models.ViewModels.Registerd
 {
-    internal class ViewRegisterdHomePage
+    internal class ViewRegisterdBookCatalogModel
     {
-        List<Registered> Registereds { get; set; }
+        Registered User { get; set; }
+        List<Book> Books { get; set; }
     }
 }

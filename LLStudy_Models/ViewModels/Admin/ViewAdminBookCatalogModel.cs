@@ -7,8 +7,9 @@ using LLStudy_Models.Model;
 
 namespace LLStudy_Models.ViewModels.Admin
 {
-    public   class ViewAdminHomePageModel
+    public   class ViewAdminBookCatalogModel
     {
-        List<Registered> Registereds { get; set; }
+        Registered User { get; set; }
+        List<Book> Registereds { get; set; }
     }
 }

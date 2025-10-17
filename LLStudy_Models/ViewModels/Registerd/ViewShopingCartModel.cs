@@ -8,6 +8,7 @@ namespace LLStudy_Models.ViewModels.Registerd
 {
     internal class ViewShopingCartModel
     {
+        Registered User { get; set; }
         List<Book> Books { get; set; }
     }
 }

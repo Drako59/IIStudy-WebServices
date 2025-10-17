@@ -12,5 +12,6 @@ namespace LLStudy_Models.ViewModels.Admin
     {
         List<Exam> Exams { get; set; }
         List<Solution> Solutions { get; set; }
+        Registered User { get; set; }
     }
 }
