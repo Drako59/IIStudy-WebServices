@@ -1,4 +1,5 @@
 ﻿
+using System.Text;
 using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
 using System.Text.Json;
@@ -15,11 +16,14 @@ namespace Testing
         {
             Console.WriteLine("Hello World!");
             TestBook();
+            TestRegistered();
+            //GetCurrenyExchange();
+            //GetHolidDays();
+            //GetNextHoliday();
+            //TranslateSentence("בן אדם ירוק בשיחה איתי");
             
-            GetCurrenyExchange();
-            GetHolidDays();
-            GetNextHoliday();
             Console.ReadLine();
+            
         }
 
         static async Task GetCurrenyExchange(string from = "USD", string to ="ILS" , int amount = 100)
@@ -39,7 +43,7 @@ namespace Testing
             };
             using (var response = await client.SendAsync(request))
             {
-                await Console.Out.WriteLineAsync("hi");
+                //await Console.Out.WriteLineAsync("hi");
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
                 CurrecnyExchange cur = JsonSerializer.Deserialize<CurrecnyExchange>(body);
@@ -95,37 +99,73 @@ namespace Testing
                 return holiday;
             }   
         }
-        static async Task TranslateSentence()
+        static async Task<Translations> TranslateSentence(string text,string source = "iw", string translate = "en")
         {
-    //        var client = new HttpClient();
-    //        var request = new HttpRequestMessage
-    //        {
-    //            Method = HttpMethod.Post,
-    //            RequestUri = new Uri("https://deep-translate1.p.rapidapi.com/language/translate/v2"),
-    //            Headers =
-    //{
-    //    { "x-rapidapi-key", "4d056610c5msh0d91eab1e9347c6p1269c2jsnb2ec8c0be52f" },
-    //    { "x-rapidapi-host", "deep-translate1.p.rapidapi.com" },
-    //},
-    //            Content = new StringContent($"{"q":"Hello World!","source":"en","target":"es"}")
-    //            {
-    //                Headers =
-    //    {
-    //        ContentType = new MediaTypeHeaderValue("application/json")
-    //    }
-    //            }
-    //        };
-    //        using (var response = await client.SendAsync(request))
-    //        {
-    //            response.EnsureSuccessStatusCode();
-    //            var body = await response.Content.ReadAsStringAsync();
-    //            Console.WriteLine(body);
-    //        }
+            //Console.WriteLine("{\"q\":" + text + ",\"source\" :" + source + ",\"target\":" + translate + "}");
+            string jsonBody = "{"
+            + "\"q\":\"" + text + "\","
+            + "\"source\":\"" + source + "\","
+            + "\"target\":\"" + translate + "\""
+            + "}";
+                    var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri("https://deep-translate1.p.rapidapi.com/language/translate/v2"),
+                Headers =
+                {
+                    { "x-rapidapi-key", "4d056610c5msh0d91eab1e9347c6p1269c2jsnb2ec8c0be52f" },
+                    { "x-rapidapi-host", "deep-translate1.p.rapidapi.com" },
+                },
+                Content = new StringContent(jsonBody, Encoding.UTF8)
+                {
+                    Headers =
+                    {
+                        ContentType = new MediaTypeHeaderValue("application/json")
+                    }
+                }
+            };
+            using (var response = await client.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                //Console.WriteLine(body);
+                Translate translate_obj = JsonSerializer.Deserialize<Translate>(body);
+                //Console.WriteLine(translate_obj);
+                Translations translated_obj2 = translate_obj.data.translations;
+
+                //Console.WriteLine(translated_obj2.translatedText[0]);
+                return translated_obj2;
+            }
+        }
+        static void TestRegistered()
+        {
+            Registered user = new Registered()
+            {
+                UserName = "A",
+                Password = "password",
+                Email = "notanemail",
+                Role = "Admin",
+                Birth = "2000-01-01"
+            };
+            if (user.HasErrors)
+            {
+
+                foreach (KeyValuePair<string, List<string>> keyValuePair in user.AllErrors())
+                {
+                    Console.WriteLine(keyValuePair.Key);
+                    foreach (string str in keyValuePair.Value)
+                    {
+                        Console.WriteLine($"{str}");
+                    }
+                    Console.WriteLine("==========================================");
+                }
+            }
         }
         static void TestBook()
         {
             Book book = new Book() { Author_name = "Hello"
-                , Book_ID = "1"
+                , Book_ID = "a"
                 , Book_name = "Max"
                 , Book_price = 90
                 , In_stock = true
