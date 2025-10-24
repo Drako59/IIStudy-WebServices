@@ -5,7 +5,9 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LLStudy_Models", "LLStudy_Models\LLStudy_Models.csproj", "{140D7867-052D-4BE1-9721-5C92356CC478}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{DF5BED67-6787-4572-B7CD-C59E305BAF79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing", "Testing\Testing.csproj", "{DF5BED67-6787-4572-B7CD-C59E305BAF79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLstudyWS", "LLstudyAPI\LLstudyWS.csproj", "{78743D6E-0F4F-4821-B0B1-7496CABBEF95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{DF5BED67-6787-4572-B7CD-C59E305BAF79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF5BED67-6787-4572-B7CD-C59E305BAF79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF5BED67-6787-4572-B7CD-C59E305BAF79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78743D6E-0F4F-4821-B0B1-7496CABBEF95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78743D6E-0F4F-4821-B0B1-7496CABBEF95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78743D6E-0F4F-4821-B0B1-7496CABBEF95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78743D6E-0F4F-4821-B0B1-7496CABBEF95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

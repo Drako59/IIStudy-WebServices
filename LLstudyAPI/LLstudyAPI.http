@@ -1,0 +1,6 @@
+@LLstudyAPI_HostAddress = http://localhost:5049
+
+GET {{LLstudyAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

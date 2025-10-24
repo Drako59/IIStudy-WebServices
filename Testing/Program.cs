@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Security.AccessControl;
 using System.Runtime.Remoting;
 using System.ComponentModel;
+using LLstudyWS;
 
 namespace Testing
 {
@@ -15,15 +16,28 @@ namespace Testing
         public static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            TestBook();
-            TestRegistered();
+            checkInsert();
+            //TestBook();
+            //TestRegistered();
             //GetCurrenyExchange();
             //GetHolidDays();
             //GetNextHoliday();
             //TranslateSentence("בן אדם ירוק בשיחה איתי");
-            
+
             Console.ReadLine();
             
+        }
+        static void checkInsert()
+        {
+            
+            Console.WriteLine( "Insert event name: ");
+            string name = Console.ReadLine();
+            string date = Console.ReadLine();
+            string details = Console.ReadLine();
+            DbHelperOledb dbHelperOledb = new DbHelperOledb();
+            dbHelperOledb.OpenConnection();
+            int result = dbHelperOledb.Insert($"INSERT INTO Events(event_name,date_event,details) VALUES('{name}','{date}','{details}') ");
+            Console.WriteLine( result);
         }
 
         static async Task GetCurrenyExchange(string from = "USD", string to ="ILS" , int amount = 100)
