@@ -40,7 +40,7 @@ namespace LLstudyWS
         {
             Console.WriteLine(  "Insert");
             this.dbCommand.CommandText = sql;
-
+            
             return this.dbCommand.ExecuteNonQuery();
         }
 

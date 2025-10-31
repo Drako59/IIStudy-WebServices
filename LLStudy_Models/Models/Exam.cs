@@ -18,7 +18,7 @@ namespace LLStudy_Models.Models
         string exam_year;
         //[Required]
         //[IsDigits(ErrorMessage = "ID must contain only digits.")]
-        string Exam_ID { get { return exam_ID; } set { exam_ID = value; } }
+        public string Exam_ID { get { return exam_ID; } set { exam_ID = value; } }
         [Required]
         public string CatregoryID { get { return catregoryID; } set { catregoryID = value; } }
         

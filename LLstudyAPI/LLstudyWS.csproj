@@ -12,4 +12,8 @@
     <PackageReference Include="System.Data.OleDb" Version="9.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LLStudy_Models\LLStudy_Models.csproj" />
+  </ItemGroup>
+
 </Project>
