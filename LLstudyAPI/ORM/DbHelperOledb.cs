@@ -21,7 +21,7 @@ namespace LLstudyWS
 
         public void CloseConnection()
         {
-            throw new NotImplementedException();
+            this.oleDbConnection.Close();
         }
 
         public void Commit()
@@ -59,10 +59,7 @@ namespace LLstudyWS
             this.dbTransaction.Rollback();
         }
 
-        public void Select()
-        {
-
-        }
+        
 
         public IDataReader Select(string sql)
         {

@@ -8,6 +8,9 @@ using System.Security.AccessControl;
 using System.Runtime.Remoting;
 using System.ComponentModel;
 using LLstudyWS;
+using System.Data.SqlTypes;
+using System.Data;
+using LLstudyWS.ORM;
 
 namespace Testing
 {
@@ -16,7 +19,8 @@ namespace Testing
         public static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            checkInsert();
+            //checkInsert();
+            CheckCreator();
             //TestBook();
             //TestRegistered();
             //GetCurrenyExchange();
@@ -39,6 +43,42 @@ namespace Testing
             int result = dbHelperOledb.Insert($"INSERT INTO Events(event_name,date_event,details) VALUES('{name}','{date}','{details}') ");
             Console.WriteLine( result);
         }
+
+        static void CheckCreator() 
+        {
+            string sql = $"SELECT * FROM Books WHERE book_ID = 1 ";
+            DbHelperOledb dbHelperOledb = new DbHelperOledb();
+            dbHelperOledb.OpenConnection();
+
+            IDataReader  dataReader = dbHelperOledb.Select(sql);
+            dataReader.Read();
+            Console.WriteLine(dataReader);
+            ModelCreators modelCreators = new ModelCreators();
+            Book book = modelCreators.BookCreator.CreateModel(dataReader);
+            dbHelperOledb.CloseConnection();
+
+            Console.WriteLine($"Book_name: {book.Book_name} , book_price: {book.Book_price}");
+
+        }
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         static async Task GetCurrenyExchange(string from = "USD", string to ="ILS" , int amount = 100)
             
