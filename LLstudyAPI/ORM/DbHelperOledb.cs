@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.OleDb;
+using System.Diagnostics;
 
 namespace LLstudyWS
 {
@@ -33,7 +34,10 @@ namespace LLstudyWS
            
         {
             this.dbCommand.CommandText = sql;
-            return this.dbCommand.ExecuteNonQuery();
+            
+            int record =  this.dbCommand.ExecuteNonQuery();
+            this.dbCommand.Parameters.Clear();
+            return record;
         }   
 
         public int Insert(string sql)
@@ -41,7 +45,9 @@ namespace LLstudyWS
             Console.WriteLine(  "Insert");
             this.dbCommand.CommandText = sql;
             
-            return this.dbCommand.ExecuteNonQuery();
+            int record =  this.dbCommand.ExecuteNonQuery();
+            this.dbCommand.Parameters.Clear();
+            return record;
         }
 
         public void OpenConnection()
@@ -64,13 +70,22 @@ namespace LLstudyWS
         public IDataReader Select(string sql)
         {
             this.dbCommand.CommandText = sql;
-            return this.dbCommand.ExecuteReader();
+            IDataReader dataReader = this.dbCommand.ExecuteReader();
+            this.dbCommand.Parameters.Clear();
+            return dataReader;
         }
 
         public int Update(string sql)
         {
             this.dbCommand.CommandText = sql;
-            return this.dbCommand.ExecuteNonQuery();
+            int record  =  this.dbCommand.ExecuteNonQuery();
+            this.dbCommand.Parameters.Clear();
+            return record;
+        }
+
+        public void AddParameter(string name, string value)
+        {
+            this.dbCommand.Parameters.Add(new OleDbParameter(name, value));
         }
     }
 }

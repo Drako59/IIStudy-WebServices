@@ -7,7 +7,8 @@
 
         public Repository()
         {
-
+            this.modelCreators = new ModelCreators();
+            this.helperOledb = new DbHelperOledb();
         }
     }
 }

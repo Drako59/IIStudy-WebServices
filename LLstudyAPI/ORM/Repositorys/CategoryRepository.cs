@@ -1,8 +1,8 @@
 ﻿using LLStudy_Models.Models;
 
-namespace LLstudyWS.ORM.Repository
+namespace LLstudyWS.ORM
 {
-    public class ReviewRepository : Repository, IRepository<Review>
+    public class CategoryRepository : Repository, IRepository<Category>
     {
         public bool Create()
         {
@@ -14,12 +14,12 @@ namespace LLstudyWS.ORM.Repository
             throw new NotImplementedException();
         }
 
-        public List<Review> GetAll()
+        public List<Category> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Review GetByID(string ID)
+        public Category GetByID(string ID)
         {
             throw new NotImplementedException();
         }

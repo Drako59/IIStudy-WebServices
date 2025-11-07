@@ -1,12 +1,9 @@
-﻿using LLStudy_Models;
-using LLStudy_Models.Models;
+﻿using LLStudy_Models.Models;
 
-namespace LLstudyWS.ORM.Repository
-
+namespace LLstudyWS.ORM
 {
-    public class BookRepositery :Repository, IRepository<Book>
+    public class ReviewRepository : Repository, IRepository<Review>
     {
-        
         public bool Create()
         {
             throw new NotImplementedException();
@@ -17,12 +14,12 @@ namespace LLstudyWS.ORM.Repository
             throw new NotImplementedException();
         }
 
-        public List<Book> GetAll()
+        public List<Review> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Book GetByID(string ID)
+        public Review GetByID(string ID)
         {
             throw new NotImplementedException();
         }

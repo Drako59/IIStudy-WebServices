@@ -1,8 +1,8 @@
 ﻿using LLStudy_Models.Models;
 
-namespace LLstudyWS.ORM.Repository
+namespace LLstudyWS.ORM
 {
-    public class EventRepository : Repository, IRepository<Event>
+    public class ShoppingCartRepository : Repository, IRepository<Shopping_Cart>
     {
         public bool Create()
         {
@@ -14,12 +14,12 @@ namespace LLstudyWS.ORM.Repository
             throw new NotImplementedException();
         }
 
-        public List<Event> GetAll()
+        public List<Shopping_Cart> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Event GetByID(string ID)
+        public Shopping_Cart GetByID(string ID)
         {
             throw new NotImplementedException();
         }

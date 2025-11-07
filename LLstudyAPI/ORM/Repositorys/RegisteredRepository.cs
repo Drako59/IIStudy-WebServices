@@ -1,9 +1,24 @@
 ﻿using LLStudy_Models.Models;
+using System.Data;
 
-namespace LLstudyWS.ORM.Repository
+namespace LLstudyWS.ORM
 {
     public class RegisteredRepository : Repository, IRepository<Registered>
     {
+        public string Login(string username, string password)
+        {
+            string sql = "SELECT password FROM Registers WHERE UserName = @USERNAME AND password = @PASSWORD";
+            this.helperOledb.AddParameter("@USERNAME", username);
+            this.helperOledb.AddParameter("@PASSWORD", password);
+            using (IDataReader reader = this.helperOledb.Select(sql)) 
+            {
+                if (reader.Read())
+                    return reader["UserName"].ToString();
+            }
+            return null;
+
+
+        }
         public bool Create()
         {
             throw new NotImplementedException();

@@ -12,6 +12,8 @@ namespace LLStudy_Models.Models
 		string event_name;
 		string date_event;
 		string details;
+		string id;
+		public string Id { get;set; }
         [Required]
         public string Event_name { get; set; }
         [Required]
