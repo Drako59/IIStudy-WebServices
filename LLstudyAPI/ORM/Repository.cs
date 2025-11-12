@@ -28,7 +28,11 @@ namespace LLstudyWS.ORM
                             (@AuthorName, @BookName, @BookPrice, @InStock, @SubjectID, @PdfUrlBook) ";
             Type OBJtype = model.GetType();
             List<string> exludePROP = new List<string> { "IsValid", "HasErrors" };
-
+            //hello
+            for (int i = 0; i< 5; i++)
+            {
+                Console.WriteLine("");
+            }
             PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => !exludePROP.Contains(p.Name)).ToArray();
 
             string columns = string.Join(", ", propertys.Select(p => p.Name));
