@@ -1,4 +1,5 @@
 ﻿
+using System.Data;
 using System.Reflection;
 
 namespace LLstudyWS.ORM
@@ -29,10 +30,7 @@ namespace LLstudyWS.ORM
             Type OBJtype = model.GetType();
             List<string> exludePROP = new List<string> { "IsValid", "HasErrors" };
             //hello
-            for (int i = 0; i< 5; i++)
-            {
-                Console.WriteLine("");
-            }
+           
             PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => !exludePROP.Contains(p.Name)).ToArray();
 
             string columns = string.Join(", ", propertys.Select(p => p.Name));
@@ -70,17 +68,34 @@ namespace LLstudyWS.ORM
             return this.helperOledb.Insert(sql) > 0;
         }
 
-        public bool Delete(string id)
+        public virtual bool Delete(string id)
         {
             throw new NotImplementedException();
         }
 
-        public List<T> GetAll()
+        public virtual List<T> GetAll()
         {
-            throw new NotImplementedException();
+            List<T> records = new List<T>();
+
+            //string Class_name = typeof(T).Name;
+            //string sql = $@"SELECT * FROM {Class_name}";
+
+            //using (IDataReader reader = this.helperOledb.Select(sql) ) {
+            //    while (reader.Read())
+            //    {
+            //        switch(Class_name){
+            //            case "Book":
+            //                records.Add(this.modelCreators.BookCreator.CreateModel(reader));
+
+            //            default:
+            //                break;
+            //        }
+            //    }
+            //}
+            return records;
         }
 
-        public T GetByID(string ID)
+        public virtual T GetByID(string ID)
         {
             throw new NotImplementedException();
         }

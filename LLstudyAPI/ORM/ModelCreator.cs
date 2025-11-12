@@ -82,6 +82,8 @@ namespace LLstudyWS.ORM
             }
         }
 
+        public IModelCreator
+
 
     }
 }

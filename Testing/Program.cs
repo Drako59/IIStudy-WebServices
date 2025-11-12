@@ -1,17 +1,18 @@
 ﻿
-using System.Text;
 using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
-using System.Text.Json;
-using System.Net.Http.Headers;
-using System.Security.AccessControl;
-using System.Runtime.Remoting;
-using System.ComponentModel;
 using LLstudyWS;
-using System.Data.SqlTypes;
-using System.Data;
 using LLstudyWS.ORM;
+using LLstudyWS.ORM.CreatorsModels;
 using LLstudyWS.ORM.Repositorys;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlTypes;
+using System.Net.Http.Headers;
+using System.Runtime.Remoting;
+using System.Security.AccessControl;
+using System.Text;
+using System.Text.Json;
 
 namespace Testing
 {
@@ -19,8 +20,10 @@ namespace Testing
     {
         public static void Main(string[] args)
         {
+            RefCheckCreator();
+            
             //Console.WriteLine("Hello World!");
-            test_repository();
+            //test_repository();
             //checkInsert();
             //CheckCreator();
             //TestBook();
@@ -64,7 +67,24 @@ namespace Testing
         }
 
 
-        
+        static void RefCheckCreator()
+        {
+            string sql = $"SELECT * FROM Books WHERE book_ID = 1 ";
+            DbHelperOledb dbHelperOledb = new DbHelperOledb();
+            dbHelperOledb.OpenConnection();
+
+            IDataReader dataReader = dbHelperOledb.Select(sql);
+            dataReader.Read();
+            Console.WriteLine(dataReader);
+
+            ModelCreatorReflection modelHelper = new ModelCreatorReflection();
+
+            Book book = modelHelper.CreateModel<Book>(dataReader);
+            dbHelperOledb.CloseConnection();
+
+            Console.WriteLine($"Book_name: {book.Book_name} , book_price: {book.Book_price}");
+
+        }
 
 
 
