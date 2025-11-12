@@ -10,9 +10,10 @@ namespace LLstudyWS.ORM
             
             
             return new Event() {
-                Event_name = Convert.ToString(dataReader["book_name"]),
-                Date_event = Convert.ToString(dataReader["book_name"]),
-                Details = Convert.ToString(dataReader["details"])
+                Event_name = Convert.ToString(dataReader["Event_name"]),
+                Date_event = Convert.ToString(dataReader["Date_event"]),
+                Details = Convert.ToString(dataReader["Details"]),
+                Id = Convert.ToString(dataReader["Id"])
 
 
             }; 

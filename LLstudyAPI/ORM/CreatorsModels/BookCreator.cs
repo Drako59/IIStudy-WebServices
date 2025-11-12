@@ -10,12 +10,12 @@ namespace LLstudyWS.ORM
         {
             
             Book book = new Book() {
-                Book_name = Convert.ToString(dataReader["book_name"]),
-                Book_price = Convert.ToDouble(dataReader["book_price"]),
-                Author_name = Convert.ToString(dataReader["author_name"]),
-                Book_ID = Convert.ToString(dataReader["book_ID"]),
-                Pdf_url_book = Convert.ToString(dataReader["pdf_url_book"]),
-                SubjectID = Convert.ToString(dataReader["subjectID"]),
+                Book_name = Convert.ToString(dataReader["Book_name"]),
+                Book_price = Convert.ToDouble(dataReader["Book_price"]),
+                Author_name = Convert.ToString(dataReader["Author_name"]),
+                Book_ID = Convert.ToString(dataReader["Book_ID"]),
+                Pdf_url_book = Convert.ToString(dataReader["Pdf_url_book"]),
+                SubjectID = Convert.ToString(dataReader["SubjectID"]),
                 In_stock = Convert.ToBoolean(dataReader["In_stock"])
         };
             //book.Book_name = Convert.ToString(dataReader["book_name"]);

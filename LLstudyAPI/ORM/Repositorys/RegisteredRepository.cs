@@ -3,7 +3,7 @@ using System.Data;
 
 namespace LLstudyWS.ORM
 {
-    public class RegisteredRepository : Repository, IRepository<Registered>
+    public class RegisteredRepository : Repository<Registered>, IRepository<Registered>
     {
         public string Login(string username, string password)
         {
@@ -40,6 +40,21 @@ namespace LLstudyWS.ORM
         }
 
         public bool Update()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Create(Registered model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Registered model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(string id)
         {
             throw new NotImplementedException();
         }

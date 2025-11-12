@@ -2,14 +2,24 @@
 
 namespace LLstudyWS.ORM
 {
-    public class ShoppingCartRepository : Repository, IRepository<Shopping_Cart>
+    public class ShoppingCartRepository : Repository<Shopping_Cart>, IRepository<Shopping_Cart>
     {
         public bool Create()
         {
             throw new NotImplementedException();
         }
 
+        public bool Create(Shopping_Cart model)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Delete()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(string id)
         {
             throw new NotImplementedException();
         }
@@ -25,6 +35,11 @@ namespace LLstudyWS.ORM
         }
 
         public bool Update()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Shopping_Cart model)
         {
             throw new NotImplementedException();
         }

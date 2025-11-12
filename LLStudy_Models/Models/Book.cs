@@ -19,7 +19,7 @@ namespace LLStudy_Models.Models
         bool in_stock;
         string subjectID;
         string pdf_url_book;
-        string name;
+        string type;
         //[Required]
         [IsDigits(ErrorMessage = "ID must contain only digits.")]
         public string Book_ID {  get { return book_ID; } set {  book_ID = value; } }

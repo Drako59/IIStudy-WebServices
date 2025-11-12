@@ -2,14 +2,24 @@
 
 namespace LLstudyWS.ORM
 {
-    public class CategoryRepository : Repository, IRepository<Category>
+    public class CategoryRepository : Repository<Category>, IRepository<Category>
     {
         public bool Create()
         {
             throw new NotImplementedException();
         }
 
+        public bool Create(Category model)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Delete()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(string id)
         {
             throw new NotImplementedException();
         }
@@ -25,6 +35,11 @@ namespace LLstudyWS.ORM
         }
 
         public bool Update()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Category model)
         {
             throw new NotImplementedException();
         }

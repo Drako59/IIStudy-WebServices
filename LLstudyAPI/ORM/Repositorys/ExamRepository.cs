@@ -3,7 +3,7 @@ using System.Data;
 
 namespace LLstudyWS.ORM
 {
-    public class ExamRepository : Repository, IRepository<Exam>
+    public class ExamRepository : Repository<Exam>, IRepository<Exam>
     {
         public bool Create(Exam model)
         {
@@ -18,9 +18,9 @@ namespace LLstudyWS.ORM
                     VALUES
                         (@NAME, @YEAR, @CATE_VAR, @ACSSES, @PATH)";
 
-            this.helperOledb.AddParameter("@NAME", model.Exam_name);
-            this.helperOledb.AddParameter("@CATE_VAR", model.CatregoryID);
-            this.helperOledb.AddParameter("@YEAR", model.Exam_year);
+            this.helperOledb.AddParameter("@NAME", model.Exam_Name);
+            this.helperOledb.AddParameter("@CATE_VAR", model.CategoryID);
+            this.helperOledb.AddParameter("@YEAR", model.Exam_Year);
             this.helperOledb.AddParameter("@NAME", model.Access.ToString());
             this.helperOledb.AddParameter("@PATH", model.File_path_url);
 
@@ -70,11 +70,11 @@ namespace LLstudyWS.ORM
                             categoryID = @CA
                         WHERE
                             Exam_ID = @ID";
-            this.helperOledb.AddParameter("@NAME", model.Exam_name);
+            this.helperOledb.AddParameter("@NAME", model.Exam_Name);
             this.helperOledb.AddParameter("@PATH", model.File_path_url);
-            this.helperOledb.AddParameter("@YEAR", model.Exam_year);
+            this.helperOledb.AddParameter("@YEAR", model.Exam_Year);
             this.helperOledb.AddParameter("@ACS", model.Access.ToString());
-            this.helperOledb.AddParameter("@CA", model.CatregoryID);
+            this.helperOledb.AddParameter("@CA", model.CategoryID);
             this.helperOledb.AddParameter("@ID", model.Exam_ID);
             return this.helperOledb.Update(sql) > 0;
 

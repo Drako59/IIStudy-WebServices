@@ -10,11 +10,11 @@ namespace LLstudyWS.ORM
             return new Exam()
             {
                 Exam_ID = Convert.ToString(dataReader["Exam_ID"]),
-                CatregoryID = Convert.ToString(dataReader["categoryID"]),
-                Access = Convert.ToBoolean(dataReader["acsses"]),
-                File_path_url = Convert.ToString("file_path_url"),
-                Exam_name = Convert.ToString("Exam_Namne"),
-                Exam_year = Convert.ToString("Exam_year")
+                CategoryID = Convert.ToString(dataReader["CategoryID"]),
+                Access = Convert.ToBoolean(dataReader["Access"]),
+                File_path_url = Convert.ToString("File_path_url"),
+                Exam_Name = Convert.ToString("Exam_Name"),
+                Exam_Year = Convert.ToString("Exam_Year")
             };
         }
     }

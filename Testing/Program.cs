@@ -11,6 +11,7 @@ using LLstudyWS;
 using System.Data.SqlTypes;
 using System.Data;
 using LLstudyWS.ORM;
+using LLstudyWS.ORM.Repositorys;
 
 namespace Testing
 {
@@ -18,9 +19,10 @@ namespace Testing
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            //Console.WriteLine("Hello World!");
+            test_repository();
             //checkInsert();
-            CheckCreator();
+            //CheckCreator();
             //TestBook();
             //TestRegistered();
             //GetCurrenyExchange();
@@ -237,6 +239,20 @@ namespace Testing
                     Console.WriteLine("==========================================");
                 }
             }
+        }
+
+        static void test_repository()
+        {
+            Book book = new Book()
+            {
+                Book_name = "ofekNIG",
+                Book_price = 10,
+                Pdf_url_book ="test"
+
+            };
+
+            RepositoryUOW UOW = new RepositoryUOW();
+            UOW.BookRepository.Create(book);
         }
     }
 }

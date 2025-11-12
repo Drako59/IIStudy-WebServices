@@ -10,9 +10,9 @@ namespace LLstudyWS.ORM
         {
             return new Registered() {
                 UserName = Convert.ToString(dataReader["UserName"]),
-                Password = Convert.ToString(dataReader["password"]),
-                Email = Convert.ToString(dataReader["email"]),
-                Role = Convert.ToString(dataReader["role"]),
+                Password = Convert.ToString(dataReader["Password"]),
+                Email = Convert.ToString(dataReader["Email"]),
+                Role = Convert.ToString(dataReader["Role"]),
                 Birth = Convert.ToString(dataReader["Birth"])
             };
 

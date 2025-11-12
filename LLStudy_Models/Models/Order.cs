@@ -10,16 +10,16 @@ namespace LLStudy_Models.Models
 {
     public class Order: Model
     {
-        string order_ID;
+        string orderID;
         string user_name;
         bool delivered;
         string location;
         double total_price;
         //[IsDigits(ErrorMessage = "ID must contain only digits.")]
         //[Required]
-        public string Order_ID { get { return order_ID; } set { order_ID = value; } }
+        public string OrderID { get { return orderID; } set { orderID = value; } }
         [Required]
-        public string User_name { get { return user_name; } set { user_name = value; } }
+        public string UserName { get { return user_name; } set { user_name = value; } }
         [Required]
         public bool Delivered { get { return delivered; } set { delivered = value; } }
 

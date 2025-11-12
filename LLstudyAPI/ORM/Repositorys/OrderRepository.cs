@@ -2,14 +2,24 @@
 
 namespace LLstudyWS.ORM
 {
-    public class OrderRepository : Repository, IRepository<Order>
+    public class OrderRepository : Repository<Order>, IRepository<Order>
     {
         public bool Create()
         {
             throw new NotImplementedException();
         }
 
+        public bool Create(Order model)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Delete()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(string id)
         {
             throw new NotImplementedException();
         }
@@ -25,6 +35,11 @@ namespace LLstudyWS.ORM
         }
 
         public bool Update()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Order model)
         {
             throw new NotImplementedException();
         }

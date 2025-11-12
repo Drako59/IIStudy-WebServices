@@ -5,7 +5,7 @@ using System.Data;
 
 namespace LLstudyWS.ORM
 {
-    public class EventRepository : Repository, IRepository<Event>
+    public class EventRepository : Repository<Event>, IRepository<Event>
     {
         public bool Create(Event model)
         {

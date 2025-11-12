@@ -11,17 +11,17 @@ namespace LLStudy_Models.Models
     public class Solution: Model
     {
         string solution_ID;
-        string catregoryID;
+        string categoryID;
         string exam_ID;
         bool access;
         string file_path_url;
-        string solution_name;
-        string solution_year;
+        string solution_Name;
+        string solution_Year;
 
         public string Solution_ID { get { return solution_ID; } set { solution_ID = value; } }
         [Required]
         [IsDigits(ErrorMessage = "ID must be a numebr.")]
-        public string CatregoryID { get { return catregoryID; } set { catregoryID = value; } }
+        public string CategoryID { get { return categoryID; } set { categoryID = value; } }
         [Required]
         [IsDigits(ErrorMessage = "ID must be a numebr.")]
 
@@ -32,8 +32,8 @@ namespace LLStudy_Models.Models
         public string File_path_url { get { return file_path_url; } set { file_path_url = value; } }
         [Required]
 
-        public string Solution_name { get { return solution_name; } set { solution_name = value; } }
-        public string Solution_year { get { return solution_year; } set { solution_year = value; } }
+        public string Solution_Name { get { return solution_Name; } set { solution_Name = value; } }
+        public string Solution_Year { get { return solution_Year; } set { solution_Year = value; } }
 
     }
 }

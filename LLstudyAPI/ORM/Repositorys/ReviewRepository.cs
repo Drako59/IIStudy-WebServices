@@ -2,14 +2,24 @@
 
 namespace LLstudyWS.ORM
 {
-    public class ReviewRepository : Repository, IRepository<Review>
+    public class ReviewRepository : Repository<Review>, IRepository<Review>
     {
         public bool Create()
         {
             throw new NotImplementedException();
         }
 
+        public bool Create(Review model)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Delete()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(string id)
         {
             throw new NotImplementedException();
         }
@@ -25,6 +35,11 @@ namespace LLstudyWS.ORM
         }
 
         public bool Update()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Review model)
         {
             throw new NotImplementedException();
         }

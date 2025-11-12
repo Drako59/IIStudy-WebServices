@@ -6,10 +6,10 @@ namespace LLstudyWS.ORM
     public class OrderCreator: IModelCreator<Order>
     {
         public Order CreateModel(IDataReader dataReader) { return new Order() { 
-            Order_ID = Convert.ToString(dataReader["OrderID"]),
-            User_name = Convert.ToString(dataReader["UserName"]),
-            Delivered = Convert.ToBoolean(dataReader["delivered"]),
-            Location = Convert.ToString(dataReader["location"]),
+            OrderID = Convert.ToString(dataReader["OrderID"]),
+            UserName = Convert.ToString(dataReader["UserName"]),
+            Delivered = Convert.ToBoolean(dataReader["Delivered"]),
+            Location = Convert.ToString(dataReader["Location"]),
             Total_price = Convert.ToDouble(dataReader["Total_price"])
 
         }; }  
