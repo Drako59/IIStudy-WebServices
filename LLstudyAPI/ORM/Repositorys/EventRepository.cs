@@ -7,18 +7,18 @@ namespace LLstudyWS.ORM
 {
     public class EventRepository : Repository<Event>, IRepository<Event>
     {
-        public bool Create(Event model)
-        {
+        //public bool Create(Event model)
+        //{
 
 
-            string sql = "INSERT INTO Events (event_name,date_event,details) VALUES(@Name, @Date, @Detail)";
-            this.helperOledb.AddParameter("@Name", model.Event_name);
-            this.helperOledb.AddParameter("@Date", model.Date_event);
-            this.helperOledb.AddParameter("@Details", model.Details);
-            return this.helperOledb.Insert(sql) > 0;
+        //    string sql = "INSERT INTO Events (event_name,date_event,details) VALUES(@Name, @Date, @Detail)";
+        //    this.helperOledb.AddParameter("@Name", model.Event_name);
+        //    this.helperOledb.AddParameter("@Date", model.Date_event);
+        //    this.helperOledb.AddParameter("@Details", model.Details);
+        //    return this.helperOledb.Insert(sql) > 0;
 
 
-        }
+        //}
 
         public bool Delete(string id)
         {

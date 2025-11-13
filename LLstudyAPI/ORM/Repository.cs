@@ -20,29 +20,34 @@ namespace LLstudyWS.ORM
 
         public virtual bool Create(T model)
         {
-            string sql2 = $@"INSERT INTO Books (
-                            author_name,
-                            book_name,
-                            book_price,
-                            In_stock,
-                            subjectID,
-                            pdf_url_book
-                            )
-                        VALUES
-                            (@AuthorName, @BookName, @BookPrice, @InStock, @SubjectID, @PdfUrlBook) ";
+            
+            this.helperOledb.OpenConnection();
             Type OBJtype = model.GetType();
             List<string> exludePROP = new List<string> { "IsValid", "HasErrors" };
-            //hello
-           
             PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => !exludePROP.Contains(p.Name)).ToArray();
-
             string columns = string.Join(", ", propertys.Select(p => p.Name));
             string placeholders = string.Join(", ", propertys.Select(p => ("@" + p.Name)));
+            string sql = $@"INSERT INTO {OBJtype.Name}s ({columns}) VALUES({placeholders})";
+            Console.WriteLine(sql);
 
-            string sql = $@"INSERT INTO {OBJtype.Name} ({columns}) VALUES({placeholders})";
+
+            Type PropretyType;
+            string? value;
+            foreach (PropertyInfo pro in propertys)
+            {
+                PropretyType = pro.PropertyType;
+                value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
+                this.helperOledb.AddParameter(("@" + pro.Name), (string)value);
+            }
+          
+            bool state = this.helperOledb.Insert(sql) > 0;
+            this.helperOledb.CloseConnection();
+            return state;
+
+
 
             //string sql = @$"INSERT INTO {model.GetType().Name}s (";
-            
+
             //foreach(PropertyInfo pro in propertys)
             //{
             //    sql += pro.Name + ",";
@@ -54,21 +59,28 @@ namespace LLstudyWS.ORM
             //}
             //sql += ")";
 
-            Type PropretyType;
-            string? value;
-            foreach (PropertyInfo pro in propertys)
-            {
-                PropretyType = pro.PropertyType;
-                value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
-                this.helperOledb.AddParameter(("@" + pro.Name), (string)value);
-            }
+
+
+            //string sql2 = $@"INSERT INTO Books (
+            //                author_name,
+            //                book_name,
+            //                book_price,
+            //                In_stock,
+            //                subjectID,
+            //                pdf_url_book
+            //                )
+            //            VALUES
+            //                (@AuthorName, @BookName, @BookPrice, @InStock, @SubjectID, @PdfUrlBook) ";
+
             //this.helperOledb.AddParameter("@AuthorName", model.Author_name);
             //this.helperOledb.AddParameter("@BookName", model.Book_name);
             //this.helperOledb.AddParameter("@BookPrice", model.Book_price.ToString());
             //this.helperOledb.AddParameter("@InStock", model.In_stock.ToString());
             //this.helperOledb.AddParameter("@SubjectID", model.SubjectID);
             //this.helperOledb.AddParameter("@PdfUrlBook", model.Pdf_url_book);
-            return this.helperOledb.Insert(sql) > 0;
+
+
+
         }
 
         public virtual bool Delete(string id)
@@ -78,10 +90,12 @@ namespace LLstudyWS.ORM
 
         public virtual List<T> GetAll()
         {
+            this.helperOledb.OpenConnection();
             List<T> records = new List<T>();
 
             string Class_name = typeof(T).Name;
             string sql = $@"SELECT * FROM {Class_name}s";
+            Console.WriteLine(sql);
 
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
@@ -91,6 +105,7 @@ namespace LLstudyWS.ORM
                     records.Add(this.moderlRefCreator.CreateModel<T>(reader));
                 }
             }
+            this.helperOledb.CloseConnection();
             return records;
         }
 

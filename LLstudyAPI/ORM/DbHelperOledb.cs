@@ -12,9 +12,11 @@ namespace LLstudyWS
         OleDbTransaction dbTransaction;
         public DbHelperOledb()
         {
+            string path = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source= ""{Directory.GetCurrentDirectory()}\App_Data\School project .accdb"";Persist Security Info=True";
             this.oleDbConnection = new OleDbConnection();
-            this.oleDbConnection.ConnectionString = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source= {Directory.GetCurrentDirectory()} \App_Data\School project .accdb"";Persist Security Info=True";
-            //this.oleDbConnection.ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=""C:\Users\User\source\repos\IIStudy_Project\LLstudyAPI\App_Data\School project .accdb"";Persist Security Info=True";s
+            //this.oleDbConnection.ConnectionString = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source= ""{Directory.GetCurrentDirectory()}\App_Data\School project .accdb"";Persist Security Info=True";
+            this.oleDbConnection.ConnectionString = $@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source= ""C:\Users\ayele\source\repos\Drako59\IIStudy-WebServices\LLstudyAPI\App_Data\School project .accdb"";Persist Security Info=True";
+            //this.oleDbConnection.ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=""C:\Users\User\source\repos\IIStudy_Project\LLstudyAPI\App_Data\School project .accdb"";Persist Security Info=True";
             this.dbCommand = new OleDbCommand();
             this.dbCommand.Connection = this.oleDbConnection;
         }
@@ -41,7 +43,9 @@ namespace LLstudyWS
         }   
 
         public int Insert(string sql)
+           
         {
+            
             Console.WriteLine(  "Insert");
             this.dbCommand.CommandText = sql;
             

@@ -20,10 +20,10 @@ namespace Testing
     {
         public static void Main(string[] args)
         {
-            RefCheckCreator();
-            
+            //RefCheckCreator();
+            //test_select();
             //Console.WriteLine("Hello World!");
-            //test_repository();
+            test_repository();
             //checkInsert();
             //CheckCreator();
             //TestBook();
@@ -33,8 +33,21 @@ namespace Testing
             //GetNextHoliday();
             //TranslateSentence("בן אדם ירוק בשיחה איתי");
 
-            Console.ReadLine();
-            
+            //Console.ReadLine();
+
+        }
+
+        static void test_select()
+        {
+            RepositoryUOW repoUOW = new RepositoryUOW();
+            IRepository<Book> BookRepo = repoUOW.BookRepository;
+
+            List<Book> books = BookRepo.GetAll();
+
+            foreach(Book book in books)
+            {
+                Console.WriteLine(@$"Name: {book.Book_name}, price: {book.Book_price}, In_stock: {book.In_stock}  ");
+            }
         }
         static void checkInsert()
         {
@@ -263,16 +276,27 @@ namespace Testing
 
         static void test_repository()
         {
+            Event ofek = new Event()
+            {
+                Event_name = "ofekNIG",
+                Date_event = "",
+                Details ="test"
+
+            };
+
             Book book = new Book()
             {
-                Book_name = "ofekNIG",
-                Book_price = 10,
-                Pdf_url_book ="test"
-
+                Author_name = "RED",
+                In_stock = true,
+                SubjectID = "2",
+                Book_name = "ofek",
+                Pdf_url_book = "robot",
+                Book_price = 67
             };
 
             RepositoryUOW UOW = new RepositoryUOW();
             UOW.BookRepository.Create(book);
+            //UOW.EventRpository.Create(ofek);
         }
     }
 }

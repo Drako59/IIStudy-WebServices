@@ -41,5 +41,15 @@
                     this.reviewRepository = new ReviewRepository();
                 return reviewRepository; }
         }
+
+        public EventRepository EventRpository
+        {
+            get
+            {
+                if (this.eventRepository == null)
+                    this.eventRepository = new EventRepository();
+                return this.eventRepository;
+            }
+        }
     }
 }
