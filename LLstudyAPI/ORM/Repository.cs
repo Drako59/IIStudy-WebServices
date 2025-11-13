@@ -1,17 +1,20 @@
 ﻿
+using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 using System.Reflection;
 
 namespace LLstudyWS.ORM
 {
-    public class Repository<T>: IRepository<T>
+    public class Repository<T>: IRepository<T> where T: new()
     {
         protected DbHelperOledb helperOledb;
         protected ModelCreators modelCreators;
+        protected ModelCreatorReflection moderlRefCreator;
 
         public Repository()
         {
             this.modelCreators = new ModelCreators();
+            this.moderlRefCreator = new ModelCreatorReflection();
             this.helperOledb = new DbHelperOledb();
         }
 
@@ -77,21 +80,17 @@ namespace LLstudyWS.ORM
         {
             List<T> records = new List<T>();
 
-            //string Class_name = typeof(T).Name;
-            //string sql = $@"SELECT * FROM {Class_name}";
+            string Class_name = typeof(T).Name;
+            string sql = $@"SELECT * FROM {Class_name}s";
 
-            //using (IDataReader reader = this.helperOledb.Select(sql) ) {
-            //    while (reader.Read())
-            //    {
-            //        switch(Class_name){
-            //            case "Book":
-            //                records.Add(this.modelCreators.BookCreator.CreateModel(reader));
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
 
-            //            default:
-            //                break;
-            //        }
-            //    }
-            //}
+                    records.Add(this.moderlRefCreator.CreateModel<T>(reader));
+                }
+            }
             return records;
         }
 
