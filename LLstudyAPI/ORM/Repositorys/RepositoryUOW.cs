@@ -1,8 +1,10 @@
-﻿namespace LLstudyWS.ORM.Repositorys
+﻿using LLstudyWS.ORM.CreatorsModels;
+
+namespace LLstudyWS.ORM.Repositorys
 {
     public class RepositoryUOW
     {
-        BookRepositery bookRepository;
+        BookRepository bookRepository;
         CategoryRepository categoryRepository;
         OrderRepository orderRepository;
         ReviewRepository reviewRepository;
@@ -11,12 +13,22 @@
         EventRepository eventRepository;
         ExamRepository examRepository;
         RegisterCreator registerCreator;
+        DbHelperOledb helperOledb;
+        ModelCreators modelCreators;
+        ModelCreatorReflection modelCreatorReflection;
 
 
-        public BookRepositery BookRepository { get { 
+        public RepositoryUOW()
+        {
+            this.modelCreatorReflection = new ModelCreatorReflection();
+            this.modelCreators = new ModelCreators();
+            this.helperOledb = new DbHelperOledb();
+        }
+
+        public BookRepository BookRepository { get { 
                 
                 if (bookRepository == null) {
-                    this.bookRepository = new BookRepositery();
+                    this.bookRepository = new BookRepository(this.helperOledb, this.modelCreators,this.modelCreatorReflection);
                 }
                 return bookRepository;
             }
@@ -24,21 +36,21 @@
         public CategoryRepository CategoryRepository { get {
                 if (categoryRepository == null)
                 {
-                    this.categoryRepository = new CategoryRepository();
+                    this.categoryRepository = new CategoryRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
                 }
                 return categoryRepository;
             } }
         public OrderRepository OrderRepository { get
             {
                 if (orderRepository == null)
-                    this.orderRepository = new OrderRepository();
+                    this.orderRepository = new OrderRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
                 return this.orderRepository;
             } }
 
         public ReviewRepository ReviewRepository
         {
             get {if (this.reviewRepository == null)
-                    this.reviewRepository = new ReviewRepository();
+                    this.reviewRepository = new ReviewRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
                 return reviewRepository; }
         }
 
@@ -47,7 +59,7 @@
             get
             {
                 if (this.eventRepository == null)
-                    this.eventRepository = new EventRepository();
+                    this.eventRepository = new EventRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
                 return this.eventRepository;
             }
         }

@@ -1,10 +1,13 @@
 ﻿using LLStudy_Models.Models;
+using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 
 namespace LLstudyWS.ORM
 {
     public class RegisteredRepository : Repository<Registered>, IRepository<Registered>
     {
+        public RegisteredRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+
         public string Login(string username, string password)
         {
             string sql = "SELECT password FROM Registers WHERE UserName = @USERNAME AND password = @PASSWORD";

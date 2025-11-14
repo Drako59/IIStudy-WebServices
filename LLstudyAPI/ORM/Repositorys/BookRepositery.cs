@@ -1,14 +1,16 @@
 ﻿using LLStudy_Models;
 using LLStudy_Models.Models;
+using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 using System.Data.SqlTypes;
 
 namespace LLstudyWS.ORM
 
 {
-    public class BookRepositery :Repository<Book>, IRepository<Book>
+    public class BookRepository :Repository<Book>, IRepository<Book>
     {
 
+        public BookRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
         public override bool Create(Book model)
         {

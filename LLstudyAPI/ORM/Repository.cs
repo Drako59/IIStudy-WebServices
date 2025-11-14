@@ -11,11 +11,11 @@ namespace LLstudyWS.ORM
         protected ModelCreators modelCreators;
         protected ModelCreatorReflection moderlRefCreator;
 
-        public Repository()
+        public Repository(DbHelperOledb helperOledb,ModelCreators modelCreator, ModelCreatorReflection modelCreatorReflection)
         {
-            this.modelCreators = new ModelCreators();
-            this.moderlRefCreator = new ModelCreatorReflection();
-            this.helperOledb = new DbHelperOledb();
+            this.modelCreators = modelCreator;
+            this.moderlRefCreator = modelCreatorReflection;
+            this.helperOledb = helperOledb;
         }
 
         public virtual bool Create(T model)
@@ -116,7 +116,20 @@ namespace LLstudyWS.ORM
 
         public bool Update(T model)
         {
-            throw new NotImplementedException();
+            string sql;
+            Type typeProp = model.GetType();
+            List<string> exludedProps = new List<string>() { "IsValid", "HasErrors"};
+            PropertyInfo[] props = typeProp.GetProperties().Where(p => (!exludedProps.Contains(p.Name) && !p.Name.Equals($@"{p.Name}ID"))).ToArray();
+            string sets = string.Join(", ", props.Select(p => @$"@{p.Name} = {p.GetValue(model,null)}"));
+
+            PropertyInfo propID = typeProp.GetProperty(@$"{typeProp.Name}ID");
+
+            sql = $@"UPDATE {typeProp.Name}s SET {sets} WHERE {propID.Name} = {propID.GetValue(model, null)}";
+
+            return this.helperOledb.Update(sql) > 0;
+
+
+
         }
     }
 }

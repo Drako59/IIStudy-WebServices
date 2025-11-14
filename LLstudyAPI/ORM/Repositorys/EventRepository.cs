@@ -2,11 +2,14 @@
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Xml.Linq;
 using System.Data;
+using LLstudyWS.ORM.CreatorsModels;
 
 namespace LLstudyWS.ORM
 {
     public class EventRepository : Repository<Event>, IRepository<Event>
     {
+        public EventRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+
         //public bool Create(Event model)
         //{
 

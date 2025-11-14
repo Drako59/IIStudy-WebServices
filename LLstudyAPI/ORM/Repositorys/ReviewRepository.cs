@@ -1,9 +1,12 @@
 ﻿using LLStudy_Models.Models;
+using LLstudyWS.ORM.CreatorsModels;
 
 namespace LLstudyWS.ORM
 {
     public class ReviewRepository : Repository<Review>, IRepository<Review>
     {
+        public ReviewRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+
         public bool Create()
         {
             throw new NotImplementedException();

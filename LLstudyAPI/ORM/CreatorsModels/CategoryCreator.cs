@@ -5,6 +5,7 @@ namespace LLstudyWS.ORM
 {
     public class CategoryCreator: IModelCreator<Category>
     {
+
         public Category CreateModel(IDataReader dataReader) { return new Category() 
         {
             SubjectID = Convert.ToString(dataReader["SubjectID"]),
