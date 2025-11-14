@@ -21,7 +21,6 @@ namespace LLstudyWS.ORM
         public virtual bool Create(T model)
         {
             
-            this.helperOledb.OpenConnection();
             Type OBJtype = model.GetType();
             List<string> exludePROP = new List<string> { "IsValid", "HasErrors" };
             PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => !exludePROP.Contains(p.Name)).ToArray();
@@ -40,9 +39,7 @@ namespace LLstudyWS.ORM
                 this.helperOledb.AddParameter(("@" + pro.Name), (string)value);
             }
           
-            bool state = this.helperOledb.Insert(sql) > 0;
-            this.helperOledb.CloseConnection();
-            return state;
+            return this.helperOledb.Insert(sql) > 0;
 
 
 
@@ -94,7 +91,6 @@ namespace LLstudyWS.ORM
 
         public virtual List<T> GetAll()
         {
-            this.helperOledb.OpenConnection();
             List<T> records = new List<T>();
 
             string Class_name = typeof(T).Name;
@@ -109,7 +105,6 @@ namespace LLstudyWS.ORM
                     records.Add(this.moderlRefCreator.CreateModel<T>(reader));
                 }
             }
-            this.helperOledb.CloseConnection();
             return records;
         }
 
