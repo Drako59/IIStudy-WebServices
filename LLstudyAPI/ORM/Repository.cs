@@ -85,7 +85,11 @@ namespace LLstudyWS.ORM
 
         public virtual bool Delete(string id)
         {
-            throw new NotImplementedException();
+            Type typeObj = typeof(T);
+            PropertyInfo prop = typeObj.GetProperty(@$"{typeObj.Name}ID");
+            string sql = @$"DELETE * FROM {typeObj.Name}s WHERE {prop.Name} = @ID";
+            this.helperOledb.AddParameter("@ID", id);
+            return this.helperOledb.Delete(sql) > 0;
         }
 
         public virtual List<T> GetAll()
@@ -111,7 +115,21 @@ namespace LLstudyWS.ORM
 
         public virtual T GetByID(string ID)
         {
-            throw new NotImplementedException();
+            Type objType = typeof(T);
+            T obj;
+            PropertyInfo propID = objType.GetProperty($@"{objType.Name}ID");
+
+            string sql = $@"SELECT * FROM {objType.Name}s WHERE {propID.Name} = @ID";
+            this.helperOledb.AddParameter("@ID",ID);
+            using(IDataReader reader  = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    obj = this.moderlRefCreator.CreateModel<T>(reader);
+                    return obj;
+                }
+            }
+            return new T();
         }
 
         public bool Update(T model)
@@ -124,7 +142,14 @@ namespace LLstudyWS.ORM
 
             PropertyInfo propID = typeProp.GetProperty(@$"{typeProp.Name}ID");
 
-            sql = $@"UPDATE {typeProp.Name}s SET {sets} WHERE {propID.Name} = {propID.GetValue(model, null)}";
+            sql = $@"UPDATE {typeProp.Name}s SET {sets} WHERE {propID.Name} = @{propID.Name}";
+
+            foreach(PropertyInfo pro in props)
+            {
+                this.helperOledb.AddParameter(@$"@{pro.Name}", pro.GetValue(model, null).ToString());
+            }
+
+            this.helperOledb.AddParameter($@"@{propID.Name}", propID.GetValue(model, null).ToString());
 
             return this.helperOledb.Update(sql) > 0;
 
