@@ -13,7 +13,7 @@ namespace LLstudyWS.ORM
                 Event_name = Convert.ToString(dataReader["Event_name"]),
                 Date_event = Convert.ToString(dataReader["Date_event"]),
                 Details = Convert.ToString(dataReader["Details"]),
-                Id = Convert.ToString(dataReader["Id"])
+                EventID = Convert.ToString(dataReader["EventID"])
 
 
             }; 

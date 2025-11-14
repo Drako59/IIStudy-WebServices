@@ -13,7 +13,7 @@ namespace LLstudyWS.ORM
                 Book_name = Convert.ToString(dataReader["Book_name"]),
                 Book_price = Convert.ToDouble(dataReader["Book_price"]),
                 Author_name = Convert.ToString(dataReader["Author_name"]),
-                Book_ID = Convert.ToString(dataReader["Book_ID"]),
+                BookID = Convert.ToString(dataReader["BookID"]),
                 Pdf_url_book = Convert.ToString(dataReader["Pdf_url_book"]),
                 SubjectID = Convert.ToString(dataReader["SubjectID"]),
                 In_stock = Convert.ToBoolean(dataReader["In_stock"])

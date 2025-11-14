@@ -256,7 +256,7 @@ namespace Testing
         static void TestBook()
         {
             Book book = new Book() { Author_name = "Hello"
-                , Book_ID = "a"
+                , BookID = "a"
                 , Book_name = "Max"
                 , Book_price = 90
                 , In_stock = true
@@ -291,7 +291,6 @@ namespace Testing
                 Author_name = "RED",
                 In_stock = true,
                 SubjectID = "2",
-                Book_name = "ofek",
                 Pdf_url_book = "robot",
                 Book_price = 67
             };

@@ -23,7 +23,11 @@ namespace LLstudyWS.ORM
             
             Type OBJtype = model.GetType();
             List<string> exludePROP = new List<string> { "IsValid", "HasErrors" };
-            PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => (!exludePROP.Contains(p.Name))).Skip(1).ToArray();
+            PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => (!exludePROP.Contains(p.Name) && (!p.Name.Equals(OBJtype.Name + "ID")))).ToArray();
+            foreach (PropertyInfo pro in propertys)
+            {
+                Console.WriteLine(@$"Property Name: {pro.Name}");
+            }
             string columns = string.Join(", ", propertys.Select(p => p.Name));
             string placeholders = string.Join(", ", propertys.Select(p => ("@" + p.Name)));
             string sql = $@"INSERT INTO {OBJtype.Name}s ({columns}) VALUES({placeholders})";
@@ -35,10 +39,10 @@ namespace LLstudyWS.ORM
             foreach (PropertyInfo pro in propertys)
             {
                 PropretyType = pro.PropertyType;
-               
                 //value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
-                this.helperOledb.AddParameter(("@" + pro.Name), pro.GetValue(model, null));
-                Console.WriteLine(@$"{"@" + pro.Name}:  {pro.GetValue(model, null).ToString()} ");
+                this.helperOledb.AddParameter(("@" + pro.Name), pro.GetValue(model, null) ?? "");
+
+                Console.WriteLine(@$"{"@" + pro.Name}:  {pro.GetValue(model, null)?.ToString() ?? ""} ");
             }
           
             return this.helperOledb.Insert(sql) > 0;
@@ -143,7 +147,7 @@ namespace LLstudyWS.ORM
 
             foreach(PropertyInfo pro in props)
             {
-                this.helperOledb.AddParameter(@$"@{pro.Name}", pro.GetValue(model, null));
+                this.helperOledb.AddParameter(@$"@{pro.Name}", pro.GetValue(model, null) ?? "");
             }
 
             this.helperOledb.AddParameter($@"@{propID.Name}", propID.GetValue(model, null));
