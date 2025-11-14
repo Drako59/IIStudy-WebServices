@@ -21,7 +21,7 @@ namespace Testing
         public static void Main(string[] args)
         {
             //RefCheckCreator();
-            //test_select();
+            test_select();
             //Console.WriteLine("Hello World!");
             test_repository();
             //checkInsert();
@@ -40,6 +40,7 @@ namespace Testing
         static void test_select()
         {
             RepositoryUOW repoUOW = new RepositoryUOW();
+            repoUOW.HelperOledb.OpenConnection();
             IRepository<Book> BookRepo = repoUOW.BookRepository;
 
             List<Book> books = BookRepo.GetAll();
@@ -48,6 +49,7 @@ namespace Testing
             {
                 Console.WriteLine(@$"Name: {book.Book_name}, price: {book.Book_price}, In_stock: {book.In_stock}  ");
             }
+            repoUOW.HelperOledb.CloseConnection();
         }
         static void checkInsert()
         {
@@ -295,7 +297,9 @@ namespace Testing
             };
 
             RepositoryUOW UOW = new RepositoryUOW();
+            UOW.HelperOledb.OpenConnection();
             UOW.BookRepository.Create(book);
+            UOW.HelperOledb.CloseConnection();
             //UOW.EventRpository.Create(ofek);
         }
     }

@@ -23,7 +23,7 @@ namespace LLstudyWS.ORM
             
             Type OBJtype = model.GetType();
             List<string> exludePROP = new List<string> { "IsValid", "HasErrors" };
-            PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => !exludePROP.Contains(p.Name)).ToArray();
+            PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => (!exludePROP.Contains(p.Name))).Skip(1).ToArray();
             string columns = string.Join(", ", propertys.Select(p => p.Name));
             string placeholders = string.Join(", ", propertys.Select(p => ("@" + p.Name)));
             string sql = $@"INSERT INTO {OBJtype.Name}s ({columns}) VALUES({placeholders})";
@@ -35,8 +35,10 @@ namespace LLstudyWS.ORM
             foreach (PropertyInfo pro in propertys)
             {
                 PropretyType = pro.PropertyType;
-                value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
-                this.helperOledb.AddParameter(("@" + pro.Name), (string)value);
+               
+                //value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
+                this.helperOledb.AddParameter(("@" + pro.Name), pro.GetValue(model, null));
+                Console.WriteLine(@$"{"@" + pro.Name}:  {pro.GetValue(model, null).ToString()} ");
             }
           
             return this.helperOledb.Insert(sql) > 0;

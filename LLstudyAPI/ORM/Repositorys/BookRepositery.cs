@@ -12,42 +12,42 @@ namespace LLstudyWS.ORM
 
         public BookRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
-        public override bool Create(Book model)
-        {
-            this.helperOledb.OpenConnection();
-            //string sql = $@"INSERT INTO Books (
-            //                author_name,
-            //                book_name,
-            //                book_price,
-            //                In_stock,
-            //                subjectID,
-            //                pdf_url_book
-            //                )
-            //            VALUES
-            //                ('{model.Author_name}', '{model.Book_name}', {model.Book_price}, {model.In_stock}, {model.SubjectID}, '{model.Pdf_url_book}') ";
-            string sql = $@"INSERT INTO Books (
-                            author_name,
-                            book_name,
-                            book_price,
-                            In_stock,
-                            subjectID,
-                            pdf_url_book
-                            )
-                        VALUES
-                            (@AuthorName, @BookName, @BookPrice, @InStock, @SubjectID, @PdfUrlBook) ";
-            this.helperOledb.AddParameter("@AuthorName", model.Author_name);
-            this.helperOledb.AddParameter("@BookName", model.Book_name);
-            this.helperOledb.AddParameter("@BookPrice", model.Book_price.ToString());
-            this.helperOledb.AddParameter("@InStock", model.In_stock.ToString());
-            this.helperOledb.AddParameter("@SubjectID", model.SubjectID);
-            this.helperOledb.AddParameter("@PdfUrlBook", model.Pdf_url_book);
-            return this.helperOledb.Insert(sql) > 0;
+        //public override bool Create(Book model)
+        //{
+        //    this.helperOledb.OpenConnection();
+        //    //string sql = $@"INSERT INTO Books (
+        //    //                author_name,
+        //    //                book_name,
+        //    //                book_price,
+        //    //                In_stock,
+        //    //                subjectID,
+        //    //                pdf_url_book
+        //    //                )
+        //    //            VALUES
+        //    //                ('{model.Author_name}', '{model.Book_name}', {model.Book_price}, {model.In_stock}, {model.SubjectID}, '{model.Pdf_url_book}') ";
+        //    string sql = $@"INSERT INTO Books (
+        //                    author_name,
+        //                    book_name,
+        //                    book_price,
+        //                    In_stock,
+        //                    subjectID,
+        //                    pdf_url_book
+        //                    )
+        //                VALUES
+        //                    (@AuthorName, @BookName, @BookPrice, @InStock, @SubjectID, @PdfUrlBook) ";
+        //    this.helperOledb.AddParameter("@AuthorName", model.Author_name);
+        //    this.helperOledb.AddParameter("@BookName", model.Book_name);
+        //    this.helperOledb.AddParameter("@BookPrice", model.Book_price.ToString());
+        //    this.helperOledb.AddParameter("@InStock", model.In_stock.ToString());
+        //    this.helperOledb.AddParameter("@SubjectID", model.SubjectID);
+        //    this.helperOledb.AddParameter("@PdfUrlBook", model.Pdf_url_book);
+        //    return this.helperOledb.Insert(sql) > 0;
 
 
 
 
 
-        }
+        //}
 
 
         public bool Delete(string id)

@@ -63,5 +63,7 @@ namespace LLstudyWS.ORM.Repositorys
                 return this.eventRepository;
             }
         }
+
+        public DbHelperOledb HelperOledb { get { return this.helperOledb; } }
     }
 }
