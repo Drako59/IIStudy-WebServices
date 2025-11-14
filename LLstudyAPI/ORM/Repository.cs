@@ -143,10 +143,10 @@ namespace LLstudyWS.ORM
 
             foreach(PropertyInfo pro in props)
             {
-                this.helperOledb.AddParameter(@$"@{pro.Name}", pro.GetValue(model, null).ToString());
+                this.helperOledb.AddParameter(@$"@{pro.Name}", pro.GetValue(model, null));
             }
 
-            this.helperOledb.AddParameter($@"@{propID.Name}", propID.GetValue(model, null).ToString());
+            this.helperOledb.AddParameter($@"@{propID.Name}", propID.GetValue(model, null));
 
             return this.helperOledb.Update(sql) > 0;
 
