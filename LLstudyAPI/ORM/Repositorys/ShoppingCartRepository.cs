@@ -1,5 +1,6 @@
 ﻿using LLStudy_Models.Models;
 using LLstudyWS.ORM.CreatorsModels;
+using System.Data;
 
 namespace LLstudyWS.ORM
 {
@@ -7,44 +8,23 @@ namespace LLstudyWS.ORM
     {
         public ShoppingCartRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
-        public bool Create()
+        public override Shopping_Cart GetByID(string UserName)
         {
-            throw new NotImplementedException();
-        }
+            string sql = "SELECT * FROM Registereds WHERE UserName = @UserName";
 
-        public bool Create(Shopping_Cart model)
-        {
-            throw new NotImplementedException();
-        }
+            this.helperOledb.AddParameter("@UserName", UserName);
 
-        public bool Delete()
-        {
-            throw new NotImplementedException();
+            Shopping_Cart obj;
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    obj = this.moderlRefCreator.CreateModel<Shopping_Cart>(reader);
+                    return obj;
+                }
+            }
+            return new Shopping_Cart();
         }
-
-        public bool Delete(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Shopping_Cart> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Shopping_Cart GetByID(string ID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(Shopping_Cart model)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.Models
 {
+
     public class Shopping_Cart:Model
     {
         string userName;

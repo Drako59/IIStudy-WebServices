@@ -22,7 +22,7 @@ namespace LLStudy_Models.Models
         string type;
         //[Required]
         [IsDigits(ErrorMessage = "ID must contain only digits.")]
-        public string Book_ID {  get { return book_ID; } set {  book_ID = value; } }
+        public string BookID {  get { return book_ID; } set {  book_ID = value; } }
         [Required(ErrorMessage = "Name was not set")]
         [StringLength(20,MinimumLength = 2, ErrorMessage ="Lenght is not between 2 and 20 characters.")]
         [FIrstCapitalChar(ErrorMessage = "First letter isn't capital.")]

@@ -22,44 +22,23 @@ namespace LLstudyWS.ORM
 
 
         }
-        public bool Create()
-        {
-            throw new NotImplementedException();
-        }
 
-        public bool Delete()
+        public override Registered GetByID(string UserName)
         {
-            throw new NotImplementedException();
-        }
+            string sql = "SELECT * FROM Registereds WHERE UserName = @UserName";
 
-        public List<Registered> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+            this.helperOledb.AddParameter("@UserName", UserName);
 
-        public Registered GetByID(string ID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Create(Registered model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(Registered model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(string id)
-        {
-            throw new NotImplementedException();
+            Registered obj;
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    obj = this.moderlRefCreator.CreateModel<Registered>(reader);
+                    return obj;
+                }
+            }
+            return new Registered();
         }
     }
 }

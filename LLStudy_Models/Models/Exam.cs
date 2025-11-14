@@ -10,7 +10,7 @@ namespace LLStudy_Models.Models
     public class Exam: Model
     {
       
-        string exam_ID;
+        string examID;
         string categoryID;
         bool access;
         string file_path_url;
@@ -18,7 +18,7 @@ namespace LLStudy_Models.Models
         string exam_Year;
         //[Required]
         //[IsDigits(ErrorMessage = "ID must contain only digits.")]
-        public string Exam_ID { get { return exam_ID; } set { exam_ID = value; } }
+        public string ExamID { get { return examID; } set { examID = value; } }
         [Required]
         public string CategoryID { get { return categoryID; } set { categoryID = value; } }
         

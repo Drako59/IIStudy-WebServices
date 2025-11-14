@@ -129,7 +129,7 @@ namespace LLstudyWS.ORM
             return new T();
         }
 
-        public bool Update(T model)
+        public virtual bool Update(T model)
         {
             string sql;
             Type typeProp = model.GetType();
