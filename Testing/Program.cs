@@ -291,6 +291,7 @@ namespace Testing
                 Author_name = "RED",
                 In_stock = true,
                 SubjectID = "2",
+                Book_name = "ofek",
                 Pdf_url_book = "robot",
                 Book_price = 67
             };
