@@ -63,6 +63,24 @@ namespace LLstudyWS.ORM.Repositorys
                 return this.eventRepository;
             }
         }
+        public ExamRepository ExamRpository
+        {
+            get
+            {
+                if (this.examRepository == null)
+                    this.examRepository = new ExamRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                return this.examRepository;
+            }
+        }
+        public SolutionRepository SolutionRpository
+        {
+            get
+            {
+                if (this.solutionRepository == null)
+                    this.solutionRepository = new SolutionRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                return this.solutionRepository;
+            }
+        }
 
         public DbHelperOledb HelperOledb { get { return this.helperOledb; } }
     }

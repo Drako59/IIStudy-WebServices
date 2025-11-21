@@ -20,8 +20,9 @@ namespace Testing
     {
         public static void Main(string[] args)
         {
+            test_solution();
             //RefCheckCreator();
-            test_select();
+            //test_select();
             //Console.WriteLine("Hello World!");
             test_repository();
             //checkInsert();
@@ -37,6 +38,20 @@ namespace Testing
 
         }
 
+        static void test_solution()
+        {
+            RepositoryUOW repoUOW = new RepositoryUOW();
+            repoUOW.HelperOledb.OpenConnection();
+            IRepository<Solution> BookRepo = repoUOW.SolutionRpository;
+
+            List<Solution> books = BookRepo.GetAll();
+
+            foreach (Solution book in books)
+            {
+                Console.WriteLine(@$"Name: {book.Solution_Name}, price: {book.Solution_Year}, In_stock: {book.SolutionID}  ");
+            }
+            repoUOW.HelperOledb.CloseConnection();
+        }
         static void test_select()
         {
             RepositoryUOW repoUOW = new RepositoryUOW();

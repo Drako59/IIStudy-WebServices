@@ -9,8 +9,8 @@ namespace LLstudyWS.ORM
         {
             return new Solution()
             {
-                Solution_ID = Convert.ToString(dataReader["Solution_ID"]),
-                Exam_ID = Convert.ToString(dataReader["Exam_ID"]),
+                SolutionID = Convert.ToString(dataReader["Solution_ID"]),
+                ExamID = Convert.ToString(dataReader["Exam_ID"]),
                 CategoryID = Convert.ToString(dataReader["CategoryID"]),
                 Access = Convert.ToBoolean(dataReader["Access"]),
                 File_path_url = Convert.ToString("File_path_url"),
