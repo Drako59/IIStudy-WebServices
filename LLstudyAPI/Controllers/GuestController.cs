@@ -47,6 +47,11 @@ namespace LLstudyWS.Controllers
                     this.debugList(viewExamsModel.Exams);
                     this.debugList(viewExamsModel.Solutions);
                     Console.WriteLine("Here");
+                    viewExamsModel.Exams = this.repositoryUOW.ExamRepository.GetAll();
+                    viewExamsModel.Solutions = this.repositoryUOW.SolutionRepository.GetAll();
+                    Console.WriteLine("here");
+                    this.debugList(viewExamsModel.Exams);
+                    this.debugList(viewExamsModel.Solutions);
 
                     return viewExamsModel;
 
@@ -66,6 +71,7 @@ namespace LLstudyWS.Controllers
                     temp_solutions.AddRange(this.repositoryUOW.SolutionRepository.GetBySubjectId(subjectID));
 
                 }
+
                 viewExamsModel.Exams = temp;
                 viewExamsModel.Solutions = temp_solutions;
                 return viewExamsModel;
