@@ -9,8 +9,8 @@ namespace LLStudy_Models.ViewModels.Guest
 {
     public class ViewExamsModel
     {
-        List<Exam> Exams { get; set; }
-        List<Solution> Solutions { get; set; }
+        public List<Exam> Exams { get; set; }
+        public List<Solution> Solutions { get; set; }
 
     }
 }

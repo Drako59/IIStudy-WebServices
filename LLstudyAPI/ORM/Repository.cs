@@ -18,16 +18,18 @@ namespace LLstudyWS.ORM
             this.helperOledb = helperOledb;
         }
 
-        public virtual bool Create(T model)
+        public virtual bool Create(T model, List<string>? exludes = null)
         {
             
             Type OBJtype = model.GetType();
             List<string> exludePROP = new List<string> { "IsValid", "HasErrors" };
+            if (exludes != null)
+                exludePROP.AddRange(exludes);
             PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => (!exludePROP.Contains(p.Name) && (!p.Name.Equals(OBJtype.Name + "ID")))).ToArray();
-            foreach (PropertyInfo pro in propertys)
-            {
-                Console.WriteLine(@$"Property Name: {pro.Name}");
-            }
+            //foreach (PropertyInfo pro in propertys)
+            //{
+            //    Console.WriteLine(@$"Property Name: {pro.Name}");
+            //}
             string columns = string.Join(", ", propertys.Select(p => p.Name));
             string placeholders = string.Join(", ", propertys.Select(p => ("@" + p.Name)));
             string sql = $@"INSERT INTO {OBJtype.Name}s ({columns}) VALUES({placeholders})";
@@ -133,13 +135,15 @@ namespace LLstudyWS.ORM
             return new T();
         }
 
-        public virtual bool Update(T model)
+        public virtual bool Update(T model, List<string>? exludes = null)
         {
             string sql;
             Type typeProp = model.GetType();
             List<string> exludedProps = new List<string>() { "IsValid", "HasErrors"};
+            if (exludes != null)
+                exludedProps.AddRange(exludes);
             PropertyInfo[] props = typeProp.GetProperties().Where(p => (!exludedProps.Contains(p.Name) && !p.Name.Equals($@"{p.Name}ID"))).ToArray();
-            string sets = string.Join(", ", props.Select(p => @$"@{p.Name} = {p.GetValue(model,null)}"));
+            string sets = string.Join(", ", props.Select(p => @$"{p.Name} = @{p.Name}"));
 
             PropertyInfo propID = typeProp.GetProperty(@$"{typeProp.Name}ID");
 

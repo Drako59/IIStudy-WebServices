@@ -2,8 +2,8 @@
 {
     public interface IRepository<T>
     {
-        bool Create(T model);
-        bool Update(T model);
+        bool Create(T model, List<string>? exludes = null);
+        bool Update(T model, List<string>? exludes = null);
         bool Delete(string id);
         List<T> GetAll();
 

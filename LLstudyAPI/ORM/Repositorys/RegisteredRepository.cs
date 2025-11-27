@@ -8,15 +8,15 @@ namespace LLstudyWS.ORM
     {
         public RegisteredRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
-        public string Login(string username, string password)
+        public Registered Login(string username, string password)
         {
-            string sql = "SELECT password FROM Registers WHERE UserName = @USERNAME AND password = @PASSWORD";
+            string sql = "SELECT * FROM Registereds WHERE UserName = @USERNAME AND Password = @PASSWORD";
             this.helperOledb.AddParameter("@USERNAME", username);
             this.helperOledb.AddParameter("@PASSWORD", password);
             using (IDataReader reader = this.helperOledb.Select(sql)) 
             {
                 if (reader.Read())
-                    return reader["UserName"].ToString();
+                    return this.moderlRefCreator.CreateModel<Registered>(reader, new List<string>() { "Password" });
             }
             return null;
 

@@ -18,14 +18,14 @@ namespace LLStudy_Models.Models
         string solution_Name;
         string solution_Year;
 
-        public string Solution_ID { get { return solution_ID; } set { solution_ID = value; } }
+        public string SolutionID { get { return solution_ID; } set { solution_ID = value; } }
         [Required]
         [IsDigits(ErrorMessage = "ID must be a numebr.")]
         public string CategoryID { get { return categoryID; } set { categoryID = value; } }
         [Required]
         [IsDigits(ErrorMessage = "ID must be a numebr.")]
 
-        public string Exam_ID { get { return Exam_ID; } set { Exam_ID = value; } }
+        public string ExamID { get { return exam_ID; } set { exam_ID = value; } }
         public bool Access { get { return access; } set { access = value; } }
         [Required]
 

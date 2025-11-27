@@ -1,87 +1,44 @@
 ﻿using LLStudy_Models.Models;
 using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LLstudyWS.ORM
 {
     public class ExamRepository : Repository<Exam>, IRepository<Exam>
     {
         public ExamRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+        public List<Exam> GetByYear(string year)
+        {
+            string sql = $@"SELECT * FROM Exams WHERE Exam_year = @year";
+            this.helperOledb.AddParameter("@year", year);
+            List<Exam> exams = new List<Exam>();
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    exams.Add(this.moderlRefCreator.CreateModel<Exam>(reader));
+                }
+            }
+            return exams;
+        }
 
-        //public bool Create(Exam model)
-        //{
-        //    string sql = @"INSERT INTO
-        //                Exams (
-        //                    Exam_Name,
-        //                    Exam_year,
-        //                    categoryID,
-        //                    acsses,
-        //                    file_path_url
-        //                )
-        //            VALUES
-        //                (@NAME, @YEAR, @CATE_VAR, @ACSSES, @PATH)";
+        public List<Exam> GetBySubjectId(string subjectID)
+        {
+            string sql = $@"SELECT * FROM Exams WHERE CategoryID = @subjectID";
+            
+            this.helperOledb.AddParameter("@subjectID", subjectID);
+            List<Exam> books = new List<Exam>();
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    books.Add(this.moderlRefCreator.CreateModel<Exam>(reader));
+                }
+            }
+            return books;
 
-        //    this.helperOledb.AddParameter("@NAME", model.Exam_Name);
-        //    this.helperOledb.AddParameter("@CATE_VAR", model.CategoryID);
-        //    this.helperOledb.AddParameter("@YEAR", model.Exam_Year);
-        //    this.helperOledb.AddParameter("@NAME", model.Access.ToString());
-        //    this.helperOledb.AddParameter("@PATH", model.File_path_url);
+        }
 
-        //    return this.helperOledb.Insert(sql) > 0;
-        //}
-
-        //public bool Delete(string id)
-        //{
-        //    string sql = "DELETE * FROM Events WHERE Exam_Name = @NAME";
-        //    this.helperOledb.AddParameter("@NAME", id);
-        //    return this.helperOledb.Delete(sql) > 0;
-        //}
-
-        //public List<Exam> GetAll()
-        //{
-        //    string sql = "SELECT * FROM Exams";
-        //    List<Exam> exams = new List<Exam>();
-        //    using (IDataReader reader = this.helperOledb.Select(sql))
-        //    {
-        //        while (reader.Read())
-        //        {
-        //            exams.Add(this.modelCreators.ExamCreator.CreateModel(reader));
-        //        }
-        //    }
-        //    return exams;
-        //}
-
-        //public Exam GetByID(string ID)
-        //{
-        //    string sql = "SELECT * FROM Exams  WHERE Exam_ID = @ID";
-        //    this.helperOledb.AddParameter("@ID", ID);
-        //    using (IDataReader reader = this.helperOledb.Select(sql))
-        //    {
-        //        reader.Read();
-        //        return this.modelCreators.ExamCreator.CreateModel(reader);
-        //    }
-        //}
-
-        //public bool Update(Exam model)
-        //{
-        //    string sql = @"UPDATE Exams
-        //                SET
-        //                    Exam_Name = @NAME,
-        //                    Exam_year = @YEAR,
-        //                    acsses = @ACS,
-        //                    file_path_url = @PATH,
-        //                    categoryID = @CA
-        //                WHERE
-        //                    Exam_ID = @ID";
-        //    this.helperOledb.AddParameter("@NAME", model.Exam_Name);
-        //    this.helperOledb.AddParameter("@PATH", model.File_path_url);
-        //    this.helperOledb.AddParameter("@YEAR", model.Exam_Year);
-        //    this.helperOledb.AddParameter("@ACS", model.Access.ToString());
-        //    this.helperOledb.AddParameter("@CA", model.CategoryID);
-        //    this.helperOledb.AddParameter("@ID", model.ExamID);
-        //    return this.helperOledb.Update(sql) > 0;
-
-
-        //}
     }
 }
