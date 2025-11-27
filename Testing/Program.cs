@@ -20,6 +20,8 @@ namespace Testing
     {
         public static void Main(string[] args)
         {
+            int[] arr = new int[2];
+
             //RefCheckCreator();
             test_select();
             //Console.WriteLine("Hello World!");
