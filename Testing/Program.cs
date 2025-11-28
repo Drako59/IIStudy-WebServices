@@ -21,8 +21,8 @@ namespace Testing
         public static void Main(string[] args)
         {
             int[] arr = new int[2];
-
-            TestUserBooks();
+            CreateCheck();
+            //TestUserBooks();
 
             //test_solution();
             //RefCheckCreator();
@@ -42,7 +42,16 @@ namespace Testing
 
         }
 
+        public static void CreateCheck()
+        {
+            RepositoryUOW UOW = new RepositoryUOW();
+            UOW.HelperOledb.OpenConnection();
 
+            UOW.RegisteredRepository.Create(new Registered() {UserName = "ff", Password = "test", Role = "Admin", Email = "testagain", Birth = "test" });
+
+
+            UOW.HelperOledb.CloseConnection();
+        }
         public static void TestUserBooks()
         {
             RepositoryUOW uow = new RepositoryUOW();

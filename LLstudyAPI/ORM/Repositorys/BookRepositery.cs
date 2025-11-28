@@ -106,6 +106,36 @@ namespace LLstudyWS.ORM
             }
             return books;
         }
+
+        public List<Book> GetByName(string name)
+        {
+            string sql = $@"SELECT
+                            *
+                        FROM
+                            Books
+                        WHERE
+                            book_name LIKE @Name & '*' OR author_name LIKE '*' & @Name &'*'";
+            this.helperOledb.AddParameter("@Name",name);
+            List<Book> books = new List<Book>();
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    books.Add(this.moderlRefCreator.CreateModel<Book>(reader));
+                }
+
+            }
+
+            foreach(Book book in books)
+            {
+                Console.WriteLine($@"Book Name: {book.Book_name}");
+            }
+            return books;
+
+        }
+
+
        
     }
 }

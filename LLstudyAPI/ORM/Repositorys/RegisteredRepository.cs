@@ -1,5 +1,6 @@
 ﻿using LLStudy_Models.Models;
 using LLstudyWS.ORM.CreatorsModels;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace LLstudyWS.ORM
@@ -8,10 +9,24 @@ namespace LLstudyWS.ORM
     {
         public RegisteredRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
-        public Registered Login(string username, string password)
+        public Registered Login( string password, string? username = null, string? email = null )
+            
         {
+            
             string sql = "SELECT * FROM Registereds WHERE UserName = @USERNAME AND Password = @PASSWORD";
-            this.helperOledb.AddParameter("@USERNAME", username);
+            if (email != null)
+            {
+                sql = "SELECT * FROM Registereds WHERE Email = @Email AND Password = @PASSWORD";
+                this.helperOledb.AddParameter("@Email", email);
+
+            }
+            else
+            {
+                this.helperOledb.AddParameter("@USERNAME", username);
+
+            }
+
+
             this.helperOledb.AddParameter("@PASSWORD", password);
             using (IDataReader reader = this.helperOledb.Select(sql)) 
             {
@@ -22,6 +37,7 @@ namespace LLstudyWS.ORM
 
 
         }
+
 
         public override Registered GetByID(string UserName)
         {

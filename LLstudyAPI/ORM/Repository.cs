@@ -30,7 +30,7 @@ namespace LLstudyWS.ORM
             //{
             //    Console.WriteLine(@$"Property Name: {pro.Name}");
             //}
-            string columns = string.Join(", ", propertys.Select(p => p.Name));
+            string columns = string.Join(", ", propertys.Select(p => $@"[{p.Name}]"));
             string placeholders = string.Join(", ", propertys.Select(p => ("@" + p.Name)));
             string sql = $@"INSERT INTO {OBJtype.Name}s ({columns}) VALUES({placeholders})";
             Console.WriteLine(sql);
@@ -42,7 +42,7 @@ namespace LLstudyWS.ORM
             {
                 PropretyType = pro.PropertyType;
                 //value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
-                this.helperOledb.AddParameter(("@" + pro.Name), pro.GetValue(model, null) ?? "");
+                this.helperOledb.AddParameter(("@" + pro.Name.ToString()), pro.GetValue(model, null) ?? "");
 
                 Console.WriteLine(@$"{"@" + pro.Name}:  {pro.GetValue(model, null)?.ToString() ?? ""} ");
             }

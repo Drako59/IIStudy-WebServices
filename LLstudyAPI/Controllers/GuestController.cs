@@ -27,6 +27,29 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpGet]
+        public List<Book> GetBooks(string? subjectID = null, string? author_name = null,string? search = null, string? book_name = null, string? price_min = null, string? price_max = null,string? type = null) {
+
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                List<Book> books = new List<Book>();
+                if (search != null)
+                    books.AddRange(this.repositoryUOW.BookRepository.GetByName(search));
+
+                return books;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
+        [HttpGet]
         public ViewExamsModel GetExams(string year = null, string subjectID = null, int pages = 0)
         {
             try
@@ -89,46 +112,8 @@ namespace LLstudyWS.Controllers
 
             }
         }
-        [HttpPost]
-        public Registered Login(string UserName, string password)
-        {
-            try
-            {
-                Registered register;
-                this.repositoryUOW.HelperOledb.OpenConnection();
-                register = this.repositoryUOW.RegisteredRepository.Login(UserName, password);
-                return register;
+       
 
-            }
-            catch (Exception ex) {
-                Console.WriteLine(ex.ToString());
-                return null;
-            }
-            finally {
-                this.repositoryUOW.HelperOledb.CloseConnection();
-            }
-
-        }
-
-        [HttpPost]
-        public List<Book> GetUserBooks(string userName)
-        {
-            try
-            {
-                this.repositoryUOW.HelperOledb.OpenConnection();
-                List<Book> books = new List<Book>();
-                books = this.repositoryUOW.BookRepository.GetUserNameBooks(userName);
-                return books;
-            }
-            catch(Exception ex) 
-            {
-                Console.WriteLine(ex.ToString());
-                return null;
-            }
-            finally
-            {
-                this.repositoryUOW.HelperOledb.CloseConnection();
-            }
-        }
+        
     }
 }

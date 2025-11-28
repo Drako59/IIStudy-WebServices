@@ -20,8 +20,8 @@ namespace LLStudy_Models.Models
         public string UserName { get; set; }
         
         [Required]
-        [FirstLetterCapital(ErrorMessage ="Valid Password is requierd")]
-        [StringLength(maximumLength: 20, MinimumLength = 8, ErrorMessage = "Valid username is required")]
+        //[FirstLetterCapital(ErrorMessage ="Valid Password is requierd")]
+        //[StringLength(maximumLength: 20, MinimumLength = 2, ErrorMessage = "Valid password is required")]
         public string Password { get; set; }
         [EmailAddress(ErrorMessage = "Valid email is required")]
         public string Email { get; set; }
