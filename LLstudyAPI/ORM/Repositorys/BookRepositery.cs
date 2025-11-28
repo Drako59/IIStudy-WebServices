@@ -118,15 +118,6 @@ namespace LLstudyWS.ORM
             this.helperOledb.AddParameter("@Name",name);
             List<Book> books = new List<Book>();
 
-            string sql = $@"SELECT     Books.BookID AS [BookID], * FROM  Books
-                                    INNER JOIN (
-                                        Orders_Books
-                                        INNER JOIN Orders ON Orders.orderID = Orders_Books.OrderID
-                                    ) ON Books.bookID = Orders_Books.BookID
-                                WHERE
-                                    Orders.UserName = @userName";
-
-            this.helperOledb.AddParameter("@userName", userName);
 
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
