@@ -12,7 +12,7 @@ namespace LLstudyWS.ORM.Repositorys
         SolutionRepository solutionRepository;
         EventRepository eventRepository;
         ExamRepository examRepository;
-        RegisterCreator registerCreator;
+        RegisteredRepository registeredRepository;
         DbHelperOledb helperOledb;
         ModelCreators modelCreators;
         ModelCreatorReflection modelCreatorReflection;
@@ -54,7 +54,7 @@ namespace LLstudyWS.ORM.Repositorys
                 return reviewRepository; }
         }
 
-        public EventRepository EventRpository
+        public EventRepository EventRepository
         {
             get
             {
@@ -63,7 +63,7 @@ namespace LLstudyWS.ORM.Repositorys
                 return this.eventRepository;
             }
         }
-        public ExamRepository ExamRpository
+        public ExamRepository ExamRepository
         {
             get
             {
@@ -72,13 +72,22 @@ namespace LLstudyWS.ORM.Repositorys
                 return this.examRepository;
             }
         }
-        public SolutionRepository SolutionRpository
+        public SolutionRepository SolutionRepository
         {
             get
             {
                 if (this.solutionRepository == null)
                     this.solutionRepository = new SolutionRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
                 return this.solutionRepository;
+            }
+        }
+
+        public RegisteredRepository RegisteredRepository {
+            get
+            {
+                if (this.registeredRepository == null)
+                    this.registeredRepository = new RegisteredRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                return this.registeredRepository;
             }
         }
 

@@ -41,8 +41,14 @@ namespace LLstudyWS.Controllers
                 {
                     Console.WriteLine("here");
 
-                    viewExamsModel.Exams = this.repositoryUOW.ExamRpository.GetAll();
-                    viewExamsModel.Solutions = this.repositoryUOW.SolutionRpository.GetAll();
+                    viewExamsModel.Exams = this.repositoryUOW.ExamRepository.GetAll();
+                    viewExamsModel.Solutions = this.repositoryUOW.SolutionRepository.GetAll();
+                    Console.WriteLine("here");
+                    this.debugList(viewExamsModel.Exams);
+                    this.debugList(viewExamsModel.Solutions);
+                    Console.WriteLine("Here");
+                    viewExamsModel.Exams = this.repositoryUOW.ExamRepository.GetAll();
+                    viewExamsModel.Solutions = this.repositoryUOW.SolutionRepository.GetAll();
                     Console.WriteLine("here");
                     this.debugList(viewExamsModel.Exams);
                     this.debugList(viewExamsModel.Solutions);
@@ -52,19 +58,20 @@ namespace LLstudyWS.Controllers
                 }
 
 
-                //if (year != null)
-                //{
-                //    temp.AddRange(this.repositoryUOW.ExamRpository.GetByYear(year));
-                //    temp_solutions.AddRange(this.repositoryUOW.SolutionRpository.GetByYear(year));
+                if (year != null)
+                {
+                    temp.AddRange(this.repositoryUOW.ExamRepository.GetByYear(year));
+                    temp_solutions.AddRange(this.repositoryUOW.SolutionRepository.GetByYear(year));
 
-                //}
+                }
 
-                //if (subjectID != null)
-                //{
-                //    temp.AddRange(this.repositoryUOW.ExamRpository.GetBySubjectId(subjectID));
-                //    temp_solutions.AddRange(this.repositoryUOW.SolutionRpository.GetBySubjectId(subjectID));
+                if (subjectID != null)
+                {
+                    temp.AddRange(this.repositoryUOW.ExamRepository.GetBySubjectId(subjectID));
+                    temp_solutions.AddRange(this.repositoryUOW.SolutionRepository.GetBySubjectId(subjectID));
 
-                //}
+                }
+
                 viewExamsModel.Exams = temp;
                 viewExamsModel.Solutions = temp_solutions;
                 return viewExamsModel;
@@ -80,6 +87,47 @@ namespace LLstudyWS.Controllers
             {
                 this.repositoryUOW.HelperOledb.CloseConnection();
 
+            }
+        }
+        [HttpPost]
+        public Registered Login(string UserName, string password)
+        {
+            try
+            {
+                Registered register;
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                register = this.repositoryUOW.RegisteredRepository.Login(UserName, password);
+                return register;
+
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
+
+        [HttpPost]
+        public List<Book> GetUserBooks(string userName)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                List<Book> books = new List<Book>();
+                books = this.repositoryUOW.BookRepository.GetUserNameBooks(userName);
+                return books;
+            }
+            catch(Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
     }

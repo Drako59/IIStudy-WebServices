@@ -4,7 +4,7 @@ namespace LLstudyWS.ORM.CreatorsModels
 {
     public interface IRefModelCreator
     {
-        T CreateModel<T>(IDataReader dataReader) where T : new();
+        T CreateModel<T>(IDataReader dataReader,List<string>? exludes = null) where T : new();
 
     }
 }
