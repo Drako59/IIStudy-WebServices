@@ -77,6 +77,9 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 List<Book> books = new List<Book>();
                 books = this.repositoryUOW.BookRepository.GetUserNameBooks(userName);
+                foreach(Book book in books)
+                    Console.WriteLine($@"BookName: {book.Book_name}");
+                Console.WriteLine("Test");
                 return books;
             }
             catch (Exception ex)
