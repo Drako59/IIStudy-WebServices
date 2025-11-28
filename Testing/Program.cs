@@ -22,7 +22,9 @@ namespace Testing
         {
             int[] arr = new int[2];
 
-            test_solution();
+            TestUserBooks();
+
+            //test_solution();
             //RefCheckCreator();
             //test_select();
             //Console.WriteLine("Hello World!");
@@ -40,11 +42,26 @@ namespace Testing
 
         }
 
+
+        public static void TestUserBooks()
+        {
+            RepositoryUOW uow = new RepositoryUOW();
+            uow.HelperOledb.OpenConnection();
+
+            List<Book> books = uow.BookRepository.GetUserNameBooks("Noam");
+
+            foreach (Book book in books)
+            {
+                Console.WriteLine(@$"Name: {book.Book_name}, price: {book.Book_price}, In_stock: {book.In_stock}  ");
+            }
+
+            uow.HelperOledb.CloseConnection();
+        }
         static void test_solution()
         {
             RepositoryUOW repoUOW = new RepositoryUOW();
             repoUOW.HelperOledb.OpenConnection();
-            IRepository<Solution> BookRepo = repoUOW.SolutionRpository;
+            IRepository<Solution> BookRepo = repoUOW.SolutionRepository;
 
             List<Solution> books = BookRepo.GetAll();
 

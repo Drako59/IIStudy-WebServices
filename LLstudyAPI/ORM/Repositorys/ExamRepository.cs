@@ -25,7 +25,7 @@ namespace LLstudyWS.ORM
 
         public List<Exam> GetBySubjectId(string subjectID)
         {
-            string sql = $@"SELECT * FROM Exams WHERE CategoryID = @subjectID";
+            string sql = $@"SELECT Books.BookID AS BookID,* FROM Exams WHERE CategoryID = @subjectID";
             
             this.helperOledb.AddParameter("@subjectID", subjectID);
             List<Exam> books = new List<Exam>();

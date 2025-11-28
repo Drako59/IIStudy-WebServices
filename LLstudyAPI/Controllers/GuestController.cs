@@ -109,5 +109,26 @@ namespace LLstudyWS.Controllers
             }
 
         }
+
+        [HttpPost]
+        public List<Book> GetUserBooks(string userName)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                List<Book> books = new List<Book>();
+                books = this.repositoryUOW.BookRepository.GetUserNameBooks(userName);
+                return books;
+            }
+            catch(Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
     }
 }
