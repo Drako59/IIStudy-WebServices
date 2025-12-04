@@ -5,6 +5,7 @@ using LLStudy_Models.ViewModels.Guest;
 using System.Security.Cryptography.X509Certificates;
 using LLstudyWS.ORM.Repositorys;
 using LLStudy_Models.Models;
+using System.Security.Permissions;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -33,10 +34,15 @@ namespace LLstudyWS.Controllers
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
+
+                if (search == null && subjectID == null && author_name == null && book_name == null && price_min == null && price_max == null && type == null)
+                    return this.repositoryUOW.BookRepository.GetAll();
+
                 List<Book> books = new List<Book>();
                 if (search != null)
                     books.AddRange(this.repositoryUOW.BookRepository.GetByName(search));
 
+                
                 return books;
             }
             catch (Exception ex)
@@ -111,9 +117,34 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
 
             }
-        }
-       
 
-        
+
+            
+        }
+
+        [HttpGet]
+        public List<Event> Calender() //string year, string month
+        {
+
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                List<Event> events = this.repositoryUOW.EventRepository.GetAll() ;
+                return events;
+
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
+
     }
 }

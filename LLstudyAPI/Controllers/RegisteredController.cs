@@ -22,13 +22,14 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 if (email != null)
                 {
-                    register = this.repositoryUOW.RegisteredRepository.Login(password, email: email);
+                    return this.repositoryUOW.RegisteredRepository.Login(password, email: email);
+                }
+                else if(UserName != null)
+                {
+                    return this.repositoryUOW.RegisteredRepository.Login(password, username: UserName);
                 }
                 else
-                {
-                    register = this.repositoryUOW.RegisteredRepository.Login(password, username: UserName);
-                }
-                return register;
+                    return null;
 
             }
             catch (Exception ex)
@@ -44,17 +45,17 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public Registered Sign_Up(Registered reg)
+        public string Sign_Up(Registered reg) //Registered
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                
+                string regID;   
                 this.repositoryUOW.RegisteredRepository.Create(reg,new List<string>() { "Role"});
 
-                reg = this.repositoryUOW.RegisteredRepository.Login(reg.Password,username: reg.UserName);
+                regID = this.repositoryUOW.RegisteredRepository.LoginID(reg.Password,username: reg.UserName);
 
-                return reg;
+                return regID;
             }
             catch (Exception ex)
             {
@@ -70,19 +71,62 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public List<Book> GetUserBooks(string userName)
+        public List<Book> GetUserBooks(string RegisteredID)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 List<Book> books = new List<Book>();
-                books = this.repositoryUOW.BookRepository.GetUserNameBooks(userName);
-                foreach(Book book in books)
-                    Console.WriteLine($@"BookName: {book.Book_name}");
-                Console.WriteLine("Test");
+                books = this.repositoryUOW.BookRepository.GetUserNameBooks(RegisteredID);
+               
                 return books;
             }
             catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpPost]
+        public string sign_in_ID(string password, string? userName = null, string? email = null)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                if (email != null)
+                    return this.repositoryUOW.RegisteredRepository.LoginID(password, email: email);
+                else if (userName != null)
+                    return this.repositoryUOW.RegisteredRepository.LoginID(password, username: userName);
+                else
+                    return null;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public Registered profile(string ID)
+        {
+            try
+            {
+                Registered reg;
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                reg = this.repositoryUOW.RegisteredRepository.GetByID(ID);
+                return reg; 
+            }
+            catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return null;

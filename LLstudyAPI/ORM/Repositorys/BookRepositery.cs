@@ -83,7 +83,7 @@ namespace LLstudyWS.ORM
         //    }
         //}
 
-        public List<Book> GetUserNameBooks(string userName)
+        public List<Book> GetUserNameBooks(string RegisteredID)
         {
             List<Book> books = new List<Book>();
 
@@ -93,9 +93,9 @@ namespace LLstudyWS.ORM
                                         INNER JOIN Orders ON Orders.orderID = Orders_Books.OrderID
                                     ) ON Books.bookID = Orders_Books.BookID
                                 WHERE
-                                    Orders.UserName = @userName";
+                                    Orders.RegisteredID = @RegisteredID";
 
-            this.helperOledb.AddParameter("@userName", userName);
+            this.helperOledb.AddParameter("@RegisteredID", RegisteredID);
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 while (reader.Read())
@@ -108,13 +108,14 @@ namespace LLstudyWS.ORM
 
         public List<Book> GetByName(string name)
         {
+            Console.WriteLine(">>>" + name + "<<<");
             string sql = $@"SELECT
                             *
                         FROM
                             Books
                         WHERE
-                            book_name LIKE @Name & '*' OR author_name LIKE '*' & @Name &'*'";
-            this.helperOledb.AddParameter("@Name",name);
+                            book_name LIKE @Name  OR author_name LIKE  @Name";
+            this.helperOledb.AddParameter("@Name","%" + name +"%");
             List<Book> books = new List<Book>();
 
 

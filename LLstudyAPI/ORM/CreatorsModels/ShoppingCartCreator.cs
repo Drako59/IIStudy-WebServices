@@ -9,7 +9,7 @@ namespace LLstudyWS.ORM
         {
             return new Shopping_Cart()
             {
-                UserName = Convert.ToString(dataReader["UserName"])
+                RegisteredID = Convert.ToString(dataReader["RegisteredID"])
             };
         }
     }

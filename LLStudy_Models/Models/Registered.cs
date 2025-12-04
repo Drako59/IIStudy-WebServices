@@ -15,6 +15,7 @@ namespace LLStudy_Models.Models
         string email;
         string role;
         string birth;
+        string registeredID;
         [Required]
         [StringLength(maximumLength: 20,MinimumLength =2,ErrorMessage ="Valid username is required")]
         public string UserName { get; set; }
@@ -28,6 +29,7 @@ namespace LLStudy_Models.Models
         [LegalRole(ErrorMessage ="Valid role is required")]
         public string Role { get; set; }
         public string Birth { get; set; }
+        public string RegisteredID { get; set; }
 
     }
 }

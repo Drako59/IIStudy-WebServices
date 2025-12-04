@@ -10,8 +10,8 @@ namespace LLStudy_Models.Models
 
     public class Shopping_Cart:Model
     {
-        string userName;
+        string registeredID;
         [Required]
-        public string UserName { get { return userName; } set { userName = value; } }
+        public string RegisteredID { get; set; }
     }
 }
