@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using LLStudy_Models.Models;
 
 
-namespace LLStudy_Models.ViewModels.Registerd
+namespace LLStudy_Models.ViewModels
 {
     public class ViewOrdersModel
     {

@@ -97,7 +97,7 @@ namespace LLstudyWS.ORM
             return this.helperOledb.Delete(sql) > 0;
         }
 
-        public virtual List<T> GetAll()
+        public virtual List<T> GetAll(List<string>? exludes = null)
         {
             List<T> records = new List<T>();
 
@@ -110,13 +110,13 @@ namespace LLstudyWS.ORM
                 while (reader.Read())
                 {
 
-                    records.Add(this.moderlRefCreator.CreateModel<T>(reader));
+                    records.Add(this.moderlRefCreator.CreateModel<T>(reader, exludes: exludes));
                 }
             }
             return records;
         }
 
-        public virtual T GetByID(string ID)
+        public virtual T GetByID(string ID, List<string>? exludes = null)
         {
             Type objType = typeof(T);
             T obj;
@@ -128,7 +128,7 @@ namespace LLstudyWS.ORM
             {
                 if (reader.Read())
                 {
-                    obj = this.moderlRefCreator.CreateModel<T>(reader);
+                    obj = this.moderlRefCreator.CreateModel<T>(reader, exludes: exludes);
                     return obj;
                 }
             }

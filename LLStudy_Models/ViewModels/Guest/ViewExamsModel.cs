@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LLStudy_Models.ViewModels.Guest
+namespace LLStudy_Models.ViewModels
 {
     public class ViewExamsModel
     {

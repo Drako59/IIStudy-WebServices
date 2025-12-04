@@ -9,7 +9,7 @@ namespace LLstudyWS.ORM
         public ShoppingCartRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
         
-        public override Shopping_Cart GetByID(string RegisteredID)
+        public override Shopping_Cart GetByID(string RegisteredID, List<string>? exludes = null)
         {
             string sql = "SELECT * FROM Registereds WHERE RegisteredID = @RegisteredID";
 

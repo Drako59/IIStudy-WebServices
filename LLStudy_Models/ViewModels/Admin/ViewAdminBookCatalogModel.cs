@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LLStudy_Models.Models;
 
-namespace LLStudy_Models.ViewModels.Admin
+namespace LLStudy_Models.ViewModels
 {
     public   class ViewAdminBookCatalogModel
     {

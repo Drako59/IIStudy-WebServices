@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using LLStudy_Models.Models;
 
-namespace LLStudy_Models.ViewModels.Registerd
+namespace LLStudy_Models.ViewModels
 {
-    internal class ViewOwnedBooksModel
+    public  class ViewOwnedBooksModel
     {
-        Registered User;
-        List<Book> Books { get; set; }
+        public Registered User { get; set; }
+        public List<Book> Books { get; set; }
     }
 }

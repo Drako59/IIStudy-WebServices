@@ -1,7 +1,7 @@
 ﻿using LLStudy_Models.Models;
 using LLstudyWS.ORM.Repositorys;
 using Microsoft.AspNetCore.Mvc;
-
+using LLStudy_Models.ViewModels;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -71,15 +71,17 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public List<Book> GetUserBooks(string RegisteredID)
+        public ViewOwnedBooksModel GetUserBooks(string RegisteredID)
         {
             try
             {
+                ViewOwnedBooksModel model = new ViewOwnedBooksModel();
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 List<Book> books = new List<Book>();
                 books = this.repositoryUOW.BookRepository.GetUserNameBooks(RegisteredID);
-               
-                return books;
+                model.Books = books;
+                model.User = this.repositoryUOW.RegisteredRepository.GetByID(RegisteredID);
+                return model;
             }
             catch (Exception ex)
             {
