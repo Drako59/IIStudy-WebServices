@@ -2,6 +2,8 @@
 using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 namespace LLstudyWS.ORM
 {
@@ -40,9 +42,19 @@ namespace LLstudyWS.ORM
             string? value;
             foreach (PropertyInfo pro in propertys)
             {
+                string salt = GetSalt(GetRandomNumber());
+
                 PropretyType = pro.PropertyType;
                 //value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
-                this.helperOledb.AddParameter(("@" + pro.Name.ToString()), pro.GetValue(model, null) ?? "");
+                if (pro.Name.Equals($@"{OBJtype.Name}Salt")) {
+                    this.helperOledb.AddParameter(("@" + pro.Name.ToString()),  salt);
+                }
+                else if(pro.Name.Equals("Password"))
+                    this.helperOledb.AddParameter(("@" + pro.Name.ToString()), GetHash((string)pro.GetValue(model, null), salt));
+                else
+                    this.helperOledb.AddParameter(("@" + pro.Name.ToString()), pro.GetValue(model, null) ?? "");
+
+
 
                 Console.WriteLine(@$"{"@" + pro.Name}:  {pro.GetValue(model, null)?.ToString() ?? ""} ");
             }
@@ -85,9 +97,33 @@ namespace LLstudyWS.ORM
             //this.helperOledb.AddParameter("@PdfUrlBook", model.Pdf_url_book);
 
 
-
+            
+        }
+        
+        protected int GetRandomNumber()
+        {
+            Random random = new Random();
+            return random.Next(8, 16);
+        }
+        
+        protected string GetHash(string password, string salt)
+        {
+            string combine = password + salt;
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(combine);
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hash = sha256.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
+            }
         }
 
+        private string GetSalt(int length)
+        {
+            byte[] bytes = new byte[length];
+            RandomNumberGenerator.Fill(bytes);
+            string s = Convert.ToBase64String(bytes);
+            return s;
+        }
         public virtual bool Delete(string id)
         {
             Type typeObj = typeof(T);

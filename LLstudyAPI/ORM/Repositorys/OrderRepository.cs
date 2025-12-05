@@ -12,7 +12,28 @@ namespace LLstudyWS.ORM
 
         public bool AddRealationsOfBooksAndOrder(string registerID, List<string> booksID)
         {
-            string sql = "INSERT INTO Orders_Books "
+            string sql = @$"INSERT INTO Orders_Books (RegisteredID, BookID) ";
+            int i = 1;
+
+            this.helperOledb.AddParameter("@RegisteredID" , registerID);
+
+            foreach (string book in booksID) {
+                if (i == 1)
+                {
+                    sql += @$"SELECT @RegisteredID, @{i}";
+
+                }
+                else
+                {
+                    sql += @$"UNION ALL SELECT @RegisteredID, @{i}";
+                }
+                this.helperOledb.AddParameter($"@{i}", book);
+
+                i++;
+
+            }
+
+            return this.helperOledb.Insert(sql) > 0;
         }
 
         public List<Order> GetUserOrders(string ID)

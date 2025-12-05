@@ -41,13 +41,13 @@ namespace LLstudyWS.ORM
 
         }
 
-        public string LoginID(string password, string? username = null, string? email = null)
+        public string LoginID(string password,  string? username = null, string? email = null)
         {
-            string sql = "SELECT * FROM Registereds WHERE UserName = @USERNAME AND Password = @PASSWORD";
+            string sql = "SELECT * FROM Registereds WHERE UserName = @USERNAME ";
 
             if (email != null)
             {
-                sql = "SELECT * FROM Registereds WHERE Email = @Email AND Password = @PASSWORD";
+                sql = "SELECT * FROM Registereds WHERE Email = @Email ";
                 this.helperOledb.AddParameter("@Email", email);
 
             }
@@ -60,11 +60,20 @@ namespace LLstudyWS.ORM
                 return null;
 
 
-                this.helperOledb.AddParameter("@PASSWORD", password);
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 if (reader.Read())
-                    return Convert.ToString(reader["RegisteredID"]);
+                {
+                    string salt = reader["RegisteredSalt"].ToString();
+                    string hash = reader["Password"].ToString();
+                    string CalHash = GetHash(password, salt);
+                    if ( CalHash == hash)
+                    {
+                        return Convert.ToString(reader["RegisteredID"]);
+
+                    }
+                    return null;
+                }
             }
             return null;
         }
