@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using LLStudy_Models.Models;
 namespace LLStudy_Models.ViewModels
 {
-    internal class ViewShopingCartModel
+    public class ViewShopingCartModel
     {
-        Registered User { get; set; }
-        List<Book> Books { get; set; }
+        public Registered User { get; set; }
+        public List<Book> Books { get; set; }
     }
 }

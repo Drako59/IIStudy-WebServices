@@ -2,6 +2,7 @@
 using LLstudyWS.ORM.Repositorys;
 using Microsoft.AspNetCore.Mvc;
 using LLStudy_Models.ViewModels;
+using LLStudy_Models.ViewModels.Registerd;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -127,6 +128,95 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 reg = this.repositoryUOW.RegisteredRepository.GetByID(ID);
                 return reg; 
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+
+        [HttpGet]
+        public ViewShopingCartModel ViewShoppingCart(string ID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                ViewShopingCartModel viewModel = new ViewShopingCartModel();
+
+                viewModel.User = this.repositoryUOW.RegisteredRepository.GetByID(ID);
+                viewModel.Books = this.repositoryUOW.BookRepository.GetShoppingCartBooks(ID);
+                return viewModel;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally 
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+            
+        }
+
+        [HttpGet]
+        public ViewOrdersModel GetUserOrders(string ID)
+        {
+            try
+            {
+                
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                ViewOrdersModel viewOrdersModel = new ViewOrdersModel();
+                viewOrdersModel.Orders = this.repositoryUOW.OrderRepository.GetUserOrders(ID);
+                viewOrdersModel.User = this.repositoryUOW.RegisteredRepository.GetByID(ID);
+                return viewOrdersModel;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+
+        public Order ViewOrderDetails(string ID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.OrderRepository.GetByID(ID);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpPost]
+        public Order Pay(PaymentViewModel payment)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+
             }
             catch(Exception ex)
             {

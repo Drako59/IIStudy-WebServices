@@ -5,7 +5,7 @@ namespace LLstudyWS.ORM.CreatorsModels
 {
     public class ModelCreatorReflection : IRefModelCreator
     {
-        public T CreateModel<T>(IDataReader dataReader, List<string>? exludes = null) where T  : new()
+        public T CreateModel<T>(IDataReader dataReader, List<string>? exludes = null, List<string>? only = null) where T  : new()
         {
 
             Type classType = typeof(T);
@@ -13,7 +13,11 @@ namespace LLstudyWS.ORM.CreatorsModels
             List<string> exludedProp = new List<string>() { "IsValid", "HasErrors" };
             if (exludes != null)
                 exludedProp.AddRange(exludes);
-            PropertyInfo[] props = classType.GetProperties().Where(p => !exludedProp.Contains(p.Name)).ToArray();
+            PropertyInfo[] props;
+            if (only == null)
+                props = classType.GetProperties().Where(p => !exludedProp.Contains(p.Name)).ToArray();
+            else
+                props = classType.GetProperties().Where(p => only.Contains(p.Name)).ToArray();
 
             T instance = new T();
 

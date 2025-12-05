@@ -1,5 +1,7 @@
 ﻿using LLStudy_Models.Models;
 using LLstudyWS.ORM.CreatorsModels;
+using Microsoft.AspNetCore.Components.Web;
+using System.Data;
 
 namespace LLstudyWS.ORM
 {
@@ -7,44 +9,27 @@ namespace LLstudyWS.ORM
     {
         public OrderRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
-        public bool Create()
+
+        public bool AddRealationsOfBooksAndOrder(string registerID, List<string> booksID)
         {
-            throw new NotImplementedException();
+            string sql = "INSERT INTO Orders_Books "
         }
 
-        public bool Create(Order model)
+        public List<Order> GetUserOrders(string ID)
         {
-            throw new NotImplementedException();
-        }
+            List<Order> orders = new List<Order>();
 
-        public bool Delete()
-        {
-            throw new NotImplementedException();
-        }
+            string sql = "SELECT * FROM Orders WHERE RegisteredID = @ID";
+            this.helperOledb.AddParameter("@ID", ID);
 
-        public bool Delete(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Order> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Order GetByID(string ID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(Order model)
-        {
-            throw new NotImplementedException();
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while(reader.Read())
+                {
+                    orders.Add(this.moderlRefCreator.CreateModel<Order>(reader));
+                }
+            }
+            return orders;
         }
     }
 }

@@ -136,6 +136,34 @@ namespace LLstudyWS.ORM
 
         }
 
+        public List<Book> GetShoppingCartBooks(string userID)
+        {
+            string sql = @$"SELECT Books.BookID AS [BookID],
+                            *
+                        FROM
+                            shopping_carts
+                            INNER JOIN (
+                                Books
+                                INNER JOIN Books__shopping_cart ON Books.BookID = Books__shopping_cart.BookID
+                            ) ON (
+                                Books__shopping_cart.RegisteredID = shopping_carts.RegisteredID
+                            )
+                        WHERE
+                            (shopping_carts.RegisteredID = @RegisteredID)";
+
+
+            List<Book> books = new List<Book>();
+            this.helperOledb.AddParameter("@RegisteredID", userID);
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while(reader.Read())
+                {
+                    books.Add(this.moderlRefCreator.CreateModel<Book>(reader));
+                }
+            }
+            return books;
+        }
+
 
        
     }

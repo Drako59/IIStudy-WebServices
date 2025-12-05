@@ -10,7 +10,7 @@ namespace LLStudy_Models.ViewModels
 {
     public class ViewOrdersModel
     {
-        Registered User { get; set; }
+        public Registered User { get; set; }
         public List<Order> Orders { get; set; }
     }
 }
