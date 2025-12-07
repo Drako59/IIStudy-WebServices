@@ -126,7 +126,7 @@ namespace LLstudyWS.Controllers
             {
                 Registered reg;
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                reg = this.repositoryUOW.RegisteredRepository.GetByID(ID);
+                reg = this.repositoryUOW.RegisteredRepository.GetByID(ID, new List<string>() {"HasErrors", "IsValid" } );
                 return reg; 
             }
             catch(Exception ex)
@@ -197,7 +197,7 @@ namespace LLstudyWS.Controllers
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return this.repositoryUOW.OrderRepository.GetByID(ID);
+                return this.repositoryUOW.OrderRepository.GetByID(ID, new List<string>() { "IsValid", "HasErrors"});
             }
             catch (Exception ex)
             {

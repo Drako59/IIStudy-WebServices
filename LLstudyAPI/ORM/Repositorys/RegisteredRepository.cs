@@ -14,10 +14,10 @@ namespace LLstudyWS.ORM
             
         {
             
-            string sql = "SELECT * FROM Registereds WHERE UserName = @USERNAME AND Password = @PASSWORD";
+            string sql = "SELECT * FROM Registereds WHERE UserName = @USERNAME";
             if (email != null)
             {
-                sql = "SELECT * FROM Registereds WHERE Email = @Email AND Password = @PASSWORD";
+                sql = "SELECT * FROM Registereds WHERE Email = @Email";
                 this.helperOledb.AddParameter("@Email", email);
 
             }
@@ -30,11 +30,15 @@ namespace LLstudyWS.ORM
                 return null;
 
 
-                this.helperOledb.AddParameter("@PASSWORD", password);
             using (IDataReader reader = this.helperOledb.Select(sql)) 
             {
                 if (reader.Read())
-                    return this.moderlRefCreator.CreateModel<Registered>(reader, new List<string>() { "Password" });
+                {
+                    if (GetHash(password, Convert.ToString(reader["RegisteredSalt"])) == Convert.ToString(reader["Password"]))
+                        return this.moderlRefCreator.CreateModel<Registered>(reader, new List<string>() {"Password", "IsValid", "HasErrors"});
+
+                }
+                    //return this.moderlRefCreator.CreateModel<Registered>(reader, new List<string>() { "Password" });
             }
             return null;
 
@@ -72,6 +76,7 @@ namespace LLstudyWS.ORM
                         return Convert.ToString(reader["RegisteredID"]);
 
                     }
+                    Console.WriteLine("Here");
                     return null;
                 }
             }

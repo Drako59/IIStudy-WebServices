@@ -36,13 +36,13 @@ namespace LLstudyWS.ORM
             string placeholders = string.Join(", ", propertys.Select(p => ("@" + p.Name)));
             string sql = $@"INSERT INTO {OBJtype.Name}s ({columns}) VALUES({placeholders})";
             Console.WriteLine(sql);
-
+            string salt = GetSalt(GetRandomNumber());
 
             Type PropretyType;
             string? value;
             foreach (PropertyInfo pro in propertys)
             {
-                string salt = GetSalt(GetRandomNumber());
+               
 
                 PropretyType = pro.PropertyType;
                 //value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
