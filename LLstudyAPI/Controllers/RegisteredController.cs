@@ -52,8 +52,7 @@ namespace LLstudyWS.Controllers
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 string regID;   
-                this.repositoryUOW.RegisteredRepository.Create(reg,new List<string>() { "Role"});
-
+                this.repositoryUOW.RegisteredRepository.CreateWithHash(reg,new List<string>() { "Role"});
                 regID = this.repositoryUOW.RegisteredRepository.LoginID(reg.Password,username: reg.UserName);
 
                 return regID;
@@ -227,6 +226,50 @@ namespace LLstudyWS.Controllers
             {
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
+        }
+
+        [HttpPost]
+        public bool Add_To_Cart(string registeredID, string bookID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                Shopping_Cart record = new Shopping_Cart() {RegisteredID = registeredID, BookID = bookID };
+                return this.repositoryUOW.ShoppingCartRepository.Create(record);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpPost]
+        public bool AddReview(Review review)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                return this.repositoryUOW.ReviewRepository.Create(review);
+
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally 
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
         }
     }
 }

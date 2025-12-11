@@ -11,21 +11,21 @@ namespace LLStudy_Models.Models
     public class Review:Model
     {
 
-        string review_ID;
+        string reviewID;
         string rate;
         string comment;
-        string book_ID;
+        string bookID;
         string userName;
         //[IsDigits(ErrorMessage = "ID must contain only digits.")]
         //[Required]
-        public string Review_ID { get { return review_ID; } set { review_ID = value; } }
+        public string ReviewID { get { return reviewID; } set { reviewID = value; } }
         [IsDigits(ErrorMessage = "ID must contain only digits.")]
         [Required]
         public string Rate { get { return rate; } set { rate = value; } }
 
         public string Comment { get { return comment; } set { comment = value; } }
         [Required]
-        public string Book_ID { get { return book_ID; } set { book_ID = value; } }
+        public string BookID { get { return bookID; } set { bookID = value; } }
         [Required]
         public string UserName { get { return userName; } set { userName = value; } }
 

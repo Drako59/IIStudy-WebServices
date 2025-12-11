@@ -141,15 +141,15 @@ namespace LLstudyWS.ORM
             string sql = @$"SELECT Books.BookID AS [BookID],
                             *
                         FROM
-                            shopping_carts
+                            Registereds
                             INNER JOIN (
                                 Books
-                                INNER JOIN Books__shopping_cart ON Books.BookID = Books__shopping_cart.BookID
+                                INNER JOIN Shopping_carts ON Books.BookID = Shopping_carts.BookID
                             ) ON (
-                                Books__shopping_cart.RegisteredID = shopping_carts.RegisteredID
+                                Shopping_carts.RegisteredID = Registereds.RegisteredID
                             )
                         WHERE
-                            (shopping_carts.RegisteredID = @RegisteredID)";
+                            (Registereds.RegisteredID = @RegisteredID)";
 
 
             List<Book> books = new List<Book>();

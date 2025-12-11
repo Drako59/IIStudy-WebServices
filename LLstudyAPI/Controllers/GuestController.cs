@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using LLstudyWS.ORM.Repositorys;
 using LLStudy_Models.Models;
 using System.Security.Permissions;
+using System.Data;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -145,6 +146,74 @@ namespace LLstudyWS.Controllers
             }
 
         }
+
+        [HttpGet]
+        public List<Order> GetAllOrders()
+        {
+            try
+            {
+                
+
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                List<Order> orders = new List<Order>();
+
+                if (false)
+                {
+                    return null;
+                }
+                else
+                {
+                    orders = this.repositoryUOW.OrderRepository.GetAll();
+                }
+
+                return null;
+                
+
+                
+
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally 
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
+
+
+        [HttpGet]
+
+        public ViewBookViewModel GetBookFullView(string bookID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                ViewBookViewModel viewBookViewModel = new ViewBookViewModel();
+
+                viewBookViewModel.book = this.repositoryUOW.BookRepository.GetByID(bookID);
+                viewBookViewModel.reviews = this.repositoryUOW.ReviewRepository.GetReviewsByBook(bookID);
+                return viewBookViewModel;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally 
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+
+       
 
     }
 }

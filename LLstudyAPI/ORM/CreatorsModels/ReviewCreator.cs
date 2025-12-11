@@ -9,10 +9,10 @@ namespace LLstudyWS.ORM
         {
             return new Review() 
             {
-                Review_ID = Convert.ToString(dataReader["Review_ID"]),
+                ReviewID = Convert.ToString(dataReader["ReviewID"]),
                 Rate = Convert.ToString(dataReader["Rate"]),
                 Comment = Convert.ToString(dataReader["Comment"]),
-                Book_ID = Convert.ToString(dataReader["Book_ID"]),
+                BookID = Convert.ToString(dataReader["Book_ID"]),
                 UserName = Convert.ToString(dataReader["UserName"])
             };
         }

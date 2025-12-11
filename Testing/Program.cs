@@ -20,15 +20,20 @@ namespace Testing
     {
         public static void Main(string[] args)
         {
+
+
+
             int[] arr = new int[2];
-            CreateCheck();
+
+            //Check_add_orders();
+            //CreateCheck();
             //TestUserBooks();
 
             //test_solution();
             //RefCheckCreator();
             //test_select();
             //Console.WriteLine("Hello World!");
-            test_repository();
+            //test_repository();
             //checkInsert();
             //CheckCreator();
             //TestBook();
@@ -39,6 +44,15 @@ namespace Testing
             //TranslateSentence("בן אדם ירוק בשיחה איתי");
 
             //Console.ReadLine();
+
+        }
+
+        public static void Check_add_orders()
+        {
+            RepositoryUOW UOW = new RepositoryUOW();
+            UOW.HelperOledb.OpenConnection();
+            UOW.OrderRepository.AddRealationsOfBooksAndOrder("1", new List<string>() { "1","2","3"});
+            UOW.HelperOledb.CloseConnection();
 
         }
 

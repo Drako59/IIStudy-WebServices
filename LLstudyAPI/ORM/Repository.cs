@@ -99,7 +99,56 @@ namespace LLstudyWS.ORM
 
             
         }
-        
+
+
+        public virtual bool CreateWithHash(T model, List<string>? exludes = null)
+        {
+
+            Type OBJtype = model.GetType();
+            List<string> exludePROP = new List<string> { "IsValid", "HasErrors" };
+            if (exludes != null)
+                exludePROP.AddRange(exludes);
+            PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => (!exludePROP.Contains(p.Name) && (!p.Name.Equals(OBJtype.Name + "ID")))).ToArray();
+            //foreach (PropertyInfo pro in propertys)
+            //{
+            //    Console.WriteLine(@$"Property Name: {pro.Name}");
+            //}
+            string columns = string.Join(", ", propertys.Select(p => $@"[{p.Name}]"));
+            string placeholders = string.Join(", ", propertys.Select(p => ("@" + p.Name)));
+            string sql = $@"INSERT INTO {OBJtype.Name}s ({columns}) VALUES({placeholders})";
+            Console.WriteLine(sql);
+            string salt = GetSalt(GetRandomNumber());
+
+            Type PropretyType;
+            string? value;
+            foreach (PropertyInfo pro in propertys)
+            {
+
+
+                PropretyType = pro.PropertyType;
+                //value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
+                if (pro.Name.Equals($@"{OBJtype.Name}Salt"))
+                {
+                    this.helperOledb.AddParameter(("@" + pro.Name.ToString()), salt);
+                }
+                else if (pro.Name.EndsWith("Password"))
+                    this.helperOledb.AddParameter(("@" + pro.Name.ToString()), GetHash((string)pro.GetValue(model, null), salt));
+                else
+                    this.helperOledb.AddParameter(("@" + pro.Name.ToString()), pro.GetValue(model, null) ?? "");
+
+
+
+                Console.WriteLine(@$"{"@" + pro.Name}:  {pro.GetValue(model, null)?.ToString() ?? ""} ");
+            }
+
+            return this.helperOledb.Insert(sql) > 0;
+
+
+
+            
+
+        }
+
         protected int GetRandomNumber()
         {
             Random random = new Random();
@@ -127,8 +176,9 @@ namespace LLstudyWS.ORM
         public virtual bool Delete(string id)
         {
             Type typeObj = typeof(T);
-            PropertyInfo prop = typeObj.GetProperty(@$"{typeObj.Name}ID");
-            string sql = @$"DELETE * FROM {typeObj.Name}s WHERE {prop.Name} = @ID";
+            //PropertyInfo prop = typeObj.GetProperty(@$"{typeObj.Name}ID");
+            string sql = @$"DELETE * FROM {typeObj.Name}s WHERE {typeObj.Name}ID = @ID";
+            Console.WriteLine(sql);
             this.helperOledb.AddParameter("@ID", id);
             return this.helperOledb.Delete(sql) > 0;
         }
@@ -178,7 +228,7 @@ namespace LLstudyWS.ORM
             List<string> exludedProps = new List<string>() { "IsValid", "HasErrors"};
             if (exludes != null)
                 exludedProps.AddRange(exludes);
-            PropertyInfo[] props = typeProp.GetProperties().Where(p => (!exludedProps.Contains(p.Name) && !p.Name.Equals($@"{p.Name}ID"))).ToArray();
+            PropertyInfo[] props = typeProp.GetProperties().Where(p => (!exludedProps.Contains(p.Name) && !p.Name.Equals($@"{typeProp.Name}ID"))).ToArray();
             string sets = string.Join(", ", props.Select(p => @$"{p.Name} = @{p.Name}"));
 
             PropertyInfo propID = typeProp.GetProperty(@$"{typeProp.Name}ID");
@@ -187,11 +237,12 @@ namespace LLstudyWS.ORM
 
             foreach(PropertyInfo pro in props)
             {
+                Console.WriteLine(@$"@{pro.Name} : {pro.GetValue(model, null).GetType()}");
                 this.helperOledb.AddParameter(@$"@{pro.Name}", pro.GetValue(model, null) ?? "");
             }
 
             this.helperOledb.AddParameter($@"@{propID.Name}", propID.GetValue(model, null));
-
+            Console.WriteLine(sql);
             return this.helperOledb.Update(sql) > 0;
 
 

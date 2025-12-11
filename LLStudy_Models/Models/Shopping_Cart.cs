@@ -10,8 +10,8 @@ namespace LLStudy_Models.Models
 
     public class Shopping_Cart:Model
     {
-        string registeredID;
         [Required]
         public string RegisteredID { get; set; }
+        public string BookID { get; set; }
     }
 }

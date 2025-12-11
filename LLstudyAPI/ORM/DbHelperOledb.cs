@@ -48,7 +48,7 @@ namespace LLstudyWS
             
             Console.WriteLine(  "Insert");
             this.dbCommand.CommandText = sql;
-            
+            Console.WriteLine(sql);
             int record =  this.dbCommand.ExecuteNonQuery();
             this.dbCommand.Parameters.Clear();
             return record;
@@ -62,6 +62,8 @@ namespace LLstudyWS
         public void OpenTransaction()
         {
             this.dbTransaction = this.oleDbConnection.BeginTransaction();
+            this.dbCommand.Transaction = this.dbTransaction;
+
         }
 
         public void RollBack()

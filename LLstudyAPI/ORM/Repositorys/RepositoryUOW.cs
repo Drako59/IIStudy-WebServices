@@ -90,6 +90,15 @@ namespace LLstudyWS.ORM.Repositorys
                 return this.registeredRepository;
             }
         }
+        public ShoppingCartRepository ShoppingCartRepository
+        {
+            get
+            {
+                if (this.shoppingCartRepository == null)
+                    this.shoppingCartRepository = new ShoppingCartRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                return this.shoppingCartRepository;
+            }
+        }
 
         public DbHelperOledb HelperOledb { get { return this.helperOledb; } }
     }

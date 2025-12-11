@@ -1,5 +1,6 @@
 ﻿using LLStudy_Models.Models;
 using LLstudyWS.ORM.CreatorsModels;
+using System.Data;
 
 namespace LLstudyWS.ORM
 {
@@ -7,44 +8,20 @@ namespace LLstudyWS.ORM
     {
         public ReviewRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
-        public bool Create()
+        public List<Review> GetReviewsByBook(string bookID)
         {
-            throw new NotImplementedException();
-        }
+            List<Review> reviews = new List<Review>();
+            string sql = "SELECT * FROM Reviews WHERE BookID = @BookID";
+            this.helperOledb.AddParameter("@BookID",bookID);
 
-        public bool Create(Review model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Review> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Review GetByID(string ID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(Review model)
-        {
-            throw new NotImplementedException();
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    reviews.Add(this.moderlRefCreator.CreateModel<Review>(reader));
+                }
+            }
+            return reviews;
         }
     }
 }
