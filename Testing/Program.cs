@@ -1,4 +1,5 @@
 ﻿
+using IIstudyWSClient;
 using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
 using LLstudyWS;
@@ -24,7 +25,7 @@ namespace Testing
 
 
             int[] arr = new int[2];
-
+            TestLibaryClient();
             //Check_add_orders();
             //CreateCheck();
             //TestUserBooks();
@@ -43,10 +44,23 @@ namespace Testing
             //GetNextHoliday();
             //TranslateSentence("בן אדם ירוק בשיחה איתי");
 
-            //Console.ReadLine();
+            Console.ReadLine();
 
         }
 
+        public static async Task TestLibaryClient()
+        {
+            ApiClient<Book> apiClient = new ApiClient<Book>();
+            apiClient.Scheme = "http";
+            apiClient.Host = "localhost";
+            apiClient.Port = 5049;
+            apiClient.Path = "api/Guest/GetBook";
+            apiClient.AddParameter("bookID" , "1");
+            Console.WriteLine("here");
+            apiClient.print_url();
+            Book book = apiClient.GetAsync().Result;
+            Console.WriteLine($"Name: {book.Book_name},Price:  {book.Book_price}");
+        }
         public static void Check_add_orders()
         {
             RepositoryUOW UOW = new RepositoryUOW();

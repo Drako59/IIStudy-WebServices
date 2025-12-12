@@ -3,7 +3,7 @@
   <Class Name="LLStudy_Models.Models.Book" Collapsed="true">
     <Position X="0.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>hIAQAKQAEAAhAAAAAYAAAAAAACAEAAAAAAAAAAAAACA=</HashCode>
+      <HashCode>hAAQCKQAEAAhAAAAAYAAAAAAACABAAAAAAAAAAAAACA=</HashCode>
       <FileName>Models\Book.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -11,8 +11,8 @@
     <Position X="6.25" Y="2.75" Width="1.5" />
     <InheritanceLine Type="LLStudy_Models.Models.Model" ManuallyRouted="true">
       <Path>
-        <Point X="4.75" Y="2.312" />
-        <Point X="4.75" Y="2.406" />
+        <Point X="4.5" Y="3.062" />
+        <Point X="4.5" Y="2.406" />
         <Point X="5.045" Y="2.406" />
         <Point X="5.045" Y="2.596" />
         <Point X="7" Y="2.596" />
@@ -27,19 +27,19 @@
   <Class Name="LLStudy_Models.Models.Event" Collapsed="true">
     <Position X="6.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAIAAAAAABAAAAAQAAEAAAABAAAAAAAAAAAAAAACA=</HashCode>
+      <HashCode>ACAAIAAgAAABAAAAAQAAEAAAABAAAAAAAAAAAAAAACA=</HashCode>
       <FileName>Models\Event.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LLStudy_Models.Models.Exam" Collapsed="true">
     <Position X="5.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAgQAAAAEAIAAAAAAAiAAAAAgAAAAIAAAACBAg=</HashCode>
+      <HashCode>AAAEAAACQAAAAkAAAAAAAAACAAAAAgAAAIIAAACCBAA=</HashCode>
       <FileName>Models\Exam.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LLStudy_Models.Models.Model" Collapsed="true">
-    <Position X="4" Y="1.75" Width="1.5" />
+    <Position X="3.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAEiACAABIAkAAAAAAAEAAAAIAAAAAAABIAA=</HashCode>
       <FileName>Models\Model.cs</FileName>
@@ -50,8 +50,8 @@
     <Position X="5.75" Y="4" Width="1.5" />
     <InheritanceLine Type="LLStudy_Models.Models.Model" ManuallyRouted="true">
       <Path>
-        <Point X="4.75" Y="2.312" />
-        <Point X="4.75" Y="2.463" />
+        <Point X="4.5" Y="3.062" />
+        <Point X="4.5" Y="2.463" />
         <Point X="4.904" Y="2.463" />
         <Point X="4.904" Y="2.77" />
         <Point X="5.287" Y="2.77" />
@@ -61,14 +61,14 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAgAAAAAAAAAAAAAAAoAAgACgAIAAYAAAAEAAAAAAAA=</HashCode>
+      <HashCode>gAAAAJAAAAAAAAAAAAIAAgACAAIAAQAAEAEAAAAAAAA=</HashCode>
       <FileName>Models\Order.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LLStudy_Models.Models.Registered" Collapsed="true">
     <Position X="0.5" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAAACAAAAAgEAAAABAAAAAAAAACAQAAAgEAAAI=</HashCode>
+      <HashCode>gAAAAoCAACAAgAAgEAAAABAAAAAAAAACAQAAAgEAAAI=</HashCode>
       <FileName>Models\Registered.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -83,8 +83,8 @@
     <Position X="1.25" Y="3.25" Width="1.5" />
     <InheritanceLine Type="LLStudy_Models.Models.Model" ManuallyRouted="true">
       <Path>
-        <Point X="4.75" Y="2.312" />
-        <Point X="4.75" Y="2.378" />
+        <Point X="4.5" Y="3.062" />
+        <Point X="4.5" Y="2.378" />
         <Point X="2.698" Y="2.378" />
         <Point X="2.698" Y="2.962" />
         <Point X="2" Y="2.962" />
@@ -92,14 +92,14 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAA=</HashCode>
+      <HashCode>gAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Shopping_Cart.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LLStudy_Models.Models.Solution" Collapsed="true">
     <Position X="3" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAFABAgwAAQAEAIAAAAAAAggAAAAAAAAAAAAAAABQg=</HashCode>
+      <HashCode>EAAEAQACwQAAAkAAEAAAAAAgAAAAAAAAAAABAACABAA=</HashCode>
       <FileName>Models\Solution.cs</FileName>
     </TypeIdentifier>
   </Class>

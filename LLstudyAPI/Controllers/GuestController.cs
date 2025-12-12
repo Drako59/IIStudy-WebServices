@@ -212,8 +212,31 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        [HttpGet]
 
-       
+        public Book GetBook(string bookID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+
+                return this.repositoryUOW.BookRepository.GetByID(bookID);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+
+
 
     }
 }

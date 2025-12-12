@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IIstudyWSClient\IIstudyWSClient.csproj" />
     <ProjectReference Include="..\LLstudyAPI\LLstudyWS.csproj" />
     <ProjectReference Include="..\LLStudy_Models\LLStudy_Models.csproj" />
   </ItemGroup>

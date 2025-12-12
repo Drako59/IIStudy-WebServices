@@ -70,7 +70,7 @@ namespace LLstudyWS.Controllers
 
         }
 
-        [HttpPost]
+        [HttpGet]
         public ViewOwnedBooksModel GetUserBooks(string RegisteredID)
         {
             try
