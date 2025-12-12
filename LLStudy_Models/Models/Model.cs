@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.Models
 {
-    public abstract class Model : INotifyDataErrorInfo
+    public abstract class Model
     {
         private Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -25,7 +25,7 @@ namespace LLStudy_Models.Models
         public bool IsValid
         {
             get { return !this.HasErrors; }
-            
+
         }
 
         public void OnErrorsChanged(string propertyName)
@@ -33,7 +33,7 @@ namespace LLStudy_Models.Models
             if (ErrorsChanged != null)
             {
                 ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
-                
+
             }
         }
 
@@ -63,7 +63,7 @@ namespace LLStudy_Models.Models
                 validationContext.MemberName = propertyName;
                 var validationResults = new List<ValidationResult>();
                 Validator.TryValidateProperty(value, validationContext, validationResults);
-               //clear previous errors from tested property
+                //clear previous errors from tested property
                 if (errors.ContainsKey(propertyName))
                     errors.Remove(propertyName);
                 OnErrorsChanged(propertyName);
