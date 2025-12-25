@@ -149,6 +149,104 @@ namespace LLstudyWS.ORM
 
         }
 
+        public bool CreateFew(List<T> modelList, List<string>? exludes = null)
+        {
+            Type OBJtype = modelList[0].GetType();
+            List<string> exludePROP = new List<string> { "IsValid", "HasErrors" };
+            if (exludes != null)
+                exludePROP.AddRange(exludes);
+            PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => (!exludePROP.Contains(p.Name) && (!p.Name.Equals(OBJtype.Name + "ID")))).ToArray();
+            //foreach (PropertyInfo pro in propertys)
+            //{
+            //    Console.WriteLine(@$"Property Name: {pro.Name}");
+            //}
+            string columns = string.Join(", ", propertys.Select(p => $@"[{p.Name}]"));
+            string placeholders = string.Join(", ", propertys.Select(p => ("@" + p.Name)));
+            string sql = $@"INSERT INTO {OBJtype.Name}s ({columns}) VALUES({placeholders})";
+            Console.WriteLine(sql);
+
+            Type PropretyType;
+            string? value;
+            this.helperOledb.OpenTransaction();
+            foreach (T model in modelList)
+            {
+                foreach (PropertyInfo pro in propertys)
+                {
+
+
+                    PropretyType = pro.PropertyType;
+                    //value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
+                   this.helperOledb.AddParameter(("@" + pro.Name.ToString()), pro.GetValue(model, null) ?? "");
+
+
+
+                    Console.WriteLine(@$"{"@" + pro.Name}:  {pro.GetValue(model, null)?.ToString() ?? ""} ");
+                }
+
+                this.helperOledb.Insert(sql);
+            }
+
+            this.helperOledb.Commit();
+
+            this.helperOledb.CloseConnection();
+            return true;
+
+
+        }
+
+        public bool CreateFewWithHash(List<T> modelList, List<string>? exludes = null)
+        {
+            Type OBJtype = modelList[0].GetType();
+            List<string> exludePROP = new List<string> { "IsValid", "HasErrors" };
+            if (exludes != null)
+                exludePROP.AddRange(exludes);
+            PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => (!exludePROP.Contains(p.Name) && (!p.Name.Equals(OBJtype.Name + "ID")))).ToArray();
+            //foreach (PropertyInfo pro in propertys)
+            //{
+            //    Console.WriteLine(@$"Property Name: {pro.Name}");
+            //}
+            string columns = string.Join(", ", propertys.Select(p => $@"[{p.Name}]"));
+            string placeholders = string.Join(", ", propertys.Select(p => ("@" + p.Name)));
+            string sql = $@"INSERT INTO {OBJtype.Name}s ({columns}) VALUES({placeholders})";
+            Console.WriteLine(sql);
+            string salt = GetSalt(GetRandomNumber());
+
+            Type PropretyType;
+            string? value;
+            this.helperOledb.OpenTransaction();
+            foreach (T model in modelList)
+            {
+                foreach (PropertyInfo pro in propertys)
+                {
+
+
+                    PropretyType = pro.PropertyType;
+                    //value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
+                    if (pro.Name.Equals($@"{OBJtype.Name}Salt"))
+                    {
+                        this.helperOledb.AddParameter(("@" + pro.Name.ToString()), salt);
+                    }
+                    else if (pro.Name.EndsWith("Password"))
+                        this.helperOledb.AddParameter(("@" + pro.Name.ToString()), GetHash((string)pro.GetValue(model, null), salt));
+                    else
+                        this.helperOledb.AddParameter(("@" + pro.Name.ToString()), pro.GetValue(model, null) ?? "");
+
+
+
+                    Console.WriteLine(@$"{"@" + pro.Name}:  {pro.GetValue(model, null)?.ToString() ?? ""} ");
+                }
+
+                this.helperOledb.Insert(sql);
+            }
+
+            this.helperOledb.Commit();
+
+            this.helperOledb.CloseConnection();
+            return true;
+
+
+        }
+
         protected int GetRandomNumber()
         {
             Random random = new Random();

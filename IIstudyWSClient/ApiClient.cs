@@ -1,0 +1,120 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
+namespace IIstudyWSClient
+{
+    public class ApiClient<T>
+    {
+        HttpClient httpClient = IIStudyHttpClient.Insatnce;
+        UriBuilder uriBuilder = new UriBuilder();
+        public string Scheme
+        {
+            set {
+                this.uriBuilder.Scheme = value;
+            }
+            
+        }
+
+        public int Port
+        {
+            set
+            {
+                this.uriBuilder.Port = value;
+            }
+        }
+        public string Host
+        {
+            set
+            {
+                this.uriBuilder.Host = value;
+            }
+        }
+        public string Path
+        {
+            set
+            {
+                this.uriBuilder.Path = value;
+            }
+        }
+        public void AddParameter(string key, string value)
+        {
+            if(this.uriBuilder.Query == string.Empty)
+            {
+                this.uriBuilder.Query += "?";
+            }
+            else
+                this.uriBuilder.Query += "&";
+
+            this.uriBuilder.Query += $"{key}={value}";
+        }
+
+        public async Task<T> GetAsync()
+        {
+            using (HttpRequestMessage httpRequest = new HttpRequestMessage())
+            {
+                httpRequest.Method = HttpMethod.Get;
+                httpRequest.RequestUri = this.uriBuilder.Uri;
+                using (HttpResponseMessage httpResponse = await httpClient.SendAsync(httpRequest)){
+
+                    //await Console.Out.WriteLineAsync(httpResponse.IsSuccessStatusCode.ToString());
+                    if (httpResponse.IsSuccessStatusCode)
+                    {
+                        string result = await httpResponse.Content.ReadAsStringAsync();
+                        await Console.Out.WriteLineAsync( result);
+                        //string result = httpResponse.Content.ToString();
+                        JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                        jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                        T model = JsonSerializer.Deserialize<T>(result, jsonSerializerOptions);
+                        //PropertyInfo pro = model.GetType().GetProperty("BookID");
+                        //await Console.Out.WriteLineAsync($"model: {(string)pro.GetValue(model, null)}");
+                        return model;
+                    }
+                    return default(T);
+                }
+            };
+
+        }
+        
+        public async Task<bool> PostAsync(T model, List<FileStream> files)
+        {
+            using(HttpRequestMessage httpRequest = new HttpRequestMessage())
+            {
+                httpRequest.Method = HttpMethod.Post;
+                httpRequest.RequestUri = this.uriBuilder.Uri;
+                MultipartFormDataContent multipartFormData = new MultipartFormDataContent();
+                string json = JsonSerializer.Serialize(model);
+
+                StringContent content  = new StringContent(json);
+
+                multipartFormData.Add(content, "model");
+                foreach (FileStream file in files)
+                {
+                    StreamContent streamContent = new StreamContent(file);
+                    multipartFormData.Add(streamContent, "file", file.Name);
+                }
+                httpRequest.Content = multipartFormData;
+
+                using(HttpResponseMessage response = await httpClient.SendAsync(httpRequest))
+                {
+                    return response.IsSuccessStatusCode;
+                    
+                }
+            }
+        }
+
+        public void print_url()
+        {
+            Console.WriteLine(this.uriBuilder.ToString());
+        }
+        public string GetUrl()
+        {
+            return this.uriBuilder.ToString();
+        }
+    }
+}

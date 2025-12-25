@@ -17,4 +17,8 @@
     <ProjectReference Include="..\LLStudy_Models\LLStudy_Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
 </Project>
