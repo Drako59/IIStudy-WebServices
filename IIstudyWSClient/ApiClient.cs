@@ -42,7 +42,7 @@ namespace IIstudyWSClient
                 this.uriBuilder.Path = value;
             }
         }
-        public void AddParameter(string key, string value)
+        public void AddParameter(string key, object value)
         {
             if(this.uriBuilder.Query == string.Empty)
             {
@@ -51,7 +51,7 @@ namespace IIstudyWSClient
             else
                 this.uriBuilder.Query += "&";
 
-            this.uriBuilder.Query += $"{key}={value}";
+            this.uriBuilder.Query += $"{key}={Convert.ToString(value)}";
         }
 
         public async Task<T> GetAsync()
@@ -81,7 +81,7 @@ namespace IIstudyWSClient
 
         }
         
-        public async Task<bool> PostAsync(T model, List<FileStream> files)
+        public async Task<bool> PostAsync(T model, List<FileStream> files = null)
         {
             using(HttpRequestMessage httpRequest = new HttpRequestMessage())
             {
@@ -93,6 +93,7 @@ namespace IIstudyWSClient
                 StringContent content  = new StringContent(json);
 
                 multipartFormData.Add(content, "model");
+                //If error raises, check files is null and than loop if not.
                 foreach (FileStream file in files)
                 {
                     StreamContent streamContent = new StreamContent(file);

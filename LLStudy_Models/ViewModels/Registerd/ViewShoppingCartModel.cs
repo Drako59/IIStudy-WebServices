@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using LLStudy_Models.Models;
 namespace LLStudy_Models.ViewModels
 {
-    public class ViewShopingCartModel
+    public class ViewShoppingCartModel
     {
         public Registered User { get; set; }
         public List<Book> Books { get; set; }

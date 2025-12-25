@@ -10,24 +10,15 @@ namespace LLstudyWS.ORM
     {
         public RegisteredRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
-        public Registered Login( string password, string? username = null, string? email = null )
+        public Registered Login( string password, string? signTool = null)
             
         {
             
-            string sql = "SELECT * FROM Registereds WHERE UserName = @USERNAME";
-            if (email != null)
-            {
-                sql = "SELECT * FROM Registereds WHERE Email = @Email";
-                this.helperOledb.AddParameter("@Email", email);
+            string sql = "SELECT * FROM Registereds WHERE UserName = @SignTool OR Email = @SignTool";
+            
+            this.helperOledb.AddParameter("@SignTool", signTool);
 
-            }
-            else if (username != null)
-            {
-                this.helperOledb.AddParameter("@USERNAME", username);
-
-            }
-            else
-                return null;
+            
 
 
             using (IDataReader reader = this.helperOledb.Select(sql)) 
@@ -45,23 +36,13 @@ namespace LLstudyWS.ORM
 
         }
 
-        public string LoginID(string password,  string? username = null, string? email = null)
+        public string LoginID(string password,  string? SignKey = null)
         {
-            string sql = "SELECT * FROM Registereds WHERE UserName = @USERNAME ";
+            string sql = "SELECT * FROM Registereds WHERE UserName = @SignKey OR Email = @SignKey ";
 
-            if (email != null)
-            {
-                sql = "SELECT * FROM Registereds WHERE Email = @Email ";
-                this.helperOledb.AddParameter("@Email", email);
+            this.helperOledb.AddParameter("@SignKey", SignKey);
 
-            }
-            else if (username != null)
-            {
-                this.helperOledb.AddParameter("@USERNAME", username);
-
-            }
-            else
-                return null;
+           
 
 
             using (IDataReader reader = this.helperOledb.Select(sql))

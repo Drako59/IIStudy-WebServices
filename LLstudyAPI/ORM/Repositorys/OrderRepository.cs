@@ -1,6 +1,7 @@
 ﻿using LLStudy_Models.Models;
 using LLstudyWS.ORM.CreatorsModels;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Data;
 
 namespace LLstudyWS.ORM
@@ -9,30 +10,14 @@ namespace LLstudyWS.ORM
     {
         public OrderRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
-
-        public bool AddRealationsOfBooksAndOrder(string orderID, List<string> booksID)
+        //NOT IN USE
+        public bool AddRealationOfBooksAndOrder(string orderID, string bookID)
         {
-            string sql = @$"INSERT INTO Orders_Books (OrderID, BookID) SELECT X.OrderID, X.BookID  FROM (";
-            int i = 1;
+            string sql = @$"INSERT INTO Orders_Books (OrderID, BookID) VALUES (@OrderID,@BookID)";
 
-            this.helperOledb.AddParameter("@OrderID" , orderID);
 
-            foreach (string book in booksID) {
-                if (i == 1)
-                {
-                    sql += @$"SELECT @OrderID AS RegisteredID, @{i}  AS BookID ";
-
-                }
-                else
-                {
-                    sql += @$"UNION ALL SELECT @OrderID, @{i} ";
-                }
-                this.helperOledb.AddParameter($"@{i}", book);
-
-                i++;
-
-            }
-            sql += ") AS X";
+            this.helperOledb.AddParameter("@OrderID", orderID);
+            this.helperOledb.AddParameter("@BookID", bookID);
 
             return this.helperOledb.Insert(sql) > 0;
         }
@@ -52,6 +37,36 @@ namespace LLstudyWS.ORM
                 }
             }
             return orders;
+        }
+
+        public List<Book> GetOrderBooks(string orderID)
+        {
+            string sql = @$"SELECT Books.BookID AS [BookID],
+                            *
+                        FROM
+                            Orders
+                            INNER JOIN (
+                                Books
+                                INNER JOIN Orders_Books ON Books.BookID = Orders_Books.BookID
+                            ) ON (
+                                Orders_Books.OrderID = Orders.OrderID
+                            )
+                        WHERE
+                            (Orders.OrderID = @OrderID)";
+
+            List<Book> books = new List<Book>();
+
+            this.helperOledb.AddParameter("@OrderID",orderID);
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    books.Add(this.moderlRefCreator.CreateModel<Book>(reader));
+                }
+            }
+            return books;
+
+
         }
     }
 }

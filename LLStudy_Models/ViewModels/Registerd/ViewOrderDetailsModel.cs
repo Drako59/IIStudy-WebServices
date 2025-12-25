@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.ViewModels.Registerd
 {
-    public class PaymentViewModel
+    public class ViewOrderDetailsModel
     {
-        public List<string> BooksID { get; set; }
+        public List<Book> Books { get; set; }
         public Order Order { get; set; }
-
+        public Registered Registered { get; set; }
     }
 }

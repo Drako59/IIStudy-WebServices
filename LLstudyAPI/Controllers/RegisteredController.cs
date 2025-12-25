@@ -14,73 +14,19 @@ namespace LLstudyWS.Controllers
         public RegisteredController() {
             this.repositoryUOW = new RepositoryUOW();
         }
-        [HttpPost]
-        public Registered Sign_In(string password, string? UserName = null, string email = null)
-        {
-            try
-            {
-                Registered register;
-                this.repositoryUOW.HelperOledb.OpenConnection();
-                if (email != null)
-                {
-                    return this.repositoryUOW.RegisteredRepository.Login(password, email: email);
-                }
-                else if(UserName != null)
-                {
-                    return this.repositoryUOW.RegisteredRepository.Login(password, username: UserName);
-                }
-                else
-                    return null;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return null;
-            }
-            finally
-            {
-                this.repositoryUOW.HelperOledb.CloseConnection();
-            }
-
-        }
-
-        [HttpPost]
-        public string Sign_Up(Registered reg) //Registered
-        {
-            try
-            {
-                this.repositoryUOW.HelperOledb.OpenConnection();
-                string regID;   
-                this.repositoryUOW.RegisteredRepository.CreateWithHash(reg,new List<string>() { "Role"});
-                regID = this.repositoryUOW.RegisteredRepository.LoginID(reg.Password,username: reg.UserName);
-
-                return regID;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return null;
-            }
-            finally
-            {
-                this.repositoryUOW.HelperOledb.CloseConnection();
-            }
-
-
-        }
+        
 
         [HttpGet]
-        public ViewOwnedBooksModel GetUserBooks(string RegisteredID)
+        public ViewOwnedBooksModel GetUserBooks(string registeredID)
         {
             try
             {
                 ViewOwnedBooksModel model = new ViewOwnedBooksModel();
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 List<Book> books = new List<Book>();
-                books = this.repositoryUOW.BookRepository.GetUserNameBooks(RegisteredID);
+                books = this.repositoryUOW.BookRepository.GetUserNameBooks(registeredID);
                 model.Books = books;
-                model.User = this.repositoryUOW.RegisteredRepository.GetByID(RegisteredID);
+                model.User = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
                 return model;
             }
             catch (Exception ex)
@@ -94,38 +40,16 @@ namespace LLstudyWS.Controllers
             }
         }
 
-        [HttpPost]
-        public string sign_in_ID(string password, string? userName = null, string? email = null)
-        {
-            try
-            {
-                this.repositoryUOW.HelperOledb.OpenConnection();
-                if (email != null)
-                    return this.repositoryUOW.RegisteredRepository.LoginID(password, email: email);
-                else if (userName != null)
-                    return this.repositoryUOW.RegisteredRepository.LoginID(password, username: userName);
-                else
-                    return null;
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return null;
-            }
-            finally
-            {
-                this.repositoryUOW.HelperOledb.CloseConnection();
-            }
-        }
+        
 
         [HttpGet]
-        public Registered profile(string ID)
+        public Registered profile(string registeredID)
         {
             try
             {
                 Registered reg;
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                reg = this.repositoryUOW.RegisteredRepository.GetByID(ID, new List<string>() {"HasErrors", "IsValid" } );
+                reg = this.repositoryUOW.RegisteredRepository.GetByID(registeredID, new List<string>() {"HasErrors", "IsValid" } );
                 return reg; 
             }
             catch(Exception ex)
@@ -141,16 +65,16 @@ namespace LLstudyWS.Controllers
 
 
         [HttpGet]
-        public ViewShopingCartModel ViewShoppingCart(string ID)
+        public ViewShoppingCartModel GetShoppingCart(string registeredID)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
-                ViewShopingCartModel viewModel = new ViewShopingCartModel();
+                ViewShoppingCartModel viewModel = new ViewShoppingCartModel();
 
-                viewModel.User = this.repositoryUOW.RegisteredRepository.GetByID(ID);
-                viewModel.Books = this.repositoryUOW.BookRepository.GetShoppingCartBooks(ID);
+                viewModel.User = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
+                viewModel.Books = this.repositoryUOW.BookRepository.GetShoppingCartBooks(registeredID);
                 return viewModel;
 
             }
@@ -167,15 +91,15 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpGet]
-        public ViewOrdersModel GetUserOrders(string ID)
+        public ViewOrdersModel GetUserOrders(string registeredID)
         {
             try
             {
                 
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 ViewOrdersModel viewOrdersModel = new ViewOrdersModel();
-                viewOrdersModel.Orders = this.repositoryUOW.OrderRepository.GetUserOrders(ID);
-                viewOrdersModel.User = this.repositoryUOW.RegisteredRepository.GetByID(ID);
+                viewOrdersModel.Orders = this.repositoryUOW.OrderRepository.GetUserOrders(registeredID);
+                viewOrdersModel.User = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
                 return viewOrdersModel;
             }
             catch(Exception ex)
@@ -191,12 +115,12 @@ namespace LLstudyWS.Controllers
 
         [HttpGet]
 
-        public Order ViewOrderDetails(string ID)
+        public Order GetOrderDetails(string orderID)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return this.repositoryUOW.OrderRepository.GetByID(ID, new List<string>() { "IsValid", "HasErrors"});
+                return this.repositoryUOW.OrderRepository.GetByID(orderID, new List<string>() { "IsValid", "HasErrors"});
             }
             catch (Exception ex)
             {
@@ -208,33 +132,49 @@ namespace LLstudyWS.Controllers
             }
         }
 
+
+        //return ID
         [HttpPost]
-        public Order Pay(PaymentViewModel payment)
+        public bool Pay( PaymentViewModel payment)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return null;
+                this.repositoryUOW.HelperOledb.OpenTransaction();
+                this.repositoryUOW.OrderRepository.Create(payment.Order);
+                string orderID = this.repositoryUOW.OrderRepository.GetLastID() ;
+                Console.WriteLine("OrderID-> "+ orderID);
+                foreach (string bookID in payment.BooksID)
+                {
+                    Console.Write(bookID + "->");
+                    this.repositoryUOW.OrderRepository.AddRealationOfBooksAndOrder(orderID, bookID);
+                }
+                Console.WriteLine(  );
+                this.repositoryUOW.HelperOledb.Commit();
+
+                return true ;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return null;
+                this.repositoryUOW.HelperOledb.RollBack();
+                return false;
             }
             finally
             {
+
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
 
         [HttpPost]
-        public bool Add_To_Cart(string registeredID, string bookID)
+        public bool AddToCart(Shopping_Cart record)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                Shopping_Cart record = new Shopping_Cart() {RegisteredID = registeredID, BookID = bookID };
+                
                 return this.repositoryUOW.ShoppingCartRepository.Create(record);
 
             }
@@ -270,6 +210,29 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
 
+        }
+
+        [HttpGet]
+        public ViewOrderDetailsModel GetOrderFullDetails(string orderID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                ViewOrderDetailsModel viewModel = new ViewOrderDetailsModel();
+                viewModel.Order = this.repositoryUOW.OrderRepository.GetByID(orderID);
+                viewModel.Books = this.repositoryUOW.OrderRepository.GetOrderBooks(orderID);
+                viewModel.Registered = this.repositoryUOW.RegisteredRepository.GetByID(viewModel.Order.RegisteredID);
+                return viewModel;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
         }
     }
 }

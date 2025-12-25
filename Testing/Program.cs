@@ -65,7 +65,7 @@ namespace Testing
         {
             RepositoryUOW UOW = new RepositoryUOW();
             UOW.HelperOledb.OpenConnection();
-            UOW.OrderRepository.AddRealationsOfBooksAndOrder("1", new List<string>() { "1","2","3"});
+            UOW.OrderRepository.AddRealationOfBooksAndOrder("1", new List<string>() { "1","2","3"});
             UOW.HelperOledb.CloseConnection();
 
         }

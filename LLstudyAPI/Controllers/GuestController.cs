@@ -7,6 +7,7 @@ using LLstudyWS.ORM.Repositorys;
 using LLStudy_Models.Models;
 using System.Security.Permissions;
 using System.Data;
+using LLStudy_Models.ViewModels.Guest;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -26,6 +27,75 @@ namespace LLstudyWS.Controllers
         public GuestController()
         {
             this.repositoryUOW = new RepositoryUOW();
+        }
+        [HttpPost]
+        public string SignIn(SignInViewModel SignInModel)
+        {
+            try
+            {
+
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.RegisteredRepository.LoginID(SignInModel.Password, SignKey: SignInModel.SignKey);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpPost]
+        public Registered SignInDetails(SignInViewModel SignInModel)
+        {
+            try
+            {
+                //Console.WriteLine(@$"Email: {SignInModel.Email}, UserName: {SignInModel.UserName}");
+
+                Registered register;
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.RegisteredRepository.Login(SignInModel.Password, signTool: SignInModel.SignKey);
+                
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
+
+        [HttpPost]
+        public string SignUp(Registered reg) //Registered
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                string regID;
+                this.repositoryUOW.RegisteredRepository.CreateWithHash(reg, new List<string>() { "Role" });
+                regID = this.repositoryUOW.RegisteredRepository.LoginID(reg.Password, SignKey: reg.UserName);
+
+                return regID;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+
         }
 
         [HttpGet]
