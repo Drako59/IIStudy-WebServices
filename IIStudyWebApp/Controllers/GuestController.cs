@@ -80,11 +80,12 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Guest/SignIn";
 
 
-            bool success = client.PostAsync(SignInModel).Result;
+            ApiResultModel<string> success = client.PostAsyncRet<SignInViewModel, string>(SignInModel).Result;
 
-            if (!success)
+
+            if (!success.Success)
                 return View("Failed to sign in.");
-            return View("signed in.");
+            return RedirectToAction("RegisteredHomePage", "Registered", success.Data);
         }
 
         public async Task<IActionResult> SignUp(Registered reg)
@@ -101,6 +102,7 @@ namespace IIStudyWebApp.Controllers
             if (!success)
                 return View("Failed to sign up.");
             return View("User has been signed up.");
+
         }
     }
 }

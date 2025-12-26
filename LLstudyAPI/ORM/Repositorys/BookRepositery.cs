@@ -165,6 +165,18 @@ namespace LLstudyWS.ORM
         }
 
 
-       
+       public int BooksCount()
+        {
+            string sql = "SELECT Count(BookID) as BookCount FROM Books";
+            int count;
+            using(IDataReader reader = this.helperOledb.Select(sql)) 
+            {
+                if(reader.Read())
+                {
+                    return count = Convert.ToInt32(reader["BookCount"]);
+                }
+            }
+            return -1;
+        }
     }
 }

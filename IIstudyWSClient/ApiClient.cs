@@ -80,8 +80,8 @@ namespace IIstudyWSClient
             };
 
         }
-        
-        public async Task<bool> PostAsync(T model, List<FileStream> files = null)
+
+        public async Task<bool> PostAsync(T model, List<Stream> files = null, bool return_obj = false)
         {
             using(HttpRequestMessage httpRequest = new HttpRequestMessage())
             {
@@ -94,10 +94,10 @@ namespace IIstudyWSClient
 
                 multipartFormData.Add(content, "model");
                 //If error raises, check files is null and than loop if not.
-                foreach (FileStream file in files)
+                foreach (Stream file in files)
                 {
                     StreamContent streamContent = new StreamContent(file);
-                    multipartFormData.Add(streamContent, "file", file.Name);
+                    multipartFormData.Add(streamContent, "file", "file");
                 }
                 httpRequest.Content = multipartFormData;
 
@@ -109,6 +109,52 @@ namespace IIstudyWSClient
             }
         }
 
+        public async Task<ApiResultModel<TResponse>> PostAsyncRet<T,TResponse>(T model, List<Stream> files = null)
+        {
+            using (HttpRequestMessage httpRequest = new HttpRequestMessage())
+            {
+                httpRequest.Method = HttpMethod.Post;
+                httpRequest.RequestUri = this.uriBuilder.Uri;
+                MultipartFormDataContent multipartFormData = new MultipartFormDataContent();
+                string json = JsonSerializer.Serialize(model);
+
+                StringContent content = new StringContent(json);
+
+                multipartFormData.Add(content, "model");
+                //If error raises, check files is null and than loop if not.
+                foreach (Stream file in files)
+                {
+                    StreamContent streamContent = new StreamContent(file);
+                    multipartFormData.Add(streamContent, "file", "file");
+                }
+                httpRequest.Content = multipartFormData;
+
+                using (HttpResponseMessage response = await httpClient.SendAsync(httpRequest))
+                {
+                    ApiResultModel<TResponse> apiResult = new ApiResultModel<TResponse>();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string result = await response.Content.ReadAsStringAsync();
+                        await Console.Out.WriteLineAsync(result);
+                        //string result = httpResponse.Content.ToString();
+                        JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                        jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                        TResponse modelRet = JsonSerializer.Deserialize<TResponse>(result, jsonSerializerOptions);
+                        apiResult.Data = modelRet;
+                        apiResult.StatusCode = response.StatusCode;
+                        apiResult.Success = response.IsSuccessStatusCode;
+                        //PropertyInfo pro = model.GetType().GetProperty("BookID");
+                        //await Console.Out.WriteLineAsync($"model: {(string)pro.GetValue(model, null)}");
+                        return apiResult;
+                    }
+                    apiResult.Success = false;
+                    apiResult.StatusCode = response.StatusCode;
+                    return apiResult;
+
+                }
+            }
+        }
         public void print_url()
         {
             Console.WriteLine(this.uriBuilder.ToString());

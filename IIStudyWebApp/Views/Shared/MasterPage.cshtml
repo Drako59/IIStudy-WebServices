@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "MasterPage";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Shoshi Pause</title>
+    <link rel="stylesheet" href="~/css/Main.css">
+</head>
+<body>
+    <div class="container">
+        <header id="header">
+            <ul class="navigation">
+                <li><a href="https://localhost:7121/Guest/HomePage">Home</a></li>
+                <li><a href="https://localhost:7121/Guest/ViewBookCatalog">Book Catalog</a></li>
+                <li><a href="">Exams</a></li>
+                <li><a href="">Calendar</a></li>
+                <li><a href="../Claude/template_website.html">Test</a></li>
+                <li><a href="../Claude/modern_book_catalog.html">Book catalog Claude</a></li>
+            </ul>
+            <div class="profile">
+                <button class="sign_up_button">Sign Up</button>
+                <button class="sign_in_button">
+                    Sign In👤
+                    <!-- <span class = ></span> -->
+                    <!-- "~/images/[image]"-->
+                    <!-- <img class = "sign_in_button_image" src="../Images/HomePage_Guest_Images/Sing_up_image.png"> -->
+                </button>
+
+
+            </div>
+        </header>
+        <main class="main">
+            @RenderBody()   
+        </main>
+    <footer>
+    </footer>
+    </div>
+</body>
+</html>

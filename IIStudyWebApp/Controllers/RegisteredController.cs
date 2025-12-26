@@ -124,7 +124,7 @@ namespace IIStudyWebApp.Controllers
 
             if (!success)
                 return View("Failed to pay.");
-            return View("Payment suceed.");
+            return View("Payment succeed.");
         }
 
         [HttpGet]
