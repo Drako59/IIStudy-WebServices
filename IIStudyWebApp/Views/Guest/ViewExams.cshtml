@@ -1,0 +1,115 @@
+﻿@using LLStudy_Models.ViewModels
+@using LLStudy_Models.Models
+
+@{
+    ViewData["Title"] = "ViewExams";
+    Layout = "~/Views/Shared/MasterPage.cshtml";
+}
+
+@model ViewExamsModel
+
+<main class="main-content">
+
+<link rel="stylesheet" href="../Css/Exams.css">
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📚 מערכת מבחנים ופתרונות</h1>
+        </div>
+
+        <div class="content-wrapper">
+            <!-- Sidebar Filters -->
+            <aside class="sidebar">
+                <h2 class="filters-title">🔍 סינון מבחנים</h2>
+
+                <div class="filter-group">
+                    <button class="filter-label">שנה</button>
+                    <select class="filter-select" id="yearFilter">
+                        <option value="">כל השנים</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <button class="filter-label">מקצוע</button>
+                    <select class="filter-select" id="subjectFilter">
+                        <option value="">כל המקצועות</option>
+                        <option value="math">מתמטיקה</option>
+                        <option value="english">אנגלית</option>
+                        <option value="hebrew">עברית</option>
+                        <option value="history">היסטוריה</option>
+                        <option value="science">מדעים</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <button class="filter-label">מועד</button>
+                    <select class="filter-select" id="termFilter">
+                        <option value="">כל המועדים</option>
+                        <option value="summer">מועד קיץ</option>
+                        <option value="winter">מועד חורף</option>
+                        <option value="makeup">מועד מיוחד</option>
+                    </select>
+                </div>
+
+                <button class="clear-filters" id="clearBtn">🔄 נקה סינון</button>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="exams-grid" id="examsGrid">
+                    <!-- Exam Card 1 -->
+                    @if (Model != null && Model.Exams.Any())
+                    {
+                        @foreach(Exam exam in Model.Exams){
+                        <div class="exam-card" data-year="2024" data-subject="math" data-term="summer">
+                            <div class="exam-header">
+                                <div class="exam-title">
+                                    <div class="exam-icon">1</div>
+                                    <span>@exam.Exam_Name</span>
+                                </div>
+                                <span class="exam-badge">חדש</span>
+                            </div>
+                            <div class="exam-info">
+                                <div class="info-row">
+                                    <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>@exam.Exam_Year</span>
+                                </div>
+                                <div class="info-row">
+                                    <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                    <span>@exam.CategoryID</span>
+                                </div>
+                            </div>
+                            <div class="exam-actions">
+                                <button class="exam-btn btn-primary">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    הצג מבחן
+                                </button>
+                                <button class="exam-btn btn-secondary">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    הצג פתרון
+                                </button>
+                            </div>
+                        </div>
+                        }
+                    }
+
+
+            </main>
+        </div>
+    </div>
+
+</main>
