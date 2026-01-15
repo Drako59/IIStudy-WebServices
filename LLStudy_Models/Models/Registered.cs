@@ -27,7 +27,7 @@ namespace LLStudy_Models.Models
         public string Password { get; set; }
         [EmailAddress(ErrorMessage = "Valid email is required")]
         public string Email { get; set; }
-        [LegalRole(ErrorMessage ="Valid role is required")]
+        //[LegalRole(ErrorMessage ="Valid role is required")]
         public string Role { get; set; }
         public string Birth { get; set; }
         public string RegisteredID { get; set; }

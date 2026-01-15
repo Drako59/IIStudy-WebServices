@@ -122,13 +122,14 @@ namespace IIstudyWSClient
 
                 multipartFormData.Add(content, "model");
                 //If error raises, check files is null and than loop if not.
+                if (files != null) { 
                 foreach (Stream file in files)
                 {
                     StreamContent streamContent = new StreamContent(file);
                     multipartFormData.Add(streamContent, "file", "file");
                 }
                 httpRequest.Content = multipartFormData;
-
+                }
                 using (HttpResponseMessage response = await httpClient.SendAsync(httpRequest))
                 {
                     ApiResultModel<TResponse> apiResult = new ApiResultModel<TResponse>();
