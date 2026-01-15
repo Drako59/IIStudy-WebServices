@@ -8,6 +8,7 @@ using LLStudy_Models.Models;
 using System.Security.Permissions;
 using System.Data;
 using LLStudy_Models.ViewModels.Guest;
+using System.Text.Json;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -76,12 +77,25 @@ namespace LLstudyWS.Controllers
         [HttpPost]
         public string SignUp(Registered reg) //Registered
         {
+            //string json = HttpContext.Request.Form["model"];
+            //Registered user = JsonSerializer
+            //List<IFormFile> file = null;
+            //if (HttpContext.Request.Form.Files.Count > 0)
+            //{
+            //    for (int i = 0; i < HttpContext.Request.Form.Files.Count; i++)
+            //    {
+            //        file.Add(HttpContext.Request.Form.Files[i]);
+            //    }
+
+            //}
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 string regID;
                 this.repositoryUOW.RegisteredRepository.CreateWithHash(reg, new List<string>() { "Role" });
                 regID = this.repositoryUOW.RegisteredRepository.LoginID(reg.Password, SignKey: reg.UserName);
+
+                string path = @$"{Directory.GetCurrentDirectory()}\wwwroot\Images\[DIRNAME]\{reg.RegisteredID}";
 
                 return regID;
             }

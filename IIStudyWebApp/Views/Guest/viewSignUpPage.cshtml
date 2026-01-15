@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewData["Title"] = "viewSignUpPage";
+    Layout = "~/Views/Shared/MasterPage.cshtml";
+}
+<link href="~/css/signin.css" rel="stylesheet" />
+<main class="main-content">
+    <form asp-action="SignUp" asp-asp-controller="Guest" method="post">
+    <div class="container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1 class="auth-title">Create Account</h1>
+                <p class="auth-subtitle">Join us to explore our book collection</p>
+            </div>
+
+            <div class="social-buttons">
+                <button class="social-btn">Facebook</button>
+                <button class="social-btn">Google</button>
+            </div>
+
+            <div class="divider">
+                <span>or sign up with email</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input type="text" id="username" class="form-input" placeholder="Choose a username">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" class="form-input" placeholder="Create a strong password">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input type="email" id="email" class="form-input" placeholder="your@email.com">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="birth">Birth Date</label>
+                <input type="text" id="birth" class="form-input" placeholder="DD/MM/YYYY">
+            </div>
+
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="terms">
+                <label class="checkbox-label" for="terms">
+                    I agree to the <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button class="submit-btn">Create Account</button>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="signin.html">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+    </form>
+</main>
+

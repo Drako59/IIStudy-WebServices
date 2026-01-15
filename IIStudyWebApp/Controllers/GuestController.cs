@@ -18,6 +18,11 @@ namespace IIStudyWebApp.Controllers
         }
 
         [HttpGet]
+
+        public async Task<IActionResult> viewSignUpPage()
+        {
+            return View();
+        }
         public async Task<IActionResult> ViewBookCatalog()
         {
 
@@ -88,6 +93,7 @@ namespace IIStudyWebApp.Controllers
             return RedirectToAction("RegisteredHomePage", "Registered", success.Data);
         }
 
+        [HttpPost]
         public async Task<IActionResult> SignUp(Registered reg)
         {
             ApiClient<Registered> client = new ApiClient<Registered>();
@@ -96,13 +102,29 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Guest/SignUp";
 
+            ApiResultModel<string> success = client.PostAsyncRet<Registered, string>(reg).Result;
+            
+            //888888888888888888888888888888888888
+            
+            //888888888888888888888888888888888888
+            //ApiResultModel<string> success = client.PostAsync(reg).Result;
 
-            bool success = client.PostAsync(reg).Result;
+            if (success.Success)
+            {
+                HttpContext.Session.SetString("RegisteredID", reg.RegisteredID);
+                return RedirectToAction("RgisteredHomePage", "Registered" );
+            }
 
-            if (!success)
-                return View("Failed to sign up.");
-            return View("User has been signed up.");
+            return View("SignUp");
+            //if (!success)
+            //    return View("Failed to sign up.");
+            //return View("User has been signed up.");
 
+        }
+
+        private async Task<string> SendReader()
+        {
+            return null;
         }
     }
 }
