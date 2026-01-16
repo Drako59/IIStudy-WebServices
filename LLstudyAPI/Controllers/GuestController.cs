@@ -50,7 +50,7 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public Registered SignInDetails(SignInViewModel SignInModel)
+        public Registered SignInDetails(SignInViewModel model)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace LLstudyWS.Controllers
 
                 Registered register;
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return this.repositoryUOW.RegisteredRepository.Login(SignInModel.Password, signTool: SignInModel.SignKey);
+                return this.repositoryUOW.RegisteredRepository.Login(model.Password, signTool: model.SignKey);
                 
 
             }
@@ -75,7 +75,7 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public string SignUp(Registered reg) //Registered
+        public string SignUp([FromBody]Registered model) //Registered
         {
             //string json = HttpContext.Request.Form["model"];
             //Registered user = JsonSerializer
@@ -88,14 +88,15 @@ namespace LLstudyWS.Controllers
             //    }
 
             //}
+
+           
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 string regID;
-                this.repositoryUOW.RegisteredRepository.CreateWithHash(reg, new List<string>() { "Role" });
-                regID = this.repositoryUOW.RegisteredRepository.LoginID(reg.Password, SignKey: reg.UserName);
-
-                string path = @$"{Directory.GetCurrentDirectory()}\wwwroot\Images\[DIRNAME]\{reg.RegisteredID}";
+                this.repositoryUOW.RegisteredRepository.CreateWithHash(model, new List<string>() { "Role" });
+                regID = this.repositoryUOW.RegisteredRepository.LoginID(model.Password, SignKey: model.UserName);
+                //string path = @$"{Directory.GetCurrentDirectory()}\wwwroot\Images\[DIRNAME]\{reg.RegisteredID}";
 
                 return regID;
             }

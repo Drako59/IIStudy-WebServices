@@ -136,6 +136,43 @@ namespace IIstudyWSClient
 
                     if (response.IsSuccessStatusCode)
                     {
+                        Console.WriteLine("here");
+                        string result = await response.Content.ReadAsStringAsync();
+                        await Console.Out.WriteLineAsync(result);
+                        //string result = httpResponse.Content.ToString();
+                        JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                        jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                        TResponse modelRet = JsonSerializer.Deserialize<TResponse>(result, jsonSerializerOptions);
+                        apiResult.Data = modelRet;
+                        apiResult.StatusCode = response.StatusCode;
+                        apiResult.Success = response.IsSuccessStatusCode;
+                        //PropertyInfo pro = model.GetType().GetProperty("BookID");
+                        //await Console.Out.WriteLineAsync($"model: {(string)pro.GetValue(model, null)}");
+                        return apiResult;
+                    }
+                    apiResult.Success = false;
+                    apiResult.StatusCode = response.StatusCode;
+                    return apiResult;
+
+                }
+            }
+        }
+
+          public async Task<ApiResultModel<TResponse>> PostAsyncRet<T, TResponse>(T model)
+        {
+            using (HttpRequestMessage httpRequest = new HttpRequestMessage())
+            {
+                httpRequest.Method = HttpMethod.Post;
+                httpRequest.RequestUri = this.uriBuilder.Uri;
+                string json = JsonSerializer.Serialize(model);
+                httpRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                using (HttpResponseMessage response = await httpClient.SendAsync(httpRequest))
+                {
+                    ApiResultModel<TResponse> apiResult = new ApiResultModel<TResponse>();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("here");
                         string result = await response.Content.ReadAsStringAsync();
                         await Console.Out.WriteLineAsync(result);
                         //string result = httpResponse.Content.ToString();

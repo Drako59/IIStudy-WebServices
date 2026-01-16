@@ -109,12 +109,13 @@ namespace IIStudyWebApp.Controllers
             //888888888888888888888888888888888888
             //ApiResultModel<string> success = client.PostAsync(reg).Result;
             await Console.Out.WriteLineAsync(  "here****************************************");
+            await Console.Out.WriteLineAsync(success.Success + "HEREHREREHREHEHREHRHEEH");
 
+            Console.WriteLine($@"{reg.UserName}");
             if (success.Success && success.Data != null)
             {
-                await Console.Out.WriteLineAsync(success.Success + "HEREHREREHREHEHREHRHEEH");
 
-                HttpContext.Session.SetString("RegisteredID", reg.RegisteredID);
+                HttpContext.Session.SetString("RegisteredID", success.Data);
                 return RedirectToAction("RgisteredHomePage", "Registered" );
             }
 
