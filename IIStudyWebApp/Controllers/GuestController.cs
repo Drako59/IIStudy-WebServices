@@ -103,19 +103,22 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Guest/SignUp";
 
             ApiResultModel<string> success = client.PostAsyncRet<Registered, string>(reg).Result;
-            
+
             //888888888888888888888888888888888888
-            
+
             //888888888888888888888888888888888888
             //ApiResultModel<string> success = client.PostAsync(reg).Result;
+            await Console.Out.WriteLineAsync(  "here****************************************");
 
-            if (success.Success)
+            if (success.Success && success.Data != null)
             {
+                await Console.Out.WriteLineAsync(success.Success + "HEREHREREHREHEHREHRHEEH");
+
                 HttpContext.Session.SetString("RegisteredID", reg.RegisteredID);
                 return RedirectToAction("RgisteredHomePage", "Registered" );
             }
 
-            return View("SignUp");
+            return RedirectToAction("ViewSignUpPage");
             //if (!success)
             //    return View("Failed to sign up.");
             //return View("User has been signed up.");
