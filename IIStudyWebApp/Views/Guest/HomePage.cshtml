@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/MasterPage.cshtml";
 }
 <link rel="stylesheet" href="../Css/HomePage.css">
-<main class="main">
+@* <main class="main">
 
     <div class="tools"></div>
     <div class="filter_subject">
@@ -23,6 +23,16 @@
 
 
     </div>
-</main>
+</main> *@
 @* <img src="~/images/homepage_guest_images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg" /> *@
-
+<main id="home" class="page-container active">
+    <section class="hero">
+        <div class="container">
+            <h1>Discover Your Next Great Read</h1>
+            <p>Explore thousands of books across all genres. Your literary adventure starts here.</p>
+            <div class="hero-cta">
+                <button class="cta-btn cta-primary" href="https://localhost:7121/Guest/ViewBookCatalog">Browse Books</button>
+            </div>
+        </div>
+    </section>
+</main>
