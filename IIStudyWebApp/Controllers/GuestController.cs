@@ -119,7 +119,7 @@ namespace IIStudyWebApp.Controllers
             {
 
                 HttpContext.Session.SetString("RegisteredID", success.Data.RegisteredID);
-                return RedirectToAction("RgisteredHomePage", "Registered" );
+                return RedirectToAction("RegisteredHomePage", "Registered" );
             }
 
             return RedirectToAction("ViewSignUpPage");

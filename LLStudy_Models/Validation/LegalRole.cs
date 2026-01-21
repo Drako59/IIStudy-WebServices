@@ -11,7 +11,7 @@ namespace LLStudy_Models.Validation
     {
         public override bool IsValid(object? value)
         {
-            string[] Roles = { "Admin", "User", "Guest" };
+            string[] Roles = { "Admin", "User" };
             for (int i = 0; i < Roles.Length; i++)
             {
                 if (Roles[i] == value.ToString())
