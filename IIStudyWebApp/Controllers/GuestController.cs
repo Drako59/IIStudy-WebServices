@@ -102,7 +102,10 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Guest/SignUp";
 
-            ApiResultModel<string> success = client.PostAsyncRet<Registered, string>(reg).Result;
+            reg.Role = "User";
+            reg.RegisteredID = "6";
+            reg.RegisteredSalt = " ";
+             ApiResultModel<Registered> success = client.PostAsyncRet<Registered, Registered>(reg).Result;
 
             //888888888888888888888888888888888888
 
@@ -111,11 +114,11 @@ namespace IIStudyWebApp.Controllers
             await Console.Out.WriteLineAsync(  "here****************************************");
             await Console.Out.WriteLineAsync(success.Success + "HEREHREREHREHEHREHRHEEH");
 
-            Console.WriteLine($@"{reg.UserName}");
+            Console.WriteLine($@"{success.Data.RegisteredID}");
             if (success.Success && success.Data != null)
             {
 
-                HttpContext.Session.SetString("RegisteredID", success.Data);
+                HttpContext.Session.SetString("RegisteredID", success.Data.RegisteredID);
                 return RedirectToAction("RgisteredHomePage", "Registered" );
             }
 

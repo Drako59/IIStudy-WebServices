@@ -10,21 +10,28 @@ namespace LLStudy_Models.Models
 {
 
 
-    public class Client: Registered
+    //public class Client: Registered
+    //{
+    //    string registeredID;
+    //    string registeredSalt;
+    //    string role;
+
+    //    public string Role { get; set; }
+    //    public string RegisteredID { get; set; }
+
+    //    public string RegisteredSalt { get; set; }
+
+    //}
+    public class Registered: Model
     {
+
         string registeredID;
         string registeredSalt;
         string role;
 
-        public string Role { get; set; }
         public string RegisteredID { get; set; }
 
         public string RegisteredSalt { get; set; }
-
-    }
-    public class Registered: Model
-    {
-  
 
         [Required]
         [StringLength(maximumLength: 20,MinimumLength =2,ErrorMessage ="Valid username is required")]
@@ -37,7 +44,8 @@ namespace LLStudy_Models.Models
         [EmailAddress(ErrorMessage = "Valid email is required")]
         public string Email { get; set; }
         //[LegalRole(ErrorMessage ="Valid role is required")]
-       
+        public string Role { get; set; }
+
         public string Birth { get; set; }
        
     }

@@ -75,7 +75,7 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public string SignUp([FromBody]Registered model) //Registered
+        public Registered SignUp([FromBody]Registered model) //Registered
         {
             //string json = HttpContext.Request.Form["model"];
             //Registered user = JsonSerializer
@@ -92,13 +92,17 @@ namespace LLstudyWS.Controllers
            
             try
             {
+                //return null;
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 string regID;
-                this.repositoryUOW.RegisteredRepository.CreateWithHash(model, new List<string>() { "Role" });
+                this.repositoryUOW.RegisteredRepository.CreateWithHash(model);
                 regID = this.repositoryUOW.RegisteredRepository.LoginID(model.Password, SignKey: model.UserName);
                 //string path = @$"{Directory.GetCurrentDirectory()}\wwwroot\Images\[DIRNAME]\{reg.RegisteredID}";
+                model.RegisteredID = regID;
 
-                return regID;
+
+
+                return model;
             }
             catch (Exception ex)
             {
