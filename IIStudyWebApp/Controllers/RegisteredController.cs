@@ -15,29 +15,34 @@ namespace IIStudyWebApp.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> RegisteredHomePage(string registeredID)
+        public async Task<IActionResult> RegisteredHomePage()
         {
+            string registeredID = HttpContext.Session.GetString("RegisteredID");
             ApiClient<Registered> client = new ApiClient<Registered>();
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
-            client.Path = "api/Registered/prfoile";
+            client.Path = "api/Registered/profile";
             client.AddParameter("registeredID", registeredID);
-
             Registered registered = await client.GetAsync();
+            ViewData["Registered"] = registered;
+
             return View(registered);
         }
         [HttpGet]
-        public async Task<IActionResult> Profile(string registeredID)
+        public async Task<IActionResult> Profile()
         {
+            string registeredID = HttpContext.Session.GetString("RegisteredID");
             ApiClient<Registered> client = new ApiClient<Registered>();
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
-            client.Path = "api/Registered/prfoile";
+            client.Path = "api/Registered/profile";
             client.AddParameter("registeredID", registeredID);
 
             Registered registered = await client.GetAsync();
+            ViewData["Registered"] = registered;
+
             return View(registered);
         }
 
@@ -158,6 +163,18 @@ namespace IIStudyWebApp.Controllers
             if (!success)
                 return View("Failed to add.");
             return View("Review added.");
+        }
+
+        public async Task<IActionResult> SignOut()
+        {
+
+
+            HttpContext.Session.Remove("RegisteredID");
+
+            return RedirectToAction("HomePage","Guest");
+            
+
+            
         }
     }
 }

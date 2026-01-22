@@ -1,0 +1,221 @@
+﻿@using LLStudy_Models.Models
+@{
+    ViewData["Title"] = "RegisteredMasterPage";
+}
+@{
+    Registered reg = ViewData["Registered"] as Registered;
+}
+
+@if(reg == null){
+    reg = new Registered()
+                {
+                    UserName = "None",
+                    Email = "None",
+                    Birth = "None",
+
+                };
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookHaven - Modern Online Bookstore</title>
+    <link href="../Css/mainregistered.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav-container">
+                <span class="logo" onclick="showPage('home')">📚IIStudy</span>
+
+                <div class="mobile-menu-toggle" id="mobileToggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="https://localhost:7121/Registered/RegisteredHomePage" class="active" data-page="home">Home</a></li>
+                    <li><a href="https://localhost:7121/Guest/ViewBookCatalog" data-page="catalog">Book Catalog</a></li>
+                    <li><a href="https://localhost:7121/Guest/ViewExams" data-page="exams">Exams</a></li>
+                    <li><a href="#"  data-page="about">About</a></li>
+                    <li><a href="#"  data-page="contact">Contact</a></li>
+                </ul>
+
+                <!-- User Profile Section -->
+                <div class="user-section">
+                    <!-- Notification Bell -->
+                    <button class="notification-btn" onclick="showNotifications()">
+                        <svg class="notification-icon" viewBox="0 0 24 24">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span class="notification-badge">3</span>
+                    </button>
+
+                    <!-- User Profile -->
+                    <div class="user-profile" onclick="toggleProfileDropdown(this)">
+
+                        <div class="user-avatar">
+                            <img src="path-to-profile-image.jpg" alt="User" onerror="this.style.display='none'">
+                        
+
+                            @if (true)
+                            {
+                                Random random = new Random();
+                                int number2 = random.Next(1, 120); //ADD THE BLACK PEOPLE.
+                                int number = random.Next(1, 10);
+                                if (number == 6)
+                                {
+                                    <img src="~/images/usersimages/ilgcdgxjyzuozcdwd70gnc9tah0c_genwj3dgvxocds9kmimgudvaxlutq-9igopu0ubwfy4s900-c-k-c0x00ffffff-no-rj.png" alt="User" onerror="this.style.display='none'">
+                                    @* <img id="profileImage" src="~/images/usersimages/ilgcdgxjyzuozcdwd70gnc9tah0c_genwj3dgvxocds9kmimgudvaxlutq-9igopu0ubwfy4s900-c-k-c0x00ffffff-no-rj.png" alt="Profile" class="profile-image"> *@
+
+                                }
+                                else
+                                {
+                                    <img src="~/images/usersimages/ilgcdgxjyzuozcdwd70gnc9tah0c_genwj3dgvxocds9kmimgudvaxlutq-9igopu0ubwfy4s900-c-k-c0x00ffffff-no-rj.png" alt="User" onerror="this.style.display='none'">
+
+                                }
+                            }
+                            @if (reg.ImagePath == "None" || reg.ImagePath == null)
+                            {
+                                if (reg.ImagePath.Contains(" "))
+                                {
+                                    string[] parts = reg.UserName.Split(" ");
+                                    <span class="avatar-text">
+
+                                        @parts[0][0]@parts[0][1]
+                                   
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="avatar-text">
+
+                                        @reg.UserName[0]@reg.UserName[1]
+                                    </span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="avatar-text">
+
+                                    NO
+                                </span>
+                            }
+                            
+
+                        </div>
+                        @* <div class="user-avatar">
+                            <!-- You can replace this with an actual image -->
+                            <!-- <img src="path-to-profile-image.jpg" alt="User"> -->
+                            
+                        </div> *@
+                        <div class="user-info">
+                            <span class="user-name"></span>
+                            <span class="user-role">Premium Member</span>
+                        </div>
+                        <svg class="dropdown-icon" viewBox="0 0 24 24">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+
+                        <!-- Dropdown Menu -->
+                        <div class="profile-dropdown">
+                            <div class="dropdown-header">
+                                <div class="dropdown-name">@reg.UserName</div>
+                                <div class="dropdown-email">@reg.Email</div>
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="https://localhost:7121/Registered/Profile" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                        My Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24">
+                                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                        </svg>
+                                        My Library
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                            <path d="M12 1v6m0 6v6m4.22-13.78l-1.42 1.42M10.2 14.8l-1.42 1.42M23 12h-6m-6 0H5m13.78 4.22l-1.42-1.42M10.2 9.2l-1.42-1.42"></path>
+                                        </svg>
+                                        Settings
+                                    </a>
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li>
+                                    <a href="https://localhost:7121/Registered/SignOut" class="dropdown-item logout">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                            <polyline points="16 17 21 12 16 7"></polyline>
+                                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                                        </svg>
+                                        Sign Out
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+
+    @RenderBody()
+    <!-- HOME PAGE -->
+    
+
+    <script>
+        function toggleMobileMenu() {
+            const mobileToggle = document.getElementById('mobileToggle');
+            const navLinks = document.getElementById('navLinks');
+            mobileToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        }
+
+        function toggleProfileDropdown(element) {
+            event.stopPropagation();
+            element.classList.toggle('active');
+        }
+
+        function showNotifications() {
+            alert('Notifications feature coming soon! You have 3 new notifications.');
+        }
+
+        function showPage(page) {
+            // Close mobile menu if open
+            const navLinks = document.getElementById('navLinks');
+            const mobileToggle = document.getElementById('mobileToggle');
+            navLinks.classList.remove('active');
+            mobileToggle.classList.remove('active');
+
+            // Your page navigation logic here
+            console.log('Navigating to:', page);
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const userProfile = document.querySelector('.user-profile');
+            if (userProfile && !userProfile.contains(event.target)) {
+                userProfile.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
+

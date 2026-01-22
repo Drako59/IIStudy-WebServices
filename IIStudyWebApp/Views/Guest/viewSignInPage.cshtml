@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "viewSignInPage";
+}
+
+
+@{
+    ViewData["Title"] = "viewSignUpPage";
+    Layout = "~/Views/Shared/MasterPage.cshtml";
+}
+@using LLStudy_Models.Models
+
+@using LLStudy_Models.ViewModels
+
+
+@model SignInViewModel
+
+<link href="~/css/SignUp.css" rel="stylesheet" />
+<main class="main-content">
+    <form asp-action="SignIn" asp-controller="Guest" method="post">
+        <div class="container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1 class="auth-title">Sign in</h1>
+                    <p class="auth-subtitle">Join us to explore our book collection</p>
+                </div>
+
+                <div class="social-buttons">
+                    <button class="social-btn">Facebook</button>
+                    <button class="social-btn">Google</button>
+                </div>
+
+                @* <div class="divider">
+                    <span>or sign up with email</span>
+                </div> *@
+
+                <div class="form-group">
+                    <label class="form-label" for="email">Email or UserName</label>
+                    <input asp-for="SignKey" type="email" id="email" value="noam98038@gmail.com" class="form-input" placeholder="your@email.com or UserName">
+                </div>
+
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input asp-for="Password" type="password" value="zoro" id="password" class="form-input" placeholder="Create a strong password">
+                </div>
+
+                
+                
+
+                <button class="submit-btn">Sign In</button>
+
+                @* <div class="auth-footer">
+                    <p>Already have an account? <a href="signin.html">Sign in</a></p>
+                </div> *@
+            </div>
+        </div>
+    </form>
+</main>
+
+
+

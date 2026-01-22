@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LLStudy_Models.ViewModels.Guest
+namespace LLStudy_Models.ViewModels
 {
     public class SignInViewModel
     {

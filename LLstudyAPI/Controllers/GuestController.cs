@@ -7,7 +7,7 @@ using LLstudyWS.ORM.Repositorys;
 using LLStudy_Models.Models;
 using System.Security.Permissions;
 using System.Data;
-using LLStudy_Models.ViewModels.Guest;
+using LLStudy_Models.ViewModels;
 using System.Text.Json;
 namespace LLstudyWS.Controllers
 {
@@ -30,13 +30,24 @@ namespace LLstudyWS.Controllers
             this.repositoryUOW = new RepositoryUOW();
         }
         [HttpPost]
-        public string SignIn(SignInViewModel SignInModel)
+        public Registered SignIn(SignInViewModel SignInModel)
         {
             try
             {
+                Registered reg = new Registered() {
+                    UserName="None",
+                    Email = "None",
+                    Password = "None",
+                    RegisteredSalt = "None",
+                    Role = "User",
+                    Birth = "None",
+                    ImagePath = "None"
+               
 
+                };
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return this.repositoryUOW.RegisteredRepository.LoginID(SignInModel.Password, SignKey: SignInModel.SignKey);
+                reg.RegisteredID =  this.repositoryUOW.RegisteredRepository.LoginID(SignInModel.Password, SignKey: SignInModel.SignKey);
+                return reg;
             }
             catch (Exception ex)
             {
