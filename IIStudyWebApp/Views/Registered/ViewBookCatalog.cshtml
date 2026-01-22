@@ -1,39 +1,11 @@
-﻿
-@using LLStudy_Models.Models
+﻿@using LLStudy_Models.Models
 @model List<Book>
+
 @{
     ViewData["Title"] = "ViewBookCatalog";
-    Layout = "~/Views/Shared/MasterPage.cshtml";
+    Layout = "~/Views/Shared/RegisteredMasterPage.cshtml";
+
 }
-@* <link rel="stylesheet" href="~/css/BooksCatalog.css">
-
-<div class="SearchBar">
-    <!-- <div>🔍</div> -->
-    <input class="input_searchbar" type="text" name="searchNameFilter" id="SearchBar" value="" placeholder="🔍 Search for books, authors, categories... ">
-</div>
-<div class="books_section">
-    <div class="filter_sidebar_tools"></div>
-    <ul class="books_catalog">
-        @if (Model != null && Model.Any())
-        {
-            @foreach (Book book in Model)
-            {
-                <li class="book_slot">
-                    <!-- <div class="flex_box">   -->
-            <span class="category_book">Math</span><br>
-
-            <img src="~/Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg">
-            <h1 class="Book_label">@book.Book_name</h1>
-            <div class="book_slot_buttons">
-                <button class="Add_to_cart book_button">Add to cart</button>
-                <button class="Preview book_button">Preview</button>
-            </div>
-        </li>
-        }
-        }
-    </ul>
-       
-</div> *@
 
 
 <link rel="stylesheet" href="../Css/bookCatalog_claude.css">
@@ -93,12 +65,12 @@
             }
 
 
-        
+
         </div>
 
-        
 
-        
+
+
 
 
     </div>

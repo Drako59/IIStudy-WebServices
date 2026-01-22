@@ -39,15 +39,36 @@
 
                 <ul class="nav-links" id="navLinks">
                     <li><a href="https://localhost:7121/Registered/RegisteredHomePage" class="active" data-page="home">Home</a></li>
-                    <li><a href="https://localhost:7121/Guest/ViewBookCatalog" data-page="catalog">Book Catalog</a></li>
+                    <li><a href="https://localhost:7121/Registered/ViewBookCatalog" data-page="catalog">Book Catalog</a></li>
                     <li><a href="https://localhost:7121/Guest/ViewExams" data-page="exams">Exams</a></li>
                     <li><a href="#"  data-page="about">About</a></li>
                     <li><a href="#"  data-page="contact">Contact</a></li>
                 </ul>
-
                 <!-- User Profile Section -->
                 <div class="user-section">
-                    <!-- Notification Bell -->
+                    <!-- shopping cart -->
+                    <button class="notification-btn" onclick="showNotifications()">
+                        <svg class="notification-icon" viewBox="0 0 24 24">
+                            <path d="M6 2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2
+                                        M16 2v4
+                                        M8 2v4
+                                        M2 10h20"></path>
+                        </svg>
+                    </button>
+
+                    @* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--></svg> *@
+                    <button class="notification-btn" onclick="showNotifications()">
+                        <svg class="notification-icon" viewBox="0 0 24 24">
+                            <path d="M2.25 3h1.386c.51 0 .955.343 1.087.835L5.91 7.5
+                                    m0 0L7.5 13.5h9.75l2.25-7.5H6.34
+                                    M9 20.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5
+                                    m8.25 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5"></path>
+                            @* <path d="M24 48C10.7 48 0 58.7 0 72C0 85.3 10.7 96 24 96L69.3 96C73.2 96 76.5 98.8 77.2 102.6L129.3 388.9C135.5 423.1 165.3 448 200.1 448L456 448C469.3 448 480 437.3 480 424C480 410.7 469.3 400 456 400L200.1 400C188.5 400 178.6 391.7 176.5 380.3L171.4 352L475 352C505.8 352 532.2 330.1 537.9 299.8L568.9 133.9C572.6 114.2 557.5 96 537.4 96L124.7 96L124.3 94C119.5 67.4 96.3 48 69.2 48L24 48zM208 576C234.5 576 256 554.5 256 528C256 501.5 234.5 480 208 480C181.5 480 160 501.5 160 528C160 554.5 181.5 576 208 576zM432 576C458.5 576 480 554.5 480 528C480 501.5 458.5 480 432 480C405.5 480 384 501.5 384 528C384 554.5 405.5 576 432 576z" /> *@
+                            @* <path d="M13.73 21a2 2 0 0 1-3.46 0"></path> *@
+                        </svg>
+                        @* <span class="notification-badge">3</span> *@
+                    </button>
+
                     <button class="notification-btn" onclick="showNotifications()">
                         <svg class="notification-icon" viewBox="0 0 24 24">
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -60,8 +81,8 @@
                     <div class="user-profile" onclick="toggleProfileDropdown(this)">
 
                         <div class="user-avatar">
-                            <img src="path-to-profile-image.jpg" alt="User" onerror="this.style.display='none'">
-                        
+                            @* <img src="path-to-profile-image.jpg" alt="User" onerror="this.style.display='none'">
+                            <img src="~/images/usersimages/ofek.png" /> *@
 
                             @if (true)
                             {
@@ -76,11 +97,11 @@
                                 }
                                 else
                                 {
-                                    <img src="~/images/usersimages/ilgcdgxjyzuozcdwd70gnc9tah0c_genwj3dgvxocds9kmimgudvaxlutq-9igopu0ubwfy4s900-c-k-c0x00ffffff-no-rj.png" alt="User" onerror="this.style.display='none'">
+                                    <img src="~/images/usersimages/ofek.png" alt="User" onerror="this.style.display='none'">
 
                                 }
                             }
-                            @if (reg.ImagePath == "None" || reg.ImagePath == null)
+                            @if ( reg.ImagePath == "None" || reg.ImagePath == null)
                             {
                                 if (reg.ImagePath.Contains(" "))
                                 {
