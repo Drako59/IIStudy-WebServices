@@ -79,14 +79,14 @@
             {
                 @foreach (Book book in Model)
                 {
-
+                    string path = $"https://localhost:7121/Guest/ViewBookPreview?bookID={book.BookID}";
                     <div class="book-card">
-                        <a href="https://localhost:7121/Guest/HomePage" class="book-cover"><img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"></a>
+                        <a href=@path class="book-cover"><img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"></a>
                         <div class="book-info">
                             <h3>@book.Book_name</h3>
                             <p class="book-author">@book.Author_name</p>
                             <p class="book-price">$@book.Book_price</p>
-                            <button class="add-to-cart" onclick="window.location.href='https://localhost:7121/Guest/ViewBookCatalog';">Add to Cart</button>
+                            <button class="add-to-cart" onclick="window.location.href='https://localhost:7121/Guest/viewSignInPage';">Add to Cart</button>
                         </div>
                     </div>
                 }

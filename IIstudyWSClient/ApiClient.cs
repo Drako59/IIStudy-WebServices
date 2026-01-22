@@ -66,6 +66,10 @@ namespace IIstudyWSClient
                     if (httpResponse.IsSuccessStatusCode)
                     {
                         string result = await httpResponse.Content.ReadAsStringAsync();
+                        if (string.IsNullOrWhiteSpace(result))
+                        {
+                            return default(T);
+                        }
                         await Console.Out.WriteLineAsync( result);
                         //string result = httpResponse.Content.ToString();
                         JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
@@ -143,8 +147,11 @@ namespace IIstudyWSClient
                         Console.WriteLine("here");
                         string result = await response.Content.ReadAsStringAsync();
                         await Console.Out.WriteLineAsync(result);
-                        if (result == null)
+                        if (string.IsNullOrWhiteSpace(result))
+                        {
+                            apiResult.Success = false;
                             return apiResult;
+                        }
                         await Console.Out.WriteLineAsync(result);
                         //string result = httpResponse.Content.ToString();
                         JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();

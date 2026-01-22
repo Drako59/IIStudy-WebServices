@@ -93,9 +93,9 @@ namespace IIStudyWebApp.Controllers
             ApiResultModel<Registered> success = client.PostAsyncRet<SignInViewModel, Registered>(SignInModel).Result;
 
 
-            Console.WriteLine($@"{success.Data.RegisteredID}");
             if (success.Success && success.Data != null)
             {
+                Console.WriteLine($@"{success.Data.RegisteredID}");
 
                 HttpContext.Session.SetString("RegisteredID", success.Data.RegisteredID);
                 return RedirectToAction("RegisteredHomePage", "Registered");

@@ -183,18 +183,20 @@ namespace IIStudyWebApp.Controllers
         {
             Registered registered = GetRegisteredDeatils().Result;
 
-
+            
             ApiClient<List<Book>> client = new ApiClient<List<Book>>();
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Guest/GetBooks";
             List<Book> books = await client.GetAsync();
+            ViewData["Registered"] = registered;
             return View(books);
         }
 
         public async Task<IActionResult> ViewBookPreview(string bookID)
         {
+            Registered registered = GetRegisteredDeatils().Result;
             ApiClient<ViewBookViewModel> client = new ApiClient<ViewBookViewModel>();
             client.Scheme = "http";
             client.Host = "localhost";
@@ -203,6 +205,7 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("bookID", bookID);
 
             ViewBookViewModel bookView = await client.GetAsync();
+            ViewData["Registered"] = registered;
             return View(bookView);
         }
 
@@ -242,8 +245,9 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Registered/profile";
             client.AddParameter("registeredID", registeredID);
-
             Registered registered = await client.GetAsync();
+            Console.WriteLine(@$"{registered.UserName} {registeredID}");
+
             return registered;
 
         }

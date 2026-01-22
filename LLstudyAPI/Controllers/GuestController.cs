@@ -9,6 +9,7 @@ using System.Security.Permissions;
 using System.Data;
 using LLStudy_Models.ViewModels;
 using System.Text.Json;
+using System.Reflection.Metadata.Ecma335;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -47,6 +48,8 @@ namespace LLstudyWS.Controllers
                 };
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 reg.RegisteredID =  this.repositoryUOW.RegisteredRepository.LoginID(SignInModel.Password, SignKey: SignInModel.SignKey);
+                if (reg.RegisteredID == null)
+                    return null;
                 return reg;
             }
             catch (Exception ex)
@@ -111,7 +114,8 @@ namespace LLstudyWS.Controllers
                 //string path = @$"{Directory.GetCurrentDirectory()}\wwwroot\Images\[DIRNAME]\{reg.RegisteredID}";
                 model.RegisteredID = regID;
 
-
+                if (model.RegisteredID == null)
+                    return null;
 
                 return model;
             }
