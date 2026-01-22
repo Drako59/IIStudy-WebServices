@@ -8,6 +8,7 @@ using LLStudy_Models.Models;
 using System.Security.Permissions;
 using System.Data;
 using LLStudy_Models.ViewModels;
+
 using System.Text.Json;
 using System.Reflection.Metadata.Ecma335;
 namespace LLstudyWS.Controllers
@@ -299,7 +300,7 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
                 ViewBookViewModel viewBookViewModel = new ViewBookViewModel();
-
+                viewBookViewModel.reviews = new List<ViewReview>();
                 viewBookViewModel.book = this.repositoryUOW.BookRepository.GetByID(bookID);
                 viewBookViewModel.reviews = this.repositoryUOW.ReviewRepository.GetReviewsByBook(bookID);
                 return viewBookViewModel;

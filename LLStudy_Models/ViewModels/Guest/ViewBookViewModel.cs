@@ -1,4 +1,5 @@
 ﻿using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace LLStudy_Models.ViewModels
     public class ViewBookViewModel
     {
         public Book book { get; set; }
-        public List<Review> reviews { get; set; }
+        public List<ViewReview> reviews { get; set; }
     }
 }

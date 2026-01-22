@@ -33,15 +33,11 @@ namespace IIStudyWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
-            string registeredID = HttpContext.Session.GetString("RegisteredID");
-            ApiClient<Registered> client = new ApiClient<Registered>();
-            client.Scheme = "http";
-            client.Host = "localhost";
-            client.Port = 5049;
-            client.Path = "api/Registered/profile";
-            client.AddParameter("registeredID", registeredID);
-
-            Registered registered = await client.GetAsync();
+            Registered registered = GetRegisteredDeatils().Result;
+            if (registered == null)
+            {
+                return RedirectToAction("ViewBookPreview", "Guest");
+            }
             ViewData["Registered"] = registered;
 
             return View(registered);
@@ -182,8 +178,11 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> ViewBookCatalog()
         {
             Registered registered = GetRegisteredDeatils().Result;
+            if (registered == null)
+            {
+                return RedirectToAction("ViewBookPreview", "Guest");
+            }
 
-            
             ApiClient<List<Book>> client = new ApiClient<List<Book>>();
             client.Scheme = "http";
             client.Host = "localhost";
@@ -197,6 +196,10 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> ViewBookPreview(string bookID)
         {
             Registered registered = GetRegisteredDeatils().Result;
+            if (registered == null)
+            {
+                return RedirectToAction("ViewBookPreview", "Guest");
+            }
             ApiClient<ViewBookViewModel> client = new ApiClient<ViewBookViewModel>();
             client.Scheme = "http";
             client.Host = "localhost";
@@ -206,6 +209,7 @@ namespace IIStudyWebApp.Controllers
 
             ViewBookViewModel bookView = await client.GetAsync();
             ViewData["Registered"] = registered;
+            
             return View(bookView);
         }
 
@@ -238,7 +242,13 @@ namespace IIStudyWebApp.Controllers
 
         private async Task<Registered> GetRegisteredDeatils()
         {
+            
             string registeredID = HttpContext.Session.GetString("RegisteredID");
+            if (string.IsNullOrWhiteSpace(registeredID))
+            {
+                // The is not a connected user.
+                return null;
+            }
             ApiClient<Registered> client = new ApiClient<Registered>();
             client.Scheme = "http";
             client.Host = "localhost";

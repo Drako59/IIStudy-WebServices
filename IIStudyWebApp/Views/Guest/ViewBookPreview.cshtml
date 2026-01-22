@@ -162,7 +162,7 @@
             </div>
             @if (Model.reviews != null && Model.reviews.Any())
             {
-                @foreach (Review review in Model.reviews)
+                @foreach (ViewReview review in Model.reviews)
                 {
                     <div class="review-item">
                         <div class="review-header-section">
@@ -190,11 +190,11 @@
 
                                             }
                                         }
-                                        @* @if (reg.ImagePath == "None" || reg.ImagePath == null)
+                                        @if (review.ImagePath == "None" || review.ImagePath == null)
                                         {
-                                            if (reg.ImagePath.Contains(" "))
+                                            if (review.ImagePath.Contains(" "))
                                             {
-                                                string[] parts = reg.UserName.Split(" ");
+                                                string[] parts = review.UserName.Split(" ");
                                                 <span class="avatar-text">
 
                                                     @parts[0][0]@parts[0][1]
@@ -205,7 +205,7 @@
                                             {
                                                 <span class="avatar-text">
 
-                                                    @reg.UserName[0]@reg.UserName[1]
+                                                    @review.UserName[0]@review.UserName[1]
                                                 </span>
                                             }
                                         }
@@ -215,7 +215,7 @@
 
                                                 NO
                                             </span>
-                                        } *@
+                                        }
 
                                         </div>
                                     </div>
