@@ -3,8 +3,10 @@ using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Registerd;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 
 namespace IIStudyWebApp.Controllers
 {
@@ -15,29 +17,30 @@ namespace IIStudyWebApp.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> RegisteredHomePage(string registeredID)
+        public async Task<IActionResult> RegisteredHomePage()
         {
+            string registeredID = HttpContext.Session.GetString("RegisteredID");
             ApiClient<Registered> client = new ApiClient<Registered>();
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
-            client.Path = "api/Registered/prfoile";
+            client.Path = "api/Registered/profile";
             client.AddParameter("registeredID", registeredID);
-
             Registered registered = await client.GetAsync();
+            ViewData["Registered"] = registered;
+
             return View(registered);
         }
         [HttpGet]
-        public async Task<IActionResult> Profile(string registeredID)
+        public async Task<IActionResult> Profile()
         {
-            ApiClient<Registered> client = new ApiClient<Registered>();
-            client.Scheme = "http";
-            client.Host = "localhost";
-            client.Port = 5049;
-            client.Path = "api/Registered/prfoile";
-            client.AddParameter("registeredID", registeredID);
+            Registered registered = GetRegisteredDeatils().Result;
+            if (registered == null)
+            {
+                return RedirectToAction("ViewBookPreview", "Guest");
+            }
+            ViewData["Registered"] = registered;
 
-            Registered registered = await client.GetAsync();
             return View(registered);
         }
 
@@ -56,16 +59,26 @@ namespace IIStudyWebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ViewShoppingCart(string registeredID)
+        public async Task<IActionResult> ViewShoppingCart()
         {
+
+            string registeredID = HttpContext.Session.GetString("RegisteredID");
+            if (string.IsNullOrWhiteSpace(registeredID))
+            {
+                // The is not a connected user.
+                return RedirectToAction("HomePage", "Guest");
+            }
             ApiClient<ViewShoppingCartModel> client = new ApiClient<ViewShoppingCartModel>();
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Registered/GetShoppingCart";
+            
             client.AddParameter("registeredID", registeredID);
 
             ViewShoppingCartModel shoppingCart = await client.GetAsync();
+
+            ViewData["Registered"] = shoppingCart.User;
             return View(shoppingCart);
         }
         [HttpGet]
@@ -128,8 +141,18 @@ namespace IIStudyWebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddToCart(Shopping_Cart record)
+        public async Task<IActionResult> AddToCart(string BookID)
         {
+            string registeredID = HttpContext.Session.GetString("RegisteredID");
+            if (string.IsNullOrWhiteSpace(registeredID))
+            {
+                // The is not a connected user.
+                return RedirectToAction("viewSignInPage", "Guest");
+            }
+            Shopping_Cart record = new Shopping_Cart();
+            record.BookID = BookID;
+            record.RegisteredID = registeredID;
+
             ApiClient<Shopping_Cart> client = new ApiClient<Shopping_Cart>();
             client.Scheme = "http";
             client.Host = "localhost";
@@ -139,9 +162,8 @@ namespace IIStudyWebApp.Controllers
 
             bool success = client.PostAsync(record).Result;
 
-            if (!success)
-                return View("Failed to pay.");
-            return View("Payment suceed.");
+            
+            return  Json(new { success = success });
         }
 
         public async Task<IActionResult> AddReview(Review record)
@@ -158,6 +180,106 @@ namespace IIStudyWebApp.Controllers
             if (!success)
                 return View("Failed to add.");
             return View("Review added.");
+        }
+
+        public async Task<IActionResult> SignOut()
+        {
+
+
+            HttpContext.Session.Remove("RegisteredID");
+
+            return RedirectToAction("HomePage","Guest");
+            
+
+            
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewBookCatalog()
+        {
+            Registered registered = GetRegisteredDeatils().Result;
+            if (registered == null)
+            {
+                return RedirectToAction("ViewBookPreview", "Guest");
+            }
+
+            ApiClient<List<Book>> client = new ApiClient<List<Book>>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetBooks";
+            List<Book> books = await client.GetAsync();
+            ViewData["Registered"] = registered;
+            return View(books);
+        }
+
+        public async Task<IActionResult> ViewBookPreview(string bookID)
+        {
+            Registered registered = GetRegisteredDeatils().Result;
+            if (registered == null)
+            {
+                return RedirectToAction("ViewBookPreview", "Guest");
+            }
+            ApiClient<ViewBookViewModel> client = new ApiClient<ViewBookViewModel>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetBookFullView";
+            client.AddParameter("bookID", bookID);
+
+            ViewBookViewModel bookView = await client.GetAsync();
+            ViewData["Registered"] = registered;
+            
+            return View(bookView);
+        }
+
+        public async Task<IActionResult> ViewExams(string year = null, string subjectID = null, int pages = 0)
+        {
+            ApiClient<ViewExamsModel> client = new ApiClient<ViewExamsModel>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetExams";
+            client.AddParameter("year", year);
+            client.AddParameter("subjectID", subjectID);
+            client.AddParameter("pages", pages);
+
+            ViewExamsModel examView = await client.GetAsync();
+            return View(examView);
+        }
+
+        public async Task<IActionResult> ViewCalender()
+        {
+            ApiClient<List<Event>> client = new ApiClient<List<Event>>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetExams";
+
+            List<Event> calender = await client.GetAsync();
+            return View(calender);
+        }
+
+        private async Task<Registered> GetRegisteredDeatils()
+        {
+            
+            string registeredID = HttpContext.Session.GetString("RegisteredID");
+            if (string.IsNullOrWhiteSpace(registeredID))
+            {
+                // The is not a connected user.
+                return null;
+            }
+            ApiClient<Registered> client = new ApiClient<Registered>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Registered/profile";
+            client.AddParameter("registeredID", registeredID);
+            Registered registered = await client.GetAsync();
+            Console.WriteLine(@$"{registered.UserName} {registeredID}");
+
+            return registered;
+
         }
     }
 }

@@ -28,7 +28,7 @@ namespace LLStudy_Models.Models
         string registeredID;
         string registeredSalt;
         string role;
-
+        string imagePath;
         public string RegisteredID { get; set; }
 
         public string RegisteredSalt { get; set; }
@@ -47,6 +47,8 @@ namespace LLStudy_Models.Models
         public string Role { get; set; }
 
         public string Birth { get; set; }
+
+        public string ImagePath { get { return imagePath; } set { this.imagePath = value;  } }
        
     }
 }

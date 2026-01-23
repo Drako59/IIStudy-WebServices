@@ -16,6 +16,7 @@ namespace LLStudy_Models.Models
         string comment;
         string bookID;
         string userName;
+        string imageUserPath = "None";
         //[IsDigits(ErrorMessage = "ID must contain only digits.")]
         //[Required]
         public string ReviewID { get { return reviewID; } set { reviewID = value; } }
@@ -26,8 +27,7 @@ namespace LLStudy_Models.Models
         public string Comment { get { return comment; } set { comment = value; } }
         [Required]
         public string BookID { get { return bookID; } set { bookID = value; } }
-        [Required]
-        public string UserName { get { return userName; } set { userName = value; } }
+
 
     }
 }

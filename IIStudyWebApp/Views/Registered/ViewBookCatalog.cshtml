@@ -1,0 +1,151 @@
+﻿@using LLStudy_Models.Models
+@model List<Book>
+
+@{
+    ViewData["Title"] = "ViewBookCatalog";
+    Layout = "~/Views/Shared/RegisteredMasterPage.cshtml";
+
+}
+
+
+<link rel="stylesheet" href="../Css/bookCatalog_claude.css">
+
+<section class="search-section">
+    <div class="container">
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search for books, authors, categories...">
+            <div class="search-icon">🔍</div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <div class="container">
+        <div class="books-grid">
+            <!-- Book Cards -->
+            @* @if (Model != null && Model.Any())
+            {
+                @foreach (Book book in Model)
+                {
+                    <div class="book-card">
+                            <span class="category-tag">Fiction</span>
+                        <div class="book-image">
+                            <img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg">
+                        </div>
+                        <h3 class="book-title">@book.Book_name</h3>
+                        <div class="book-actions">
+                            <button class="action-btn btn-add-cart">Add to Cart</button>
+                            <button class="action-btn btn-preview">Preview</button>
+                        </div>
+                    </div>
+                }
+            } *@
+
+
+
+
+
+            @if (Model != null && Model.Any())
+            {
+                @foreach (Book book in Model)
+                {
+                    string path = $"https://localhost:7121/Registered/ViewBookPreview?bookID={book.BookID}";
+                    <div class="book-card">
+                        <a href=@path class="book-cover"><img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"></a>
+                        <div class="book-info">
+                            <h3>@book.Book_name</h3>
+                            <p class="book-author">@book.Author_name</p>
+                            <p class="book-price">$@book.Book_price</p>
+                            <button class="add-to-cart" onclick="AddToCart(@book.BookID)">Add to Cart</button>
+                        </div>
+                    </div>
+                }
+            }
+
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+</main>
+
+<script>
+    async function AddToCart(bookId) {
+        try {
+            const response = await fetch(
+                `https://localhost:7121/Registered/AddToCart?bookId=${encodeURIComponent(bookId)}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                alert("Didn't work");
+                // showAddToCartError(bookId);
+                return;
+            }
+
+            const data = await response.json(); // { success: true/false }
+            alert(data.success);
+
+
+            // if (data.success) {
+            //     showAddToCartSuccess(bookId);
+            // } else {
+            //     showAddToCartError(bookId);
+            // }
+
+        } catch (err) {
+            // console.error(err);
+            // showAddToCartError(bookId);
+        }
+    }
+
+    // function showAddToCartSuccess(bookId) {
+    //     const btn = document.getElementById('btn-' + bookId);
+    //     if (!btn) return;
+
+    //     btn.textContent = 'Added ✔';
+    //     btn.disabled = true;
+    //     btn.classList.add('in-cart');
+    // }
+
+    // function showAddToCartError(bookId) {
+    //     const btn = document.getElementById('btn-' + bookId);
+    //     if (!btn) return;
+
+    //     btn.textContent = 'Failed';
+    //     btn.classList.add('error');
+    // }
+</script>
+
+
+@*  <script>
+     function AddToCart(let id){
+        const path = 'https://localhost:7121/Registered/ViewBookPreview?bookID=${id}';
+        fetch(path)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+     }
+ </script> *@

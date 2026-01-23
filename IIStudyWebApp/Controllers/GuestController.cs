@@ -1,7 +1,7 @@
 ﻿using IIstudyWSClient;
 using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
-using LLStudy_Models.ViewModels.Guest;
+using LLStudy_Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using System.Net;
@@ -20,6 +20,11 @@ namespace IIStudyWebApp.Controllers
         [HttpGet]
 
         public async Task<IActionResult> viewSignUpPage()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> viewSignInPage()
         {
             return View();
         }
@@ -85,12 +90,18 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Guest/SignIn";
 
 
-            ApiResultModel<string> success = client.PostAsyncRet<SignInViewModel, string>(SignInModel).Result;
+            ApiResultModel<Registered> success = client.PostAsyncRet<SignInViewModel, Registered>(SignInModel).Result;
 
 
-            if (!success.Success)
-                return View("Failed to sign in.");
-            return RedirectToAction("RegisteredHomePage", "Registered", success.Data);
+            if (success.Success && success.Data != null)
+            {
+                Console.WriteLine($@"{success.Data.RegisteredID}");
+
+                HttpContext.Session.SetString("RegisteredID", success.Data.RegisteredID);
+                return RedirectToAction("RegisteredHomePage", "Registered");
+            }
+
+            return RedirectToAction("ViewSignInPage");
         }
 
         [HttpPost]
@@ -105,6 +116,7 @@ namespace IIStudyWebApp.Controllers
             reg.Role = "User";
             reg.RegisteredID = "6";
             reg.RegisteredSalt = " ";
+            reg.ImagePath = "None";
              ApiResultModel<Registered> success = client.PostAsyncRet<Registered, Registered>(reg).Result;
 
             //888888888888888888888888888888888888
@@ -119,7 +131,7 @@ namespace IIStudyWebApp.Controllers
             {
 
                 HttpContext.Session.SetString("RegisteredID", success.Data.RegisteredID);
-                return RedirectToAction("RgisteredHomePage", "Registered" );
+                return RedirectToAction("RegisteredHomePage", "Registered");
             }
 
             return RedirectToAction("ViewSignUpPage");

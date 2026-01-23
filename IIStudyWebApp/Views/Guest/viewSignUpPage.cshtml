@@ -7,7 +7,7 @@
 
 @model Registered
 
-<link href="~/css/signin.css" rel="stylesheet" />
+<link href="~/css/SignUp.css" rel="stylesheet" />
 <main class="main-content">
     <form asp-action="SignUp" asp-controller="Guest" method="post">
     <div class="container">
@@ -27,7 +27,7 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="username">Username</label>
+                <label class="form-label" for="username">Usernames</label>
                     <input asp-for="UserName" value="ofri" type="text" id="username" class="form-input" placeholder="Choose a username">
             </div>
 
@@ -56,7 +56,7 @@
             <button class="submit-btn">Create Account</button>
 
             <div class="auth-footer">
-                <p>Already have an account? <a href="signin.html">Sign in</a></p>
+                    <p>Already have an account? <a href="https://localhost:7121/Guest/viewSignInPage">Sign in</a></p>
             </div>
         </div>
     </div>

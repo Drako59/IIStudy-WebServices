@@ -114,3 +114,47 @@
 .Bagruyot:hover h1{
     color: white;
 } */
+
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+    color: white;
+}
+
+    .hero h1 {
+        font-size: 56px;
+        font-weight: 800;
+        margin-bottom: 20px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero p {
+        font-size: 20px;
+        margin-bottom: 40px;
+        opacity: 0.95;
+    }
+
+.hero-cta {
+    display: inline-flex;
+    gap: 20px;
+}
+
+.cta-btn {
+    padding: 16px 32px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.cta-primary {
+    background: white;
+    color: #667eea;
+}
+
+    .cta-primary:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(255, 255, 255, 0.3);
+    }

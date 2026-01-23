@@ -66,6 +66,10 @@ namespace IIstudyWSClient
                     if (httpResponse.IsSuccessStatusCode)
                     {
                         string result = await httpResponse.Content.ReadAsStringAsync();
+                        if (string.IsNullOrWhiteSpace(result))
+                        {
+                            return default(T);
+                        }
                         await Console.Out.WriteLineAsync( result);
                         //string result = httpResponse.Content.ToString();
                         JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
@@ -94,13 +98,19 @@ namespace IIstudyWSClient
 
                 multipartFormData.Add(content, "model");
                 //If error raises, check files is null and than loop if not.
-                foreach (Stream file in files)
+                if (files != null)
                 {
-                    StreamContent streamContent = new StreamContent(file);
-                    multipartFormData.Add(streamContent, "file", "file");
+                    foreach (Stream file in files)
+                    {
+                        StreamContent streamContent = new StreamContent(file);
+                        multipartFormData.Add(streamContent, "file", "file");
+                    }
+                    httpRequest.Content = multipartFormData;
                 }
-                httpRequest.Content = multipartFormData;
-
+                else
+                {
+                    httpRequest.Content = content;
+                }
                 using(HttpResponseMessage response = await httpClient.SendAsync(httpRequest))
                 {
                     return response.IsSuccessStatusCode;
@@ -143,8 +153,11 @@ namespace IIstudyWSClient
                         Console.WriteLine("here");
                         string result = await response.Content.ReadAsStringAsync();
                         await Console.Out.WriteLineAsync(result);
-                        if (result == null)
+                        if (string.IsNullOrWhiteSpace(result))
+                        {
+                            apiResult.Success = false;
                             return apiResult;
+                        }
                         await Console.Out.WriteLineAsync(result);
                         //string result = httpResponse.Content.ToString();
                         JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();

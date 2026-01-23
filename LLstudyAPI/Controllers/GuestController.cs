@@ -7,8 +7,10 @@ using LLstudyWS.ORM.Repositorys;
 using LLStudy_Models.Models;
 using System.Security.Permissions;
 using System.Data;
-using LLStudy_Models.ViewModels.Guest;
+using LLStudy_Models.ViewModels;
+
 using System.Text.Json;
+using System.Reflection.Metadata.Ecma335;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -30,13 +32,26 @@ namespace LLstudyWS.Controllers
             this.repositoryUOW = new RepositoryUOW();
         }
         [HttpPost]
-        public string SignIn(SignInViewModel SignInModel)
+        public Registered SignIn(SignInViewModel SignInModel)
         {
             try
             {
+                Registered reg = new Registered() {
+                    UserName="None",
+                    Email = "None",
+                    Password = "None",
+                    RegisteredSalt = "None",
+                    Role = "User",
+                    Birth = "None",
+                    ImagePath = "None"
+               
 
+                };
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return this.repositoryUOW.RegisteredRepository.LoginID(SignInModel.Password, SignKey: SignInModel.SignKey);
+                reg.RegisteredID =  this.repositoryUOW.RegisteredRepository.LoginID(SignInModel.Password, SignKey: SignInModel.SignKey);
+                if (reg.RegisteredID == null)
+                    return null;
+                return reg;
             }
             catch (Exception ex)
             {
@@ -100,7 +115,8 @@ namespace LLstudyWS.Controllers
                 //string path = @$"{Directory.GetCurrentDirectory()}\wwwroot\Images\[DIRNAME]\{reg.RegisteredID}";
                 model.RegisteredID = regID;
 
-
+                if (model.RegisteredID == null)
+                    return null;
 
                 return model;
             }
@@ -284,7 +300,7 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
                 ViewBookViewModel viewBookViewModel = new ViewBookViewModel();
-
+                viewBookViewModel.reviews = new List<ViewReview>();
                 viewBookViewModel.book = this.repositoryUOW.BookRepository.GetByID(bookID);
                 viewBookViewModel.reviews = this.repositoryUOW.ReviewRepository.GetReviewsByBook(bookID);
                 return viewBookViewModel;

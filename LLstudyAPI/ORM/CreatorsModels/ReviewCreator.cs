@@ -13,7 +13,6 @@ namespace LLstudyWS.ORM
                 Rate = Convert.ToString(dataReader["Rate"]),
                 Comment = Convert.ToString(dataReader["Comment"]),
                 BookID = Convert.ToString(dataReader["Book_ID"]),
-                UserName = Convert.ToString(dataReader["UserName"])
             };
         }
     }
