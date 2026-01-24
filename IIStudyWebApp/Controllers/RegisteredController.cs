@@ -20,6 +20,8 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> RegisteredHomePage()
         {
             string registeredID = HttpContext.Session.GetString("RegisteredID");
+            //RegisteredViewModel registeredInfo = new RegisteredViewModel();
+            //registeredInfo.registered = GetRegisteredDeatils().Result;
             if (registeredID == null)
             {
                 return RedirectToAction("ViewBookPreview", "Guest");
@@ -39,7 +41,11 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> Profile()
         {
             Registered registered = GetRegisteredDeatils().Result;
-            if (registered == null)
+
+            //RegisteredViewModel registeredInfo = new RegisteredViewModel();
+            //registeredInfo.registered = GetRegisteredDeatils().Result;
+
+            if (registered == null) //registeredInfo.registered;
             {
                 return RedirectToAction("ViewBookPreview", "Guest");
             }
@@ -67,6 +73,10 @@ namespace IIStudyWebApp.Controllers
         {
 
             string registeredID = HttpContext.Session.GetString("RegisteredID");
+
+            //RegisteredViewModel registeredInfo = new RegisteredViewModel();
+            //registeredInfo.registered = GetRegisteredDeatils().Result;
+
             if (string.IsNullOrWhiteSpace(registeredID))
             {
                 // The is not a connected user.
@@ -232,6 +242,9 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> ViewBookCatalog()
         {
             Registered registered = GetRegisteredDeatils().Result;
+            //RegisteredViewModel registeredInfo = new RegisteredViewModel();
+            //registeredInfo.registered = GetRegisteredDeatils().Result;
+
             if (registered == null)
             {
                 return RedirectToAction("ViewBookPreview", "Guest");
@@ -250,6 +263,9 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> ViewBookPreview(string bookID)
         {
             Registered registered = GetRegisteredDeatils().Result;
+            //RegisteredViewModel registeredInfo = new RegisteredViewModel();
+            //registeredInfo.registered = GetRegisteredDeatils().Result;
+
             if (registered == null)
             {
                 return RedirectToAction("ViewBookPreview", "Guest");

@@ -6,6 +6,12 @@
     Registered reg = ViewData["Registered"] as Registered;
 }
 
+@* @{
+    int shoppingCartItemsNumber = ViewData["BooksCountCart"] != null
+    ? (int)ViewData["BooksCountCart"]
+    : 0; ;
+} *@
+
 @if(reg == null){
     reg = new Registered()
                 {
