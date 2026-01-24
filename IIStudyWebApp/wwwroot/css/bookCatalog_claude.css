@@ -302,7 +302,6 @@
 }
 
 .add-to-cart {
-
     align-self: end;
     width: 100%;
     padding: 12px;
@@ -313,6 +312,11 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center; /* ממרכז אנכית */
+    justify-content: center; /* ממרכז אופקית */
+    gap: 8px; /* רווח בין האייקון לטקסט */
+    line-height: 1; /* שלא ימשוך למעלה/למטה */
 }
 
     .add-to-cart:hover {
@@ -365,3 +369,8 @@ button.add-to-cart.in-cart {
         transform: none;
         box-shadow: none;
     }
+
+.add-to-cart svg {
+    display: block; /* מוריד מרווחים מוזרים של inline */
+    flex-shrink: 0; /* לא ימעכו את האייקון */
+}
