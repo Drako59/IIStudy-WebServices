@@ -94,7 +94,7 @@ namespace IIstudyWSClient
                 MultipartFormDataContent multipartFormData = new MultipartFormDataContent();
                 string json = JsonSerializer.Serialize(model);
 
-                StringContent content  = new StringContent(json);
+                StringContent content  = new StringContent(json, Encoding.UTF8, "application/json");
 
                 multipartFormData.Add(content, "model");
                 //If error raises, check files is null and than loop if not.

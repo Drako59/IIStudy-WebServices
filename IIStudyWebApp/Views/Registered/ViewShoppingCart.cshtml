@@ -28,7 +28,7 @@
                 {
                     foreach (Book book in Model.Books)
                     {
-                        <div class="cart-item">
+                        <div class="cart-item" >
                             <div class="item-image">
                                 <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"
                                      onerror="this.src='/images/books/placeholder.png'"
@@ -46,7 +46,7 @@
                                         <span class="qty-value">1</span>
                                         <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
                                     </div>
-                                    <button class="remove-btn" onclick="removeItem(this)">Remove</button>
+                                    <button class="remove-btn" onclick="window.location.href=`https://localhost:7121/Registered/RemoveFromCart?BookID=${@book.BookID}`;" id="book-@book.BookID">Remove</button> <!--removeItem(this)-->
                                 </div>
                             </div>
                             <div class="item-price-section">
@@ -112,15 +112,53 @@
         }
     }
 
-    function removeItem(btn) {
-        const cartItem = btn.closest('.cart-item');
-        cartItem.style.opacity = '0';
-        cartItem.style.transform = 'translateX(-20px)';
-        setTimeout(() => {
-            cartItem.remove();
-            updateTotal();
-            checkEmptyCart();
-        }, 300);
+    async function removeItem(btn) {
+
+        try {
+            // btn = document.getElementById("book-" + bookID);
+            alert("here");
+            const response = await fetch(
+                `https://localhost:7121/Registered/RemoveFromCart?bookID=${encodeURIComponent(bookId)}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+
+            // alert(`https://localhost:7121/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`);
+            if (!response.ok) {
+                alert("Didn't work");
+                // showAddToCartError(bookId);
+                return;
+            }
+
+            const data = await response.json(); // { success: true/false }
+            alert(data.success);
+
+
+            if (data.success) {
+                const cartItem = btn.closest('.cart-item');
+                cartItem.style.opacity = '0';
+                cartItem.style.transform = 'translateX(-20px)';
+                setTimeout(() => {
+                    cartItem.remove();
+                    updateTotal();
+                    checkEmptyCart();
+                }, 300);
+            }// else {
+            //     showAddToCartError(bookId);
+            // }
+
+           
+
+        } catch (err) {
+            console.error(err);
+            // showAddToCartError(bookId);
+        }
+    
+        
     }
 
     function updateTotal() {

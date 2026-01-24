@@ -20,6 +20,10 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> RegisteredHomePage()
         {
             string registeredID = HttpContext.Session.GetString("RegisteredID");
+            if (registeredID == null)
+            {
+                return RedirectToAction("ViewBookPreview", "Guest");
+            }
             ApiClient<Registered> client = new ApiClient<Registered>();
             client.Scheme = "http";
             client.Host = "localhost";
@@ -141,9 +145,39 @@ namespace IIStudyWebApp.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> RemoveFromCart(string BookID)
+        {
+            string registeredID = HttpContext.Session.GetString("RegisteredID");
+            if (string.IsNullOrWhiteSpace(registeredID))
+            {
+                // The is not a connected user.
+                return RedirectToAction("viewSignInPage", "Guest");
+            }
+            
+            Shopping_Cart record = new Shopping_Cart();
+            record.BookID = BookID;
+            record.RegisteredID = registeredID;
+
+            ApiClient<Shopping_Cart> client = new ApiClient<Shopping_Cart>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Registered/RemoveFromCart";
+
+
+            bool success = client.PostAsync(record).Result;
+
+
+            //return Json(new { success = success });
+            return RedirectToAction("ViewShoppingCart", "Registered");
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AddToCart(string BookID)
         {
             string registeredID = HttpContext.Session.GetString("RegisteredID");
+            //Console.WriteLine("Here");
+            //Console.WriteLine("registeredID " + registeredID);
             if (string.IsNullOrWhiteSpace(registeredID))
             {
                 // The is not a connected user.

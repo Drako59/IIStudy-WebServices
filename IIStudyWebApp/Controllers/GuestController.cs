@@ -95,7 +95,7 @@ namespace IIStudyWebApp.Controllers
 
             if (success.Success && success.Data != null)
             {
-                Console.WriteLine($@"{success.Data.RegisteredID}");
+                //Console.WriteLine($@"{success.Data.RegisteredID}");
 
                 HttpContext.Session.SetString("RegisteredID", success.Data.RegisteredID);
                 return RedirectToAction("RegisteredHomePage", "Registered");
