@@ -168,8 +168,8 @@ namespace IIStudyWebApp.Controllers
             bool success = client.PostAsync(record).Result;
 
 
-            //return Json(new { success = success });
-            return RedirectToAction("ViewShoppingCart", "Registered");
+            return Json(new { success = success });
+            return RedirectToAction("ViewShoppingCart", "Registered"); //difrrent approach 
         }
 
         [HttpGet]

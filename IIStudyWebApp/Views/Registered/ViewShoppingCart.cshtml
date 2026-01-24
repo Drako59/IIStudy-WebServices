@@ -46,7 +46,7 @@
                                         <span class="qty-value">1</span>
                                         <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
                                     </div>
-                                    <button class="remove-btn" onclick="window.location.href=`https://localhost:7121/Registered/RemoveFromCart?BookID=${@book.BookID}`;" id="book-@book.BookID">Remove</button> <!--removeItem(this)-->
+                                    <button class="remove-btn" onclick="removeItem(this,@book.BookID)" id="book-@book.BookID">Remove</button> <!--window.location.href=`https://localhost:7121/Registered/RemoveFromCart?BookID=${@book.BookID};-->
                                 </div>
                             </div>
                             <div class="item-price-section">
@@ -112,13 +112,13 @@
         }
     }
 
-    async function removeItem(btn) {
+    async function removeItem(btn,bookID) {
 
         try {
             // btn = document.getElementById("book-" + bookID);
-            alert("here");
+            // alert("here");
             const response = await fetch(
-                `https://localhost:7121/Registered/RemoveFromCart?bookID=${encodeURIComponent(bookId)}`,
+                `https://localhost:7121/Registered/RemoveFromCart?bookID=${encodeURIComponent(bookID)}`,
                 {
                     method: 'GET',
                     headers: {
@@ -127,7 +127,7 @@
                 }
             );
 
-            // alert(`https://localhost:7121/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`);
+            // alert(`https:localhost:7121/Registered/AddToCart?bookID=${encodeURIComponent(bookID)}`);
             if (!response.ok) {
                 alert("Didn't work");
                 // showAddToCartError(bookId);
@@ -135,7 +135,7 @@
             }
 
             const data = await response.json(); // { success: true/false }
-            alert(data.success);
+            // alert(data.success);
 
 
             if (data.success) {

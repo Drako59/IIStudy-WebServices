@@ -31,8 +31,9 @@ namespace LLstudyWS.ORM
         {
             Console.WriteLine(BookID + " "+registeredID);
             string sql = "DELETE * FROM Shopping_carts WHERE BookID = @BookID AND RegisteredID = @RegisteredID";
-            this.helperOledb.AddParameter("@RegisteredID", registeredID);
             this.helperOledb.AddParameter("@BookID", BookID);
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
 
             return this.helperOledb.Delete(sql) > 0;
 
