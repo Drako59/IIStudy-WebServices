@@ -2,6 +2,7 @@
 
 // checkEmptyCart();
 
+updateTotal();
 function updateQty(btn, change) {
     const qtyElement = btn.parentElement.querySelector('.qty-value');
     let currentQty = parseInt(qtyElement.textContent);
@@ -14,11 +15,17 @@ function updateQty(btn, change) {
 }
 
 
-async function removeOneItem(bookID) {
+async function removeOneItem(btn, bookID) {
 
     try {
         // btn = document.getElementById("book-" + bookID);
         // alert("here");
+        const qtyElement = btn.parentElement.querySelector('.qty-value');
+        let currentQty = parseInt(qtyElement.textContent);
+        if (currentQty - 1 < 1) {
+            return;
+        }
+
         const response = await fetch(
             `https://localhost:7121/Registered/RemoveFromCart?bookID=${encodeURIComponent(bookID)}`,
             {
@@ -39,19 +46,11 @@ async function removeOneItem(bookID) {
         const data = await response.json(); // { success: true/false }
         // alert(data.success);
 
+        
+        if (data.success)
+            updateQty(btn, -1);
 
-        // if (data.success) {
-        //     const cartItem = btn.closest('.cart-item');
-        //     cartItem.style.opacity = '0';
-        //     cartItem.style.transform = 'translateX(-20px)';
-        //     setTimeout(() => {
-        //         cartItem.remove();
-        //         updateTotal();
-        //         checkEmptyCart();
-        //     }, 300);
-        // }else {
-        //     showAddToCartError(bookId);
-        // }
+       
 
 
 
@@ -69,6 +68,8 @@ async function removeItem(btn, bookID) {
     try {
         // btn = document.getElementById("book-" + bookID);
         // alert("here");
+
+
         const response = await fetch(
             `https://localhost:7121/Registered/RemoveAllBooksFromCart?bookID=${encodeURIComponent(bookID)}`,
             {
@@ -88,7 +89,8 @@ async function removeItem(btn, bookID) {
 
         const data = await response.json(); // { success: true/false }
         // alert(data.success);
-
+        if (!data.success)
+            alert("Remove failed.")
 
         if (data.success) {
             const cartItem = btn.closest('.cart-item');
@@ -115,7 +117,29 @@ async function removeItem(btn, bookID) {
 
 function updateTotal() {
     // In a real app, this would recalculate based on actual prices
-    console.log('Updating total...');
+    try {
+        var price;
+        var amount;
+        var sum = 0;
+        const items = document.getElementsByClassName("cart-item");
+        for (const item of items) {
+            price = parseFloat(item.querySelector(".item-price").textContent.slice(1), 10);
+            amount = parseFloat(item.querySelector(".qty-value").textContent, 10);
+            sum += amount * price;
+        }
+        const totalPay = document.querySelector(".total-value");
+        const sumPay = document.querySelector(".sum-value");
+
+        const taxPay = document.querySelector(".tax-value");
+
+        sumPay.textContent = `$${sum.toFixed(2)}`;
+        taxPay.textContent = `$${(sum / 10).toFixed(2)}`;
+        totalPay.textContent = `$${(sum + (sum / 10)).toFixed(2)}`;
+
+    }
+    catch (err) {
+        console.log(err);
+    }
 }
 
 function checkEmptyCart() {
@@ -169,10 +193,7 @@ async function AddToCart(btn,bookId) {
         const data = await response.json(); // { success: true/false }
         //alert(data.success);
 
-        if (!data.success) {
-            alert("failed to remvoe one item.");
-            return;
-        }
+        
         updateQty(btn, 1);
        
         //if (data.success) {

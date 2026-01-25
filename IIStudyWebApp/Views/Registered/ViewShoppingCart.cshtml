@@ -26,31 +26,31 @@
                 <!-- Cart Item 1 -->
                 @if (Model.CartBooks != null && Model.CartBooks.Any())
                 {
-                    foreach (CartBookViewModel book in Model.CartBooks)
+                    foreach (CartBookViewModel cartBook in Model.CartBooks)
                     {
                         <div class="cart-item" >
                             <div class="item-image">
                                 <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"
                                      onerror="this.src='/images/books/placeholder.png'"
-                                     alt="@book.Book.Book_name"
+                                     alt="@cartBook.Book.Book_name"
                                      class="item-image-img" />
 
                             </div>
                             <div class="item-details">
-                                <h3 class="item-title">@book.Book.Book_name</h3>
+                                <h3 class="item-title">@cartBook.Book.Book_name</h3>
                                 <p class="item-author">by Harper Lee</p>
                                 <p class="item-meta">PDF Format • Fiction</p>
                                 <div class="item-actions">
                                     <div class="quantity-control">
-                                        <button class="qty-btn" onclick="updateQty(this, -1)">−</button>
-                                        <span class="qty-value">@book.CountBooks</span>
-                                        <button class="qty-btn" onclick="AddToCart(this,@book.Book.BookID)">+</button>
+                                        <button class="qty-btn" onclick="removeOneItem(this,@cartBook.Book.BookID)">−</button>
+                                        <span class="qty-value">@cartBook.CountBooks</span>
+                                        <button class="qty-btn" onclick="AddToCart(this,@cartBook.Book.BookID)">+</button>
                                     </div>
-                                    <button class="remove-btn" onclick="removeItem(this,@book.Book.BookID)" id="book-@book.Book.BookID">Remove</button> <!--window.location.href=`https://localhost:7121/Registered/RemoveFromCart?BookID=${@book.Book.BookID};-->
+                                    <button class="remove-btn" onclick="removeItem(this,@cartBook.Book.BookID)" id="book-@cartBook.Book.BookID">Remove</button> <!--window.location.href=`https://localhost:7121/Registered/RemoveFromCart?BookID=${@cartBook.Book.BookID};-->
                                 </div>
                             </div>
                             <div class="item-price-section">
-                                <div class="item-price">$@book.Book.Book_price</div>
+                                <div class="item-price">$@cartBook.Book.Book_price</div>
                                 <div class="item-price-label">Price</div>
                             </div>
                         </div>
@@ -78,17 +78,17 @@
                     
                 <div class="summary-row">
                     <span class="summary-label">Subtotal (4 items)</span>
-                    <span class="summary-value">$163.00</span>
+                    <span class="summary-value sum-value">$163.00</span>
                 </div>
                     
                 <div class="summary-row">
                     <span class="summary-label">Shipping</span>
-                    <span class="summary-value">$5.00</span>
+                    <span class="summary-value">$0.00</span>
                 </div>
                     
                 <div class="summary-row">
                     <span class="summary-label">Tax (10%)</span>
-                    <span class="summary-value">$16.30</span>
+                    <span class="summary-value tax-value">$16.30</span>
                 </div>
 
                 <div class="summary-divider"></div>
