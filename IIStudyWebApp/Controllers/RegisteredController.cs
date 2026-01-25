@@ -167,6 +167,7 @@ namespace IIStudyWebApp.Controllers
             Shopping_Cart record = new Shopping_Cart();
             record.BookID = BookID;
             record.RegisteredID = registeredID;
+            record.CountBooks = 1;
 
             ApiClient<Shopping_Cart> client = new ApiClient<Shopping_Cart>();
             client.Scheme = "http";
@@ -182,6 +183,36 @@ namespace IIStudyWebApp.Controllers
             return RedirectToAction("ViewShoppingCart", "Registered"); //difrrent approach 
         }
 
+        public async Task<IActionResult> RemoveAllBooksFromCart(string BookID)
+        {
+            string registeredID = HttpContext.Session.GetString("RegisteredID");
+            if (string.IsNullOrWhiteSpace(registeredID))
+            {
+                // The is not a connected user.
+                return RedirectToAction("viewSignInPage", "Guest");
+            }
+
+            Shopping_Cart record = new Shopping_Cart();
+            record.BookID = BookID;
+            record.RegisteredID = registeredID;
+            record.CountBooks = 1;
+
+            ApiClient<Shopping_Cart> client = new ApiClient<Shopping_Cart>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Registered/RemoveAllBooksFromCart";
+
+
+            bool success = client.PostAsync(record).Result;
+
+
+            return Json(new { success = success });
+            return RedirectToAction("ViewShoppingCart", "Registered"); //difrrent approach 
+        }
+
+        //RemoveAllBooksFromCart
+
         [HttpGet]
         public async Task<IActionResult> AddToCart(string BookID)
         {
@@ -196,6 +227,8 @@ namespace IIStudyWebApp.Controllers
             Shopping_Cart record = new Shopping_Cart();
             record.BookID = BookID;
             record.RegisteredID = registeredID;
+            record.CountBooks = 1;
+
 
             ApiClient<Shopping_Cart> client = new ApiClient<Shopping_Cart>();
             client.Scheme = "http";

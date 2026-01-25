@@ -9,6 +9,6 @@ namespace LLStudy_Models.ViewModels
     public class ViewShoppingCartModel
     {
         public Registered User { get; set; }
-        public List<Book> Books { get; set; }
+        public List<CartBookViewModel> CartBooks { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LLStudy_Models.Models;
 using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
+using System.Net;
 
 namespace LLstudyWS.ORM
 {
@@ -40,8 +41,73 @@ namespace LLstudyWS.ORM
 
         }
 
+        public bool AppendToCart( string BookID , string registeredID)
+        {
+            string sql = "UPDATE Shopping_carts SET CountBooks = (CountBooks + 1) WHERE BookID = @BookID AND RegisteredID = @RegisteredID ";
+            this.helperOledb.AddParameter("@BookID", BookID);
 
-       
-        
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+
+            return this.helperOledb.Update(sql) > 0;
+        }
+
+        public int CheckIfExist(string BookID, string registeredID)
+        {
+            string sql = @$"SELECT 
+                                IIF(COUNT(*) > 0, 1, 0) AS IsExists
+                            FROM Shopping_carts
+                            WHERE BookID = @BookID
+                              AND RegisteredID = @RegisteredID;
+                            ";
+            this.helperOledb.AddParameter("@BookID", BookID);
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+
+
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt32(reader["IsExists"]);
+                }
+                return -1;
+            }
+        }
+        public bool RemoveOneBookForUuser(string BookID, string registeredID)
+        {
+            string sql = "UPDATE Shopping_carts SET CountBooks = (CountBooks - 1) WHERE BookID = @BookID AND RegisteredID = @RegisteredID ";
+            this.helperOledb.AddParameter("@BookID", BookID);
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+
+            return this.helperOledb.Update(sql) > 0;
+        }
+
+        public int CountBookForUser(string BookID, string registeredID)
+        {
+            string sql = @$"SELECT 
+                                CountBooks
+                            FROM Shopping_carts
+                            WHERE BookID = @BookID
+                              AND RegisteredID = @RegisteredID;
+                            ";
+            this.helperOledb.AddParameter("@BookID", BookID);
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+
+
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt32(reader["CountBooks"]);
+                }
+                return -1;
+            }
+        }
+
+
     }
 }

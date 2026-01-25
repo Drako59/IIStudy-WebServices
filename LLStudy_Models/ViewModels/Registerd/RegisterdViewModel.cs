@@ -11,6 +11,6 @@ namespace LLStudy_Models.ViewModels
     public class RegisteredViewModel
     {
         public Registered registered { get; set; }
-        public int booksCount { get; set; }
+        public int CartBooksCount { get; set; }
     }
 }

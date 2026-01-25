@@ -13,5 +13,7 @@ namespace LLStudy_Models.Models
         [Required]
         public string RegisteredID { get; set; }
         public string BookID { get; set; }
+
+        public int CountBooks { get; set; }
     }
 }

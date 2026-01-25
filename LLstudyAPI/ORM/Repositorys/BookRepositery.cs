@@ -1,8 +1,10 @@
 ﻿using LLStudy_Models;
 using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels;
 using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
 
 namespace LLstudyWS.ORM
@@ -135,8 +137,31 @@ namespace LLstudyWS.ORM
             return books;
 
         }
+        public int CountBookForUser(string BookID, string registeredID)
+        {
+            string sql = @$"SELECT 
+                                CountBooks
+                            FROM Shopping_carts
+                            WHERE BookID = @BookID
+                              AND RegisteredID = @RegisteredID;
+                            ";
+            this.helperOledb.AddParameter("@BookID", BookID);
 
-        public List<Book> GetShoppingCartBooks(string userID)
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+
+
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt32(reader["CountBooks"]);
+                }
+                return -1;
+            }
+        }
+
+        public List<CartBookViewModel> GetShoppingCartBooks(string userID)
         {
             string sql = @$"SELECT Books.BookID AS [BookID],
                             *
@@ -151,14 +176,22 @@ namespace LLstudyWS.ORM
                         WHERE
                             (Registereds.RegisteredID = @RegisteredID)";
 
-
-            List<Book> books = new List<Book>();
+            CartBookViewModel CartBook;
+            
+            List<CartBookViewModel> books = new List<CartBookViewModel>();
             this.helperOledb.AddParameter("@RegisteredID", userID);
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 while(reader.Read())
                 {
-                    books.Add(this.moderlRefCreator.CreateModel<Book>(reader));
+                    CartBook = new CartBookViewModel()
+                    {
+                        Book = this.moderlRefCreator.CreateModel<Book>(reader)
+                        
+                    };
+                    CartBook.CountBooks = Convert.ToInt32(reader["CountBooks"]);
+                    books.Add(CartBook);
+                    
                 }
             }
             return books;

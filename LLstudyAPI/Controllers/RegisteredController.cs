@@ -72,9 +72,9 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
                 ViewShoppingCartModel viewModel = new ViewShoppingCartModel();
-
+                viewModel.CartBooks = new List<CartBookViewModel>();
                 viewModel.User = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
-                viewModel.Books = this.repositoryUOW.BookRepository.GetShoppingCartBooks(registeredID);
+                viewModel.CartBooks = this.repositoryUOW.BookRepository.GetShoppingCartBooks(registeredID);
                 return viewModel;
 
             }
@@ -168,13 +168,42 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        //[HttpPost]
+
+        //public bool AppendToCart(Shopping_Cart record)
+        //{
+        //    try
+        //    {
+        //        this.repositoryUOW.HelperOledb.OpenConnection();
+
+        //        return this.repositoryUOW.ShoppingCartRepository.Create(record);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.ToString());
+        //        return false;
+        //    }
+        //    finally
+        //    {
+        //        this.repositoryUOW.HelperOledb.CloseConnection();
+        //    }
+        //}
         [HttpPost]
         public bool AddToCart(Shopping_Cart record)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                
+                int exist = this.repositoryUOW.ShoppingCartRepository.CheckIfExist(record.BookID, record.RegisteredID);
+                Console.WriteLine(@$"exist: {exist}");
+                if (exist == 1)
+                {
+                    return this.repositoryUOW.ShoppingCartRepository.AppendToCart(record.BookID, record.RegisteredID);
+                }
+                else if (exist == -1)
+                    return false;
+                record.CountBooks = 1;
                 return this.repositoryUOW.ShoppingCartRepository.Create(record);
 
             }
@@ -236,11 +265,37 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
+
+        public bool RemoveAllBooksFromCart(Shopping_Cart record)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                
+                return this.repositoryUOW.ShoppingCartRepository.RemoveBookForUser(record.BookID, record.RegisteredID);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+        [HttpPost]
         public bool RemoveFromCart(Shopping_Cart record)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
+
+                if (this.repositoryUOW.ShoppingCartRepository.CountBookForUser(record.BookID,record.RegisteredID) > 1)
+                {
+                    return this.repositoryUOW.ShoppingCartRepository.RemoveOneBookForUuser(record.BookID,record.RegisteredID);
+                }
                 return this.repositoryUOW.ShoppingCartRepository.RemoveBookForUser(record.BookID,record.RegisteredID);
             }
             catch (Exception ex)
