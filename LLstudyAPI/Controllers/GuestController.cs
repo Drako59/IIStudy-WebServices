@@ -303,6 +303,7 @@ namespace LLstudyWS.Controllers
                 viewBookViewModel.reviews = new List<ViewReview>();
                 viewBookViewModel.book = this.repositoryUOW.BookRepository.GetByID(bookID);
                 viewBookViewModel.reviews = this.repositoryUOW.ReviewRepository.GetReviewsByBook(bookID);
+                viewBookViewModel.Rate = this.repositoryUOW.BookRepository.GetBookRate(bookID);
                 return viewBookViewModel;
 
             }

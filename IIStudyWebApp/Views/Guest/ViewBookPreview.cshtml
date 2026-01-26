@@ -49,18 +49,27 @@
                     <h1 class="book-title-main">@Model.book.Book_name</h1>
                     <p class="book-author-main">@Model.book.Author_name</p>
 
-                    @* <div class="rating-section">
+                     <div class="rating-section">
                         <div class="stars-large">
-                            <span class="star-large">★</span>
-                            <span class="star-large">★</span>
-                            <span class="star-large">★</span>
-                            <span class="star-large">★</span>
-                            <span class="star-large">★</span>
+                            @for (int i = 0; i < Math.Round(Model.Rate); i++)
+                            {
+                                <span class="star-large">★</span>
+                            }
                         </div>
                         <span class="rating-info">
-                            <span class="rating-count">4.8</span> (1,234 reviews)
+                            @if(Model.Rate != 0)
+                            {
+                                <span class="rating-count">@Model.Rate</span>
+                            }
+                            else
+                            {
+                                <span class="rating-count">Note rated yet, want to be first?:)</span>
+                            }
+
+                            
+                            (@Model.reviews.Count reviews)
                         </span>
-                    </div> *@
+                    </div> 
 
                     <div class="book-meta-grid">
                         <div class="meta-item-large">
@@ -109,14 +118,28 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button class="btn-large btn-add-to-cart" onclick="window.location.href='https://localhost:7121/Guest/viewSignInPage';">
-                            <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                            Add to Cart
-                        </button>
+                        @if (Model.book.In_stock)
+                        {
+                            <button class="btn-large btn-add-to-cart" onclick="window.location.href='https://localhost:7121/Guest/viewSignInPage';">
+                                <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                Add to Cart
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn-large btn-add-to-cart error" disabled onclick="window.location.href='https://localhost:7121/Guest/viewSignInPage';">
+                                <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                Add to Cart
+                            </button>
+                        }
                         @* <button class="btn-large btn-wishlist">
                             <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>

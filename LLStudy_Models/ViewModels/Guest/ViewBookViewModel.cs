@@ -11,6 +11,7 @@ namespace LLStudy_Models.ViewModels
 {
     public class ViewBookViewModel
     {
+        public double Rate { get; set; }
         public Book book { get; set; }
         public List<ViewReview> reviews { get; set; }
     }

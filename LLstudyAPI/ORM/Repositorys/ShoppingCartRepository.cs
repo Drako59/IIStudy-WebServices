@@ -108,6 +108,10 @@ namespace LLstudyWS.ORM
             }
         }
 
+        //SELECT SUM(sc.CountBooks* b.Book_price) AS CartTotal
+        //FROM Shopping_Carts sc
+        //INNER JOIN Books b ON sc.BookID = b.BookID
+        //WHERE sc.RegisteredID = @RegisteredID;
 
     }
 }

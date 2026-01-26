@@ -51,23 +51,46 @@
             {
                 @foreach (Book book in Model)
                 {
-                    string path = $"https://localhost:7121/Registered/ViewBookPreview?bookID={book.BookID}";
-                    <div class="book-card">
-                        <a href=@path class="book-cover"><img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"></a>
-                        <div class="book-info">
-                            <h3>@book.Book_name</h3>
-                            <p class="book-author">@book.Author_name</p>
-                            <p class="book-price">$@book.Book_price</p>
-                            <button class="add-to-cart" id="book-@book.BookID" onclick="AddToCart(@book.BookID)">
-                                @* <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
+                    if (book.In_stock)
+                    {
+                        string path = $"https://localhost:7121/Registered/ViewBookPreview?bookID={book.BookID}";
+                        <div class="book-card">
+                            <a href=@path class="book-cover"><img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"></a>
+                            <div class="book-info">
+                                <h3>@book.Book_name</h3>
+                                <p class="book-author">@book.Author_name</p>
+                                <p class="book-price">$@book.Book_price</p>
+                                <button class="add-to-cart" id="book-@book.BookID" onclick="AddToCart(@book.BookID)">
+                                    @* <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
+                                        <circle cx="9" cy="21" r="1"></circle>
+                                        <circle cx="20" cy="21" r="1"></circle>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                    </svg> *@
+                                    Add to Cart
+                                    </button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        string path = $"https://localhost:7121/Registered/ViewBookPreview?bookID={book.BookID}";
+                        <div class="book-card">
+                            <a href=@path class="book-cover"><img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"></a>
+                            <div class="book-info">
+                                <h3>@book.Book_name</h3>
+                                <p class="book-author">@book.Author_name</p>
+                                <p class="book-price">$@book.Book_price</p>
+                                <button class="add-to-cart error" id="book-@book.BookID" disabled onclick="AddToCart(@book.BookID)">
+                                    @* <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
                                     <circle cx="9" cy="21" r="1"></circle>
                                     <circle cx="20" cy="21" r="1"></circle>
                                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                                 </svg> *@
-                                Add to Cart
+                                    Out of stock
                                 </button>
+                            </div>
                         </div>
-                    </div>
+                    }
                 }
             }
 

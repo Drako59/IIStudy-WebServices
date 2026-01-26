@@ -211,5 +211,39 @@ namespace LLstudyWS.ORM
             }
             return -1;
         }
+
+        public double GetBookRate(string bookID)
+        {
+            double sumRate;
+            double devider;
+            string sql = @$"SELECT IIF(SUM(Rate) IS NULL, 0, SUM(Rate)) AS SumRate
+                            FROM Reviews
+                            WHERE BookID = @BookID;";
+            this.helperOledb.AddParameter("@BookID", bookID);
+            using(IDataReader reader = this.helperOledb.Select(sql)){
+                if (reader.Read())
+                {
+                    sumRate = Convert.ToDouble(reader["SumRate"]);
+                }
+                else return 0;
+            }
+
+            sql = @$"SELECT Count(*) AS Devider
+                            FROM Reviews
+                            WHERE BookID = @BookID;";
+            this.helperOledb.AddParameter("@BookID", bookID);
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    devider = Convert.ToDouble(reader["Devider"]);
+                }
+                else return 0;
+                if (devider == 0 || sumRate == 0) return 0;
+                return sumRate / devider;
+            }
+            
+
+        }
     }
 }
