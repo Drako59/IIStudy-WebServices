@@ -39,7 +39,7 @@ namespace LLstudyWS.ORM
             return orders;
         }
 
-        public List<Book> GetOrderBooks(string orderID)
+        public List<OrderBook> GetOrderBooks(string orderID)
         {
             string sql = @$"SELECT Books.BookID AS [BookID],
                             *
@@ -54,14 +54,14 @@ namespace LLstudyWS.ORM
                         WHERE
                             (Orders.OrderID = @OrderID)";
 
-            List<Book> books = new List<Book>();
+            List<OrderBook> books = new List<OrderBook>();
 
             this.helperOledb.AddParameter("@OrderID",orderID);
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 while (reader.Read())
                 {
-                    books.Add(this.moderlRefCreator.CreateModel<Book>(reader));
+                    books.Add(this.moderlRefCreator.CreateModel<OrderBook>(reader));
                 }
             }
             return books;

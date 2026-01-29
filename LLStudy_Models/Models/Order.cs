@@ -27,5 +27,9 @@ namespace LLStudy_Models.Models
         public double Total_price { get { return total_price; } set { total_price = value; } }
         public string RegisteredID { get; set; }
 
+        //[Data]
+        public string Date { get; set; }
+
+
     }
 }

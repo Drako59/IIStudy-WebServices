@@ -1,0 +1,264 @@
+﻿
+@{
+    ViewData["Title"] = "ViewUserOrders";
+    Layout = "~/Views/Shared/RegisteredMasterPage.cshtml";
+}
+@using LLStudy_Models.ViewModels
+@using LLStudy_Models.Models
+
+@model ViewOrdersModel
+
+<link href="../Css/orders.css" rel="stylesheet" />
+<div class="orders-page">
+    <div class="container">
+        <div class="page-header">
+            <div class="page-title-section">
+                <h1>My Orders</h1>
+                <p class="page-subtitle">Track and manage your book orders</p>
+            </div>
+
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterOrders('all')">All Orders</button>
+                <button class="filter-tab" onclick="filterOrders('processing')">Processing</button>
+                <button class="filter-tab" onclick="filterOrders('shipped')">Shipped</button>
+                <button class="filter-tab" onclick="filterOrders('delivered')">Delivered</button>
+            </div>
+        </div>
+
+        <div class="orders-content">
+            <!-- Order 1 - Delivered -->
+            @foreach (ViewOrderDetailsModel order in Model.Orders)
+            {
+                string delivered = order.Order.Delivered ? "delivered" : "shipped";
+                <div class="order-card" data-status="@delivered">
+                    <div class="order-header">
+                        <div class="order-info-left">
+                            <div class="order-number">Order #@order.Order.OrderID</div>
+                            <div class="order-date">Placed on @order.Order.Date</div>
+                        </div>
+                        <div class="order-status @delivered">
+                            <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; stroke: currentColor; fill: none;">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            @delivered
+                        </div>
+                    </div>
+
+                    <div class="order-items">
+                       
+                        @foreach (OrderBook book in order.Books)
+                        {
+                            
+                                <div class="order-item">
+                                    <div class="order-item-image">
+                                        <svg viewBox="0 0 24 24" fill="none">
+                                            <rect x="3" y="4" width="18" height="16" rx="2" />
+                                            <path d="M7 8h10M7 12h8M7 16h6" />
+                                        </svg>
+                                    </div>
+                                    <div class="order-item-details">
+                                        <h4>@book.Book_name</h4>
+                                        <p>by @book.Author_name</p>
+                                        <p>PDF Format • Fiction</p>
+                                    </div>
+                                    <div class="order-item-price">
+                                        <div class="item-price-main">@book.Book_price</div>
+                                        <div class="item-quantity">Qty: @book.Amount</div>
+                                    </div>
+                                </div>
+                        }
+
+                      
+                    </div>
+
+                    <div class="order-footer">
+                        <div class="order-total">
+                            <div class="order-total-label">Order Total</div>
+                            <div class="order-total-value">$@order.Order.Total_price</div>
+                        </div>
+                        <div class="order-actions">
+                            <button class="order-btn btn-primary" onclick="viewOrder(1)">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                View Details
+                            </button>
+                            <button class="order-btn btn-secondary" onclick="downloadInvoice(1)">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Invoice
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Order 2 - Shipped -->
+            @* <div class="order-card" data-status="shipped">
+                <div class="order-header">
+                    <div class="order-info-left">
+                        <div class="order-number">Order #ORD-2024-1298</div>
+                        <div class="order-date">Placed on January 25, 2026</div>
+                    </div>
+                    <div class="order-status shipped">
+                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; stroke: currentColor; fill: none;">
+                            <rect x="1" y="3" width="15" height="13"></rect>
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                        </svg>
+                        Shipped
+                    </div>
+                </div>
+
+                <div class="order-items">
+                    <div class="order-item">
+                        <div class="order-item-image">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="4" width="18" height="16" rx="2" />
+                                <path d="M7 8h10M7 12h8M7 16h6" />
+                            </svg>
+                        </div>
+                        <div class="order-item-details">
+                            <h4>Pride and Prejudice</h4>
+                            <p>by Jane Austen</p>
+                            <p>PDF Format • Romance</p>
+                        </div>
+                        <div class="order-item-price">
+                            <div class="item-price-main">$42.00</div>
+                            <div class="item-quantity">Qty: 1</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-footer">
+                    <div class="order-total">
+                        <div class="order-total-label">Order Total</div>
+                        <div class="order-total-value">$47.00</div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="order-btn btn-primary" onclick="trackOrder(2)">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Track Order
+                        </button>
+                        <button class="order-btn btn-secondary" onclick="viewOrder(2)">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div> *@
+
+            <!-- Order 3 - Processing -->
+            @* <div class="order-card" data-status="processing">
+                <div class="order-header">
+                    <div class="order-info-left">
+                        <div class="order-number">Order #ORD-2024-1305</div>
+                        <div class="order-date">Placed on January 28, 2026</div>
+                    </div>
+                    <div class="order-status processing">
+                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; stroke: currentColor; fill: none;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Processing
+                    </div>
+                </div>
+
+                <div class="order-items">
+                    <div class="order-item">
+                        <div class="order-item-image">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="4" width="18" height="16" rx="2" />
+                                <path d="M7 8h10M7 12h8M7 16h6" />
+                            </svg>
+                        </div>
+                        <div class="order-item-details">
+                            <h4>The Great Gatsby</h4>
+                            <p>by F. Scott Fitzgerald</p>
+                            <p>PDF Format • Classic</p>
+                        </div>
+                        <div class="order-item-price">
+                            <div class="item-price-main">$39.00</div>
+                            <div class="item-quantity">Qty: 2</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-footer">
+                    <div class="order-total">
+                        <div class="order-total-label">Order Total</div>
+                        <div class="order-total-value">$83.00</div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="order-btn btn-primary" onclick="viewOrder(3)">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            View Details
+                        </button>
+                        <button class="order-btn btn-secondary" onclick="cancelOrder(3)">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div> *@
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterOrders(status) {
+        const tabs = document.querySelectorAll('.filter-tab');
+        const orders = document.querySelectorAll('.order-card');
+
+        tabs.forEach(tab => tab.classList.remove('active'));
+        event.target.classList.add('active');
+
+        orders.forEach(order => {
+            if (status === 'all') {
+                order.style.display = 'block';
+            } else {
+                if (order.dataset.status === status) {
+                    order.style.display = 'block';
+                } else {
+                    order.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    function viewOrder(orderId) {
+        alert(`Viewing details for order ${orderId}`);
+    }
+
+    function trackOrder(orderId) {
+        alert(`Tracking order ${orderId}...`);
+    }
+
+    function downloadInvoice(orderId) {
+        alert(`Downloading invoice for order ${orderId}...`);
+    }
+
+    function cancelOrder(orderId) {
+        if (confirm('Are you sure you want to cancel this order?')) {
+            alert(`Order ${orderId} has been cancelled.`);
+        }
+    }
+</script>

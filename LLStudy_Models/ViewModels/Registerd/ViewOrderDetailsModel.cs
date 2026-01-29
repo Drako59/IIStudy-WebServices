@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LLStudy_Models.ViewModels.Registerd
+namespace LLStudy_Models.ViewModels
 {
     public class ViewOrderDetailsModel
     {
-        public List<Book> Books { get; set; }
+        public List<OrderBook> Books { get; set; }
         public Order Order { get; set; }
-        public Registered Registered { get; set; }
     }
 }

@@ -96,8 +96,9 @@ namespace IIStudyWebApp.Controllers
             return View(shoppingCart);
         }
         [HttpGet]
-        public async Task<IActionResult> ViewUserOrders(string registeredID)
+        public async Task<IActionResult> ViewUserOrders()
         {
+            string registeredID = HttpContext.Session.GetString("RegisteredID");
             ApiClient<ViewOrdersModel> client = new ApiClient<ViewOrdersModel>();
             client.Scheme = "http";
             client.Host = "localhost";
@@ -105,7 +106,10 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Registered/GetUserOrders";
             client.AddParameter("registeredID", registeredID);
 
+
+
             ViewOrdersModel orders = await client.GetAsync();
+            ViewData["Registered"] = orders.User;
             return View(orders);
         }
 

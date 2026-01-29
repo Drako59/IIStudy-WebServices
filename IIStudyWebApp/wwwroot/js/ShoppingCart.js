@@ -204,6 +204,6 @@ async function AddToCart(btn,bookId) {
 
     } catch (err) {
         console.error(err);
-        showAddToCartError(bookId);
+        //showAddToCartError(bookId);
     }
 }

@@ -98,7 +98,12 @@ namespace LLstudyWS.Controllers
                 
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 ViewOrdersModel viewOrdersModel = new ViewOrdersModel();
-                viewOrdersModel.Orders = this.repositoryUOW.OrderRepository.GetUserOrders(registeredID);
+                viewOrdersModel.Orders = new List<ViewOrderDetailsModel>();
+                List<Order> orders = this.repositoryUOW.OrderRepository.GetUserOrders(registeredID);
+                foreach (Order order in orders) {
+                    viewOrdersModel.Orders.Add(new ViewOrderDetailsModel() { Order = order, Books = this.repositoryUOW.OrderRepository.GetOrderBooks(order.OrderID)});
+                }
+
                 viewOrdersModel.User = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
                 return viewOrdersModel;
             }
@@ -250,7 +255,7 @@ namespace LLstudyWS.Controllers
                 ViewOrderDetailsModel viewModel = new ViewOrderDetailsModel();
                 viewModel.Order = this.repositoryUOW.OrderRepository.GetByID(orderID);
                 viewModel.Books = this.repositoryUOW.OrderRepository.GetOrderBooks(orderID);
-                viewModel.Registered = this.repositoryUOW.RegisteredRepository.GetByID(viewModel.Order.RegisteredID);
+                //viewModel.Registered = this.repositoryUOW.RegisteredRepository.GetByID(viewModel.Order.RegisteredID);
                 return viewModel;
             }
             catch(Exception ex)
