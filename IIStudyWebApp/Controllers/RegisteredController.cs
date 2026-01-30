@@ -47,7 +47,7 @@ namespace IIStudyWebApp.Controllers
 
             if (registered == null) //registeredInfo.registered;
             {
-                return RedirectToAction("ViewBookPreview", "Guest");
+                return RedirectToAction("HomePage", "Guest");
             }
             ViewData["Registered"] = registered;
 
@@ -366,6 +366,51 @@ namespace IIStudyWebApp.Controllers
             Console.WriteLine(@$"{registered.UserName} {registeredID}");
 
             return registered;
+
+        }
+
+        public async Task<IActionResult> ChangeProfileImage([FromForm] IFormFile image)
+        {
+            IFormFile formFile = image;
+            //if (!HttpContext.Request.Form.Files.Any())
+            //{
+            //    await Console.Out.WriteLineAsync( "Here, there is not any file");
+            //    return RedirectToAction( "Profile", "Registered");   
+            //}
+
+            //formFile = HttpContext.Request.Form.Files[0];
+
+
+            if (formFile == null || formFile.Length == 0)
+            {
+                await Console.Out.WriteLineAsync("Here, there is not any file");
+
+                return RedirectToAction("Profile", "Registered");
+                
+            }
+            Registered reg = GetRegisteredDeatils().Result;
+            if(reg == null)
+            {
+                return RedirectToAction( "ViewSignInPage", "Guest");
+            }
+
+            ApiClient<Registered> client = new ApiClient<Registered>();
+
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Registered/ChangeImage";
+            
+            bool success = client.PostAsync(reg, new List<Stream>() { formFile.OpenReadStream() }).Result;
+
+            await Console.Out.WriteLineAsync("here*************************************" + success.ToString());
+
+            return RedirectToAction("Profile", "Registered");
+
+
+
+
+
 
         }
     }

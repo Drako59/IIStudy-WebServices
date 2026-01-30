@@ -3,6 +3,7 @@ using LLstudyWS.ORM.Repositorys;
 using Microsoft.AspNetCore.Mvc;
 using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Registerd;
+using System.Text.Json;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -312,6 +313,61 @@ namespace LLstudyWS.Controllers
             {
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
+        }
+
+        [HttpPost]
+        public bool ChangeImage([FromForm] string model, [FromForm] IFormFile file)
+        {
+            try
+            {
+                JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                Registered modelReg = JsonSerializer.Deserialize<Registered>(model, jsonSerializerOptions);
+                //if (!HttpContext.Request.Form.Files.Any())
+                //    return false;
+                //IFormFile image = HttpContext.Request.Form.Files[0];
+                if (file == null || file.Length == 0)
+                    throw new Exception("Empty file");
+
+                string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.FullName,"wwwroot","Images","RegisteredProfileImages");
+                string ext = Path.GetExtension(file.FileName);
+                if (string.IsNullOrEmpty(ext))
+                {
+                    ext = file.ContentType switch
+                    {
+                        "image/jpeg" => ".jpg",
+                        "image/png" => ".png",
+                        "image/gif" => ".gif",
+                        _ => ".bin"
+                    };
+                }
+
+                string fileName = $"User{modelReg.RegisteredID}{ext}";
+
+                path = Path.Combine(path, fileName);
+                Console.WriteLine("********************************" + path);
+
+                using (FileStream stream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                if(modelReg.ImagePath == "None")
+                {
+                    modelReg = this.repositoryUOW.RegisteredRepository.GetByID(modelReg.RegisteredID);
+                    modelReg.ImagePath = fileName;
+                    this.repositoryUOW.RegisteredRepository.Update(modelReg, exludes : new List<string> {"Password","Role","RegisteredID","RegisteredSalt" });
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            
+            
+            
         }
     }
 }

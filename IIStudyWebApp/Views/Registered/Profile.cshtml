@@ -36,7 +36,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                 </button>
-                <input type="file" id="imageInput" accept="image/*" onchange="changeProfileImage(event)">
+                <form asp-action="ChangeProfileImage" asp-controller="Registered" method="post" enctype="multipart/form-data">
+                    <input type="file" name="image" id="imageInput" accept="image/*" onchange="this.form.submit();">
+                </form>
             </div>
             <h1 class="profile-name" id="userName">@Model.UserName</h1>
         </div>
@@ -118,3 +120,4 @@
     </div>
 </div>
 
+<script src="~/js/profile.js"></script>
