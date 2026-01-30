@@ -15,7 +15,7 @@
         <!-- Profile Header -->
         <div class="profile-header">
             <div class="profile-image-container">
-                @if (true)
+                @* @if (true)
                 {
                     Random random = new Random();
                     int number = random.Next(1, 10);
@@ -29,6 +29,30 @@
                         <img id="profileImage" src="~/images/usersimages/ofek.png" alt="Profile" class="profile-image">
 
                     }
+                } *@
+
+                @if (Model.ImagePath == "None" || Model.ImagePath == null)
+                {
+                    if (Model.ImagePath.Contains(" "))
+                    {
+                        string[] parts = Model.UserName.Split(" ");
+                        <span class="avatar-text">
+
+                            @parts[0][0]@parts[0][1]
+
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="avatar-text">
+
+                            @Model.UserName[0]@Model.UserName[1]
+                        </span>
+                    }
+                }
+                else
+                {
+                    <img id="profileImage" src="@Url.Action("GetProfileImage", "Registered", new { registeredID = Model.RegisteredID })" alt="Profile" class="profile-image">
                 }
                 <button class="change-photo-btn" onclick="document.getElementById('imageInput').click()">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">

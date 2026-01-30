@@ -369,6 +369,7 @@ namespace IIStudyWebApp.Controllers
 
         }
 
+        [HttpPost]
         public async Task<IActionResult> ChangeProfileImage([FromForm] IFormFile image)
         {
             IFormFile formFile = image;
@@ -401,7 +402,9 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Registered/ChangeImage";
             
-            bool success = client.PostAsync(reg, new List<Stream>() { formFile.OpenReadStream() }).Result;
+            bool success = client.PostAsync(reg, new List<(Stream,string)>() { 
+                (formFile.OpenReadStream(),formFile.FileName) 
+            }).Result;
 
             await Console.Out.WriteLineAsync("here*************************************" + success.ToString());
 
@@ -412,6 +415,26 @@ namespace IIStudyWebApp.Controllers
 
 
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProfileImage(string registeredID)
+        {
+            ApiClient<Registered> client = new ApiClient<Registered>();
+
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Registered/GetProfileImage";
+            client.AddParameter("registeredID", registeredID);
+            ApiFileResultModel file = client.GetAsyncFile().Result ;
+
+            //if(file == null)
+            //{
+            //    return 
+            //}
+            
+            return File(file.Bytes, file.ContentType);
         }
     }
 }

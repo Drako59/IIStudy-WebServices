@@ -85,7 +85,39 @@ namespace IIstudyWSClient
 
         }
 
-        public async Task<bool> PostAsync(T model, List<Stream> files = null, bool return_obj = false)
+        public async Task<ApiFileResultModel> GetAsyncFile()
+        {
+            
+            using (HttpRequestMessage httpRequest = new HttpRequestMessage())
+            {
+                ApiFileResultModel resultModel = new ApiFileResultModel();
+                httpRequest.Method = HttpMethod.Get;
+                httpRequest.RequestUri = this.uriBuilder.Uri;
+                using (HttpResponseMessage httpResponse = await httpClient.SendAsync(httpRequest))
+                {
+
+                    //await Console.Out.WriteLineAsync(httpResponse.IsSuccessStatusCode.ToString());
+                    if (httpResponse.IsSuccessStatusCode)
+                    {
+                        byte[] file = await httpResponse.Content.ReadAsByteArrayAsync();
+                        string contentType = httpResponse.Content.Headers.ContentType?.ToString() ?? "image/jpeg";
+                        //string result = httpResponse.Content.ToString();
+                        //PropertyInfo pro = model.GetType().GetProperty("BookID");
+                        //await Console.Out.WriteLineAsync($"model: {(string)pro.GetValue(model, null)}");
+                        resultModel.Bytes = file;
+                        resultModel.ContentType = contentType;
+
+
+                        return resultModel;
+                    }
+                    return null;
+                }
+            }
+            ;
+
+        }
+
+        public async Task<bool> PostAsync(T model, List<(Stream stream, string fileName)> files = null, bool return_obj = false)
         {
             using(HttpRequestMessage httpRequest = new HttpRequestMessage())
             {
@@ -100,10 +132,10 @@ namespace IIstudyWSClient
                 //If error raises, check files is null and than loop if not.
                 if (files != null)
                 {
-                    foreach (Stream file in files)
+                    foreach (var (stream, fileName) in files)
                     {
-                        StreamContent streamContent = new StreamContent(file);
-                        multipartFormData.Add(streamContent, "file", "file");
+                        StreamContent streamContent = new StreamContent(stream);
+                        multipartFormData.Add(streamContent, "file", fileName);
                     }
                     httpRequest.Content = multipartFormData;
                 }

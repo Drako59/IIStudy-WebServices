@@ -196,7 +196,7 @@
                                         @* <img src="path-to-profile-image.jpg" alt="User" onerror="this.style.display='none'">
                             <img src="~/images/usersimages/ofek.png" /> *@
 
-                                        @if (true)
+                                        @* @if (true)
                                         {
                                             Random random = new Random();
                                             int number2 = random.Next(1, 120); //ADD THE BLACK PEOPLE.
@@ -204,7 +204,7 @@
                                             if (number == 6)
                                             {
                                                 <img src="~/images/usersimages/ilgcdgxjyzuozcdwd70gnc9tah0c_genwj3dgvxocds9kmimgudvaxlutq-9igopu0ubwfy4s900-c-k-c0x00ffffff-no-rj.png" alt="User" onerror="this.style.display='none'">
-                                                @* <img id="profileImage" src="~/images/usersimages/ilgcdgxjyzuozcdwd70gnc9tah0c_genwj3dgvxocds9kmimgudvaxlutq-9igopu0ubwfy4s900-c-k-c0x00ffffff-no-rj.png" alt="Profile" class="profile-image"> *@
+                                                @* <img id="profileImage" src="~/images/usersimages/ilgcdgxjyzuozcdwd70gnc9tah0c_genwj3dgvxocds9kmimgudvaxlutq-9igopu0ubwfy4s900-c-k-c0x00ffffff-no-rj.png" alt="Profile" class="profile-image"> //
 
                                             }
                                             else
@@ -212,7 +212,7 @@
                                                 <img src="~/images/usersimages/ofek.png" alt="User" onerror="this.style.display='none'">
 
                                             }
-                                        }
+                                        } *@
                                         @if (review.ImagePath == "None" || review.ImagePath == null)
                                         {
                                             if (review.ImagePath.Contains(" "))
@@ -234,10 +234,9 @@
                                         }
                                         else
                                         {
-                                            <span class="avatar-text">
-
-                                                NO
-                                            </span>
+                                            <img src="@Url.Action("GetProfileImage", "Registered", new { registeredID = review.RegisteredID })" alt="User" onerror="this.style.display='none'">
+                                            
+                                            
                                         }
 
                                     </div>

@@ -1,9 +1,12 @@
 ﻿using LLStudy_Models.Models;
-using LLstudyWS.ORM.Repositorys;
-using Microsoft.AspNetCore.Mvc;
 using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Registerd;
+using LLstudyWS.ORM.Repositorys;
+using System.IO;
+using System.Net.Mime;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -11,6 +14,7 @@ namespace LLstudyWS.Controllers
     public class RegisteredController : ControllerBase
     {
         RepositoryUOW repositoryUOW;
+        string path = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "RegisteredImages");
 
         public RegisteredController() {
             this.repositoryUOW = new RepositoryUOW();
@@ -316,47 +320,28 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public bool ChangeImage([FromForm] string model, [FromForm] IFormFile file)
+        public bool ChangeImage([FromForm] string model)
         {
             try
             {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                if(HttpContext.Request.Form.Count == 0)
+                {
+                    throw new Exception("A file was not found.");
+                    return false;
+                }
+                IFormFile file = HttpContext.Request.Form.Files[0];
                 JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
                 jsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 Registered modelReg = JsonSerializer.Deserialize<Registered>(model, jsonSerializerOptions);
-                //if (!HttpContext.Request.Form.Files.Any())
-                //    return false;
-                //IFormFile image = HttpContext.Request.Form.Files[0];
-                if (file == null || file.Length == 0)
-                    throw new Exception("Empty file");
+                
 
-                string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.FullName,"wwwroot","Images","RegisteredProfileImages");
-                string ext = Path.GetExtension(file.FileName);
-                if (string.IsNullOrEmpty(ext))
-                {
-                    ext = file.ContentType switch
-                    {
-                        "image/jpeg" => ".jpg",
-                        "image/png" => ".png",
-                        "image/gif" => ".gif",
-                        _ => ".bin"
-                    };
-                }
-
-                string fileName = $"User{modelReg.RegisteredID}{ext}";
-
-                path = Path.Combine(path, fileName);
-                Console.WriteLine("********************************" + path);
-
-                using (FileStream stream = new FileStream(path, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-                if(modelReg.ImagePath == "None")
-                {
-                    modelReg = this.repositoryUOW.RegisteredRepository.GetByID(modelReg.RegisteredID);
-                    modelReg.ImagePath = fileName;
-                    this.repositoryUOW.RegisteredRepository.Update(modelReg, exludes : new List<string> {"Password","Role","RegisteredID","RegisteredSalt" });
-                }
+                //if(modelReg.ImagePath == "None")
+                //{
+                modelReg = this.repositoryUOW.RegisteredRepository.GetByID(modelReg.RegisteredID);
+                modelReg.ImagePath = this.repositoryUOW.RegisteredRepository.ChangeImage(file,modelReg.RegisteredID);
+                this.repositoryUOW.RegisteredRepository.Update(modelReg, exludes : new List<string> {"Password","Role","RegisteredID","RegisteredSalt" });
+                //}
 
                 return true;
             }
@@ -365,9 +350,62 @@ namespace LLstudyWS.Controllers
                 Console.WriteLine(ex.ToString());
                 return false;
             }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
             
             
             
+        }
+        [HttpGet]
+        public IActionResult GetProfileImage(string registeredID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                
+                string AbsoultePath;
+                Registered reg = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
+                if(reg.ImagePath != null)
+                {
+                    AbsoultePath = Path.Combine(this.path, reg.ImagePath);
+
+                }
+                else
+                {
+                    AbsoultePath = Path.Combine(this.path, "zoro2.jpg");
+                }
+
+                //FileStream stream = System.IO.File.OpenRead(AbsoultePath);
+                ////string contentType = "application/octet-stream";
+                //string ext = Path.GetExtension(AbsoultePath).ToLowerInvariant();
+                //string contentType = ext switch
+                //{
+                //    ".jpg" or ".jpeg" => "image/jpeg",
+                //    ".png" => "image/png",
+                //    ".gif" => "image/gif",
+                //    _ => "application/octet-stream"
+                //};
+                //IFormFile formFile = new FormFile(stream, 0, stream.Length, null, reg.ImagePath)
+                //{
+                //    Headers = new HeaderDictionary(),
+                //    ContentType = contentType
+                //};
+                var (stream, contentType) = this.repositoryUOW.RegisteredRepository.GetImage(AbsoultePath, reg.ImagePath);
+
+                return File(stream, contentType);
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return  StatusCode(500, "Error loading image");
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
         }
     }
 }

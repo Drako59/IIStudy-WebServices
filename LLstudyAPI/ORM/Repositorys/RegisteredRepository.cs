@@ -1,8 +1,13 @@
 ﻿using LLStudy_Models.Models;
+using Microsoft.AspNetCore.Mvc;
+
 using LLstudyWS.ORM.CreatorsModels;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Runtime.CompilerServices;
+
+using System.IO;
+
 
 namespace LLstudyWS.ORM
 {
@@ -64,7 +69,69 @@ namespace LLstudyWS.ORM
             return null;
         }
 
+        public (Stream,string) GetImage(string AboslutePath, string imageName)
+        {
+            FileStream stream = System.IO.File.OpenRead(AboslutePath);
+            //string contentType = "application/octet-stream";
+            string ext = Path.GetExtension(AboslutePath).ToLowerInvariant();
+            string contentType = ext switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                _ => "application/octet-stream"
+            };
+            IFormFile formFile = new FormFile(stream, 0, stream.Length, null, imageName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = contentType
+            };
+            return (stream, contentType);
+        }
 
+        public string ChangeImage(IFormFile file, string registeredID)
+        {
+
+            //if (!HttpContext.Request.Form.Files.Any())
+            //    return false;
+            //IFormFile image = HttpContext.Request.Form.Files[0];
+            if (file == null || file.Length == 0)
+                throw new Exception("Empty file");
+
+            //string path = Path.Combine(Directory.GetCurrentDirectory()!, "App_Data","RegisteredsImages");
+            string path = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "RegisteredImages");
+
+            Directory.CreateDirectory(path);
+
+            string ext = Path.GetExtension(file.FileName);
+            Console.WriteLine($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
+
+            if (string.IsNullOrEmpty(ext))
+            {
+                ext = (file.ContentType ?? "").ToLowerInvariant() switch
+                {
+                    "image/jpeg" => ".jpg",
+                    "image/png" => ".png",
+                    "image/gif" => ".gif",
+                    _ => throw new Exception("Unsupported file type")
+                };
+            }
+
+            string fileName = $"User{registeredID}{ext}";
+
+            path = Path.Combine(path, fileName);
+            Console.WriteLine("********************************" + path);
+
+
+            using (FileStream stream = new FileStream(path, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+
+
+            return fileName;
+        }
         //public override Registered GetByID(string UserName)
         //{
         //    string sql = "SELECT * FROM Registereds WHERE UserName = @UserName";
