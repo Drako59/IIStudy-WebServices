@@ -81,11 +81,11 @@ namespace LLstudyWS.ORM
                 ".gif" => "image/gif",
                 _ => "application/octet-stream"
             };
-            IFormFile formFile = new FormFile(stream, 0, stream.Length, null, imageName)
-            {
-                Headers = new HeaderDictionary(),
-                ContentType = contentType
-            };
+            //IFormFile formFile = new FormFile(stream, 0, stream.Length, null, imageName)
+            //{
+            //    Headers = new HeaderDictionary(),
+            //    ContentType = contentType
+            //};
             return (stream, contentType);
         }
 
