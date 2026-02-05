@@ -19,7 +19,7 @@
         <div class="book-main-section">
             <div class="book-header">
                 <div class="book-cover-main">
-                    <img class="book-cover-image" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg" /> <!-- CHANE TO A REAL IMAGE-->
+                    <img class="book-cover-image" src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })" /> <!-- CHANE TO A REAL IMAGE-->
                     @* <svg viewBox="0 0 24 24" fill="none">
                         <rect x="3" y="4" width="18" height="16" rx="2" />
                         <path d="M7 8h10M7 12h8M7 16h6" />
@@ -155,22 +155,22 @@
             <h2 class="section-title">Book Preview Gallery</h2>
             <div class="gallery-grid">
                 <div class="gallery-item">
-                    <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
                 <div class="gallery-item">
-                    <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
                 <div class="gallery-item">
-                    <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
                 <div class="gallery-item">
-                    <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
@@ -181,7 +181,7 @@
         <div class="reviews-section">
             <div class="reviews-header">
                 <h2 class="section-title">Customer Reviews</h2>
-                <button class="write-review-btn">Write a Review</button>
+                <button class="write-review-btn" onclick="openReviewForm()">Write a Review</button>
             </div>
             @if (Model.reviews != null && Model.reviews.Any())
             {
@@ -304,7 +304,125 @@
         </div>
     </div>
 </div>
+<div class="review-form-overlay" id="reviewFormOverlay">
+    <div class="review-form-container">
+        <div class="review-form-header">
+            <h2 class="review-form-title">Write a Review</h2>
+            <button class="close-form-btn" onclick="closeReviewForm()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <form asp-action="AddReview" asp-controller="Registered" id="reviewForm" method="post">  
+            <!--onsubmit ="submitReview(event)" -->
+            <!-- Rating Input -->
+            <div class="rating-input-section">
+                <label class="rating-input-label">Your Rating</label>
+                <div class="star-rating-input" id="starRating">
+                    <span class="star-input" data-rating="1" onclick="setRating(1)">★</span>
+                    <span class="star-input" data-rating="2" onclick="setRating(2)">★</span>
+                    <span class="star-input" data-rating="3" onclick="setRating(3)">★</span>
+                    <span class="star-input" data-rating="4" onclick="setRating(4)">★</span>
+                    <span class="star-input" data-rating="5" onclick="setRating(5)">★</span>
+                </div>
+                <input type="hidden" id="ratingValue" name="Rate" value="0" required>
+            </div>
+
+            <!-- Review Text -->
+            <div class="review-text-section">
+                <label class="rating-input-label">Your Review</label>
+                <textarea class="review-textarea"
+                          id="reviewText"
+                          name="Comment"
+                          placeholder="Share your thoughts about this book... What did you like? What could be improved? Would you recommend it to others?"
+                          required
+                          minlength="10"></textarea>
+            </div>
+            <input name="BookID" value="@Model.book.BookID" style="display: none;" />
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="cancel-review-btn" onclick="closeReviewForm()">Cancel</button>
+                <button type="submit" class="submit-review-btn">Submit Review</button>
+            </div>
+        </form>
+    </div>
+</div>
 <script src="~/js/addtocart.js"></script>
+<script>
+    // Review Form Functions
+    let selectedRating = 0;
+
+    function openReviewForm() {
+        // alert("here");
+        document.getElementById('reviewFormOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeReviewForm() {
+        document.getElementById('reviewFormOverlay').classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+        resetReviewForm();
+    }
+
+    function setRating(rating) {
+        selectedRating = rating;
+        document.getElementById('ratingValue').value = rating;
+
+        // Update star display
+        const stars = document.querySelectorAll('.star-input');
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+    }
+
+    function resetReviewForm() {
+        selectedRating = 0;
+        document.getElementById('reviewForm').reset();
+        document.querySelectorAll('.star-input').forEach(star => {
+            star.classList.remove('active');
+        });
+    }
+
+    function submitReview(event) {
+        event.preventDefault();
+
+        const rating = document.getElementById('ratingValue').value;
+        const reviewText = document.getElementById('reviewText').value;
+
+        if (rating === '0') {
+            alert('Please select a rating');
+            return;
+        }
+
+        // if (reviewText.trim().length < 10) {
+        //     alert('Please write a review with at least 10 characters');
+        //     return;
+        // }
+
+        // Here you would send the data to your server
+        console.log('Review submitted:', { rating, reviewText });
+
+        // alert('Thank you for your review! Your feedback has been submitted successfully.');
+        closeReviewForm();
+    }
+
+    // Close overlay when clicking outside the form
+    document.getElementById('reviewFormOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeReviewForm();
+        }
+    });
+
+    // Add to cart functionality
+    
+</script>
 
 <script>
     const mainCover = document.getElementById('mainCover');
@@ -313,7 +431,7 @@
     galleryImages.forEach(img => {
         img.addEventListener('click', () => {
             const fullSrc = img.getAttribute('data-full') || img.src;
-            mainCover.src = fullSrc;
+            // mainCover.src = fullSrc;
 
             // סימון thumbnail פעיל
             galleryImages.forEach(i => i.classList.remove('active'));

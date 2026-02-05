@@ -141,6 +141,25 @@ namespace IIStudyWebApp.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetBookImage(string bookID)
+        {
+            ApiClient<Registered> client = new ApiClient<Registered>();
+
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetBookImage";
+            client.AddParameter("bookID", bookID);
+            ApiFileResultModel file = client.GetAsyncFile().Result;
+
+            //if(file == null)
+            //{
+            //    return 
+            //}
+
+            return File(file.Bytes, file.ContentType);
+        }
         private async Task<string> SendReader()
         {
             return null;

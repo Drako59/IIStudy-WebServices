@@ -28,6 +28,8 @@ namespace LLStudy_Models.Models
         [Required]
         public string BookID { get { return bookID; } set { bookID = value; } }
 
+        public  string RegisteredID { get; set; }
+
 
     }
 }

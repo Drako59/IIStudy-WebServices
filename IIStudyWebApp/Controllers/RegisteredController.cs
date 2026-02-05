@@ -254,13 +254,14 @@ namespace IIStudyWebApp.Controllers
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Registered/AddReview";
-
-
+            string registeredID = HttpContext.Session.GetString("RegisteredID");
+            record.RegisteredID = registeredID;
+            record.ReviewID = "0";
             bool success = client.PostAsync(record).Result;
 
             if (!success)
-                return View("Failed to add.");
-            return View("Review added.");
+                return RedirectToAction("ViewBookPreview","Guest", new { bookID = record.BookID });
+            return RedirectToAction("ViewBookPreview", "Guest", new { bookID = record.BookID });
         }
 
         public async Task<IActionResult> SignOut()

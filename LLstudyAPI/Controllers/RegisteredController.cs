@@ -15,7 +15,6 @@ namespace LLstudyWS.Controllers
     {
         RepositoryUOW repositoryUOW;
         string path = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "RegisteredImages");
-
         public RegisteredController() {
             this.repositoryUOW = new RepositoryUOW();
         }
@@ -229,13 +228,13 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public bool AddReview(Review review)
+        public bool AddReview(Review model)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
-                return this.repositoryUOW.ReviewRepository.Create(review);
+                return this.repositoryUOW.ReviewRepository.Create(model);
 
                 
             }
@@ -392,7 +391,7 @@ namespace LLstudyWS.Controllers
                 //    Headers = new HeaderDictionary(),
                 //    ContentType = contentType
                 //};
-                var (stream, contentType) = this.repositoryUOW.RegisteredRepository.GetImage(AbsoultePath, reg.ImagePath);
+                var (stream, contentType) = this.repositoryUOW.RegisteredRepository.GetImage(AbsoultePath);
 
                 return File(stream, contentType);
 

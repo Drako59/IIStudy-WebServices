@@ -18,6 +18,7 @@ namespace LLstudyWS.Controllers
     public class GuestController : ControllerBase
     {
 
+        readonly string BooksPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "BooksImages");
 
         private void debugList<T>(List<T> list)
         {
@@ -341,7 +342,38 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetBookImage(string bookID)
+        {
+            try
+            {
+                string AbsoultePath;
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                Book book = this.repositoryUOW.BookRepository.GetByID(bookID);
+                if (book.BookImagePath != null && book.BookImagePath != "None")
+                {
+                    AbsoultePath = Path.Combine(this.BooksPath, book.BookImagePath);
 
+                }
+                else
+                {
+                    AbsoultePath = Path.Combine(this.BooksPath, "PlaceHolder.jpg");
+                }
+
+                var (stream, contentType) = this.repositoryUOW.RegisteredRepository.GetImage(AbsoultePath);
+
+                return File(stream, contentType);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
 
 
     }

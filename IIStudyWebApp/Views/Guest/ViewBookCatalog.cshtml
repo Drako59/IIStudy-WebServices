@@ -83,7 +83,7 @@
                     {
                         string path = $"https://localhost:7121/Guest/ViewBookPreview?bookID={book.BookID}";
                         <div class="book-card">
-                            <a href=@path class="book-cover"><img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"></a>
+                            <a href=@path class="book-cover"><img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"></a>
                         <div class="book-info">
                             <h3>@book.Book_name</h3>
                             <p class="book-author">@book.Author_name</p>
@@ -103,7 +103,7 @@
                     {
                         string path = $"https://localhost:7121/Guest/ViewBookPreview?bookID={book.BookID}";
                         <div class="book-card">
-                            <a href=@path class="book-cover"><img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"></a>
+                            <a href=@path class="book-cover"><img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"></a>
                             <div class="book-info">
                                 <h3>@book.Book_name</h3>
                                 <p class="book-author">@book.Author_name</p>

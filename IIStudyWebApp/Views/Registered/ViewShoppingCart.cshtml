@@ -30,7 +30,7 @@
                     {
                         <div class="cart-item" >
                             <div class="item-image">
-                                <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"
+                                <img src="@Url.Action("GetBookImage", "Guest", new { bookID = cartBook.Book.BookID })"
                                      onerror="this.src='/images/books/placeholder.png'"
                                      alt="@cartBook.Book.Book_name"
                                      class="item-image-img" />

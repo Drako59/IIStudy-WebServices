@@ -51,10 +51,8 @@
                             
                                 <div class="order-item">
                                     <div class="order-item-image">
-                                        <svg viewBox="0 0 24 24" fill="none">
-                                            <rect x="3" y="4" width="18" height="16" rx="2" />
-                                            <path d="M7 8h10M7 12h8M7 16h6" />
-                                        </svg>
+                                        <img src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"
+                                                 alt="To Kill a Mockingbird cover">
                                     </div>
                                     <div class="order-item-details">
                                         <h4>@book.Book_name</h4>

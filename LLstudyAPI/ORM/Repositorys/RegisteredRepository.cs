@@ -69,7 +69,7 @@ namespace LLstudyWS.ORM
             return null;
         }
 
-        public (Stream,string) GetImage(string AboslutePath, string imageName)
+        public (Stream,string) GetImage(string AboslutePath)
         {
             FileStream stream = System.IO.File.OpenRead(AboslutePath);
             //string contentType = "application/octet-stream";

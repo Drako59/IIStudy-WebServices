@@ -9,6 +9,7 @@
 @model ViewBookViewModel
 
 <link href="~/css/bookpreview.css" rel="stylesheet" />
+
 <div class="book-details-page">
     <div class="container">
         <div class="breadcrumb">
@@ -19,7 +20,7 @@
         <div class="book-main-section">
             <div class="book-header">
                 <div class="book-cover-main">
-                    <img class="book-cover-image" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg" /> <!-- CHANE TO A REAL IMAGE-->
+                    <img class="book-cover-image" src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })" /> <!-- CHANE TO A REAL IMAGE-->
                     @* <svg viewBox="0 0 24 24" fill="none">
                         <rect x="3" y="4" width="18" height="16" rx="2" />
                         <path d="M7 8h10M7 12h8M7 16h6" />
@@ -155,22 +156,22 @@
             <h2 class="section-title">Book Preview Gallery</h2>
             <div class="gallery-grid">
                 <div class="gallery-item">
-                    <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg" 
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
                 <div class="gallery-item">
-                    <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg" 
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
                 <div class="gallery-item">
-                    <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
                 <div class="gallery-item">
-                    <img src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg"
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
@@ -181,7 +182,7 @@
         <div class="reviews-section">
             <div class="reviews-header">
                 <h2 class="section-title">Customer Reviews</h2>
-                <button class="write-review-btn">Write a Review</button>
+                <button class="write-review-btn" onclick="window.location.href='https://localhost:7121/Guest/viewSignInPage';">Write a Review</button>
             </div>
             @if (Model.reviews != null && Model.reviews.Any())
             {
@@ -196,7 +197,7 @@
                                         @* <img src="path-to-profile-image.jpg" alt="User" onerror="this.style.display='none'">
                             <img src="~/images/usersimages/ofek.png" /> *@
 
-                                        @if (true)
+                                        @* @if (true)
                                         {
                                             Random random = new Random();
                                             int number2 = random.Next(1, 120); //ADD THE BLACK PEOPLE.
@@ -204,7 +205,7 @@
                                             if (number == 6)
                                             {
                                                 <img src="~/images/usersimages/ilgcdgxjyzuozcdwd70gnc9tah0c_genwj3dgvxocds9kmimgudvaxlutq-9igopu0ubwfy4s900-c-k-c0x00ffffff-no-rj.png" alt="User" onerror="this.style.display='none'">
-                                                @* <img id="profileImage" src="~/images/usersimages/ilgcdgxjyzuozcdwd70gnc9tah0c_genwj3dgvxocds9kmimgudvaxlutq-9igopu0ubwfy4s900-c-k-c0x00ffffff-no-rj.png" alt="Profile" class="profile-image"> *@
+                                                @* <img id="profileImage" src="~/images/usersimages/ilgcdgxjyzuozcdwd70gnc9tah0c_genwj3dgvxocds9kmimgudvaxlutq-9igopu0ubwfy4s900-c-k-c0x00ffffff-no-rj.png" alt="Profile" class="profile-image"> 
 
                                             }
                                             else
@@ -212,15 +213,15 @@
                                                 <img src="~/images/usersimages/ofek.png" alt="User" onerror="this.style.display='none'">
 
                                             }
-                                        }
+                                        } *@
                                         @if (review.ImagePath == "None" || review.ImagePath == null)
                                         {
-                                            if (review.ImagePath.Contains(" "))
+                                            if (review.UserName.Contains(" "))
                                             {
                                                 string[] parts = review.UserName.Split(" ");
                                                 <span class="avatar-text">
 
-                                                    @parts[0][0]@parts[0][1]
+                                                    @parts[0][0]@parts[1][0]
 
                                                 </span>
                                             }
@@ -234,10 +235,9 @@
                                         }
                                         else
                                         {
-                                            <span class="avatar-text">
+                                            <img src="@Url.Action("GetProfileImage", "Registered", new { registeredID = review.RegisteredID })" alt="User" onerror="this.style.display='none'">
 
-                                                NO
-                                            </span>
+
                                         }
 
                                         </div>
@@ -312,7 +312,7 @@
     galleryImages.forEach(img => {
         img.addEventListener('click', () => {
             const fullSrc = img.getAttribute('data-full') || img.src;
-            mainCover.src = fullSrc;
+            // mainCover.src = fullSrc;
 
             // סימון thumbnail פעיל
             galleryImages.forEach(i => i.classList.remove('active'));
