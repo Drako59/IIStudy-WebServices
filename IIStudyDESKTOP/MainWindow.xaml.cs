@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using AdminApp.UserControls;
 namespace IIStudyDESKTOP
 {
     /// <summary>
@@ -16,6 +16,7 @@ namespace IIStudyDESKTOP
     /// </summary>
     public partial class MainWindow : Window
     {
+        StartPage startPage;
         public MainWindow()
         {
             InitializeComponent();
@@ -24,6 +25,11 @@ namespace IIStudyDESKTOP
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ViewStartPage()
+        {
+            if (this.startPage)
         }
     }
 }

@@ -5,30 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IIStudyDESKTOP"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1860"
+        Title="MainWindow" Height="1080" Width="1920"
         ResizeMode="NoResize"
         >
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="FontSize" Value="15"></Setter>
-            <Setter Property="Margin" Value="40"></Setter>
+            <Setter Property="FontSize" Value="30"></Setter>
+            <Setter Property="Margin" Value="20"></Setter>
             <Setter Property="Height" Value="40"></Setter>
         </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="718*"/>
-            <ColumnDefinition Width="23*"/>
+            <ColumnDefinition Width="159*"/>
+            <ColumnDefinition Width="156*"/>
+            <ColumnDefinition Width="426*"/>
+            <ColumnDefinition Width="24*"/>
             <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="1109*"/>
+            <ColumnDefinition Width="1145*"/>
         </Grid.ColumnDefinitions>
         <!--<Grid.ColumnDefinitions>
             <ColumnDefinition Width="191*"/>
             <ColumnDefinition Width="9*"/>
         </Grid.ColumnDefinitions>-->
-        <StackPanel Orientation="Vertical" Background="#FFB7B2B2" Width="200" Margin="0,0,518,0" >
-            <Button Content="Max Test" Style="{StaticResource ButtonStyle}" Click="Button_Click"></Button>
+        <StackPanel Width="365" Orientation="Vertical" Background="#FFB7B2B2" Margin="0,0,376,0" Grid.ColumnSpan="3" >
+            <Button Content="HomePage" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
+            <Button Content="Books" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
+            <Button Content="Exams" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
+            <Button Content="Registers" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
+            <Button Content="Orders" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
+            <Button Content="Calender" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
         </StackPanel>
+
 
     </Grid>
 

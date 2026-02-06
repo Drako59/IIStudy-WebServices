@@ -8,4 +8,15 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Images\PlaceHolder2.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\PlaceHolder2.jpg">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Resource>
+  </ItemGroup>
+
 </Project>
