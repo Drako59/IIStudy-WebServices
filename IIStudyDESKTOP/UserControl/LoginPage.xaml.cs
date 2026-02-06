@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace IIStudyDESKTOP.UserControl
 {
     /// <summary>
-    /// Interaction logic for UserControl.xaml
+    /// Interaction logic for LoginPage.xaml
     /// </summary>
-    public partial class UserControl : UserControl
+    public partial class LoginPage : UserControl
     {
-        public UserControl()
+        public LoginPage()
         {
             InitializeComponent();
         }

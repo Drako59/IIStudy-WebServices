@@ -28,14 +28,14 @@
             <ColumnDefinition Width="191*"/>
             <ColumnDefinition Width="9*"/>
         </Grid.ColumnDefinitions>-->
-        <StackPanel Width="365" Orientation="Vertical" Background="#FFB7B2B2" Margin="0,0,376,0" Grid.ColumnSpan="3" >
-            <Button Content="HomePage" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
-            <Button Content="Books" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
-            <Button Content="Exams" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
-            <Button Content="Registers" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
-            <Button Content="Orders" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
-            <Button Content="Calender" Style="{StaticResource ButtonStyle}" Click="Button_Click" Height="62"/>
-        </StackPanel>
+        <TextBlock Width="365"   Background="#FFB7B2B2" Margin="0,0,376,0" Grid.ColumnSpan="3" >
+            <Hyperlink   Style="{StaticResource ButtonStyle}" Click="Button_Click" >HomePage</Hyperlink>
+            <Hyperlink  Style="{StaticResource ButtonStyle}" Click="Button_Click" >Books</Hyperlink>
+            <Hyperlink  Style="{StaticResource ButtonStyle}" Click="Button_Click" >Exams</Hyperlink>
+            <Hyperlink  Style="{StaticResource ButtonStyle}" Click="Button_Click" >registers</Hyperlink>
+            <Hyperlink  Style="{StaticResource ButtonStyle}" Click="Button_Click" >Orders</Hyperlink> 
+            <Hyperlink  Style="{StaticResource ButtonStyle}" Click="Button_Click" >Calendar</Hyperlink>
+        </TextBlock>
 
 
     </Grid>

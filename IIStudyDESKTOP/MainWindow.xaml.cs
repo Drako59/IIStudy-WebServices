@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using AdminApp.UserControls;
+using IIStudyDESKTOP.UserControl;
 namespace IIStudyDESKTOP
 {
     /// <summary>
@@ -16,7 +16,8 @@ namespace IIStudyDESKTOP
     /// </summary>
     public partial class MainWindow : Window
     {
-        StartPage startPage;
+         HomePage homePage;
+        LoginPage loginPage;
         public MainWindow()
         {
             InitializeComponent();
@@ -29,7 +30,16 @@ namespace IIStudyDESKTOP
 
         private void ViewStartPage()
         {
-            if (this.startPage)
+            if (this.homePage == null)
+                this.homePage = new HomePage();
+            this.Content = this.homePage;
+        }
+
+        private void ViewLoginPage()
+        {
+            if (this.loginPage == null)
+                this.loginPage = new LoginPage();
+            this.Content = this.loginPage;
         }
     }
 }
