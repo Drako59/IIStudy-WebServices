@@ -36,7 +36,7 @@
                     if (Model.UserName.Contains(" "))
                     {
                         string[] parts = Model.UserName.Split(" ");
-                        <span class="avatar-text">
+                        <span class="profileImage">
 
                             @parts[0][0]@parts[1][0]
 
@@ -44,7 +44,7 @@
                     }
                     else
                     {
-                        <span class="avatar-text">
+                        <span class="profileImage">
 
                             @Model.UserName[0]@Model.UserName[1]
                         </span>

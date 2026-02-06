@@ -255,13 +255,14 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Registered/AddReview";
             string registeredID = HttpContext.Session.GetString("RegisteredID");
+            if (registeredID == null) { return RedirectToAction("viewSignInPage", "Guest"); }
             record.RegisteredID = registeredID;
             record.ReviewID = "0";
             bool success = client.PostAsync(record).Result;
 
             if (!success)
-                return RedirectToAction("ViewBookPreview","Guest", new { bookID = record.BookID });
-            return RedirectToAction("ViewBookPreview", "Guest", new { bookID = record.BookID });
+                return RedirectToAction("ViewBookPreview","Registered", new { bookID = record.BookID });
+            return RedirectToAction("ViewBookPreview", "Registered", new { bookID = record.BookID });
         }
 
         public async Task<IActionResult> SignOut()
@@ -407,7 +408,7 @@ namespace IIStudyWebApp.Controllers
                 (formFile.OpenReadStream(),formFile.FileName) 
             }).Result;
 
-            await Console.Out.WriteLineAsync("here*************************************" + success.ToString());
+            //await Console.Out.WriteLineAsync("here*************************************" + success.ToString());
 
             return RedirectToAction("Profile", "Registered");
 

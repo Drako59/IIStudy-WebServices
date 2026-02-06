@@ -52,15 +52,54 @@
 
                      <div class="rating-section">
                         <div class="stars-large">
-                            @for (int i = 0; i < Math.Round(Model.Rate); i++)
-                            {
-                                <span class="star-large">★</span>
+                            @{
+                                int totalStars = 5;
+                                double starsAmount = Math.Floor(Model.Rate) ;
+                                
+                                for (int i = 0; i < starsAmount; i++)
+                                {
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M12 .587l3.668 7.431L23.327 9.75l-5.664 5.51L18.997 24 12 19.897 5.003 24l1.334-8.74L.673 9.75l7.659-1.732z"
+                                              fill="#FACC15" />
+                                    </svg>
+
+
+                                }
+                                if (Model.Rate - starsAmount > 0)
+                                {
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <defs>
+                                            <!-- חצי שמאלי של הכוכב -->
+                                            <clipPath id="star-half-left">
+                                                <rect x="0" y="0" width="12" height="24" />
+                                            </clipPath>
+                                        </defs>
+
+                                        <!-- רקע אפור (כוכב ריק) -->
+                                        <path d="M12 .587l3.668 7.431L23.327 9.75l-5.664 5.51L18.997 24 12 19.897 5.003 24l1.334-8.74L.673 9.75l7.659-1.732z"
+                                              fill="#E5E7EB" />
+
+                                        <!-- חצי צהוב מעל -->
+                                        <path d="M12 .587l3.668 7.431L23.327 9.75l-5.664 5.51L18.997 24 12 19.897 5.003 24l1.334-8.74L.673 9.75l7.659-1.732z"
+                                              fill="#FACC15"
+                                              clip-path="url(#star-half-left)" />
+                                    </svg>
+
+                                }
+                                for (int i = 0; i < totalStars - Math.Round(Model.Rate); i++)
+                                {
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M12 .587l3.668 7.431L23.327 9.75l-5.664 5.51L18.997 24 12 19.897 5.003 24l1.334-8.74L.673 9.75l7.659-1.732z"
+                                              fill="#E5E7EB" />
+                                    </svg>
+
+                                }
                             }
                         </div>
                         <span class="rating-info">
                             @if(Model.Rate != 0)
                             {
-                                <span class="rating-count">@Model.Rate</span>
+                                <span class="rating-count">@Math.Round(Model.Rate, 3)</span>
                             }
                             else
                             {
@@ -248,12 +287,49 @@
                                 </div>
                             </div>
                             <div class="review-rating">
-                                @for(int i = 0; i < Convert.ToInt32(review.Rate); i++)
-                                {
-                                    <span class="star-review">★</span>
-                                   
+                                @{
+                                    totalStars = 5;
+                                    starsAmount = Convert.ToInt16(review.Rate);
+                                    for (int i = 0; i < starsAmount; i++)
+                                    {
+                                        <svg viewBox="0 0 24 24" width="24" height="24">
+                                            <path d="M12 .587l3.668 7.431L23.327 9.75l-5.664 5.51L18.997 24 12 19.897 5.003 24l1.334-8.74L.673 9.75l7.659-1.732z"
+                                                  fill="#FACC15" />
+                                        </svg>
+
+
+                                    }
+                                    if (review.Rate - starsAmount > 0)
+                                    {
+                                        <svg viewBox="0 0 24 24" width="24" height="24">
+                                            <defs>
+                                                <!-- חצי שמאלי של הכוכב -->
+                                                <clipPath id="star-half-left">
+                                                    <rect x="0" y="0" width="12" height="24" />
+                                                </clipPath>
+                                            </defs>
+
+                                            <!-- רקע אפור (כוכב ריק) -->
+                                            <path d="M12 .587l3.668 7.431L23.327 9.75l-5.664 5.51L18.997 24 12 19.897 5.003 24l1.334-8.74L.673 9.75l7.659-1.732z"
+                                                  fill="#E5E7EB" />
+
+                                            <!-- חצי צהוב מעל -->
+                                            <path d="M12 .587l3.668 7.431L23.327 9.75l-5.664 5.51L18.997 24 12 19.897 5.003 24l1.334-8.74L.673 9.75l7.659-1.732z"
+                                                  fill="#FACC15"
+                                                  clip-path="url(#star-half-left)" />
+                                        </svg>
+
+                                    }
+                                    for (int i = 0; i < totalStars - starsAmount; i++)
+                                    {
+                                        <svg viewBox="0 0 24 24" width="24" height="24">
+                                            <path d="M12 .587l3.668 7.431L23.327 9.75l-5.664 5.51L18.997 24 12 19.897 5.003 24l1.334-8.74L.673 9.75l7.659-1.732z"
+                                                  fill="#E5E7EB" />
+                                        </svg>
+
+                                    }
                                 }
-                                
+
                             </div>
                         </div>
                         <div class="review-text-content">

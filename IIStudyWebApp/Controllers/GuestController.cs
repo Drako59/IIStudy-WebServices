@@ -126,7 +126,7 @@ namespace IIStudyWebApp.Controllers
             await Console.Out.WriteLineAsync(  "here****************************************");
             await Console.Out.WriteLineAsync(success.Success + "HEREHREREHREHEHREHRHEEH");
 
-            Console.WriteLine($@"{success.Data.RegisteredID}");
+            //Console.WriteLine($@"{success.Data.RegisteredID}");
             if (success.Success && success.Data != null)
             {
 
