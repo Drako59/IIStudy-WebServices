@@ -18,11 +18,11 @@ namespace IIStudyDESKTOP.UserControl
     /// <summary>
     /// Interaction logic for LoginPage.xaml
     /// </summary>
-    public partial class LoginPage : UserControl
-    {
-        public LoginPage()
-        {
-            InitializeComponent();
-        }
-    }
+    //public partial class LoginPage : UserControl
+    //{
+    //    public LoginPage()
+    //    {
+    //        InitializeComponent();
+    //    }
+    //}
 }
