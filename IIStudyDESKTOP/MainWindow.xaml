@@ -184,15 +184,11 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <DockPanel LastChildFill="True">
         <!-- Main Container -->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
+        
         <!-- Header -->
-        <Border Grid.Row="0" 
+        <Border  DockPanel.Dock="Left"  
                 Background="White" 
                 Padding="30,20"
                 CornerRadius="0">
@@ -201,14 +197,18 @@
             </Border.Effect>
 
             <Grid>
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
                 <!-- Logo -->
-                <TextBlock Grid.Column="0" 
+                <TextBlock Grid.Row="0" 
                           FontSize="24" 
                           FontWeight="ExtraBold"
                           VerticalAlignment="Center">
@@ -222,18 +222,23 @@
                 </TextBlock>
 
                 <!-- Navigation Buttons -->
-                <StackPanel Grid.Column="2" 
-                           Orientation="Horizontal" 
+                <StackPanel Grid.Row="2" 
+                           Orientation="Vertical" 
                            HorizontalAlignment="Right">
-                    <Button Content="Home" Style="{StaticResource SecondaryButton}" Padding="16,10"/>
-                    <Button Content="Books" Style="{StaticResource SecondaryButton}" Padding="16,10"/>
-                    <Button Content="Exams" Style="{StaticResource SecondaryButton}" Padding="16,10"/>
+                    <Button Content="Home" Style="{StaticResource SecondaryButton}" Padding="60,10" Margin="0, 10 ,0 , 10"/>
+                    <Button Content="Books" Style="{StaticResource SecondaryButton}" Padding="16,10" Margin="0, 10 ,0 , 10"/>
+                    <Button Content="Exams" Style="{StaticResource SecondaryButton}" Padding="16,10" Margin="0, 10 ,0 , 10"/>
+                    <Button Content="Orders" Style="{StaticResource SecondaryButton}" Padding="16,10" Margin="0, 10 ,0 , 10"/>
+                    <Button Content="Users" Style="{StaticResource SecondaryButton}" Padding="16,10" Margin="0, 10 ,0 , 10"/>
+
                 </StackPanel>
             </Grid>
         </Border>
 
         <!-- Main Content -->
-        <ScrollViewer Grid.Row="1" 
+        <ScrollViewer DockPanel.Dock="Right" 
+                      Grid.Row="0"
+                      VerticalAlignment="Stretch"
                      VerticalScrollBarVisibility="Auto"
                      Margin="40,40,40,40">
             <Border Background="White" 
@@ -444,5 +449,5 @@
                 </StackPanel>
             </Border>
         </ScrollViewer>
-    </Grid>
+    </DockPanel>
 </Window>
