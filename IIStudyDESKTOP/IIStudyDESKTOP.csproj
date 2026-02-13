@@ -13,6 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IIstudyWSClient\IIstudyWSClient.csproj" />
+    <ProjectReference Include="..\LLStudy_Models\LLStudy_Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Images\PlaceHolder2.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

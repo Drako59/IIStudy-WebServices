@@ -13,16 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IIStudyDESKTOP.UserControl
+namespace IIStudyDESKTOP.UserControllers
 {
     /// <summary>
-    /// Interaction logic for LoginPage.xaml
+    /// Interaction logic for BookView.xaml
     /// </summary>
-    //public partial class LoginPage : UserControl
-    //{
-    //    public LoginPage()
-    //    {
-    //        InitializeComponent();
-    //    }
-    //}
+    public partial class BookView : UserControl
+    {
+        public BookView()
+        {
+            InitializeComponent();
+        }
+    }
 }
