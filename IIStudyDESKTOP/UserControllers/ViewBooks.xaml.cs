@@ -43,7 +43,7 @@ namespace IIStudyDESKTOP.UserControllers
             books = await client.GetAsync();
             this.DataContext = books;
             this.dgBooks.ItemsSource = books;
-            UpdateStatistics();
+            //UpdateStatistics();
 
         }
         private async Task LoadBooks()

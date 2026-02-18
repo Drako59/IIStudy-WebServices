@@ -18,6 +18,7 @@ namespace IIStudyDESKTOP
     {
         ViewBooks viewBooks;
         BookView bookView;
+        ViewOrders viewOrders;
         public MainWindow()
         {
             InitializeComponent();
@@ -51,6 +52,12 @@ namespace IIStudyDESKTOP
             if (this.bookView == null)
                 this.bookView = new BookView();
             this.MainContent.Content = this.bookView;
+        }
+        private void ViewOrders(object sender, RoutedEventArgs e)
+        {
+            if (this.viewOrders == null)
+                this.viewOrders = new ViewOrders();
+            this.MainContent.Content = this.viewOrders;
         }
     }
 }

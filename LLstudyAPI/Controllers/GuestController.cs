@@ -253,43 +253,7 @@ namespace LLstudyWS.Controllers
 
         }
 
-        [HttpGet]
-        public List<Order> GetAllOrders()
-        {
-            try
-            {
-                
-
-                this.repositoryUOW.HelperOledb.OpenConnection();
-
-                List<Order> orders = new List<Order>();
-
-                if (false)
-                {
-                    return null;
-                }
-                else
-                {
-                    orders = this.repositoryUOW.OrderRepository.GetAll();
-                }
-
-                return null;
-                
-
-                
-
-            }
-            catch (Exception ex) 
-            {
-                Console.WriteLine(ex.ToString());
-                return null;
-            }
-            finally 
-            {
-                this.repositoryUOW.HelperOledb.CloseConnection();
-            }
-
-        }
+        
 
 
         [HttpGet]

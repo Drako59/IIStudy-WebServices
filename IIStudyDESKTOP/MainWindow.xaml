@@ -224,7 +224,7 @@
                         </Button>
 
                         <!-- Orders Button -->
-                        <Button Style="{StaticResource SidebarButton}">
+                        <Button Style="{StaticResource SidebarButton}" Click="ViewOrders">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="🛒" FontSize="18" Margin="0,0,12,0"/>
                                 <TextBlock Text="Orders" VerticalAlignment="Center"/>

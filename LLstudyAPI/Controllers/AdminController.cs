@@ -293,6 +293,37 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
+        [HttpGet]
+        public List<Order> GetAllOrders()
+        {
+            try
+            {
+
+
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                List<Order> orders = new List<Order>();
+
+                
+                orders = this.repositoryUOW.OrderRepository.GetAll();
+
+                return orders;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
 
     }
 }
