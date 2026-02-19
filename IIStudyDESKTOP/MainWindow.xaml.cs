@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,7 @@ namespace IIStudyDESKTOP
         ViewBooks viewBooks;
         BookView bookView;
         ViewOrders viewOrders;
+        RegisteredsPage registeredsPage;
         public MainWindow()
         {
             InitializeComponent();
@@ -58,6 +60,13 @@ namespace IIStudyDESKTOP
             if (this.viewOrders == null)
                 this.viewOrders = new ViewOrders();
             this.MainContent.Content = this.viewOrders;
+        }
+
+        private void ViewRegistereds(object sender, RoutedEventArgs e)
+        {
+            if (this.registeredsPage == null)
+                this.registeredsPage = new RegisteredsPage();
+            this.MainContent.Content = this.registeredsPage; ;
         }
     }
 }
