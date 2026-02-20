@@ -1,4 +1,5 @@
-﻿using LLStudy_Models.Models;
+﻿using IIstudyWSClient;
+using LLStudy_Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace IIStudyDESKTOP.UserControllers
 {
@@ -22,9 +24,9 @@ namespace IIStudyDESKTOP.UserControllers
     /// </summary>
     public partial class RegisteredsPage : UserControl
     {
-        
 
-        
+
+        private List<Registered> registereds = new List<Registered>();
 
         private ObservableCollection<Registered> _allUsers = new();
         private string _filterMode = "All";
@@ -38,17 +40,35 @@ namespace IIStudyDESKTOP.UserControllers
         // ════════════════════════════════════════════════════════════
         //  LOAD DATA
         // ════════════════════════════════════════════════════════════
-        private void LoadUsers()
+        private async Task LoadUsers()
         {
-            _allUsers.Clear();
-
-            
-                   
-               
-           
-
-            ApplyFilters();
+            //_allUsers.Clear();
+            if (this.registereds != null && this.registereds.Any())
+            {
+                ApplyFilters();
+                this.registereds.Clear();
+            }
+            await GetRegistereds();
             UpdateStats();
+
+
+
+
+
+
+        }
+
+        private async Task GetRegistereds()
+        {
+            ApiClient<List<Registered>> client = new ApiClient<List<Registered>>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/GetAllRegistereds";
+            this.registereds.AddRange(await client.GetAsync());
+            
+            this.DataContext = this.registereds;
+            this.UsersListView.ItemsSource = this.registereds;
         }
 
         // ════════════════════════════════════════════════════════════
@@ -58,7 +78,7 @@ namespace IIStudyDESKTOP.UserControllers
         {
             var search = SearchBox?.Text?.Trim().ToLower() ?? "";
 
-            var filtered = _allUsers.Where(u =>
+            var filtered = this.registereds.Where(u =>
             {
                 bool passFilter = _filterMode switch
                 {
@@ -85,10 +105,10 @@ namespace IIStudyDESKTOP.UserControllers
 
         private void UpdateStats()
         {
-            TxtTotal.Text = _allUsers.Count.ToString();
-            TxtAdmins.Text = _allUsers.Count(u => u.Role?.ToLower() == "admin").ToString();
-            TxtManagers.Text = _allUsers.Count(u => u.Role?.ToLower() == "manager").ToString();
-            TxtUsers.Text = _allUsers.Count(u => u.Role?.ToLower() == "user").ToString();
+            TxtTotal.Text = this.registereds.Count.ToString();
+            TxtAdmins.Text = this.registereds.Count(u => u.Role?.ToLower() == "admin").ToString();
+            TxtManagers.Text = this.registereds.Count(u => u.Role?.ToLower() == "manager").ToString();
+            TxtUsers.Text = this.registereds.Count(u => u.Role?.ToLower() == "user").ToString();
         }
 
         // ════════════════════════════════════════════════════════════

@@ -324,6 +324,37 @@ namespace LLstudyWS.Controllers
             }
 
         }
+        [HttpGet]
+        public List<Registered> GetAllRegistereds()
+        {
+            try
+            {
+
+
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                List<Registered> orders = new List<Registered>();
+
+
+                orders = this.repositoryUOW.RegisteredRepository.GetAll();
+
+                return orders;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
 
     }
 }

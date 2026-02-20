@@ -29,7 +29,7 @@ namespace IIStudyDESKTOP.UserControllers
         {
             InitializeComponent();
             this.GetOrders();
-            Loaded += (_, __) => LoadOrders();
+            //Loaded += (_, __) => LoadOrders();
         }
 
         private const string ConnStr =

@@ -4,9 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IIStudyDESKTOP.UserControllers"
+             xmlns:convertor="clr-namespace:IIStudyDESKTOP"
              mc:Ignorable="d" 
+             
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <convertor:UrlConverter x:Key="UrlConverter">
+            
+        </convertor:UrlConverter>
         <!-- Gradient Background Brush -->
         <LinearGradientBrush x:Key="GradientBackground" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#667eea" Offset="0"/>
@@ -62,29 +67,35 @@
 
         <!-- Edit Button Style -->
         <Style x:Key="EditButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#667eea"/>
+            <Setter Property="Foreground" Value="#5b6dfc"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Padding" Value="12,8"/>
-            <Setter Property="BorderBrush" Value="#e2e8f0"/>
-            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                            VerticalAlignment="Center"/>
+                        <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="14"
+                        Padding="{TemplateBinding Padding}">
+                            <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                                <TextBlock Text="✏"
+                                   Margin="0,0,5,0"/>
+                                <ContentPresenter/>
+                            </StackPanel>
                         </Border>
+
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" Value="#667eea"/>
-                                <Setter Property="Background" Value="#f7fafc"/>
+                                <Setter TargetName="border"
+                                Property="Background"
+                                Value="#eef2ff"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -94,29 +105,35 @@
 
         <!-- Delete Button Style -->
         <Style x:Key="DeleteButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#ef4444"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Padding" Value="12,8"/>
-            <Setter Property="BorderBrush" Value="#fee2e2"/>
-            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                            VerticalAlignment="Center"/>
+                        <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="14"
+                        Padding="{TemplateBinding Padding}">
+                            <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                                <TextBlock Text="🗑"
+                                   Margin="0,0,5,0"/>
+                                <ContentPresenter/>
+                            </StackPanel>
                         </Border>
+
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" Value="#ef4444"/>
-                                <Setter Property="Background" Value="#fef2f2"/>
+                                <Setter TargetName="border"
+                                Property="Background"
+                                Value="#fef2f2"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -263,6 +280,7 @@
                     </Grid>
 
                     <!-- Books DataGrid -->
+                    
                     <DataGrid x:Name="dgBooks"
                              AutoGenerateColumns="False"
                              CanUserAddRows="False"
@@ -327,7 +345,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-
+                            
                             <!-- Book Cover -->
                             <DataGridTemplateColumn Header="Cover" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -337,10 +355,7 @@
                                                CornerRadius="8"
                                                Background="#f0f0f0"
                                                VerticalAlignment="Center">
-                                            <TextBlock Text="📖" 
-                                                      FontSize="20"
-                                                      HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"/>
+                                            <Image Source="{Binding BookImagePath,Converter={StaticResource UrlConverter } ,ConverterParameter=Book}"/>
                                         </Border>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -451,11 +466,11 @@
                                         <StackPanel Orientation="Horizontal" 
                                                    HorizontalAlignment="Center"
                                                    >
-                                            <Button Content="✏️ Edit"
+                                            <Button Content="Edit"
                                                    Style="{StaticResource EditButton}"
                                                    
                                                    Tag="{Binding}"/>
-                                            <Button Content="🗑️ Delete"
+                                            <Button Content="Delete"
                                                    Style="{StaticResource DeleteButton}"
                                                    
                                                    Tag="{Binding}"/>

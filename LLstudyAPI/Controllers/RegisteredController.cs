@@ -366,7 +366,7 @@ namespace LLstudyWS.Controllers
                 
                 string AbsoultePath;
                 Registered reg = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
-                if(reg.ImagePath != null)
+                if(reg.ImagePath != null && reg.ImagePath != "None")
                 {
                     AbsoultePath = Path.Combine(this.path, reg.ImagePath);
 
