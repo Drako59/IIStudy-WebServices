@@ -1,7 +1,6 @@
 ﻿using IIstudyWSClient;
 using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
-using LLStudy_Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using System.Net;
