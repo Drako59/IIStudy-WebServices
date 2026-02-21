@@ -28,9 +28,10 @@ namespace IIStudyDESKTOP.UserControllers
     public partial class ViewBooks : UserControl
     {
         private ObservableCollection<Book> allBooks;
-        private ObservableCollection<Book> filteredBooks;
+        private List<Book> filteredBooks;
         private List<Book> books;
         private BookDetails bookDetails;
+        private string searchBar;
         public ViewBooks()
         {
             InitializeComponent();
@@ -45,7 +46,7 @@ namespace IIStudyDESKTOP.UserControllers
             client.Port = 5049;
             client.Path = "api/Guest/GetBooks";
             this.books = await client.GetAsync();
-            
+            this.filteredBooks = this.books;
             //UpdateStatistics();
 
         }
@@ -143,11 +144,35 @@ namespace IIStudyDESKTOP.UserControllers
                 );
             }
         }
+
+        private void SearchUpdate(object sender, TextChangedEventArgs e)
+        {
+            this.searchBar = this.txtSearch.Text;
+            ApplyFilters();
+            this.UpdateStatistics();
+        }
+        private void ApplyFilters()
+        {
+            this.searchBar = this.searchBar != null ? this.searchBar.Trim().ToLower() : "";
+            this.filteredBooks = this.books.Where(b =>
+            {
+                bool search = b.Book_name.ToLower().Contains(this.searchBar) || 
+                              b.Author_name.ToLower().Contains(this.searchBar) ||
+                              b.BookID.ToLower() == this.searchBar;
+
+
+                return search;
+            }
+            ).ToList();
+            //this.DataContext = this.filteredBooks;
+            this.dgBooks.ItemsSource = this.filteredBooks;
+
+        }
         private void UpdateStatistics()
         {
-            txtTotalBooks.Text = this.books.Count.ToString();
-            txtInStock.Text = this.books.Count(b => b.In_stock).ToString();
-            txtOutOfStock.Text = this.books.Count(b => !b.In_stock).ToString();
+            txtTotalBooks.Text = this.filteredBooks.Count.ToString();
+            txtInStock.Text = this.filteredBooks.Count(b => b.In_stock).ToString();
+            txtOutOfStock.Text = this.filteredBooks.Count(b => !b.In_stock).ToString();
         }
 
         private void ViewBookDetails(object sender, RoutedEventArgs e)
@@ -162,6 +187,11 @@ namespace IIStudyDESKTOP.UserControllers
                 Window parentWindow = Window.GetWindow(this);
             this.bookDetails.Owner = parentWindow;
             this.bookDetails.Show();
+        }
+
+        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

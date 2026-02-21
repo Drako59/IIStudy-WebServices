@@ -319,13 +319,13 @@
                             <ColumnDefinition Width="90"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="#"           Style="{StaticResource TableHeader}"/>
+                        <!--<TextBlock Grid.Column="7" Text="Image"       Style="{StaticResource TableHeader}"/>-->
                         <TextBlock Grid.Column="1" Text="Username"    Style="{StaticResource TableHeader}"/>
                         <TextBlock Grid.Column="2" Text="Email"       Style="{StaticResource TableHeader}"/>
                         <TextBlock Grid.Column="3" Text="Role"        Style="{StaticResource TableHeader}"/>
                         <TextBlock Grid.Column="4" Text="Birth Date"  Style="{StaticResource TableHeader}"/>
                         <TextBlock Grid.Column="5" Text="Reg. ID"     Style="{StaticResource TableHeader}"/>
                         <TextBlock Grid.Column="6" Text="Phone"       Style="{StaticResource TableHeader}"/>
-                        <TextBlock Grid.Column="7" Text="Image"       Style="{StaticResource TableHeader}"/>
                         <TextBlock Grid.Column="8" Text="Actions"     Style="{StaticResource TableHeader}"/>
                     </Grid>
                 </Border>
