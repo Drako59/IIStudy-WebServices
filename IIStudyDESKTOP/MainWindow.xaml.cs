@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IIStudyDESKTOP.UserControllers;
+using IIStudyDESKTOP.WindowsPages;
 namespace IIStudyDESKTOP
 {
     /// <summary>
@@ -21,6 +22,7 @@ namespace IIStudyDESKTOP
         BookView bookView;
         ViewOrders viewOrders;
         RegisteredsPage registeredsPage;
+        BookDetails bookDetails;
         public MainWindow()
         {
             InitializeComponent();
@@ -67,6 +69,14 @@ namespace IIStudyDESKTOP
             if (this.registeredsPage == null)
                 this.registeredsPage = new RegisteredsPage();
             this.MainContent.Content = this.registeredsPage; ;
+        }
+
+        private void ViewBookDetails(object sender, RoutedEventArgs e)
+        {
+            if (this.bookDetails == null)
+                this.bookDetails = new BookDetails();
+            this.bookDetails.Owner = this;
+            this.bookDetails.ShowDialog();
         }
     }
 }

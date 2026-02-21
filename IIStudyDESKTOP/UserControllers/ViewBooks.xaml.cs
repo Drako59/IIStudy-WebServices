@@ -1,5 +1,10 @@
-﻿using System;
+﻿using IIStudyDESKTOP.WindowsPages;
+using IIstudyWSClient;
+using LLStudy_Models;
+using LLStudy_Models.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +17,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using LLStudy_Models;
-using LLStudy_Models.Models;
-using IIstudyWSClient;
-using System.Collections.ObjectModel;
+using IIStudyDESKTOP.WindowsPages;
+using System.Runtime.CompilerServices;
 
 namespace IIStudyDESKTOP.UserControllers
 {
@@ -26,11 +29,12 @@ namespace IIStudyDESKTOP.UserControllers
     {
         private ObservableCollection<Book> allBooks;
         private ObservableCollection<Book> filteredBooks;
-        List<Book> books;
+        private List<Book> books;
+        private BookDetails bookDetails;
         public ViewBooks()
         {
             InitializeComponent();
-            this.GetBooks();
+            this.LoadBooks();
         }
 
         private async Task GetBooks()
@@ -40,13 +44,19 @@ namespace IIStudyDESKTOP.UserControllers
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Guest/GetBooks";
-            books = await client.GetAsync();
-            this.DataContext = books;
-            this.dgBooks.ItemsSource = books;
+            this.books = await client.GetAsync();
+            
             //UpdateStatistics();
 
         }
         private async Task LoadBooks()
+        {
+            await this.GetBooks();
+            this.DataContext = this.books;
+            this.dgBooks.ItemsSource = this.books;
+            this.UpdateStatistics();
+        }
+        private async Task LoadBooks(int removeThisAfter)
         {
             try
             {
@@ -135,9 +145,23 @@ namespace IIStudyDESKTOP.UserControllers
         }
         private void UpdateStatistics()
         {
-            txtTotalBooks.Text = allBooks.Count.ToString();
-            txtInStock.Text = allBooks.Count(b => b.In_stock).ToString();
-            txtOutOfStock.Text = allBooks.Count(b => !b.In_stock).ToString();
+            txtTotalBooks.Text = this.books.Count.ToString();
+            txtInStock.Text = this.books.Count(b => b.In_stock).ToString();
+            txtOutOfStock.Text = this.books.Count(b => !b.In_stock).ToString();
+        }
+
+        private void ViewBookDetails(object sender, RoutedEventArgs e)
+        {
+            if (this.bookDetails == null)
+                this.bookDetails = new BookDetails();
+            else
+            {
+                this.bookDetails.Close();
+                this.bookDetails = new BookDetails();
+            }
+                Window parentWindow = Window.GetWindow(this);
+            this.bookDetails.Owner = parentWindow;
+            this.bookDetails.Show();
         }
     }
 }

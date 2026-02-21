@@ -468,7 +468,7 @@
                                                    >
                                             <Button Content="Edit"
                                                    Style="{StaticResource EditButton}"
-                                                   
+                                                   Click="ViewBookDetails"
                                                    Tag="{Binding}"/>
                                             <Button Content="Delete"
                                                    Style="{StaticResource DeleteButton}"

@@ -199,7 +199,7 @@
                                   Margin="25,0,0,12"/>
 
                         <!-- Home Button -->
-                        <Button Style="{StaticResource ActiveSidebarButton}" Click="ViewBooks">
+                        <Button Style="{StaticResource ActiveSidebarButton}" >
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="🏠" FontSize="18" Margin="0,0,12,0"/>
                                 <TextBlock Text="Home" VerticalAlignment="Center"/>
@@ -208,7 +208,7 @@
 
                         <!-- Books Button -->
                         <Button Style="{StaticResource SidebarButton}" 
-                                Click="Button_Click_2">
+                                Click="ViewBooks">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="📚" FontSize="18" Margin="0,0,12,0"/>
                                 <TextBlock Text="Books" VerticalAlignment="Center"/>
