@@ -71,12 +71,6 @@ namespace IIStudyDESKTOP
             this.MainContent.Content = this.registeredsPage; ;
         }
 
-        private void ViewBookDetails(object sender, RoutedEventArgs e)
-        {
-            if (this.bookDetails == null)
-                this.bookDetails = new BookDetails();
-            this.bookDetails.Owner = this;
-            this.bookDetails.ShowDialog();
-        }
+        
     }
 }

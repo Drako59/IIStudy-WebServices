@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using IIStudyDESKTOP.WindowsPages;
+using LLStudy_Models.Models;
 namespace IIStudyDESKTOP.WindowsPages
 {
     /// <summary>
@@ -22,11 +23,18 @@ namespace IIStudyDESKTOP.WindowsPages
     public partial class BookDetails : Window
     {
         EditBook editBook;
-        public BookDetails()
+        private Book book;
+        public BookDetails(Book book)
         {
+            this.book = book;
             InitializeComponent();
+            LoadBook();
         }
 
+        private void LoadBook()
+        {
+            this.DataContext = this.book;
+        }
         private void  ViewEditBook(object sender, RoutedEventArgs e) 
         {
             //if (this.editBook == null)

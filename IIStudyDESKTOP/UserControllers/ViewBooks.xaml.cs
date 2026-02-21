@@ -177,12 +177,15 @@ namespace IIStudyDESKTOP.UserControllers
 
         private void ViewBookDetails(object sender, RoutedEventArgs e)
         {
+
+            Button btn = sender as Button;
+            Book book = btn.Tag as Book;
             if (this.bookDetails == null)
-                this.bookDetails = new BookDetails();
+                this.bookDetails = new BookDetails(book);
             else
             {
                 this.bookDetails.Close();
-                this.bookDetails = new BookDetails();
+                this.bookDetails = new BookDetails(book);
             }
                 Window parentWindow = Window.GetWindow(this);
             this.bookDetails.Owner = parentWindow;
