@@ -44,6 +44,8 @@ namespace IIStudyDESKTOP
             if (this.viewBooks == null)
                 this.viewBooks = new ViewBooks();
             this.MainContent.Content = this.viewBooks;
+            this.ClickButtonNav(sender);
+
         }
 
         private void ViewBook(object sender, RoutedEventArgs e)
@@ -62,15 +64,30 @@ namespace IIStudyDESKTOP
             if (this.viewOrders == null)
                 this.viewOrders = new ViewOrders();
             this.MainContent.Content = this.viewOrders;
+            this.ClickButtonNav(sender);
+
         }
 
         private void ViewRegistereds(object sender, RoutedEventArgs e)
         {
             if (this.registeredsPage == null)
                 this.registeredsPage = new RegisteredsPage();
-            this.MainContent.Content = this.registeredsPage; ;
+            this.MainContent.Content = this.registeredsPage;
+            this.ClickButtonNav(sender);
         }
 
-        
+        private void ClickButtonNav(object sender)
+        {
+            this.HomeNav.Style = (Style)this.Resources["SidebarButton"];
+            this.BooksNav.Style = (Style)this.Resources["SidebarButton"];
+            this.ExamsNav.Style = (Style)this.Resources["SidebarButton"];
+            this.OrdersNav.Style = (Style)this.Resources["SidebarButton"];
+            this.UsersNav.Style = (Style)this.Resources["SidebarButton"];
+            this.ReportsNav.Style = (Style)this.Resources["SidebarButton"];
+            this.SettingsNav.Style = (Style)this.Resources["SidebarButton"];
+
+            Button btn = sender as Button;
+            btn.Style = (Style)this.Resources["ActiveSidebarButton"];
+        }
     }
 }
