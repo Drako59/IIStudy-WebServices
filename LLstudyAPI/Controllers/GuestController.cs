@@ -314,7 +314,7 @@ namespace LLstudyWS.Controllers
                 string AbsoultePath;
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 Book book = this.repositoryUOW.BookRepository.GetByID(bookID);
-                if (book.BookImagePath != null && book.BookImagePath != "None")
+                if (book.BookImagePath != null && book.BookImagePath.ToLower() != "none" && System.IO.File.Exists(Path.Combine(this.BooksPath,book.BookImagePath)))
                 {
                     AbsoultePath = Path.Combine(this.BooksPath, book.BookImagePath);
 

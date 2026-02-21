@@ -184,12 +184,14 @@ namespace IIStudyDESKTOP.UserControllers
                 this.bookDetails = new BookDetails(book);
             else
             {
-                this.bookDetails.Close();
+                //this.bookDetails.Close();
                 this.bookDetails = new BookDetails(book);
             }
                 Window parentWindow = Window.GetWindow(this);
             this.bookDetails.Owner = parentWindow;
             this.bookDetails.Show();
+            this.dgBooks.ItemsSource = null;
+            this.dgBooks.ItemsSource = this.books;
         }
 
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)

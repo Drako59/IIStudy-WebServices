@@ -5,9 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
         mc:Ignorable="d"
+        xmlns:convertor="clr-namespace:IIStudyDESKTOP"
+        
         Title="BookDetails" Height="520" Width="620"
         >
     <Window.Resources>
+        <convertor:UrlConverter x:Key="UrlConverter">
+
+        </convertor:UrlConverter>
         <Style x:Key="InfoLabel" TargetType="TextBlock">
             <Setter Property="FontSize" Value="10"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -91,14 +96,16 @@
                                 </LinearGradientBrush>
                             </Border.Background>
                         </Border>
-                        <TextBlock Text="📚" FontSize="44"
+                        <TextBlock Text="📚" FontSize="44" x:Name="BookCoverEmoji"
                                    HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
+                                   VerticalAlignment="Center" Visibility="Visible"/>
                         <!-- Real image -->
                         <Border CornerRadius="10" ClipToBounds="True">
-                            <Image x:Name="BookCoverImage"
+                            <Image x:Name="BookCoverImage" Source="{Binding BookImagePath,Converter={StaticResource UrlConverter } ,ConverterParameter=Book}"
                                    Stretch="UniformToFill"
-                                   Visibility="Collapsed"/>
+                                   Visibility="Collapsed"
+                                   />
+                            <!--Visibility="Collapsed"-->
                         </Border>
                     </Grid>
                 </Border>
@@ -273,7 +280,8 @@
                         Height="48"
                         BorderThickness="0"
                         Cursor="Hand"
-                        Click="ViewEditBook">
+                        Click="ViewEditBook"
+                        CommandParameter="{Binding}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="editBorder" CornerRadius="14">

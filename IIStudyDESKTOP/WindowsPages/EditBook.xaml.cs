@@ -1,8 +1,11 @@
-﻿using LLStudy_Models.Models;
+﻿using IIstudyWSClient;
+using LLStudy_Models.Models;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,7 +16,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.IO;
 namespace IIStudyDESKTOP.WindowsPages
 {
     /// <summary>
@@ -22,29 +24,38 @@ namespace IIStudyDESKTOP.WindowsPages
     public partial class EditBook : Window
     {
         // !! UPDATE to your actual connection string !!
-        private const string ConnStr =
-            @"Server=YOUR_SERVER;Database=YOUR_DATABASE;Trusted_Connection=True;";
+        
 
-        private Book _book;
+        private Book book;
         private string _selectedImagePath = null;
         private string _selectedPdfPath = null;
+        private string ImageFileName = null;
 
         // Raised when save is successful so the parent window can refresh
         public event EventHandler<Book> OnSaved;
 
-        public EditBook() /*Book book*/
+        public EditBook(Book book) 
         {
-            Book book  = new Book() { BookImagePath = "None", BookID = "0", Author_name = "Test", Book_name = "Test", Book_price = 0.00, In_stock = true, Pdf_url_book = "test.pdf", SubjectID = "0" };
+            this._selectedImagePath = null;
             InitializeComponent();
             // Allow dragging the borderless window
             MouseLeftButtonDown += (_, e) => { try { DragMove(); } catch { } };
-            _book = book;
-            PopulateFields(book);
+            this.book = book;
+            LoadBook();
+
+            //PopulateFields(book);
         }
 
         // ════════════════════════════════════════════════════════════
         //  POPULATE FIELDS
         // ════════════════════════════════════════════════════════════
+
+        private void LoadBook()
+        {
+            this.DataContext = this.book;
+            this.CheckIfImageExist();
+
+        }
         private void PopulateFields(Book book)
         {
             TxtSubtitle.Text = $"Editing: {book.Book_name}";
@@ -54,7 +65,7 @@ namespace IIStudyDESKTOP.WindowsPages
                                         ? book.Book_price.ToString("N2") : "";
             EditSubjectID.Text = book.SubjectID ?? "";
             //EditType.Text = book.Type ?? "";
-            EditBookAuthor.Text = book.Author_name ?? book.Author_name ?? "";
+            //EditBookAuthor.Text = book.Author_name ?? book.Author_name ?? "";
             EditInStock.IsChecked = book.In_stock;
 
             if (!string.IsNullOrWhiteSpace(book.Pdf_url_book) &&
@@ -126,8 +137,9 @@ namespace IIStudyDESKTOP.WindowsPages
 
             if (dlg.ShowDialog() == true)
             {
-                _selectedImagePath = dlg.FileName;
-                TxtImagePath.Text = System.IO.Path.GetFileName(dlg.FileName);
+                this._selectedImagePath = dlg.FileName;
+                this.ImageFileName = System.IO.Path.GetFileName(dlg.FileName);
+                TxtImagePath.Text = this.ImageFileName;
                 TxtImagePath.Foreground = Brushes.White;
                 TryShowCover(dlg.FileName);
             }
@@ -172,8 +184,8 @@ namespace IIStudyDESKTOP.WindowsPages
                 return;
             }
 
-            string finalImagePath = _selectedImagePath ?? _book.BookImagePath;
-            string finalPdfPath = _selectedPdfPath ?? _book.Pdf_url_book;
+            string finalImagePath = _selectedImagePath ?? book.BookImagePath;
+            string finalPdfPath = _selectedPdfPath ?? book.Pdf_url_book;
 
             try
             {
@@ -182,20 +194,20 @@ namespace IIStudyDESKTOP.WindowsPages
                 
 
                 // Update in-memory model
-                this._book.Book_name = EditBookName.Text.Trim();
-                this._book.Author_name = EditAuthorName.Text.Trim();
-                this._book.Book_price = newPrice;
-                this._book.SubjectID = EditSubjectID.Text.Trim();
+                this.book.Book_name = EditBookName.Text.Trim();
+                this.book.Author_name = EditAuthorName.Text.Trim();
+                this.book.Book_price = newPrice;
+                this.book.SubjectID = EditSubjectID.Text.Trim();
                 //this._book.Type = EditType.Text.Trim();
-                this._book.Author_name = EditBookAuthor.Text.Trim();
-                this._book.In_stock = EditInStock.IsChecked == true;
-                this._book.Pdf_url_book = finalPdfPath;
-                this._book.BookImagePath = finalImagePath;
+                //this.book.Author_name = EditBookAuthor.Text.Trim();
+                this.book.In_stock = EditInStock.IsChecked == true;
+                this.book.Pdf_url_book = finalPdfPath;
+                this.book.BookImagePath = finalImagePath;
 
                 MessageBox.Show("Book updated successfully! ✅", "Saved",
                     MessageBoxButton.OK, MessageBoxImage.Information);
 
-                OnSaved?.Invoke(this, _book);
+                OnSaved?.Invoke(this, book);
                 DialogResult = true;
                 Close();
             }
@@ -214,5 +226,48 @@ namespace IIStudyDESKTOP.WindowsPages
             DialogResult = false;
             Close();
         }
+
+        private async void UpdateBook(object sender,RoutedEventArgs e)
+        {
+            ApiClient<bool> client = new ApiClient<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/UpdateFullBook";
+            ApiResultModel<Book> response = await client.PostAsyncRet<Book,Book>(this.book,this._selectedImagePath ==  null? new List<(Stream, string)>() : new List<(Stream,string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) });
+            if (response.Success)
+            {
+                this.book.BookImagePath = response.Data.BookImagePath;
+                this.DataContext = this.book;
+                this.DialogResult = true;
+                this.Close();
+                this.CheckIfImageExist();
+            }
+            else
+            {
+                MessageBox.Show(
+                            "The operation failed.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+            }
+
+            
+        }
+
+        private void CheckIfImageExist()
+        {
+            if(this.book.BookImagePath.ToLower() != "none" && this.book.BookImagePath != null)
+            {
+                CoverImage.Visibility = Visibility.Visible;
+                CoverEmoji.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                CoverImage.Visibility = Visibility.Collapsed;
+                CoverEmoji.Visibility = Visibility.Visible;
+            }
+        }
+
     }
 }

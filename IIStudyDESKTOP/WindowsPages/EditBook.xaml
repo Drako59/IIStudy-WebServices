@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
         mc:Ignorable="d"
+        xmlns:convertor="clr-namespace:IIStudyDESKTOP"
+        
         Title="EditBook" Height="450" Width="800">
     <Window.Resources>
+        <convertor:UrlConverter x:Key="UrlConverter">
+
+        </convertor:UrlConverter>
         <Style x:Key="FieldLabel" TargetType="TextBlock">
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -15,24 +20,28 @@
         </Style>
 
         <Style x:Key="EditBox" TargetType="TextBox">
-            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="Foreground" Value="#1e293b"/>
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#e2e8f0"/>
             <Setter Property="BorderThickness" Value="1.5"/>
-            <Setter Property="Padding" Value="12,8"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="MinHeight" Value="42"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
                         <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="10"
-                                Padding="{TemplateBinding Padding}">
-                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center"/>
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10"
+                        Padding="{TemplateBinding Padding}">
+
+                            <!-- חשוב מאוד: בלי VerticalAlignment על ה ScrollViewer -->
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+
                         </Border>
+
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
                                 <Setter Property="BorderBrush" Value="#667eea"/>
@@ -44,6 +53,8 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="UseLayoutRounding" Value="True"/>
         </Style>
 
         <Style x:Key="UploadBtn" TargetType="Button">
@@ -183,12 +194,15 @@
                                 <TextBlock x:Name="CoverEmoji"
                                            Text="📚" FontSize="40"
                                            HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
+                                           VerticalAlignment="Center"
+                                           Visibility="Collapsed"
+                                           />
                                 <!-- Actual image -->
                                 <Border CornerRadius="12" ClipToBounds="True">
-                                    <Image x:Name="CoverImage"
-                                           Stretch="UniformToFill"
-                                           Visibility="Collapsed"/>
+                                    <Image x:Name="CoverImage" Source="{Binding BookImagePath,Converter={StaticResource UrlConverter } ,ConverterParameter=Book}"
+                                           Stretch="UniformToFill" 
+                                           />
+                                    <!--Visibility="Collapsed"-->
                                 </Border>
                                 <!-- Hover overlay — "change image" hint -->
                                 <Border x:Name="CoverOverlay"
@@ -234,7 +248,7 @@
                                        VerticalAlignment="Center"/>
                         </Border>
 
-                        <TextBlock Text="Edit Book"
+                        <TextBlock Text="{Binding BookID, StringFormat=Edit Book #{0}}"
                                    FontSize="20" FontWeight="ExtraBold"
                                    Foreground="White"/>
                         <TextBlock x:Name="TxtSubtitle"
@@ -259,8 +273,9 @@
                                     CornerRadius="8"
                                     Padding="10,0"
                                     Height="36">
+                                <!--Text="No image selected"-->
                                 <TextBlock x:Name="TxtImagePath"
-                                           Text="No image selected"
+                                           Text="{Binding BookImagePath}"
                                            FontSize="11"
                                            Foreground="#ddd6fe"
                                            VerticalAlignment="Center"
@@ -300,11 +315,11 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
                             <TextBlock Text="BOOK NAME" Style="{StaticResource FieldLabel}"/>
-                            <TextBox x:Name="EditBookName" Style="{StaticResource EditBox}"/>
+                            <TextBox x:Name="EditBookName" Text="{Binding Book_name}" Style="{StaticResource EditBox}" />
                         </StackPanel>
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="AUTHOR NAME" Style="{StaticResource FieldLabel}"/>
-                            <TextBox x:Name="EditAuthorName" Style="{StaticResource EditBox}"/>
+                            <TextBox x:Name="EditAuthorName" Text="{Binding Author_name}" Style="{StaticResource EditBox}"/>
                         </StackPanel>
                     </Grid>
 
@@ -317,11 +332,11 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
                             <TextBlock Text="PRICE (₪)" Style="{StaticResource FieldLabel}"/>
-                            <TextBox x:Name="EditPrice" Style="{StaticResource EditBox}"/>
+                            <TextBox x:Name="EditPrice" Text="{Binding Book_price}" Style="{StaticResource EditBox}"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="SUBJECT ID" Style="{StaticResource FieldLabel}"/>
-                            <TextBox x:Name="EditSubjectID" Style="{StaticResource EditBox}"/>
+                            <TextBox x:Name="EditSubjectID" Text="{Binding SubjectID}" Style="{StaticResource EditBox}"/>
                         </StackPanel>
                     </Grid>
 
@@ -334,17 +349,17 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
                             <TextBlock Text="TYPE" Style="{StaticResource FieldLabel}"/>
-                            <TextBox x:Name="EditType" Style="{StaticResource EditBox}"/>
+                            <TextBox x:Name="EditType" Text="PDF" Style="{StaticResource EditBox}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="2">
+                        <!--<StackPanel Grid.Column="2">
                             <TextBlock Text="BOOK AUTHOR" Style="{StaticResource FieldLabel}"/>
                             <TextBox x:Name="EditBookAuthor" Style="{StaticResource EditBox}"/>
-                        </StackPanel>
+                        </StackPanel>-->
                     </Grid>
 
                     <!-- In Stock -->
                     <Border Background="#f8fafc" CornerRadius="10" Padding="14,10" Margin="0,0,0,14">
-                        <CheckBox x:Name="EditInStock" FontSize="13" FontWeight="SemiBold" Foreground="#1e293b">
+                        <CheckBox x:Name="EditInStock" IsChecked="{Binding In_stock}" FontSize="13" FontWeight="SemiBold" Foreground="#1e293b">
                             <TextBlock Text="✅  Mark as In Stock" FontSize="13" FontWeight="SemiBold"/>
                         </CheckBox>
                     </Border>
@@ -366,8 +381,9 @@
                                     CornerRadius="8"
                                     Padding="10,0"
                                     Height="38">
+                                <!--Text="No PDF selected"-->
                                 <TextBlock x:Name="TxtPdfPath"
-                                           Text="No PDF selected"
+                                          Text="{Binding Pdf_url_book}"
                                            FontSize="12"
                                            Foreground="#94a3b8"
                                            VerticalAlignment="Center"
@@ -407,7 +423,7 @@
                         <TextBlock Text="← Back" FontSize="14" FontWeight="Bold" Foreground="#64748b"/>
                     </Button>
 
-                    <Button Grid.Column="2" Style="{StaticResource SaveBtn}" Click="BtnSave_Click">
+                    <Button Grid.Column="2" Style="{StaticResource SaveBtn}" Click="UpdateBook">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="💾" FontSize="15" Margin="0,0,8,0" VerticalAlignment="Center"/>
                             <TextBlock Text="Save Changes" FontSize="14" FontWeight="Bold"

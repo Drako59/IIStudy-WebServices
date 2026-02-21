@@ -245,5 +245,50 @@ namespace LLstudyWS.ORM
             
 
         }
+
+        public string ChangeImage(IFormFile file, string bookID)
+        {
+
+           
+            if (file == null || file.Length == 0)
+                throw new Exception("Empty file");
+
+            //Registered reg2 = this.GetByID(registeredID);
+            //File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "RegisteredImages",reg2.ImagePath));
+
+            //string path = Path.Combine(Directory.GetCurrentDirectory()!, "App_Data","RegisteredsImages");
+            string path = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "BooksImages");
+
+            Directory.CreateDirectory(path);
+
+            string ext = Path.GetExtension(file.FileName);
+            Console.WriteLine($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
+
+            if (string.IsNullOrEmpty(ext))
+            {
+                ext = (file.ContentType ?? "").ToLowerInvariant() switch
+                {
+                    "image/jpeg" => ".jpg",
+                    "image/png" => ".png",
+                    "image/gif" => ".gif",
+                    _ => throw new Exception("Unsupported file type")
+                };
+            }
+
+            string fileName = $"Book{bookID}{ext}";
+
+            path = Path.Combine(path, fileName);
+            Console.WriteLine("********************************" + path);
+
+
+            using (FileStream stream = new FileStream(path, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+
+
+            return fileName;
+        }
     }
 }

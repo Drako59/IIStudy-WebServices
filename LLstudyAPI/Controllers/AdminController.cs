@@ -1,7 +1,9 @@
 ﻿using LLStudy_Models.Models;
 using LLstudyWS.ORM.Repositorys;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Reflection;
+using System.Text.Json;
 
 namespace LLstudyWS.Controllers
 {
@@ -354,6 +356,48 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
 
+        }
+
+
+
+        [HttpPost]
+
+        public Book UpdateFullBook([FromForm] string model)
+        {
+            try
+            {
+                bool hasImage = false;
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                
+
+                JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                Book modelBook = JsonSerializer.Deserialize<Book>(model, jsonSerializerOptions);
+
+                if (HttpContext.Request.Form.Files.Count != 0)
+                {
+                    hasImage = true;
+                    IFormFile file = HttpContext.Request.Form.Files[0];
+                    modelBook.BookImagePath = this.repositoryUOW.BookRepository.ChangeImage(file, modelBook.BookID);
+
+
+                }
+
+
+                if (this.repositoryUOW.BookRepository.Update(modelBook))
+                    return modelBook;
+                return null;
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
         }
 
     }

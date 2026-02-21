@@ -151,7 +151,7 @@ namespace IIstudyWSClient
             }
         }
 
-        public async Task<ApiResultModel<TResponse>> PostAsyncRet<T,TResponse>(T model, List<Stream> files = null)
+        public async Task<ApiResultModel<TResponse>> PostAsyncRet<T,TResponse>(T model, List<(Stream stream, string fileName)> files = null)
         {
             using (HttpRequestMessage httpRequest = new HttpRequestMessage())
             {
@@ -165,10 +165,10 @@ namespace IIstudyWSClient
                 multipartFormData.Add(content, "model");
                 //If error raises, check files is null and than loop if not.
                 if (files != null) { 
-                foreach (Stream file in files)
+                foreach (var (stream, fileName) in files)
                 {
-                    StreamContent streamContent = new StreamContent(file);
-                    multipartFormData.Add(streamContent, "file", "file");
+                    StreamContent streamContent = new StreamContent(stream);
+                    multipartFormData.Add(streamContent, "file", fileName);
                 }
                 httpRequest.Content = multipartFormData;
                 }
@@ -190,7 +190,7 @@ namespace IIstudyWSClient
                             apiResult.Success = false;
                             return apiResult;
                         }
-                        await Console.Out.WriteLineAsync(result);
+                        await Console.Out.WriteLineAsync(result); //DEBUG
                         //string result = httpResponse.Content.ToString();
                         JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
                         jsonSerializerOptions.PropertyNameCaseInsensitive = true;
