@@ -19,6 +19,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IIStudyDESKTOP.WindowsPages;
 using System.Runtime.CompilerServices;
+using LLStudy_Models.ViewModels;
+using LLStudy_Models.ViewModels.Guest;
 
 namespace IIStudyDESKTOP.UserControllers
 {
@@ -27,9 +29,10 @@ namespace IIStudyDESKTOP.UserControllers
     /// </summary>
     public partial class ViewBooks : UserControl
     {
-        private ObservableCollection<Book> allBooks;
-        private List<Book> filteredBooks;
-        private List<Book> books;
+        //private ObservableCollection<Book> allBooks;
+        //private List<ViewBookViewModel> fullBooks;
+        private List<BookShownDesktop> filteredBooks;
+        private List<BookShownDesktop> books;
         private BookDetails bookDetails;
         private string searchBar;
         public ViewBooks()
@@ -40,16 +43,29 @@ namespace IIStudyDESKTOP.UserControllers
 
         private async Task GetBooks()
         {
-            ApiClient<List<Book>> client = new ApiClient<List<Book>> ();
+            ApiClient<List<BookShownDesktop>> client = new ApiClient<List<BookShownDesktop>> ();
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
-            client.Path = "api/Guest/GetBooks";
+            client.Path = "api/Guest/GetDesktopBooks";
             this.books = await client.GetAsync();
             this.filteredBooks = this.books;
             //UpdateStatistics();
 
         }
+
+        //private async Task GetFullBooks()
+        //{
+        //    ApiClient<List<Book>> client = new ApiClient<List<Book>>();
+        //    client.Scheme = "http";
+        //    client.Host = "localhost";
+        //    client.Port = 5049;
+        //    client.Path = "api/Guest/GetBooks";
+        //    this.books = await client.GetAsync();
+        //    this.filteredBooks = this.books;
+        //    //UpdateStatistics();
+
+        //}
         private async Task LoadBooks()
         {
             await this.GetBooks();
@@ -63,74 +79,74 @@ namespace IIStudyDESKTOP.UserControllers
             {
                 // Load books from your database
                 // For demo purposes, using sample data
-                allBooks = new ObservableCollection<Book>
-                {
-                    new Book
-                    {
-                        BookID = "BK-001",
-                        Book_name = "To Kill a Mockingbird",
-                        Author_name = "Harper Lee",
-                        Book_price = 24.99,
-                        In_stock = true,
-                        SubjectID = "1"
-                    },
-                    new Book
-                    {
-                        BookID = "BK-001",
-                        Book_name = "To Kill a Mockingbird",
-                        Author_name = "Harper Lee",
-                        Book_price = 24.99,
-                        In_stock = true,
-                        SubjectID = "1"
-                    },
-                    new Book
-                    {
-                        BookID = "BK-001",
-                        Book_name = "To Kill a Mockingbird",
-                        Author_name = "Harper Lee",
-                        Book_price = 24.99,
-                        In_stock = true,
-                        SubjectID = "1"
-                    },
-                    new Book
-                    {
-                        BookID = "BK-001",
-                        Book_name = "To Kill a Mockingbird",
-                        Author_name = "Harper Lee",
-                        Book_price = 24.99,
-                        In_stock = true,
-                        SubjectID = "1"
-                    },
-                    new Book
-                    {
-                        BookID = "BK-001",
-                        Book_name = "To Kill a Mockingbird",
-                        Author_name = "Harper Lee",
-                        Book_price = 24.99,
-                        In_stock = true,
-                        SubjectID = "1"
-                    },
-                    new Book
-                    {
-                        BookID = "BK-002",
-                        Book_name = "To Kill a Mockingbird",
-                        Author_name = "Harper Lee",
-                        Book_price = 24.99,
-                        In_stock = true,
-                        SubjectID = "1"
-                    },
-                    new Book
-                    {
-                        BookID = "BK-002",
-                        Book_name = "To Kill a Mockingbird",
-                        Author_name = "Harper Lee",
-                        Book_price = 24.99,
-                        In_stock = true,
-                        SubjectID = "1"
-                    } };
+                //allBooks = new ObservableCollection<Book>
+                //{
+                //    new Book
+                //    {
+                //        BookID = "BK-001",
+                //        Book_name = "To Kill a Mockingbird",
+                //        Author_name = "Harper Lee",
+                //        Book_price = 24.99,
+                //        In_stock = true,
+                //        SubjectID = "1"
+                //    },
+                //    new Book
+                //    {
+                //        BookID = "BK-001",
+                //        Book_name = "To Kill a Mockingbird",
+                //        Author_name = "Harper Lee",
+                //        Book_price = 24.99,
+                //        In_stock = true,
+                //        SubjectID = "1"
+                //    },
+                //    new Book
+                //    {
+                //        BookID = "BK-001",
+                //        Book_name = "To Kill a Mockingbird",
+                //        Author_name = "Harper Lee",
+                //        Book_price = 24.99,
+                //        In_stock = true,
+                //        SubjectID = "1"
+                //    },
+                //    new Book
+                //    {
+                //        BookID = "BK-001",
+                //        Book_name = "To Kill a Mockingbird",
+                //        Author_name = "Harper Lee",
+                //        Book_price = 24.99,
+                //        In_stock = true,
+                //        SubjectID = "1"
+                //    },
+                //    new Book
+                //    {
+                //        BookID = "BK-001",
+                //        Book_name = "To Kill a Mockingbird",
+                //        Author_name = "Harper Lee",
+                //        Book_price = 24.99,
+                //        In_stock = true,
+                //        SubjectID = "1"
+                //    },
+                //    new Book
+                //    {
+                //        BookID = "BK-002",
+                //        Book_name = "To Kill a Mockingbird",
+                //        Author_name = "Harper Lee",
+                //        Book_price = 24.99,
+                //        In_stock = true,
+                //        SubjectID = "1"
+                //    },
+                //    new Book
+                //    {
+                //        BookID = "BK-002",
+                //        Book_name = "To Kill a Mockingbird",
+                //        Author_name = "Harper Lee",
+                //        Book_price = 24.99,
+                //        In_stock = true,
+                //        SubjectID = "1"
+                //    } };
 
-                //filteredBooks = new ObservableCollection<Book>(allBooks);
-                dgBooks.ItemsSource = allBooks;
+                ////filteredBooks = new ObservableCollection<Book>(allBooks);
+                //dgBooks.ItemsSource = allBooks;
 
                 UpdateStatistics();
             }

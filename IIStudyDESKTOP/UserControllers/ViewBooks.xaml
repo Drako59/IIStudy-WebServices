@@ -64,10 +64,45 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- Edit Button Style -->
         <Style x:Key="EditButton" TargetType="Button">
             <Setter Property="Foreground" Value="#5b6dfc"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                Background="{TemplateBinding Background}"
+                CornerRadius="14"
+                Padding="{TemplateBinding Padding}">
+                            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                                <TextBlock Text="✏"
+                           Margin="0,0,5,0"/>
+                                <ContentPresenter/>
+                            </StackPanel>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border"
+                        Property="Background"
+                        Value="#eef2ff"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Edit Button Style -->
+        <Style x:Key="ReviewsButton" TargetType="Button">
+            <Setter Property="Foreground" Value="#9ea2a8"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Height" Value="30"/>
@@ -85,7 +120,7 @@
                         Padding="{TemplateBinding Padding}">
                             <StackPanel Orientation="Horizontal"
                                 VerticalAlignment="Center">
-                                <TextBlock Text="✏"
+                                <TextBlock Text="💬"
                                    Margin="0,0,5,0"/>
                                 <ContentPresenter/>
                             </StackPanel>
@@ -325,7 +360,9 @@
                                 <Setter Property="Padding" Value="15,10"/>
                                 <Setter Property="BorderThickness" Value="0,0,0,2"/>
                                 <Setter Property="BorderBrush" Value="#e2e8f0"/>
-                            </Style>
+                            <!--<Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>-->
+                        </Style>
 
                             <!-- Cell Style -->
                             <Style TargetType="DataGridCell">
@@ -399,22 +436,50 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <!-- Price -->
-                            <DataGridTextColumn Header="Price" 
-                                               Binding="{Binding Book_price, StringFormat=\{0:C\}}" 
-                                               Width="100"
-                                               IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="FontWeight" Value="Bold"/>
-                                        <Setter Property="Foreground" Value="#667eea"/>
-                                        <Setter Property="FontSize" Value="14"/>
-                                        <Setter Property="VerticalAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
 
-                            <!-- Stock Status -->
+                        <!--Reviews-->
+                        <DataGridTextColumn Header="Reviews" 
+                                            Binding="{Binding reviewsNum}" 
+                                            Width="100"
+                                            IsReadOnly="True"> 
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="#667eea"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <!--Rate-->
+                        <DataGridTextColumn Header="Rate" 
+                                           Binding="{Binding Rate}" 
+                                           Width="100"
+                                           IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="#667eea"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <!-- Price -->
+                        <DataGridTextColumn Header="Price" 
+                                           Binding="{Binding Book_price, StringFormat=\{0:C\}}" 
+                                           Width="100"
+                                           IsReadOnly="True">       
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="#667eea"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <!-- Stock Status -->
                             <DataGridTemplateColumn Header="Status" Width="120">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -469,13 +534,18 @@
                             </DataGridTemplateColumn>
 
                             <!-- Actions -->
-                            <DataGridTemplateColumn Header="Actions" Width="180">
+                            <DataGridTemplateColumn Header="Actions" Width="240">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" 
                                                    HorizontalAlignment="Center"
                                                    >
-                                            <Button Content="Edit"
+                                        
+                                        <Button Content="Reviews"
+                                                    Style="{StaticResource ReviewsButton}"
+                                                    
+                                                    Tag="{Binding}"/>           
+                                        <Button Content="Edit"
                                                    Style="{StaticResource EditButton}"
                                                    Click="ViewBookDetails"
                                                    Tag="{Binding}"/>

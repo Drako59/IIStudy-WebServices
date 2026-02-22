@@ -1,11 +1,13 @@
 ﻿using LLStudy_Models;
 using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
+using LLStudy_Models.ViewModels.Guest;
 using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
+using System.Text;
 
 namespace LLstudyWS.ORM
 
@@ -216,7 +218,7 @@ namespace LLstudyWS.ORM
         {
             double sumRate;
             double devider;
-            string sql = @$"SELECT IIF(SUM(Rate) IS NULL, 0, SUM(Rate)) AS SumRate
+            string sql = @$"SELECT Count(*) AS Devider, IIF(SUM(Rate) IS NULL, 0, SUM(Rate)) AS SumRate
                             FROM Reviews
                             WHERE BookID = @BookID;";
             this.helperOledb.AddParameter("@BookID", bookID);
@@ -224,27 +226,18 @@ namespace LLstudyWS.ORM
                 if (reader.Read())
                 {
                     sumRate = Convert.ToDouble(reader["SumRate"]);
-                }
-                else return 0;
-            }
-
-            sql = @$"SELECT Count(*) AS Devider
-                            FROM Reviews
-                            WHERE BookID = @BookID;";
-            this.helperOledb.AddParameter("@BookID", bookID);
-            using (IDataReader reader = this.helperOledb.Select(sql))
-            {
-                if (reader.Read())
-                {
                     devider = Convert.ToDouble(reader["Devider"]);
                 }
                 else return 0;
-                if (devider == 0 || sumRate == 0) return 0;
-                return sumRate / devider;
             }
+
+            
+                  
+            if (devider == 0 || sumRate == 0) return 0;
+            return Math.Round(sumRate / devider,1);
+        }
             
 
-        }
 
         public string ChangeImage(IFormFile file, string bookID)
         {
@@ -289,6 +282,77 @@ namespace LLstudyWS.ORM
 
 
             return fileName;
+        }
+
+
+        public List<ViewBookViewModel> GetFullBooks()
+        {
+            List<ViewBookViewModel> books = new List<ViewBookViewModel>();
+
+            string sql = $@"SELECT * FROM Books";
+            ViewBookViewModel model;
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    model = new ViewBookViewModel() { book = this.moderlRefCreator.CreateModel<Book>(reader) };
+                    
+                    books.Add(model);
+                    
+                }
+            }
+
+            foreach(ViewBookViewModel book in books)
+            {
+                book.Rate = this.GetBookRate(book.book.BookID);
+                book.reviews = this.GetReviewsByBook(book.book.BookID);
+                book.reviewsNumber = book.reviews.Count();
+            }
+            return books;
+        }
+
+        public List<BookShownDesktop> GetDesktopBooks()
+        {
+            List<BookShownDesktop> books = new List<BookShownDesktop>();
+
+            string sql = $@"SELECT * FROM Books";
+            BookShownDesktop model;
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    model = this.moderlRefCreator.CreateModel<BookShownDesktop>(reader, exludes : new List<string>() { "reviewsNum","Rate" });
+
+                    books.Add(model);
+
+                }
+            }
+
+            foreach (BookShownDesktop book in books)
+            {
+                book.Rate = this.GetBookRate(book.BookID);
+                book.reviewsNum = this.reviewNumber(book.BookID);
+            }
+            return books;
+        }
+
+        public int reviewNumber(string bookID)
+        {
+            int counter;
+            string sql = @$"SELECT Count(*) AS counterReviews
+                            FROM Reviews
+                            WHERE BookID = @BookID;";
+
+            this.helperOledb.AddParameter("@BookID", bookID);
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    counter = Convert.ToInt32(reader["counterReviews"]);
+                }
+                else return 0;
+                return counter;
+            }
         }
     }
 }

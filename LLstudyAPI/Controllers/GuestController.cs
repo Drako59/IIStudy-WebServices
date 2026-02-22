@@ -11,6 +11,7 @@ using LLStudy_Models.ViewModels;
 
 using System.Text.Json;
 using System.Reflection.Metadata.Ecma335;
+using LLStudy_Models.ViewModels.Guest;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -268,6 +269,7 @@ namespace LLstudyWS.Controllers
                 viewBookViewModel.reviews = new List<ViewReview>();
                 viewBookViewModel.book = this.repositoryUOW.BookRepository.GetByID(bookID);
                 viewBookViewModel.reviews = this.repositoryUOW.ReviewRepository.GetReviewsByBook(bookID);
+                viewBookViewModel.reviewsNumber = viewBookViewModel.reviews.Count();
                 viewBookViewModel.Rate = this.repositoryUOW.BookRepository.GetBookRate(bookID);
                 return viewBookViewModel;
 
@@ -278,6 +280,52 @@ namespace LLstudyWS.Controllers
                 return null;
             }
             finally 
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+
+        public List<ViewBookViewModel> GetAllBookFullView()
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+
+                return this.repositoryUOW.BookRepository.GetFullBooks(); ;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+
+        public List<BookShownDesktop> GetDesktopBooks()
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+
+                return this.repositoryUOW.BookRepository.GetDesktopBooks(); ;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
             {
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }

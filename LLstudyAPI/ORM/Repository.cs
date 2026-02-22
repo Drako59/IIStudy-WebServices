@@ -1,5 +1,6 @@
 ﻿
 using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels;
 using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 using System.Reflection;
@@ -407,6 +408,28 @@ namespace LLstudyWS.ORM
             }
             return null;
 
+        }
+
+        public List<ViewReview> GetReviewsByBook(string bookID)
+        {
+            List<ViewReview> reviews = new List<ViewReview>();
+            //string sql = "SELECT * FROM Reviews WHERE BookID = @BookID";
+            string sql = $@"SELECT   Reviews.RegisteredID AS [RegisteredID],* FROM  Reviews
+                                    INNER JOIN ( Registereds
+                                       
+                                    ) ON Registereds.RegisteredID = Reviews.RegisteredID
+                                WHERE
+                                    BookID = @BookID";
+            this.helperOledb.AddParameter("@BookID", bookID);
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    reviews.Add(this.moderlRefCreator.CreateModel<ViewReview>(reader));
+                }
+            }
+            return reviews;
         }
     }
 }
