@@ -34,6 +34,7 @@ namespace IIStudyDESKTOP.UserControllers
         private List<BookShownDesktop> filteredBooks;
         private List<BookShownDesktop> books;
         private BookDetails bookDetails;
+        private ViewReviews reviews;
         private string searchBar;
         public ViewBooks()
         {
@@ -213,6 +214,23 @@ namespace IIStudyDESKTOP.UserControllers
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private void ViewReviewsPage(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Book book = btn.CommandParameter as Book;
+            if (this.reviews == null)
+                this.reviews = new ViewReviews(book);
+            else
+            {
+                this.reviews = new ViewReviews(book);
+            }
+            Window parentWindow = Window.GetWindow(this);
+
+            this.reviews.Owner = parentWindow;
+            this.reviews.Show();
+            
         }
     }
 }

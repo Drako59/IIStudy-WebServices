@@ -12,7 +12,7 @@ namespace LLStudy_Models.Models
     {
 
         string reviewID;
-        string rate;
+        double rate;
         string comment;
         string bookID;
         string userName;
@@ -22,7 +22,7 @@ namespace LLStudy_Models.Models
         public string ReviewID { get { return reviewID; } set { reviewID = value; } }
         [IsDigits(ErrorMessage = "ID must contain only digits.")]
         [Required]
-        public string Rate { get { return rate; } set { rate = value; } }
+        public double Rate { get { return rate; } set { rate = value; } }
 
         public string Comment { get { return comment; } set { comment = value; } }
         [Required]

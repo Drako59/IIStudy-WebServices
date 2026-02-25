@@ -7,13 +7,10 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.ViewModels
 {
-    public class ViewReview
+    public class ViewReview: Review
     {
         public string UserName { get; set; }
         public string ImagePath { get; set; }
-        public int Rate { get; set; }
-        public string Comment { get; set; }
         public string RegisteredID { get; set; }
-        public string ReviewID { get; set; }
     }
 }

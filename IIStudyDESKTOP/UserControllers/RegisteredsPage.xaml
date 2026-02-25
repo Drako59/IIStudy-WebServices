@@ -375,7 +375,7 @@
                                                 <ImageBrush ImageSource="{Binding RegisteredID,
                                            Converter={StaticResource UrlConverter},
                                            ConverterParameter=Registered}"
-                    Stretch="UniformToFill"/>
+                                            Stretch="UniformToFill"/>
                                             </Border.Background>
                                         </Border>
 

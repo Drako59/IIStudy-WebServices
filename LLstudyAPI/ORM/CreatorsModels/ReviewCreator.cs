@@ -10,7 +10,6 @@ namespace LLstudyWS.ORM
             return new Review() 
             {
                 ReviewID = Convert.ToString(dataReader["ReviewID"]),
-                Rate = Convert.ToString(dataReader["Rate"]),
                 Comment = Convert.ToString(dataReader["Comment"]),
                 BookID = Convert.ToString(dataReader["Book_ID"]),
             };

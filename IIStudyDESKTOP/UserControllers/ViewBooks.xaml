@@ -543,8 +543,8 @@
                                         
                                         <Button Content="Reviews"
                                                     Style="{StaticResource ReviewsButton}"
-                                                    
-                                                    Tag="{Binding}"/>           
+                                                    Click="ViewReviewsPage"
+                                                    CommandParameter="{Binding}"/>           
                                         <Button Content="Edit"
                                                    Style="{StaticResource EditButton}"
                                                    Click="ViewBookDetails"
