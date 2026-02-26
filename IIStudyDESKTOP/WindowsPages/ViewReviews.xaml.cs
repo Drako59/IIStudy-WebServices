@@ -25,13 +25,17 @@ namespace IIStudyDESKTOP.WindowsPages
 
         List<ViewReview> reviews;
         List<ViewReview> filtered;
-        public ViewReviews(Book book)
+        public ViewReviews(Book book, int reviewsAmount = 0, double avgRate = 0, int likes = 0, int dislikes = 0)
         {
             InitializeComponent();
             MouseLeftButtonDown += (_, e) => { try { DragMove(); } catch { } };
 
             TxtBookTitle.Text = string.IsNullOrWhiteSpace(book.Book_name)
                 ? $"Book #{book.BookID}" : book.Book_name;
+            this.TxtTotalLikes.Text = likes.ToString();
+            this.TxtTotalDislikes.Text = dislikes.ToString();
+            this.TxtTotalReviews.Text = reviewsAmount.ToString();
+            this.TxtAvgRating.Text = avgRate.ToString();
 
             LoadReviews(book);
         }

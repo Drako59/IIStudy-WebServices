@@ -1,0 +1,215 @@
+﻿using LLStudy_Models.Models;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace IIStudyDESKTOP.WindowsPages
+{
+    /// <summary>
+    /// Interaction logic for CreateBookPage.xaml
+    /// </summary>
+    public partial class CreateBookPage : Window
+    {
+
+        // !! UPDATE to your actual connection string !!
+
+
+        private string _selectedImagePath = null;
+        private string _selectedPdfPath = null;
+
+        // Raised after a successful insert so the caller can refresh its book list
+        public event EventHandler<Book> OnBookCreated;
+
+        public CreateBookPage()
+        {
+            InitializeComponent();
+            MouseLeftButtonDown += (_, e) => { try { DragMove(); } catch { } };
+        }
+
+        // ════════════════════════════════════════════════════════════
+        //  COVER IMAGE — hover & browse
+        // ════════════════════════════════════════════════════════════
+        private void Cover_MouseEnter(object sender, MouseEventArgs e)
+            => CoverOverlay.Visibility = Visibility.Visible;
+
+        private void Cover_MouseLeave(object sender, MouseEventArgs e)
+            => CoverOverlay.Visibility = Visibility.Collapsed;
+
+        private void CoverOverlay_Click(object sender, MouseButtonEventArgs e)
+            => BrowseImage_Click(sender, null);
+
+        private void BrowseImage_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog
+            {
+                Title = "Select Book Cover Image",
+                Filter = "Image Files|*.png;*.jpg;*.jpeg;*.webp;*.gif|" +
+                            "PNG (*.png)|*.png|" +
+                            "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                            "WebP (*.webp)|*.webp|" +
+                            "GIF (*.gif)|*.gif|" +
+                            "All Files (*.*)|*.*"
+            };
+
+            if (dlg.ShowDialog() != true) return;
+
+            _selectedImagePath = dlg.FileName;
+            TxtImagePath.Text = System.IO.Path.GetFileName(dlg.FileName);
+            TxtImagePath.Foreground = Brushes.White;
+            TryShowCover(dlg.FileName);
+        }
+
+        private void TryShowCover(string path)
+        {
+            try
+            {
+                var bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.CacheOption = BitmapCacheOption.OnLoad;
+
+                if (path.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                    bmp.UriSource = new Uri(path);
+                else if (System.IO.File.Exists(path))
+                    bmp.UriSource = new Uri(path, UriKind.Absolute);
+                else return;
+
+                bmp.EndInit();
+                CoverImage.Source = bmp;
+                CoverImage.Visibility = Visibility.Visible;
+                CoverEmoji.Visibility = Visibility.Collapsed;
+            }
+            catch
+            {
+                CoverImage.Visibility = Visibility.Collapsed;
+                CoverEmoji.Visibility = Visibility.Visible;
+            }
+        }
+
+        // ════════════════════════════════════════════════════════════
+        //  PDF BROWSE
+        // ════════════════════════════════════════════════════════════
+        private void BrowsePdf_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog
+            {
+                Title = "Select PDF File",
+                Filter = "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*"
+            };
+
+            if (dlg.ShowDialog() != true) return;
+
+            _selectedPdfPath = dlg.FileName;
+            TxtPdfPath.Text = System.IO.Path.GetFileName(dlg.FileName);
+            TxtPdfPath.Foreground = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#4338ca"));
+        }
+
+        // ════════════════════════════════════════════════════════════
+        //  CREATE — validate + INSERT
+        // ════════════════════════════════════════════════════════════
+        private void BtnCreate_Click(object sender, RoutedEventArgs e)
+        {
+            // ── Validation ──────────────────────────────────────────
+            if (string.IsNullOrWhiteSpace(InputBookName.Text))
+            {
+                Shake(InputBookName);
+                MessageBox.Show("Book name is required.", "Validation",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(InputAuthorName.Text))
+            {
+                Shake(InputAuthorName);
+                MessageBox.Show("Author name is required.", "Validation",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!double.TryParse(InputPrice.Text, out double price))
+            {
+                Shake(InputPrice);
+                MessageBox.Show("Please enter a valid numeric price.", "Validation",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // ── Insert ──────────────────────────────────────────────
+            try
+            {
+
+
+                // Get the new BookID back
+
+                // Build the new Book object and raise event
+                var newBook = new Book
+                {
+                    BookID = "0",
+                    Book_name = InputBookName.Text.Trim(),
+                    Author_name = InputAuthorName.Text.Trim(),
+                    Book_price = price,
+                    SubjectID = InputSubjectID.Text.Trim(),
+                    //Type = InputType.Text.Trim(),
+                    //BookAuthor = InputBookAuthor.Text.Trim(),
+                    In_stock = InputInStock.IsChecked == true,
+                    Pdf_url_book = _selectedPdfPath,
+                    BookImagePath = _selectedImagePath
+                };
+
+                OnBookCreated?.Invoke(this, newBook);
+
+                MessageBox.Show($"✅  \"{newBook.Book_name}\" was added successfully!",
+                    "Book Created", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                DialogResult = true;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to create book:\n{ex.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // ── Highlight the invalid field border briefly ───────────────
+        private void Shake(System.Windows.Controls.TextBox box)
+        {
+            box.BorderBrush = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#ef4444"));
+            box.BorderThickness = new Thickness(2);
+
+            var timer = new System.Windows.Threading.DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1.5)
+            };
+            timer.Tick += (_, __) =>
+            {
+                box.BorderBrush = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString("#e2e8f0"));
+                box.BorderThickness = new Thickness(1.5);
+                timer.Stop();
+            };
+            timer.Start();
+        }
+
+        // ════════════════════════════════════════════════════════════
+        //  CANCEL / CLOSE
+        // ════════════════════════════════════════════════════════════
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
+    }
+}

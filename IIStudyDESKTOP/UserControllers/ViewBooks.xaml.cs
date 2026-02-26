@@ -35,7 +35,9 @@ namespace IIStudyDESKTOP.UserControllers
         private List<BookShownDesktop> books;
         private BookDetails bookDetails;
         private ViewReviews reviews;
+        private CreateBookPage createBookPage;
         private string searchBar;
+        
         public ViewBooks()
         {
             InitializeComponent();
@@ -204,7 +206,7 @@ namespace IIStudyDESKTOP.UserControllers
                 //this.bookDetails.Close();
                 this.bookDetails = new BookDetails(book);
             }
-                Window parentWindow = Window.GetWindow(this);
+            Window parentWindow = Window.GetWindow(this);
             this.bookDetails.Owner = parentWindow;
             this.bookDetails.Show();
             this.dgBooks.ItemsSource = null;
@@ -220,17 +222,26 @@ namespace IIStudyDESKTOP.UserControllers
         {
             Button btn = sender as Button;
             Book book = btn.CommandParameter as Book;
+            BookShownDesktop details = btn.CommandParameter as BookShownDesktop;
             if (this.reviews == null)
-                this.reviews = new ViewReviews(book);
+                this.reviews = new ViewReviews(book,reviewsAmount: details.reviewsNum, avgRate: details.Rate);
             else
             {
-                this.reviews = new ViewReviews(book);
+                this.reviews = new ViewReviews(book, reviewsAmount: details.reviewsNum, avgRate: details.Rate);
             }
             Window parentWindow = Window.GetWindow(this);
 
             this.reviews.Owner = parentWindow;
             this.reviews.Show();
             
+        }
+
+        private void CreateBookPopUp(object sender, RoutedEventArgs e)
+        {
+
+            this.createBookPage = new CreateBookPage();
+
+            this.createBookPage.ShowDialog();
         }
     }
 }

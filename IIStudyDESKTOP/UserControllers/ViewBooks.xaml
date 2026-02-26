@@ -289,6 +289,7 @@
                         <!-- Add New Book Button -->
                         <Button Grid.Column="2" 
                                Content="➕ Add New Book"
+                                Click="CreateBookPopUp"
                                Style="{StaticResource ModernButton}"
                                VerticalAlignment="Center"
                                />

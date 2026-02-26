@@ -400,5 +400,43 @@ namespace LLstudyWS.Controllers
             }
         }
 
+    [HttpPost]
+
+    public bool CreateNewBook([FromForm] string model)
+    {
+        try
+        {
+            bool hasImage = false;
+            this.repositoryUOW.HelperOledb.OpenConnection();
+
+            JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+            jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            Book modelBook = JsonSerializer.Deserialize<Book>(model, jsonSerializerOptions);
+            bool suceed = this.repositoryUOW.BookRepository.Create(modelBook);
+            modelBook.BookID = this.repositoryUOW.BookRepository.GetLastID();
+            if (HttpContext.Request.Form.Files.Count != 0)
+            {
+                hasImage = true;
+                IFormFile file = HttpContext.Request.Form.Files[0];
+                modelBook.BookImagePath = this.repositoryUOW.BookRepository.ChangeImage(file, modelBook.BookID);
+
+
+            }
+
+
+            return suceed;
+            
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+            return false;
+        }
+        finally
+        {
+            this.repositoryUOW.HelperOledb.CloseConnection();
+        }
     }
 }
+    }
