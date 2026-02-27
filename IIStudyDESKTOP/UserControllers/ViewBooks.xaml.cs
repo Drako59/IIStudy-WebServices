@@ -21,6 +21,7 @@ using IIStudyDESKTOP.WindowsPages;
 using System.Runtime.CompilerServices;
 using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Guest;
+using System.Text.Json.Nodes;
 
 namespace IIStudyDESKTOP.UserControllers
 {
@@ -211,6 +212,32 @@ namespace IIStudyDESKTOP.UserControllers
             this.bookDetails.Show();
             this.dgBooks.ItemsSource = null;
             this.dgBooks.ItemsSource = this.books;
+        }
+
+        private async void DeleteBook(object sender, RoutedEventArgs e)
+        {
+
+            Button btn = sender as Button;
+            Book book = btn.Tag as Book;
+            ApiClient<string> client = new ApiClient<string>();
+            ApiResultModel<bool> result = new ApiResultModel<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/RemoveBook";
+            result = await client.PostAsyncRet<Book,bool>(book);
+            if(!result.Success || !result.Data)
+            {
+                MessageBox.Show("Delete was failed.", "Validation", MessageBoxButton.OK ,MessageBoxImage.Error);
+            }
+            else
+            {
+                this.filteredBooks = this.books;
+                this.books.Remove((BookShownDesktop)book);
+                this.DataContext = this.books;
+                this.dgBooks.ItemsSource = this.books;
+            }
+            
         }
 
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)

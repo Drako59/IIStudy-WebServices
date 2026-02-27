@@ -38,6 +38,25 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        [HttpPost]
+        public bool RemoveBook(Book book)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+                return this.repositoryUOW.BookRepository.Delete(book.BookID);
+
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
         [HttpDelete]
         public bool RemoveReview(string reviewID)
         {
@@ -408,7 +427,7 @@ namespace LLstudyWS.Controllers
         {
             bool hasImage = false;
             this.repositoryUOW.HelperOledb.OpenConnection();
-
+             this.repositoryUOW.HelperOledb.OpenTransaction();
             JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
             jsonSerializerOptions.PropertyNameCaseInsensitive = true;
             Book modelBook = JsonSerializer.Deserialize<Book>(model, jsonSerializerOptions);
@@ -419,11 +438,11 @@ namespace LLstudyWS.Controllers
                 hasImage = true;
                 IFormFile file = HttpContext.Request.Form.Files[0];
                 modelBook.BookImagePath = this.repositoryUOW.BookRepository.ChangeImage(file, modelBook.BookID);
-
+                this.repositoryUOW.BookRepository.Update(modelBook);
 
             }
 
-
+                this.repositoryUOW.HelperOledb.Commit();
             return suceed;
             
 
@@ -431,6 +450,7 @@ namespace LLstudyWS.Controllers
         catch (Exception ex)
         {
             Console.WriteLine(ex.ToString());
+            this.repositoryUOW.HelperOledb.RollBack();
             return false;
         }
         finally

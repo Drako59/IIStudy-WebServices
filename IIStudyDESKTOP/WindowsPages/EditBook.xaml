@@ -25,7 +25,7 @@
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#e2e8f0"/>
             <Setter Property="BorderThickness" Value="1.5"/>
-            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Padding" Value="12,4"/>
             <Setter Property="MinHeight" Value="42"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">

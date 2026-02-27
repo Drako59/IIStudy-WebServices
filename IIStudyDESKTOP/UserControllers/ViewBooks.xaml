@@ -552,7 +552,7 @@
                                                    Tag="{Binding}"/>
                                             <Button Content="Delete"
                                                    Style="{StaticResource DeleteButton}"
-                                                   
+                                                   Click="DeleteBook"
                                                    Tag="{Binding}"/>
                                         </StackPanel>
                                     </DataTemplate>

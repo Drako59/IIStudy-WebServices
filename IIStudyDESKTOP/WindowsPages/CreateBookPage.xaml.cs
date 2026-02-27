@@ -1,7 +1,10 @@
-﻿using LLStudy_Models.Models;
+﻿using IIstudyWSClient;
+using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels.Guest;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +27,7 @@ namespace IIStudyDESKTOP.WindowsPages
 
         // !! UPDATE to your actual connection string !!
 
-
+        private string ImageFileName = null;
         private string _selectedImagePath = null;
         private string _selectedPdfPath = null;
 
@@ -65,7 +68,8 @@ namespace IIStudyDESKTOP.WindowsPages
             if (dlg.ShowDialog() != true) return;
 
             _selectedImagePath = dlg.FileName;
-            TxtImagePath.Text = System.IO.Path.GetFileName(dlg.FileName);
+            this.ImageFileName = System.IO.Path.GetFileName(dlg.FileName);
+            TxtImagePath.Text = this.ImageFileName;
             TxtImagePath.Foreground = Brushes.White;
             TryShowCover(dlg.FileName);
         }
@@ -118,7 +122,7 @@ namespace IIStudyDESKTOP.WindowsPages
         // ════════════════════════════════════════════════════════════
         //  CREATE — validate + INSERT
         // ════════════════════════════════════════════════════════════
-        private void BtnCreate_Click(object sender, RoutedEventArgs e)
+        private async void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
             // ── Validation ──────────────────────────────────────────
             if (string.IsNullOrWhiteSpace(InputBookName.Text))
@@ -163,15 +167,32 @@ namespace IIStudyDESKTOP.WindowsPages
                     //Type = InputType.Text.Trim(),
                     //BookAuthor = InputBookAuthor.Text.Trim(),
                     In_stock = InputInStock.IsChecked == true,
-                    Pdf_url_book = _selectedPdfPath,
+                    Pdf_url_book = _selectedPdfPath == null? "None" : this._selectedPdfPath,
                     BookImagePath = _selectedImagePath
                 };
 
                 OnBookCreated?.Invoke(this, newBook);
 
-                MessageBox.Show($"✅  \"{newBook.Book_name}\" was added successfully!",
-                    "Book Created", MessageBoxButton.OK, MessageBoxImage.Information);
 
+
+                
+
+                ApiClient<Book> client = new ApiClient<Book>();
+                ApiResultModel<bool> result = new ApiResultModel<bool>();
+                client.Scheme = "http";
+                client.Host = "localhost";
+                client.Port = 5049;
+                client.Path = "api/Admin/CreateNewBook";
+                result = await client.PostAsyncRet<Book,bool>(newBook, this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) });
+                if (!result.Success || !result.Data)
+                {
+                    DialogResult = false;
+                    
+                    throw new Exception(message: "Failed to upload image");
+                }
+                
+                MessageBox.Show($"✅  \"{newBook.Book_name}\" was added successfully!",
+                    "Book Created", MessageBoxButton.OK, MessageBoxImage.Information); 
                 DialogResult = true;
                 Close();
             }

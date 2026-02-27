@@ -20,7 +20,7 @@
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#e2e8f0"/>
             <Setter Property="BorderThickness" Value="1.5"/>
-            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Padding" Value="12,4"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -246,7 +246,7 @@
                         <StackPanel Grid.Column="2" VerticalAlignment="Center">
                             <!-- Icon badge -->
                             <Border Width="36" Height="36" CornerRadius="10"
-                                    Background="#ffffff22"
+                                    Background="White"
                                     HorizontalAlignment="Left"
                                     Margin="0,0,0,8">
                                 <TextBlock Text="✨" FontSize="18"
@@ -272,8 +272,8 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Border Grid.Column="0"
-                                        Background="#ffffff18"
-                                        BorderBrush="#ffffff33"
+                                        Background="White"
+                                        BorderBrush="White"
                                         BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="10,0"
@@ -384,10 +384,10 @@
                             <TextBlock Text="TYPE" Style="{StaticResource FieldLabel}"/>
                             <TextBox x:Name="InputType" Style="{StaticResource InputBox}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="2">
+                        <!--<StackPanel Grid.Column="2">
                             <TextBlock Text="BOOK AUTHOR" Style="{StaticResource FieldLabel}"/>
                             <TextBox x:Name="InputBookAuthor" Style="{StaticResource InputBox}"/>
-                        </StackPanel>
+                        </StackPanel>-->
                     </Grid>
 
                     <!-- In Stock -->
