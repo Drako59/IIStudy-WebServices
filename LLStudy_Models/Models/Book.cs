@@ -38,5 +38,7 @@ namespace LLStudy_Models.Models
 
         public string BookImagePath { get; set; }
 
+        public bool IsDeleted { get; set; }
+
     }
 }

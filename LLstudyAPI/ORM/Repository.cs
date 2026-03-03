@@ -376,11 +376,11 @@ namespace LLstudyWS.ORM
             if (exludes != null)
                 exludedProps.AddRange(exludes);
             PropertyInfo[] props = typeProp.GetProperties().Where(p => (!exludedProps.Contains(p.Name) && !p.Name.Equals($@"{typeProp.Name}ID"))).ToArray();
-            string sets = string.Join(", ", props.Select(p => @$"{p.Name} = @{p.Name}"));
+            string sets = string.Join(", ", props.Select(p => @$"[{p.Name}] = @{p.Name}"));
 
             PropertyInfo propID = typeProp.GetProperty(@$"{typeProp.Name}ID");
 
-            sql = $@"UPDATE {typeProp.Name}s SET {sets} WHERE {propID.Name} = @{propID.Name}";
+            sql = $@"UPDATE {typeProp.Name}s SET {sets} WHERE [{propID.Name}] = @{propID.Name}";
 
             foreach(PropertyInfo pro in props)
             {

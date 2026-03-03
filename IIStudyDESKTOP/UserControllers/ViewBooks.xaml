@@ -550,10 +550,34 @@
                                                    Style="{StaticResource EditButton}"
                                                    Click="ViewBookDetails"
                                                    Tag="{Binding}"/>
-                                            <Button Content="Delete"
+                                        <Button Click="ToggleDeleteButton"
+                                            Tag="{Binding}">
+
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource DeleteButton}">
+
+                                                    <!-- ברירת מחדל = DELETE -->
+                                                    <Setter Property="Content" Value="Delete"/>
+                                                    <Setter Property="Foreground" Value="#ef4444"/>
+
+                                                    <Style.Triggers>
+
+                                                        <!-- אם הספר לא פעיל -->
+                                                        <DataTrigger Binding="{Binding IsDeleted}" Value="True">
+                                                            <Setter Property="Content" Value="Restore"/>
+                                                            <Setter Property="Foreground" Value="#16a34a"/>
+                                                        </DataTrigger>
+
+                                                    </Style.Triggers>
+
+                                                </Style>
+                                            </Button.Style>
+
+                                        </Button>
+                                        <!--<Button Content="Delete"
                                                    Style="{StaticResource DeleteButton}"
                                                    Click="DeleteBook"
-                                                   Tag="{Binding}"/>
+                                                   Tag="{Binding}"/>-->
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

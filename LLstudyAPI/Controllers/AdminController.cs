@@ -39,15 +39,18 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public bool RemoveBook(Book book)
+         
+        public bool BanUser([FromBody] Registered reg)
         {
-            try
-            {
-                this.repositoryUOW.HelperOledb.CloseConnection();
-                return this.repositoryUOW.BookRepository.Delete(book.BookID);
-
+            try{
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                reg.IsBanned = true;
+                if (reg.RegisteredID == "39")
+                    return false;
+                return this.repositoryUOW.RegisteredRepository.Update(reg, exludes : new List<string>() { "RegisteredSalt", "PhoneNumber","ImagePath", "Role","Birth", "Email","Password","UserName"});
             }
-            catch (Exception ex) {
+            catch(Exception ex)
+            {
                 Console.WriteLine(ex.ToString());
                 return false;
             }
@@ -57,14 +60,81 @@ namespace LLstudyWS.Controllers
             }
         }
 
-        [HttpDelete]
-        public bool RemoveReview(string reviewID)
+        [HttpPost]
+
+        public bool UnBanUser([FromBody] Registered reg)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                reg.IsBanned = false;
+                return this.repositoryUOW.RegisteredRepository.Update(reg, exludes: new List<string>() { "RegisteredSalt", "PhoneNumber", "ImagePath", "Role", "Birth", "Email", "Password", "UserName" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpPost]
+        public bool RemoveBook([FromBody]Book book)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                bool flag = false;
+                this.repositoryUOW.HelperOledb.OpenTransaction();
+                book.IsDeleted = true;
+                flag = this.repositoryUOW.ShoppingCartRepository.RemoveBook(book.BookID) && this.repositoryUOW.BookRepository.Update(book, exludes: new List<string>() { "BookImagePath", "BookDetails", "BookAuthorImage", "Pdf_url_book", "Type", "SubjectID", "In_stock" , "Book_name", "Book_price", "Author_name" });
+
+                this.repositoryUOW.HelperOledb.Commit();
+                return flag;
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                this.repositoryUOW.HelperOledb.RollBack();
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpPost]
+        public bool RestoreBook([FromBody] Book book)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                book.IsDeleted = false;
+                return  this.repositoryUOW.BookRepository.Update(book, exludes: new List<string>() { "BookImagePath", "BookDetails", "BookAuthorImage", "Pdf_url_book", "Type", "SubjectID", "In_stock", "Book_name", "Book_price", "Author_name" });
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpPost]
+        public bool RemoveReview([FromBody] Review review)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
-                return this.repositoryUOW.ReviewRepository.Delete(reviewID);
+                return this.repositoryUOW.ReviewRepository.Delete(review.ReviewID);
 
             }
             catch(Exception ex) 
@@ -78,15 +148,15 @@ namespace LLstudyWS.Controllers
             }
 
         }
-        [HttpDelete]
+        [HttpPost]
 
-        public bool RemoveEvent(string eventID)
+        public bool RemoveEvent([FromBody] Event Event)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
-                return this.repositoryUOW.EventRepository.Delete(eventID);
+                return this.repositoryUOW.EventRepository.Delete(Event.EventID);
 
             }
             catch (Exception ex)
@@ -101,13 +171,13 @@ namespace LLstudyWS.Controllers
 
         }
 
-        [HttpDelete]
-        public bool RemoveExam(string examID)
+        [HttpPost]
+        public bool RemoveExam([FromBody] Exam exam)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return this.repositoryUOW.ExamRepository.Delete(examID);
+                return this.repositoryUOW.ExamRepository.Delete(exam.ExamID);
             }
             catch(Exception ex)
             {
@@ -120,14 +190,14 @@ namespace LLstudyWS.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpPost]
 
-        public bool RemoveSolution(string solutionID)
+        public bool RemoveSolution([FromBody] Solution solution)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return this.repositoryUOW.SolutionRepository.Delete(solutionID);
+                return this.repositoryUOW.SolutionRepository.Delete(solution.SolutionID);
             }
             catch (Exception ex)
             {

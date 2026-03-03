@@ -6,8 +6,10 @@ using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Diagnostics;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LLstudyWS.ORM
 
@@ -353,6 +355,23 @@ namespace LLstudyWS.ORM
                 else return 0;
                 return counter;
             }
+        }
+
+        public List<Book> GetExistBooks()
+        {
+            List<Book> books = new List<Book>();
+            string sql = "SELECT * FROM Books WHERE IsDeleted = False";
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+
+                    books.Add(this.moderlRefCreator.CreateModel<Book>(reader));
+
+                };
+                
+            }
+            return books;
         }
     }
 }

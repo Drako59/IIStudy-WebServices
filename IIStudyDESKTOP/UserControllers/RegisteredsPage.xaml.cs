@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,9 +27,10 @@ namespace IIStudyDESKTOP.UserControllers
     {
 
 
-        private List<Registered> registereds = new List<Registered>();
+        private List<Registered> registereds = null;
 
         private ObservableCollection<Registered> _allUsers = new();
+        private List<Registered> filtered;
         private string _filterMode = "All";
 
         public RegisteredsPage()
@@ -65,8 +67,8 @@ namespace IIStudyDESKTOP.UserControllers
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Admin/GetAllRegistereds";
-            this.registereds.AddRange(await client.GetAsync());
-            
+            this.registereds = await client.GetAsync();
+            this.filtered = this.registereds;
             this.DataContext = this.registereds;
             this.UsersListView.ItemsSource = this.registereds;
         }
@@ -78,12 +80,12 @@ namespace IIStudyDESKTOP.UserControllers
         {
             var search = SearchBox?.Text?.Trim().ToLower() ?? "";
 
-            var filtered = this.registereds.Where(u =>
+            this.filtered = this.registereds.Where(u =>
             {
                 bool passFilter = _filterMode switch
                 {
                     "Admin" => u.Role?.ToLower() == "admin",
-                    "Manager" => u.Role?.ToLower() == "manager",
+                    "Banned" => u.IsBanned,
                     "User" => u.Role?.ToLower() == "user",
                     _ => true
                 };
@@ -107,7 +109,7 @@ namespace IIStudyDESKTOP.UserControllers
         {
             TxtTotal.Text = this.registereds.Count.ToString();
             TxtAdmins.Text = this.registereds.Count(u => u.Role?.ToLower() == "admin").ToString();
-            TxtManagers.Text = this.registereds.Count(u => u.Role?.ToLower() == "manager").ToString();
+            TxtBanned.Text = this.registereds.Count(u => u.IsBanned).ToString();
             TxtUsers.Text = this.registereds.Count(u => u.Role?.ToLower() == "user").ToString();
         }
 
@@ -129,10 +131,10 @@ namespace IIStudyDESKTOP.UserControllers
             SetActiveChip(FilterAdmins);
             ApplyFilters();
         }
-        private void Filter_Managers(object sender, RoutedEventArgs e)
+        private void Filter_Banned(object sender, RoutedEventArgs e)
         {
-            _filterMode = "Manager";
-            SetActiveChip(FilterManagers);
+            _filterMode = "Banned";
+            SetActiveChip(FilterBanned);
             ApplyFilters();
         }
         private void Filter_Users(object sender, RoutedEventArgs e)
@@ -148,7 +150,7 @@ namespace IIStudyDESKTOP.UserControllers
             var inactiveFg = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#475569"));
             var activeBg = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#667eea"));
 
-            foreach (var btn in new[] { FilterAll, FilterAdmins, FilterManagers, FilterUsers })
+            foreach (var btn in new[] { FilterAll, FilterAdmins, FilterBanned, FilterUsers })
             {
                 btn.Background = inactiveBg;
                 btn.Foreground = inactiveFg;
@@ -206,6 +208,87 @@ namespace IIStudyDESKTOP.UserControllers
             {
                 MessageBox.Show($"Delete failed:\n{ex.Message}",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private async void BanUser(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Registered reg = btn.Tag as Registered;
+            ApiClient<string> client = new ApiClient<string>();
+            ApiResultModel<bool> result = new ApiResultModel<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/BanUser";
+            result = await client.PostAsyncRet<Registered, bool>(reg);
+            if (!result.Success || !result.Data)
+            {
+                MessageBox.Show("Ban operation has failed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                reg.IsBanned = true;
+                this.DataContext = null;
+                this.UsersListView.ItemsSource = null;
+                this.DataContext = this.registereds;
+                UsersListView.ItemsSource = new ObservableCollection<Registered>(this.filtered);
+                //MessageBox.Show("Ban operation has succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+        }
+
+        private async void UnBanUser(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Registered reg = btn.Tag as Registered;
+            ApiClient<string> client = new ApiClient<string>();
+            ApiResultModel<bool> result = new ApiResultModel<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/UnBanUser";
+            result = await client.PostAsyncRet<Registered, bool>(reg);
+            if (!result.Success || !result.Data)
+            {
+                MessageBox.Show("UnBan operation has failed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                reg.IsBanned = false;
+                this.DataContext = null;
+                this.UsersListView.ItemsSource = null;
+                this.DataContext = this.registereds;
+                UsersListView.ItemsSource = new ObservableCollection<Registered>(this.filtered);
+                //MessageBox.Show("UnBan operation has succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+        }
+
+        private void ToggleBanButton(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Registered reg = btn.Tag as Registered;
+            if (reg.IsBanned)
+            {
+                var confirm = MessageBox.Show(
+                $"Are you sure you want to unban user \"{reg.UserName}\"?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+                if (confirm != MessageBoxResult.Yes) return;
+                this.UnBanUser(sender, e);
+            }
+            else
+            {
+                var confirm = MessageBox.Show(
+                $"Are you sure you want to ban user \"{reg.UserName}\"?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+                if (confirm != MessageBoxResult.Yes) return;
+                this.BanUser(sender, e);
             }
         }
     }

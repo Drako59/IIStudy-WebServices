@@ -49,6 +49,6 @@ namespace LLStudy_Models.Models
         public string Birth { get; set; }
 
         public string ImagePath { get { return imagePath; } set { this.imagePath = value;  } }
-       
+       public bool IsBanned { get; set; }
     }
 }

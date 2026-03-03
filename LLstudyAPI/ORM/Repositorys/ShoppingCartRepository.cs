@@ -27,6 +27,12 @@ namespace LLstudyWS.ORM
             }
             return new Shopping_Cart();
         }
+        public bool RemoveBook (string bookID)
+        {
+            string sql = "DELETE * FROM Shopping_carts WHERE BookID = @BookID";
+            this.helperOledb.AddParameter("@BookID", bookID);
+            return this.helperOledb.Delete(sql) >= 0;
+        }
 
         public bool RemoveBookForUser( string BookID, string registeredID)
         {

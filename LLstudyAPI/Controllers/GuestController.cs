@@ -144,7 +144,9 @@ namespace LLstudyWS.Controllers
 
 
                 if (search == null && subjectID == null && author_name == null && book_name == null && price_min == null && price_max == null && type == null)
-                    return this.repositoryUOW.BookRepository.GetAll();
+                    return this.repositoryUOW.BookRepository.GetExistBooks();
+                    //return this.repositoryUOW.BookRepository.GetAll();
+
 
                 List<Book> books = new List<Book>();
                 if (search != null)
@@ -312,7 +314,7 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
 
-                return this.repositoryUOW.BookRepository.GetFullBooks(); ;
+                return this.repositoryUOW.BookRepository.GetFullBooks();
 
             }
             catch (Exception ex)

@@ -57,7 +57,9 @@ namespace LLstudyWS.ORM
                     string salt = reader["RegisteredSalt"].ToString();
                     string hash = reader["Password"].ToString();
                     string CalHash = GetHash(password, salt);
-                    if ( CalHash == hash)
+                    if (Convert.ToBoolean(reader["IsBanned"]))
+                        return "0";
+                    if ( CalHash == hash )
                     {
                         return Convert.ToString(reader["RegisteredID"]);
 

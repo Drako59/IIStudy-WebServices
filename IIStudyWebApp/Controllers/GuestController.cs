@@ -91,8 +91,8 @@ namespace IIStudyWebApp.Controllers
 
             ApiResultModel<Registered> success = client.PostAsyncRet<SignInViewModel, Registered>(SignInModel).Result;
 
-
-            if (success.Success && success.Data != null)
+            
+            if (success.Success && success.Data != null && Convert.ToInt64(success.Data.RegisteredID) > 0)
             {
                 //Console.WriteLine($@"{success.Data.RegisteredID}");
 

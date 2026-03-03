@@ -197,10 +197,10 @@
                     <DropShadowEffect Color="Black" BlurRadius="14" ShadowDepth="0" Opacity="0.06"/>
                 </Border.Effect>
                 <StackPanel>
-                    <TextBlock Text="Managers" FontSize="11" FontWeight="Bold" Foreground="#94a3b8"/>
-                    <TextBlock x:Name="TxtManagers" Text="0"
-                               FontSize="28" FontWeight="ExtraBold" Foreground="#f59e0b" Margin="0,6,0,0"/>
-                    <TextBlock Text="Manager role" FontSize="11" Foreground="#94a3b8" Margin="0,4,0,0"/>
+                    <TextBlock Text="Banned" FontSize="11" FontWeight="Bold" Foreground="#94a3b8"/>
+                    <TextBlock x:Name="TxtBanned" Text="0"
+                               FontSize="28" FontWeight="ExtraBold" Foreground="#e32b1e" Margin="0,6,0,0"/>
+                    <TextBlock Text="Banned Users" FontSize="11" Foreground="#94a3b8" Margin="0,4,0,0"/>
                 </StackPanel>
             </Border>
 
@@ -269,13 +269,13 @@
                             Foreground="#667eea"
                             Margin="0,0,8,0"
                             Click="Filter_Admins"/>
-                    <Button x:Name="FilterManagers"
+                    <Button x:Name="FilterBanned"
                             Style="{StaticResource FilterChip}"
-                            Content="🔧 Managers"
-                            Background="#fffbeb"
-                            Foreground="#d97706"
+                            Content="🚫 Banned"
+                            Background="#ffe2e0"
+                            Foreground="#e32b1e"
                             Margin="0,0,8,0"
-                            Click="Filter_Managers"/>
+                            Click="Filter_Banned"/>
                     <Button x:Name="FilterUsers"
                             Style="{StaticResource FilterChip}"
                             Content="👤 Users"
@@ -488,14 +488,38 @@
                                                 Content="👁"
                                                 ToolTip="View Info"
                                                 Margin="0,0,6,0"
-                                                Tag="{Binding RegisteredID}"
+                                                Tag="{Binding}"
                                                 Click="ViewUser_Click"/>
-                                        <Button Style="{StaticResource ActionBtn}"
+                                        <!--<Button Style="{StaticResource ActionBtn}"
                                                 Background="#fef2f2"
                                                 Content="🗑"
                                                 ToolTip="Remove User"
                                                 Tag="{Binding RegisteredID}"
-                                                Click="DeleteUser_Click"/>
+                                                Click="DeleteUser_Click"/>-->
+                                        <Button Click="ToggleBanButton"
+                                                    Tag="{Binding}">
+
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource ActionBtn}">
+
+                                                    <!-- ברירת מחדל = DELETE -->
+                                                    <Setter Property="Content" Value="🔒"/>
+                                                    <Setter Property="Foreground" Value="#ef4444"/>
+
+                                                    <Style.Triggers>
+
+                                                        <!-- אם הספר לא פעיל -->
+                                                        <DataTrigger Binding="{Binding IsBanned}" Value="True">
+                                                            <Setter Property="Content" Value="🔑"/>
+                                                            <Setter Property="Foreground" Value="#16a34a"/>
+                                                        </DataTrigger>
+
+                                                    </Style.Triggers>
+
+                                                </Style>
+                                            </Button.Style>
+
+                                        </Button>
                                     </StackPanel>
 
                                 </Grid>

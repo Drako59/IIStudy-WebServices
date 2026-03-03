@@ -232,14 +232,76 @@ namespace IIStudyDESKTOP.UserControllers
             }
             else
             {
-                this.filteredBooks = this.books;
-                this.books.Remove((BookShownDesktop)book);
+                book.IsDeleted = true;
+                //this.filteredBooks = this.books;
+                //this.books.Remove((BookShownDesktop)book);
+                this.DataContext = null;
+                this.dgBooks.ItemsSource = null;
                 this.DataContext = this.books;
                 this.dgBooks.ItemsSource = this.books;
+                //MessageBox.Show("Delete succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             
         }
 
+        private async void RestoreBook(object sender, RoutedEventArgs e)
+        {
+
+            Button btn = sender as Button;
+            Book book = btn.Tag as Book;
+            ApiClient<string> client = new ApiClient<string>();
+            ApiResultModel<bool> result = new ApiResultModel<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/RestoreBook";
+            result = await client.PostAsyncRet<Book, bool>(book);
+            if (!result.Success || !result.Data)
+            {
+                MessageBox.Show("Restore was failed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                book.IsDeleted = false;
+                //this.filteredBooks = this.books;
+                //this.books.Remove((BookShownDesktop)book);
+                this.DataContext = null;
+                this.dgBooks.ItemsSource = null;
+                this.DataContext = this.books;
+                this.dgBooks.ItemsSource = this.books;
+                //MessageBox.Show("Restore succeed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+        }
+
+        private void ToggleDeleteButton(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Book book = btn.Tag as Book;
+
+            if (!book.IsDeleted)
+            {
+                var confirm = MessageBox.Show(
+                $"Are you sure you want to remove book \"{book.Book_name}\"?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+                if (confirm != MessageBoxResult.Yes) return;
+                this.DeleteBook(sender, e);
+            }
+            else
+            {
+                var confirm = MessageBox.Show(
+                $"Are you sure you want to Restore book \"{book.Book_name}\"?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+                if (confirm != MessageBoxResult.Yes) return;
+                this.RestoreBook(sender, e);
+            }
+        }
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
 
