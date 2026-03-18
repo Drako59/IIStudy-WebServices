@@ -58,6 +58,38 @@ namespace IIStudyDESKTOP.WindowsPages
 
         }
 
+
+        private async void RemoveReview(object sender, RoutedEventArgs e)
+        {
+            
+            Button btn = sender as Button;
+            ViewReview review = btn.Tag as ViewReview;
+
+            var confirm = MessageBox.Show(
+               $"Are you sure you want to remove user's \"{review.UserName}\" review?\nThis action cannot be undone.",
+               "Confirm Delete",
+               MessageBoxButton.YesNo,
+               MessageBoxImage.Warning);
+            if (confirm != MessageBoxResult.Yes) return;
+            ApiClient<Review> client = new ApiClient<Review>();
+            ApiResultModel<bool> success;
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/RemoveReview";
+            success = await client.PostAsyncRet<Review, bool>((Review)review);
+            if (!success.Data)
+            {
+                MessageBox.Show("The operation failed, the review didn't got deleted.", "Error message",MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            this.reviews.Remove(review);
+            this.DataContext = null;
+            this.ReviewsList.ItemsSource = null;
+            this.DataContext = this.reviews;
+            this.ReviewsList.ItemsSource = this.reviews;
+        }
+
         private void Close_Click(object sender, RoutedEventArgs e) => Close();
     }
 }

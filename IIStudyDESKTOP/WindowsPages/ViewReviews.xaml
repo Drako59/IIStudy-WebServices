@@ -393,8 +393,8 @@
 
                                                     <!-- 🗑 Delete button -->
                                                     <!--Click="DeleteReview_Click"-->
-                                                    <Button Tag="{Binding ReviewID}"
-                                                            
+                                                    <Button Tag="{Binding}"
+                                                            Click="RemoveReview"
                                                             Cursor="Hand"
                                                             BorderThickness="0"
                                                             ToolTip="Delete review">

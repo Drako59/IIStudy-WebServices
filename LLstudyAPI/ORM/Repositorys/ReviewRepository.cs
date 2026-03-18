@@ -30,5 +30,25 @@ namespace LLstudyWS.ORM
             }
             return reviews;
         }
+
+        public List<RegisteredComments> GetReviewsByRegistered(string registeredID)
+        {
+            List<RegisteredComments> regReviews = new List<RegisteredComments>();
+            string sql = @$"SELECT  Books.BookID  AS [BookID], * FROM Reviews 
+                                    INNER JOIN ( Books
+
+                                    ) ON Books.BookID = Reviews.BookID 
+                                WHERE 
+                                    RegisteredID = @RegisteredID";
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    regReviews.Add(this.moderlRefCreator.CreateModel<RegisteredComments>(reader));
+                }
+            }
+            return regReviews;
+        }
     }
 }

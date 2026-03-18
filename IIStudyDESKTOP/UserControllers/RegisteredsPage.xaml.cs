@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IIStudyDESKTOP.WindowsPages;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace IIStudyDESKTOP.UserControllers
@@ -28,7 +29,7 @@ namespace IIStudyDESKTOP.UserControllers
 
 
         private List<Registered> registereds = null;
-
+        private RegisteredDetails registeredDetail;
         private ObservableCollection<Registered> _allUsers = new();
         private List<Registered> filtered;
         private string _filterMode = "All";
@@ -290,6 +291,15 @@ namespace IIStudyDESKTOP.UserControllers
                 if (confirm != MessageBoxResult.Yes) return;
                 this.BanUser(sender, e);
             }
+        }
+
+        private void ShowRegisteredDetails(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Registered reg = btn.Tag as Registered;
+            registeredDetail = new RegisteredDetails(reg);
+            registeredDetail.Show();
+            
         }
     }
 }

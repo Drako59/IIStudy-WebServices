@@ -489,7 +489,7 @@
                                                 ToolTip="View Info"
                                                 Margin="0,0,6,0"
                                                 Tag="{Binding}"
-                                                Click="ViewUser_Click"/>
+                                                Click="ShowRegisteredDetails"/>
                                         <!--<Button Style="{StaticResource ActionBtn}"
                                                 Background="#fef2f2"
                                                 Content="🗑"

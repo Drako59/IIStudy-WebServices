@@ -1,0 +1,513 @@
+﻿<Window x:Class="IIStudyDESKTOP.WindowsPages.RegisteredDetails"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
+        mc:Ignorable="d"
+        Title="RegisteredDetails" Height="720" Width="520"
+        WindowStartupLocation="CenterScreen"
+        xmlns:convertor="clr-namespace:IIStudyDESKTOP"
+        >
+        
+
+        <Window.Resources>
+            
+            <convertor:UrlConverter x:Key="UrlConverter">
+
+            </convertor:UrlConverter>
+            
+            <Style x:Key="InfoLabel" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Foreground" Value="#94a3b8"/>
+                <Setter Property="Margin" Value="0,0,0,3"/>
+            </Style>
+
+            <Style x:Key="InfoValue" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="#1e293b"/>
+                <Setter Property="TextWrapping" Value="Wrap"/>
+            </Style>
+
+            <Style x:Key="InfoCard" TargetType="Border">
+                <Setter Property="Background" Value="#f8fafc"/>
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="Padding" Value="12,10"/>
+            </Style>
+
+        </Window.Resources>
+
+        <!-- Outer shadow wrapper -->
+        <Border Margin="16" CornerRadius="22" Background="White">
+            <Border.Effect>
+                <DropShadowEffect Color="#764ba2" BlurRadius="40" ShadowDepth="0" Opacity="0.18"/>
+            </Border.Effect>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Hero -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Info cards -->
+                    <RowDefinition Height="*"/>
+                    <!-- Reviews section -->
+                </Grid.RowDefinitions>
+
+                <!-- ════════════════════════════════════════
+                 HERO — gradient with avatar + name
+                 ════════════════════════════════════════ -->
+                <Border Grid.Row="0" CornerRadius="22,22,0,0" ClipToBounds="True">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#667eea" Offset="0"/>
+                            <GradientStop Color="#764ba2" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                    <Grid>
+                        <!-- Decorative blobs -->
+                        <Ellipse Width="200" Height="200"
+                             HorizontalAlignment="Right" VerticalAlignment="Top"
+                             Margin="0,-80,-50,0" Opacity="0.09" IsHitTestVisible="False">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <Ellipse Width="110" Height="110"
+                             HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                             Margin="-30,0,0,0" Opacity="0.08" IsHitTestVisible="False">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+
+                        <!-- Close button -->
+                        <Button HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Margin="0,12,12,0"
+                            Width="30" Height="30"
+                            BorderThickness="0" Cursor="Hand"
+                            >
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="b" Background="Transparent" CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="b" Property="Background" Value="#ffffff22"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <TextBlock Text="✕" FontSize="14" Foreground="White" FontWeight="Bold"/>
+                        </Button>
+
+                        <!-- Avatar + name block -->
+                        <StackPanel HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="0,28,0,28">
+
+                            <!-- Avatar ring -->
+                            <Border Width="110" Height="110"
+                                CornerRadius="60"
+                                BorderBrush="#e0e7ff"
+                                BorderThickness="3"
+                                HorizontalAlignment="Center"
+                                Margin="0,0,0,12">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="0" Opacity="0.22"/>
+                                </Border.Effect>
+                                <Grid>
+                                    <!-- Coloured initials fallback -->
+                                    <Border CornerRadius="60" x:Name="AvatarColorBg">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#a78bfa" Offset="0"/>
+                                                <GradientStop Color="#7c3aed" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                    </Border>
+                                    <TextBlock x:Name="TxtInitials"
+                                           Text="?"
+                                           FontSize="28" FontWeight="ExtraBold"
+                                           Foreground="White"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                                    <!-- Real image -->
+                                    <Ellipse>
+                                        <Ellipse.Fill>
+                                        <ImageBrush x:Name="AvatarBrush" Stretch="UniformToFill" ImageSource="{Binding RegisteredID,
+                                                                                                               Converter={StaticResource UrlConverter},
+                                                                                                               ConverterParameter=Registered}"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                </Grid>
+                            </Border>
+
+                            <!-- Username -->
+                            <TextBlock x:Name="TxtUsername"
+                                   Text="{Binding UserName}"
+                                   FontSize="20" FontWeight="ExtraBold"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"/>
+
+                            <!-- Badges row: Role + Banned status -->
+                            <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,8,0,0">
+                                <Border x:Name="RoleBadge"
+                                    CornerRadius="8" Padding="10,4"
+                                    Margin="0,0,6,0">
+                                    <TextBlock x:Name="TxtRoleBadge"
+                                           FontSize="11" FontWeight="Bold"
+                                           Foreground="White"/>
+                                </Border>
+                                <Border x:Name="BannedBadge"
+                                    CornerRadius="8" Padding="10,4"
+                                    Visibility="Collapsed">
+                                    <TextBlock Text="🚫 Banned"
+                                           FontSize="11" FontWeight="Bold"
+                                           Foreground="White"/>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ════════════════════════════════════════
+                 INFO CARDS
+                 ════════════════════════════════════════ -->
+                <StackPanel Grid.Row="1" Margin="22,16,22,0">
+
+                    <!-- Row 1: ID + Registered date -->
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource InfoCard}">
+                            <StackPanel>
+                                <TextBlock Text="USER ID" Style="{StaticResource InfoLabel}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🔖 " FontSize="13"/>
+                                    <TextBlock x:Name="TxtUserID" Text="{Binding RegisteredID}" Style="{StaticResource InfoValue}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="2" Style="{StaticResource InfoCard}">
+                            <StackPanel>
+                                <TextBlock Text="JOINED" Style="{StaticResource InfoLabel}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="📅 " FontSize="13"/>
+                                    <TextBlock x:Name="TxtJoined" Text="{Binding Role}" Style="{StaticResource InfoValue}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Row 2: Email + Phone -->
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource InfoCard}">
+                            <StackPanel>
+                                <TextBlock Text="EMAIL" Style="{StaticResource InfoLabel}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="✉️ " FontSize="13"/>
+                                    <TextBlock x:Name="TxtEmail" Text="{Binding Email}"
+                                           Style="{StaticResource InfoValue}"
+                                           TextWrapping="Wrap" MaxWidth="160"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="2" Style="{StaticResource InfoCard}">
+                            <StackPanel>
+                                <TextBlock Text="PHONE" Style="{StaticResource InfoLabel}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="📞 " FontSize="13"/>
+                                    <TextBlock x:Name="TxtPhone" Text="{Binding Phone}" Style="{StaticResource InfoValue}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Row 3: Birth date (full width) -->
+                    <Border Style="{StaticResource InfoCard}" Margin="0,0,0,10">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🎂 " FontSize="16" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <StackPanel>
+                                <TextBlock Text="DATE OF BIRTH" Style="{StaticResource InfoLabel}"/>
+                                <TextBlock x:Name="TxtBirth" Text="{Binding Birth}" Style="{StaticResource InfoValue}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+
+                <!-- ════════════════════════════════════════
+                 REVIEWS SECTION
+                 ════════════════════════════════════════ -->
+                <Border Grid.Row="2"
+                    Margin="22,10,22,18"
+                    CornerRadius="16"
+                    BorderBrush="#ede9fe"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!-- Section header -->
+                            <RowDefinition Height="*"/>
+                            <!-- List -->
+                        </Grid.RowDefinitions>
+
+                        <!-- Section header bar -->
+                        <Border Grid.Row="0"
+                            CornerRadius="16,16,0,0"
+                            Padding="14,10">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#f5f3ff" Offset="0"/>
+                                    <GradientStop Color="#ede9fe" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="💬" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Reviews"
+                                           FontSize="14" FontWeight="ExtraBold"
+                                           Foreground="#5b21b6" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <Border Grid.Column="1"
+                                    Background="#7c3aed"
+                                    CornerRadius="10"
+                                    Padding="8,3">
+                                    <TextBlock x:Name="TxtReviewCount"
+                                           Text="0"
+                                           FontSize="11" FontWeight="Bold"
+                                           Foreground="White"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Review cards list -->
+                        <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Padding="12,10,12,10"
+                                  Background="White">
+                            <Grid>
+                                <!-- Cards -->
+                                <ItemsControl x:Name="ReviewsList">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="0,0,0,8"
+                                                CornerRadius="12"
+                                                Background="White"
+                                                BorderBrush="#ede9fe"
+                                                BorderThickness="1">
+                                                <Border.Effect>
+                                                    <DropShadowEffect Color="#667eea" BlurRadius="10"
+                                                                  ShadowDepth="0" Opacity="0.06"/>
+                                                </Border.Effect>
+
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+
+                                                    <!-- Top: book name + stars + rating -->
+                                                    <Border Grid.Row="0"
+                                                        CornerRadius="12,12,0,0"
+                                                        Padding="12,8">
+                                                        <Border.Background>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                <GradientStop Color="#faf9ff" Offset="0"/>
+                                                                <GradientStop Color="#f3f0ff" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Border.Background>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <StackPanel VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding Book_name}"
+                                                                       FontSize="12" FontWeight="Bold"
+                                                                       Foreground="#1e293b"
+                                                                       TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="{Binding ReviewID}"
+                                                                       FontSize="10"
+                                                                       Foreground="#a78bfa"
+                                                                       Margin="0,2,0,0"/>
+                                                            </StackPanel>
+                                                            <!-- Stars + number -->
+                                                            <Border Grid.Column="1"
+                                                                CornerRadius="8" Padding="8,3"
+                                                                Background="{Binding RatingBackground}"
+                                                                VerticalAlignment="Center">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="{Binding StarsText}"
+                                                                           FontSize="11" Margin="0,0,4,0"/>
+                                                                    <TextBlock Text="{Binding Rate}"
+                                                                           FontSize="11" FontWeight="ExtraBold"
+                                                                           Foreground="{Binding RatingColor}"
+                                                                           VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </Grid>
+                                                    </Border>
+
+                                                    <!-- Bottom: comment + likes/dislikes -->
+                                                    <Border Grid.Row="1" Padding="12,8,12,8">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <!-- Accent bar -->
+                                                            <Border Grid.Column="0"
+                                                                Width="3" CornerRadius="3"
+                                                                Margin="0,0,10,0"
+                                                                VerticalAlignment="Stretch">
+                                                                <Border.Background>
+                                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                        <GradientStop Color="#667eea" Offset="0"/>
+                                                                        <GradientStop Color="#764ba2" Offset="1"/>
+                                                                    </LinearGradientBrush>
+                                                                </Border.Background>
+                                                            </Border>
+
+                                                            <!-- Comment text -->
+                                                            <TextBlock Grid.Column="1"
+                                                                   Text="{Binding Comment}"
+                                                                   FontSize="12"
+                                                                   Foreground="#374151"
+                                                                   TextWrapping="Wrap"
+                                                                   FontStyle="Italic"
+                                                                   LineHeight="18"
+                                                                   VerticalAlignment="Center"/>
+
+                                                            <!-- Likes / dislikes -->
+                                                            <StackPanel Grid.Column="2"
+                                                                    Orientation="Horizontal"
+                                                                    VerticalAlignment="Center"
+                                                                    Margin="8,0,0,0">
+                                                                <Border CornerRadius="6" Padding="6,3"
+                                                                    Background="#f0fdf4"
+                                                                    Margin="0,0,4,0">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <TextBlock Text="👍" FontSize="11"
+                                                                               Margin="0,0,3,0"/>
+                                                                        <TextBlock Text="{Binding Likes}"
+                                                                               FontSize="11" FontWeight="Bold"
+                                                                               Foreground="#16a34a"
+                                                                               VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                                <Border CornerRadius="6" Padding="6,3"
+                                                                    Background="#fef2f2">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <TextBlock Text="👎" FontSize="11"
+                                                                               Margin="0,0,3,0"/>
+                                                                        <TextBlock Text="{Binding Dislikes}"
+                                                                               FontSize="11" FontWeight="Bold"
+                                                                               Foreground="#dc2626"
+                                                                               VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            <Button Tag="{Binding}"
+                                                                    Click="RemoveReview"
+                                                                    Cursor="Hand"
+                                                                    BorderThickness="0"
+                                                                    ToolTip="Delete review">
+                                                                <Button.Template>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border x:Name="delBorder"
+                                                                                Background="#fef2f2"
+                                                                                CornerRadius="10"
+                                                                                Padding="10,5">
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <TextBlock Text="🗑"
+                                                                                           FontSize="13"
+                                                                                           VerticalAlignment="Center"
+                                                                                           Margin="0,0,5,0"/>
+                                                                                <TextBlock Text="Delete"
+                                                                                           FontSize="11"
+                                                                                           FontWeight="Bold"
+                                                                                           Foreground="#ef4444"
+                                                                                           VerticalAlignment="Center"/>
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter TargetName="delBorder"
+                                                                                        Property="Background"
+                                                                                        Value="#fee2e2"/>
+                                                                            </Trigger>
+                                                                            <Trigger Property="IsPressed" Value="True">
+                                                                                <Setter TargetName="delBorder"
+                                                                                        Property="Background"
+                                                                                        Value="#fecaca"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Button.Template>
+                                                            </Button>
+                                                        </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <!-- Empty state -->
+                                <Border x:Name="EmptyReviews"
+                                    Visibility="Collapsed"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="0,20">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="💬" FontSize="36"
+                                               HorizontalAlignment="Center"/>
+                                        <TextBlock Text="No reviews yet"
+                                               FontSize="13" FontWeight="SemiBold"
+                                               Foreground="#94a3b8"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,8,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+
+            </Grid>
+        </Border>
+
+</Window>
