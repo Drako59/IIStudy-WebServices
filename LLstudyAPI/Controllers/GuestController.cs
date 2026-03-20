@@ -18,8 +18,8 @@ namespace LLstudyWS.Controllers
     [ApiController]
     public class GuestController : ControllerBase
     {
-
         readonly string BooksPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "BooksImages");
+        Dictionary<string, string> subjectsDict;
 
         private void debugList<T>(List<T> list)
         {
@@ -267,12 +267,15 @@ namespace LLstudyWS.Controllers
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
-                ViewBookViewModel viewBookViewModel = new ViewBookViewModel();
-                viewBookViewModel.reviews = new List<ViewReview>();
-                viewBookViewModel.book = this.repositoryUOW.BookRepository.GetByID(bookID);
-                viewBookViewModel.reviews = this.repositoryUOW.ReviewRepository.GetReviewsByBook(bookID);
-                viewBookViewModel.reviewsNumber = viewBookViewModel.reviews.Count();
-                viewBookViewModel.Rate = this.repositoryUOW.BookRepository.GetBookRate(bookID);
+                //ViewBookViewModel viewBookViewModel = new ViewBookViewModel();
+                //viewBookViewModel.reviews = new List<ViewReview>();
+                //viewBookViewModel.book = this.repositoryUOW.BookRepository.GetByID(bookID);
+                //viewBookViewModel.reviews = this.repositoryUOW.ReviewRepository.GetReviewsByBook(bookID);
+                //viewBookViewModel.reviewsNumber = viewBookViewModel.reviews.Count();
+                //viewBookViewModel.Rate = this.repositoryUOW.BookRepository.GetBookRate(bookID);
+
+                ViewBookViewModel viewBookViewModel = this.repositoryUOW.BookRepository.GetFullBook(bookID);
+
                 return viewBookViewModel;
 
             }
@@ -307,7 +310,7 @@ namespace LLstudyWS.Controllers
 
         [HttpGet]
 
-        public List<ViewBookViewModel> GetAllBookFullView()
+        public List<ViewBookViewModel> GetAllBookFullView() //with reviews, don't in use .
         {
             try
             {
@@ -337,7 +340,7 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
 
-                return this.repositoryUOW.BookRepository.GetDesktopBooks(); ;
+                return this.repositoryUOW.BookRepository.GetDesktopBooks() ;
 
             }
             catch (Exception ex)
@@ -407,6 +410,62 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        [HttpGet]
+        public List<Subject> GetAllSubjects()
+        {
+            try 
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.SubjectRepository.GetAll();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public Dictionary<string,string> GetAllSubjectsDict()
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.SubjectRepository.GetSubjectsDict();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public List<string> GetSubjectsNamesList()
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.SubjectRepository.GetSubjectsNamesList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
 
     }
 }

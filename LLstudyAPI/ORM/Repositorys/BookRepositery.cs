@@ -134,10 +134,10 @@ namespace LLstudyWS.ORM
 
             }
 
-            foreach(Book book in books)
-            {
-                Console.WriteLine($@"Book Name: {book.Book_name}");
-            }
+            //foreach(Book book in books)
+            //{
+            //    Console.WriteLine($@"Book Name: {book.Book_name}");
+            //}
             return books;
 
         }
@@ -286,18 +286,108 @@ namespace LLstudyWS.ORM
             return fileName;
         }
 
+        public ViewBookViewModel GetFullBook(string bookID)
+        {
+            ViewBookViewModel book = new ViewBookViewModel();
 
+            string sql = $@"SELECT * FROM Books";
+
+            sql = $@"SELECT
+                    b.BookID,
+                    b.author_name AS Author_name,
+                    b.book_name AS Book_name,
+                    b.in_stock AS In_stock,
+                    b.SubjectID,
+                    b.book_price AS Book_price,
+                    b.pdf_url_book AS Pdf_url_book,
+                    b.BookImagePath,
+                    b.IsDeleted,
+                    s.Subject_name,
+                    COUNT(r.ReviewID) AS ReviewsNumber,
+                    IIF(COUNT(r.ReviewID) = 0, 0, ROUND(AVG(r.Rate), 1)) AS Rate
+                FROM
+                    (
+                        Books b
+                        LEFT JOIN Subjects s ON b.SubjectID = s.SubjectID
+                    )
+                    LEFT JOIN Reviews r ON b.BookID = r.BookID
+                WHERE b.BookID = @BookID
+                GROUP BY
+                    b.BookID,
+                    b.author_name,
+                    b.book_name,
+                    b.in_stock,
+                    b.SubjectID,
+                    b.book_price,
+                    b.pdf_url_book,
+                    b.BookImagePath,
+                    b.IsDeleted,
+                    s.Subject_name";
+            this.helperOledb.AddParameter("@BookID", bookID);
+                
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    book = this.moderlRefCreator.CreateModel<ViewBookViewModel>(reader, exludes: new List<string> { "book", "reviews" });
+                    book.book = this.moderlRefCreator.CreateModel<Book>(reader);
+
+                    
+
+                }
+                else  
+                    return null;
+            }
+
+            
+            //book.Rate = this.GetBookRate(book.book.BookID);
+            book.reviews = this.GetReviewsByBook(book.book.BookID);
+            //book.reviewsNumber = book.reviews.Count();
+            return book;
+        }
         public List<ViewBookViewModel> GetFullBooks()
         {
             List<ViewBookViewModel> books = new List<ViewBookViewModel>();
 
             string sql = $@"SELECT * FROM Books";
+
+            sql = $@"SELECT
+                    b.BookID,
+                    b.author_name AS Author_name,
+                    b.book_name AS Book_name,
+                    b.in_stock AS In_stock,
+                    b.SubjectID,
+                    b.book_price AS Book_price,
+                    b.pdf_url_book AS Pdf_url_book,
+                    b.BookImagePath,
+                    b.IsDeleted,
+                    s.Subject_name,
+                    COUNT(r.ReviewID) AS ReviewsNumber,
+                    IIF(COUNT(r.ReviewID) = 0, 0, ROUND(AVG(r.Rate), 1)) AS Rate
+                FROM
+                    (
+                        Books b
+                        LEFT JOIN Subjects s ON b.SubjectID = s.SubjectID
+                    )
+                    LEFT JOIN Reviews r ON b.BookID = r.BookID
+                GROUP BY
+                    b.BookID,
+                    b.author_name,
+                    b.book_name,
+                    b.in_stock,
+                    b.SubjectID,
+                    b.book_price,
+                    b.pdf_url_book,
+                    b.BookImagePath,
+                    b.IsDeleted,
+                    s.Subject_name;";
             ViewBookViewModel model;
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 while (reader.Read())
                 {
-                    model = new ViewBookViewModel() { book = this.moderlRefCreator.CreateModel<Book>(reader) };
+                    model = this.moderlRefCreator.CreateModel<ViewBookViewModel>(reader,exludes : new List<string> { "book" , "reviews" });
+                    model.book = this.moderlRefCreator.CreateModel<Book>(reader);
                     
                     books.Add(model);
                     
@@ -306,9 +396,9 @@ namespace LLstudyWS.ORM
 
             foreach(ViewBookViewModel book in books)
             {
-                book.Rate = this.GetBookRate(book.book.BookID);
+                //book.Rate = this.GetBookRate(book.book.BookID);
                 book.reviews = this.GetReviewsByBook(book.book.BookID);
-                book.reviewsNumber = book.reviews.Count();
+                //book.reviewsNumber = book.reviews.Count();
             }
             return books;
         }
@@ -318,23 +408,56 @@ namespace LLstudyWS.ORM
             List<BookShownDesktop> books = new List<BookShownDesktop>();
 
             string sql = $@"SELECT * FROM Books";
+
+            sql = $@"SELECT
+                    b.BookID,
+                    b.author_name AS Author_name,
+                    b.book_name AS Book_name,
+                    b.in_stock AS In_stock,
+                    b.SubjectID,
+                    b.book_price AS Book_price,
+                    b.pdf_url_book AS Pdf_url_book,
+                    b.BookImagePath,
+                    b.IsDeleted,
+                    s.Subject_name,
+                    COUNT(r.ReviewID) AS ReviewsNum,
+                    IIF(COUNT(r.ReviewID) = 0, 0, ROUND(AVG(r.Rate), 1)) AS Rate
+                FROM
+                    (
+                        Books b
+                        LEFT JOIN Subjects s ON b.SubjectID = s.SubjectID
+                    )
+                    LEFT JOIN Reviews r ON b.BookID = r.BookID
+                GROUP BY
+                    b.BookID,
+                    b.author_name,
+                    b.book_name,
+                    b.in_stock,
+                    b.SubjectID,
+                    b.book_price,
+                    b.pdf_url_book,
+                    b.BookImagePath,
+                    b.IsDeleted,
+                    s.Subject_name;";
+
             BookShownDesktop model;
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 while (reader.Read())
                 {
-                    model = this.moderlRefCreator.CreateModel<BookShownDesktop>(reader, exludes : new List<string>() { "reviewsNum","Rate" });
+                    model = this.moderlRefCreator.CreateModel<BookShownDesktop>(reader); //, exludes : new List<string>() { "reviewsNum","Rate" }
 
                     books.Add(model);
 
                 }
             }
 
-            foreach (BookShownDesktop book in books)
-            {
-                book.Rate = this.GetBookRate(book.BookID);
-                book.reviewsNum = this.reviewNumber(book.BookID);
-            }
+            //foreach (BookShownDesktop book in books)
+            //{
+            //    book.Rate = this.GetBookRate(book.BookID);
+            //    book.reviewsNum = this.reviewNumber(book.BookID);
+                
+            //}
             return books;
         }
 

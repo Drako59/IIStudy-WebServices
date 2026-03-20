@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.Models
 {
-    public class CategoryModel: Model
+    public class Subject: Model
     {
         string subjectID;
         string subject_name;

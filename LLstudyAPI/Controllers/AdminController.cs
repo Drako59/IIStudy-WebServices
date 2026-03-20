@@ -548,7 +548,51 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
-    
+
+        [HttpPost]
+        public bool SetAdmin(Registered reg)
+        {
+            try
+            {
+                reg.Role = "Admin";
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.RegisteredRepository.Update(reg);
+
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
+
+        [HttpPost]
+        public bool RemoveAdmin(Registered reg)
+        {
+            try
+            {
+                reg.Role = "User";
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.RegisteredRepository.Update(reg);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
+
 
     }
 }

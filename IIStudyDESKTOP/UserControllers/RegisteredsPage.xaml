@@ -12,6 +12,9 @@
         <convertor:UrlConverter x:Key="UrlConverter">
 
         </convertor:UrlConverter>
+        <convertor:ToLowerConverter x:Key="ToLowerConverter">
+            
+        </convertor:ToLowerConverter>
         <Style x:Key="TableHeader" TargetType="TextBlock">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -350,7 +353,7 @@
                                         <ColumnDefinition Width="80"/>
                                         <ColumnDefinition Width="110"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="120"/>
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Reg ID -->
@@ -483,6 +486,32 @@
 
                                     <!-- Actions -->
                                     <StackPanel Grid.Column="8" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Button Click="ToggleAdminButton"
+                                                Margin="0,0,6,0"
+                                                
+                                                Tag="{Binding}">
+
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource ActionBtn}">
+
+                                                    <!-- ברירת מחדל = DELETE -->
+                                                    <Setter Property="Content" Value="👑"/> 
+                                                    <Setter Property="Foreground" Value="#16a34a"/>
+
+                                                    <Style.Triggers>
+
+                                                        <!-- אם הספר לא פעיל -->
+                                                        <DataTrigger Binding="{Binding Role,Converter={StaticResource ToLowerConverter}}" Value="admin">
+                                                            <Setter Property="Content" Value="💔"/>
+                                                            <Setter Property="Foreground" Value="#ef4444"/>
+                                                        </DataTrigger>
+
+                                                    </Style.Triggers>
+
+                                                </Style>
+                                            </Button.Style>
+
+                                        </Button>
                                         <Button Style="{StaticResource ActionBtn}"
                                                 Background="#eff6ff"
                                                 Content="👁"
@@ -497,7 +526,7 @@
                                                 Tag="{Binding RegisteredID}"
                                                 Click="DeleteUser_Click"/>-->
                                         <Button Click="ToggleBanButton"
-                                                    Tag="{Binding}">
+                                                Tag="{Binding}">
 
                                             <Button.Style>
                                                 <Style TargetType="Button" BasedOn="{StaticResource ActionBtn}">

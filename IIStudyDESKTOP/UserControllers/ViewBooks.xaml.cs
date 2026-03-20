@@ -37,12 +37,22 @@ namespace IIStudyDESKTOP.UserControllers
         private BookDetails bookDetails;
         private ViewReviews reviews;
         private CreateBookPage createBookPage;
+        private List<string> SubjectsNames { get; set; }
+        private string SelectedSubject { get; set; }
+        private Dictionary<string, string> Subjects { get; set; }
         private string searchBar;
         
-        public ViewBooks()
+        public  ViewBooks()
         {
             InitializeComponent();
-            this.LoadBooks();
+            this.init_page();
+            
+        }
+
+        private async Task init_page()
+        {
+            await this.LoadBooks();
+            await this.LoadSubjects();
         }
 
         private async Task GetBooks()
@@ -57,6 +67,22 @@ namespace IIStudyDESKTOP.UserControllers
             //UpdateStatistics();
 
         }
+        private async Task LoadSubjects()
+        {
+            ApiClient<Dictionary<string,string>> client = new ApiClient<Dictionary<string, string>>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetAllSubjectsDict";
+            this.Subjects = await client.GetAsync();
+            this.SubjectsNames = this.Subjects.Values.ToList();
+            cmbFilter.ItemsSource = this.SubjectsNames;
+            this.SubjectsNames.Insert(0, "All");
+            this.SelectedSubject = "All";
+            this.cmbFilter.SelectedItem = this.SelectedSubject;
+        }
+
+       
 
         //private async Task GetFullBooks()
         //{
@@ -190,22 +216,25 @@ namespace IIStudyDESKTOP.UserControllers
         }
         private void UpdateStatistics()
         {
-            txtTotalBooks.Text = this.filteredBooks.Count.ToString();
-            txtInStock.Text = this.filteredBooks.Count(b => b.In_stock).ToString();
-            txtOutOfStock.Text = this.filteredBooks.Count(b => !b.In_stock).ToString();
+            if (this.filteredBooks != null && this.filteredBooks.Any())
+            {
+                txtTotalBooks.Text = this.filteredBooks.Count.ToString();
+                txtInStock.Text = this.filteredBooks.Count(b => b.In_stock).ToString();
+                txtOutOfStock.Text = this.filteredBooks.Count(b => !b.In_stock).ToString();
+            }
         }
 
         private void ViewBookDetails(object sender, RoutedEventArgs e)
         {
 
             Button btn = sender as Button;
-            Book book = btn.Tag as Book;
+            BookShownDesktop book = btn.Tag as BookShownDesktop;
             if (this.bookDetails == null)
-                this.bookDetails = new BookDetails(book);
+                this.bookDetails = new BookDetails(book, this.Subjects);
             else
             {
                 //this.bookDetails.Close();
-                this.bookDetails = new BookDetails(book);
+                this.bookDetails = new BookDetails(book, this.Subjects);
             }
             Window parentWindow = Window.GetWindow(this);
             this.bookDetails.Owner = parentWindow;
@@ -328,7 +357,7 @@ namespace IIStudyDESKTOP.UserControllers
         private void CreateBookPopUp(object sender, RoutedEventArgs e)
         {
 
-            this.createBookPage = new CreateBookPage();
+            this.createBookPage = new CreateBookPage(this.Subjects);
 
             this.createBookPage.ShowDialog();
         }

@@ -14,6 +14,92 @@
             <Setter Property="Margin" Value="0,0,0,5"/>
         </Style>
 
+
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#e2e8f0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="MinHeight" Value="42"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+
+                            <!-- BOX -->
+                            <Border x:Name="Border"
+                            CornerRadius="10"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+
+                                <!-- 🔥 כל האזור לחיץ -->
+                                <ToggleButton
+                            IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Focusable="False">
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="40"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- TEXT (רק השם) -->
+                                        <TextBlock
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="#1e293b"
+                                    Text="{Binding SelectedItem.Value, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                                        <!-- ARROW -->
+                                        <TextBlock Grid.Column="1"
+                                           Text="▼"
+                                           FontSize="10"
+                                           Foreground="#64748b"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                                    </Grid>
+                                </ToggleButton>
+                            </Border>
+
+                            <!-- DROPDOWN -->
+                            <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
+                           Placement="Bottom"
+                           AllowsTransparency="True"
+                           Focusable="False">
+
+                                <Border Margin="0,4,0,0"
+                                Background="White"
+                                CornerRadius="10"
+                                BorderBrush="#e2e8f0"
+                                BorderThickness="1.5">
+
+                                    <ScrollViewer>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+
+                        <!-- HOVER / FOCUS -->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#a5b4fc"/>
+                            </Trigger>
+
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#667eea"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="InputBox" TargetType="TextBox">
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Foreground" Value="#1e293b"/>
@@ -369,7 +455,13 @@
                         </StackPanel>
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="SUBJECT ID" Style="{StaticResource FieldLabel}"/>
-                            <TextBox x:Name="InputSubjectID" Style="{StaticResource InputBox}"/>
+                            <ComboBox
+                                    Style="{StaticResource ModernComboBox}"
+                                    x:Name="InputSubjectID"
+                                    ItemsSource="{Binding Subjects}"
+                                    DisplayMemberPath="Value"
+                                    SelectedValuePath="Key"
+                                    SelectedValue="{Binding SubjectID}" />
                         </StackPanel>
                     </Grid>
 

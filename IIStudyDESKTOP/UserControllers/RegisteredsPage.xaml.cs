@@ -301,5 +301,77 @@ namespace IIStudyDESKTOP.UserControllers
             registeredDetail.Show();
             
         }
+
+        private void ToggleAdminButton(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Registered reg = btn.Tag as Registered;
+            if(reg.Role.ToLower() == "admin")
+            {
+                var confirm = MessageBox.Show("Are you sure you want to remove to this user the admin role???", "Confirm Admin", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                RemoveAdminButton(sender, e);
+            }
+            else
+            {
+                var confirm = MessageBox.Show("Are you sure you want to set this user as admin???", "Confirm Admin", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                SetAdminButton(sender, e);
+            }
+        }
+
+        private async void SetAdminButton(object sender, RoutedEventArgs e)
+        {
+
+            Button btn = sender as Button;
+            Registered reg = btn.Tag as Registered;
+            ApiClient<string> client = new ApiClient<string>();
+            ApiResultModel<bool> result = new ApiResultModel<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/SetAdmin";
+            result = await client.PostAsyncRet<Registered, bool>(reg);
+            if (!result.Success || !result.Data)
+            {
+                MessageBox.Show("Set admin operation has failed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                reg.Role = "Admin";
+                this.DataContext = null;
+                this.UsersListView.ItemsSource = null;
+                this.DataContext = this.registereds;
+                UsersListView.ItemsSource = new ObservableCollection<Registered>(this.filtered);
+                //MessageBox.Show("UnBan operation has succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+        }
+
+        private async void RemoveAdminButton(object sender, RoutedEventArgs e)
+        {
+
+            Button btn = sender as Button;
+            Registered reg = btn.Tag as Registered;
+            ApiClient<string> client = new ApiClient<string>();
+            ApiResultModel<bool> result = new ApiResultModel<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/RemoveAdmin";
+            result = await client.PostAsyncRet<Registered, bool>(reg);
+            if (!result.Success || !result.Data)
+            {
+                MessageBox.Show("Remove admin operation has failed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                reg.Role = "User";
+                this.DataContext = null;
+                this.UsersListView.ItemsSource = null;
+                this.DataContext = this.registereds;
+                UsersListView.ItemsSource = new ObservableCollection<Registered>(this.filtered);
+                //MessageBox.Show("UnBan operation has succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+        }
     }
 }

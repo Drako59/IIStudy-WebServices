@@ -5,7 +5,7 @@ namespace LLstudyWS.ORM.Repositorys
     public class RepositoryUOW
     {
         BookRepository bookRepository;
-        CategoryRepository categoryRepository;
+        SubjectRepository subjectRepository;
         OrderRepository orderRepository;
         ReviewRepository reviewRepository;
         ShoppingCartRepository shoppingCartRepository;
@@ -33,12 +33,13 @@ namespace LLstudyWS.ORM.Repositorys
                 return bookRepository;
             }
         }
-        public CategoryRepository CategoryRepository { get {
-                if (categoryRepository == null)
+        public SubjectRepository SubjectRepository
+        { get {
+                if (subjectRepository == null)
                 {
-                    this.categoryRepository = new CategoryRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                    this.subjectRepository = new SubjectRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
                 }
-                return categoryRepository;
+                return subjectRepository;
             } }
         public OrderRepository OrderRepository { get
             {

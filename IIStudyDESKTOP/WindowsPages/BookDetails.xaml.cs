@@ -1,6 +1,7 @@
 ﻿using IIStudyDESKTOP.WindowsPages;
 using IIstudyWSClient;
 using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels.Guest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,11 @@ namespace IIStudyDESKTOP.WindowsPages
     public partial class BookDetails : Window
     {
         EditBook editBook;
-        private Book book;
-        public BookDetails(Book book)
+        private BookShownDesktop book;
+        private Dictionary<string,string> Subjects { get; set; }
+        public BookDetails(BookShownDesktop book, Dictionary<string, string> subjects)
         {
+            this.Subjects = subjects;
             this.book = book;
             InitializeComponent();
             LoadBook();
@@ -41,9 +44,9 @@ namespace IIStudyDESKTOP.WindowsPages
         private async void  ViewEditBook(object sender, RoutedEventArgs e) 
         {
             Button btn = sender as Button;
-            Book book = btn.CommandParameter as Book;
+            BookShownDesktop book = btn.CommandParameter as BookShownDesktop;
             //if (this.editBook == null)
-            this.editBook = new EditBook(book);
+            this.editBook = new EditBook(book, this.Subjects);
 
             this.editBook.Owner = this;
             bool? reponse = this.editBook.ShowDialog() ;

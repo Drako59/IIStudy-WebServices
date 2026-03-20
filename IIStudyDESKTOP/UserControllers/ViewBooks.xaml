@@ -315,13 +315,15 @@
                                  Height="45"
                                  FontSize="14"
                                  Padding="14,12"
+                                 ItemsSource="{Binding SubjectsNames}"
+                                 SelectedItem="{Binding SelectedSubject}"
                                  >
-                            <ComboBoxItem Content="All Books" IsSelected="True"/>
-                            <ComboBoxItem Content="In Stock"/>
+                            <!--<ComboBoxItem Content="All Books" IsSelected="True"/>-->
+                            <!--<ComboBoxItem Content="In Stock"/>
                             <ComboBoxItem Content="Out of Stock"/>
                             <ComboBoxItem Content="Fiction"/>
                             <ComboBoxItem Content="Science"/>
-                            <ComboBoxItem Content="History"/>
+                            <ComboBoxItem Content="History"/>-->
                         </ComboBox>
                     </Grid>
 
@@ -436,6 +438,18 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
+                        <!-- Author -->
+                        <DataGridTextColumn Header="Subject" 
+                                            Binding="{Binding Subject_name}" 
+                                            Width="180"
+                                            IsReadOnly="True">          
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="#64748b"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
 
                         <!--Reviews-->

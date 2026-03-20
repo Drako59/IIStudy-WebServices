@@ -30,13 +30,15 @@ namespace IIStudyDESKTOP.WindowsPages
         private string ImageFileName = null;
         private string _selectedImagePath = null;
         private string _selectedPdfPath = null;
-
+        private Dictionary<string,string> Subjects { get; set; }
         // Raised after a successful insert so the caller can refresh its book list
         public event EventHandler<Book> OnBookCreated;
 
-        public CreateBookPage()
+        public CreateBookPage(Dictionary<string, string> subjects)
         {
             InitializeComponent();
+            this.Subjects = subjects;
+            this.InputSubjectID.ItemsSource = this.Subjects;
             MouseLeftButtonDown += (_, e) => { try { DragMove(); } catch { } };
         }
 
@@ -163,7 +165,7 @@ namespace IIStudyDESKTOP.WindowsPages
                     Book_name = InputBookName.Text.Trim(),
                     Author_name = InputAuthorName.Text.Trim(),
                     Book_price = price,
-                    SubjectID = InputSubjectID.Text.Trim(),
+                    SubjectID = InputSubjectID.SelectedValue.ToString(),
                     //Type = InputType.Text.Trim(),
                     //BookAuthor = InputBookAuthor.Text.Trim(),
                     In_stock = InputInStock.IsChecked == true,

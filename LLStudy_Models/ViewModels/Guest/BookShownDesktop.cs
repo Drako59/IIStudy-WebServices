@@ -9,6 +9,7 @@ namespace LLStudy_Models.ViewModels.Guest
 {
     public class BookShownDesktop : Book
     {
+        public string Subject_name { get; set; }
         public int reviewsNum {get; set;}
         public double Rate { get; set; }
     }

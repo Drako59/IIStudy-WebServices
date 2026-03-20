@@ -168,10 +168,10 @@
 
                         <Border Grid.Column="2" Background="#f8fafc" CornerRadius="12" Padding="12,10">
                             <StackPanel>
-                                <TextBlock Text="SUBJECT ID" Style="{StaticResource InfoLabel}"/>
+                                <TextBlock Text="SUBJECT" Style="{StaticResource InfoLabel}"/>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="🏷 " FontSize="13"/>
-                                    <TextBlock x:Name="TxtSubjectID" Text="{Binding SubjectID}" Style="{StaticResource InfoValue}"/>
+                                    <TextBlock x:Name="TxtSubjectID" Text="{Binding Subject_name}" Style="{StaticResource InfoValue}"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -196,7 +196,7 @@
                                 <TextBlock Text="PRICE" Style="{StaticResource InfoLabel}"/>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="💰 " FontSize="13"/>
-                                    <TextBlock x:Name="TxtPrice" Text="{Binding Book_price}"
+                                    <TextBlock x:Name="TxtPrice" Text="{Binding Book_price, StringFormat=\{0:C\}}"
                                                FontSize="17" FontWeight="ExtraBold">
                                         <TextBlock.Foreground>
                                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">

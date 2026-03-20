@@ -1,5 +1,6 @@
 ﻿using IIstudyWSClient;
 using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels.Guest;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 namespace IIStudyDESKTOP.WindowsPages
@@ -26,21 +28,23 @@ namespace IIStudyDESKTOP.WindowsPages
         // !! UPDATE to your actual connection string !!
         
 
-        private Book book;
+        private BookShownDesktop book;
         private string _selectedImagePath = null;
         private string _selectedPdfPath = null;
         private string ImageFileName = null;
+        private Dictionary<string,string> Subjects { get; set; }
 
         // Raised when save is successful so the parent window can refresh
         public event EventHandler<Book> OnSaved;
 
-        public EditBook(Book book) 
+        public EditBook(BookShownDesktop book, Dictionary<string, string> subjects) 
         {
             this._selectedImagePath = null;
             InitializeComponent();
             // Allow dragging the borderless window
             MouseLeftButtonDown += (_, e) => { try { DragMove(); } catch { } };
             this.book = book;
+            this.Subjects = subjects;
             LoadBook();
 
             //PopulateFields(book);
@@ -52,7 +56,10 @@ namespace IIStudyDESKTOP.WindowsPages
 
         private void LoadBook()
         {
+            this.EditSubjectID.ItemsSource = this.Subjects;
+            this.EditSubjectID.SelectedValue = book.BookID;
             this.DataContext = this.book;
+
             this.CheckIfImageExist();
 
         }
@@ -168,54 +175,34 @@ namespace IIStudyDESKTOP.WindowsPages
         // ════════════════════════════════════════════════════════════
         //  SAVE
         // ════════════════════════════════════════════════════════════
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        private bool BtnSaveValidationClick(object sender, RoutedEventArgs e) //NOT IN USE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         {
             if (string.IsNullOrWhiteSpace(EditBookName.Text))
             {
                 MessageBox.Show("Book name cannot be empty.", "Validation",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                return false;
             }
 
             if (!double.TryParse(EditPrice.Text, out double newPrice))
             {
                 MessageBox.Show("Please enter a valid numeric price.", "Validation",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                return false;
             }
 
-            string finalImagePath = _selectedImagePath ?? book.BookImagePath;
-            string finalPdfPath = _selectedPdfPath ?? book.Pdf_url_book;
+        
 
-            try
-            {
-                
 
-                
+
+
 
                 // Update in-memory model
-                this.book.Book_name = EditBookName.Text.Trim();
-                this.book.Author_name = EditAuthorName.Text.Trim();
-                this.book.Book_price = newPrice;
-                this.book.SubjectID = EditSubjectID.Text.Trim();
-                //this._book.Type = EditType.Text.Trim();
-                //this.book.Author_name = EditBookAuthor.Text.Trim();
-                this.book.In_stock = EditInStock.IsChecked == true;
-                this.book.Pdf_url_book = finalPdfPath;
-                this.book.BookImagePath = finalImagePath;
+               
 
-                MessageBox.Show("Book updated successfully! ✅", "Saved",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
+            OnSaved?.Invoke(this, book);
 
-                OnSaved?.Invoke(this, book);
-                DialogResult = true;
-                Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Save failed:\n{ex.Message}", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            return true;
         }
 
         // ════════════════════════════════════════════════════════════
@@ -229,29 +216,32 @@ namespace IIStudyDESKTOP.WindowsPages
 
         private async void UpdateBook(object sender,RoutedEventArgs e)
         {
-            ApiClient<bool> client = new ApiClient<bool>();
-            client.Scheme = "http";
-            client.Host = "localhost";
-            client.Port = 5049;
-            client.Path = "api/Admin/UpdateFullBook";
-            ApiResultModel<Book> response = await client.PostAsyncRet<Book,Book>(this.book,this._selectedImagePath ==  null? new List<(Stream, string)>() : new List<(Stream,string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) });
-            if (response.Success)
+            if (this.BtnSaveValidationClick(sender, e))
             {
-                this.book.BookImagePath = response.Data.BookImagePath;
-                this.DataContext = this.book;
-                this.DialogResult = true;
-                this.Close();
-                this.CheckIfImageExist();
+                ApiClient<bool> client = new ApiClient<bool>();
+                client.Scheme = "http";
+                client.Host = "localhost";
+                client.Port = 5049;
+                client.Path = "api/Admin/UpdateFullBook";
+                ApiResultModel<Book> response = await client.PostAsyncRet<Book, Book>(this.book, this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) });
+                if (response.Success)
+                {
+                    this.book.BookImagePath = response.Data.BookImagePath;
+                    this.book.Subject_name = this.Subjects[this.book.SubjectID];
+                    this.DataContext = this.book;
+                    this.DialogResult = true;
+                    this.Close();
+                    this.CheckIfImageExist();
+                }
+                else
+                {
+                    MessageBox.Show(
+                                "The operation failed.",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                }
             }
-            else
-            {
-                MessageBox.Show(
-                            "The operation failed.",
-                            "Error",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-            }
-
             
         }
 

@@ -11,7 +11,7 @@ namespace LLStudy_Models.Models
     {
       
         string examID;
-        string categoryID;
+        string subjectID;
         bool access;
         string file_path_url;
         string exam_Name;
@@ -20,7 +20,7 @@ namespace LLStudy_Models.Models
         //[IsDigits(ErrorMessage = "ID must contain only digits.")]
         public string ExamID { get { return examID; } set { examID = value; } }
         [Required]
-        public string CategoryID { get { return categoryID; } set { categoryID = value; } }
+        public string SubjectID { get { return subjectID; } set { subjectID = value; } }
         
         public bool Access { get { return access; } set { access = value; } }
         [Required]
