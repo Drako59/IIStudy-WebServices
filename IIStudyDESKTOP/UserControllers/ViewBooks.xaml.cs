@@ -76,10 +76,15 @@ namespace IIStudyDESKTOP.UserControllers
             client.Path = "api/Guest/GetAllSubjectsDict";
             this.Subjects = await client.GetAsync();
             this.SubjectsNames = this.Subjects.Values.ToList();
-            cmbFilter.ItemsSource = this.SubjectsNames;
+            this.Subjects.Add("0", "All");
+            this.cmbFilter.ItemsSource = this.Subjects;
+            this.SelectedSubject = "0";
+            this.cmbFilter.SelectedValue = this.SelectedSubject;
+
+
+            //cmbFilter.ItemsSource = this.SubjectsNames;
             this.SubjectsNames.Insert(0, "All");
-            this.SelectedSubject = "All";
-            this.cmbFilter.SelectedItem = this.SelectedSubject;
+            //this.cmbFilter.SelectedItem = this.SelectedSubject;
         }
 
        
@@ -360,6 +365,31 @@ namespace IIStudyDESKTOP.UserControllers
             this.createBookPage = new CreateBookPage(this.Subjects);
 
             this.createBookPage.ShowDialog();
+        }
+
+        private void FilterSubject(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            string subjectID = comboBox.SelectedValue?.ToString();
+            if (subjectID != "0")
+            {
+                this.filteredBooks = this.books.Where(b =>
+                {
+                    bool found = (b.SubjectID == subjectID);
+                    return found;
+
+                }
+                ).ToList();
+                this.dgBooks.ItemsSource = null;
+                this.dgBooks.ItemsSource = this.filteredBooks;
+                //this.DataContext = this.filteredBooks;
+            }
+            else {
+                this.dgBooks.ItemsSource = null;
+                this.dgBooks.ItemsSource = this.books;
+                //this.DataContext = this.books;
+            }
+
         }
     }
 }

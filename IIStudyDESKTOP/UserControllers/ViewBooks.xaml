@@ -289,7 +289,7 @@
                         <!-- Add New Book Button -->
                         <Button Grid.Column="2" 
                                Content="➕ Add New Book"
-                                Click="CreateBookPopUp"
+                               Click="CreateBookPopUp"
                                Style="{StaticResource ModernButton}"
                                VerticalAlignment="Center"
                                />
@@ -315,10 +315,14 @@
                                  Height="45"
                                  FontSize="14"
                                  Padding="14,12"
-                                 ItemsSource="{Binding SubjectsNames}"
-                                 SelectedItem="{Binding SelectedSubject}"
+                                 SelectionChanged="FilterSubject"
+                                 ItemsSource="{Binding Subjects}"
+                                 DisplayMemberPath="Value"
+                                 SelectedValuePath="Key"
                                  >
-                            <!--<ComboBoxItem Content="All Books" IsSelected="True"/>-->
+                                <!--SelectedValue="{Binding SubjectID}"-->
+
+                        <!--<ComboBoxItem Content="All Books" IsSelected="True"/>-->
                             <!--<ComboBoxItem Content="In Stock"/>
                             <ComboBoxItem Content="Out of Stock"/>
                             <ComboBoxItem Content="Fiction"/>
