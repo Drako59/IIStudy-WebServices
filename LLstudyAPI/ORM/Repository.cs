@@ -62,44 +62,7 @@ namespace LLstudyWS.ORM
             }
           
             return this.helperOledb.Insert(sql) > 0;
-
-
-
-            //string sql = @$"INSERT INTO {model.GetType().Name}s (";
-
-            //foreach(PropertyInfo pro in propertys)
-            //{
-            //    sql += pro.Name + ",";
-            //}
-            //sql += ") VALUES (";
-            //foreach (PropertyInfo pro in propertys)
-            //{
-            //    sql += "@" + pro.Name + ",";
-            //}
-            //sql += ")";
-
-
-
-            //string sql2 = $@"INSERT INTO Books (
-            //                author_name,
-            //                book_name,
-            //                book_price,
-            //                In_stock,
-            //                subjectID,
-            //                pdf_url_book
-            //                )
-            //            VALUES
-            //                (@AuthorName, @BookName, @BookPrice, @InStock, @SubjectID, @PdfUrlBook) ";
-
-            //this.helperOledb.AddParameter("@AuthorName", model.Author_name);
-            //this.helperOledb.AddParameter("@BookName", model.Book_name);
-            //this.helperOledb.AddParameter("@BookPrice", model.Book_price.ToString());
-            //this.helperOledb.AddParameter("@InStock", model.In_stock.ToString());
-            //this.helperOledb.AddParameter("@SubjectID", model.SubjectID);
-            //this.helperOledb.AddParameter("@PdfUrlBook", model.Pdf_url_book);
-
-
-            
+        
         }
 
         
