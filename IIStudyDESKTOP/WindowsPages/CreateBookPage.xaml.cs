@@ -26,7 +26,7 @@ namespace IIStudyDESKTOP.WindowsPages
     {
 
         // !! UPDATE to your actual connection string !!
-
+        private string fileName = null;
         private string ImageFileName = null;
         private string _selectedImagePath = null;
         private string _selectedPdfPath = null;
@@ -116,7 +116,9 @@ namespace IIStudyDESKTOP.WindowsPages
             if (dlg.ShowDialog() != true) return;
 
             _selectedPdfPath = dlg.FileName;
-            TxtPdfPath.Text = System.IO.Path.GetFileName(dlg.FileName);
+
+            this.fileName = System.IO.Path.GetFileName(dlg.FileName);
+            TxtPdfPath.Text = this.fileName;
             TxtPdfPath.Foreground = new SolidColorBrush(
                 (Color)ColorConverter.ConvertFromString("#4338ca"));
         }
@@ -185,7 +187,21 @@ namespace IIStudyDESKTOP.WindowsPages
                 client.Host = "localhost";
                 client.Port = 5049;
                 client.Path = "api/Admin/CreateNewBook";
-                result = await client.PostAsyncRet<Book,bool>(newBook, this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) });
+
+                List<(Stream, string)> files_list = new List<(Stream, string)>();
+
+                if (this._selectedImagePath != null)
+                {
+                    files_list.Add( (File.OpenRead(this._selectedImagePath), this.ImageFileName) );
+                }
+                if (this._selectedPdfPath != null)
+                {
+                    files_list.Add(  (File.OpenRead(this._selectedPdfPath), this.fileName ) );
+                }
+
+
+
+                result = await client.PostAsyncRet<Book,bool>(newBook, files_list); //this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) }
                 if (!result.Success || !result.Data)
                 {
                     DialogResult = false;

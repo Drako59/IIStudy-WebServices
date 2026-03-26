@@ -456,7 +456,6 @@ namespace LLstudyWS.Controllers
             {
                 try
                 {
-                    bool hasImage = false;
                     this.repositoryUOW.HelperOledb.OpenConnection();
                 
 
@@ -466,10 +465,34 @@ namespace LLstudyWS.Controllers
 
                     if (HttpContext.Request.Form.Files.Count != 0)
                     {
-                        hasImage = true;
-                        IFormFile file = HttpContext.Request.Form.Files[0];
-                        modelBook.BookImagePath = this.repositoryUOW.BookRepository.ChangeImage(file, modelBook.BookID);
+                        foreach (IFormFile file in HttpContext.Request.Form.Files)
+                        {
+                            string ext = Path.GetExtension(file.FileName);
+                            //Console.WriteLine($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
 
+                            if (string.IsNullOrEmpty(ext))
+                            {
+                                ext = (file.ContentType ?? "").ToLowerInvariant() switch
+                                {
+                                    "image/jpeg" => ".jpg",
+                                    "image/png" => ".png",
+                                    "image/gif" => ".gif",
+                                    "application/pdf" => ".pdf",
+                                    _ => throw new Exception("Unsupported file type")
+                                };
+                            }
+
+                            if(ext == ".pdf")
+                            {
+                                modelBook.Pdf_url_book = this.repositoryUOW.BookRepository.ChangeFile(file, modelBook.BookID);
+
+                            }
+                            else
+                            {
+                                modelBook.BookImagePath = this.repositoryUOW.BookRepository.ChangeImage(file, modelBook.BookID);
+
+                            }
+                        }
 
                     }
 
@@ -506,14 +529,40 @@ namespace LLstudyWS.Controllers
                 modelBook.BookID = this.repositoryUOW.BookRepository.GetLastID();
                 if (HttpContext.Request.Form.Files.Count != 0)
                 {
-                    hasImage = true;
-                    IFormFile file = HttpContext.Request.Form.Files[0];
-                    modelBook.BookImagePath = this.repositoryUOW.BookRepository.ChangeImage(file, modelBook.BookID);
-                    this.repositoryUOW.BookRepository.Update(modelBook);
+                    foreach(IFormFile file in HttpContext.Request.Form.Files) {
+                        string ext = Path.GetExtension(file.FileName);
+                        //Console.WriteLine($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
+
+                        if (string.IsNullOrEmpty(ext))
+                        {
+                            ext = (file.ContentType ?? "").ToLowerInvariant() switch
+                            {
+                                "image/jpeg" => ".jpg",
+                                "image/png" => ".png",
+                                "image/gif" => ".gif",
+                                "application/pdf" => ".pdf",
+                                _ => throw new Exception("Unsupported file type")
+                            };
+                        }
+
+                        if(ext == ".pdf")
+                        {
+                            modelBook.Pdf_url_book = this.repositoryUOW.BookRepository.ChangeFile(file, modelBook.BookID);
+                        }
+                        else
+                        {
+                            //hasImage = true;
+                            //IFormFile file = HttpContext.Request.Form.Files[0];
+                            modelBook.BookImagePath = this.repositoryUOW.BookRepository.ChangeImage(file, modelBook.BookID);
+                        }
+                        this.repositoryUOW.BookRepository.Update(modelBook);
+
+
+                    }
 
                 }
 
-                    this.repositoryUOW.HelperOledb.Commit();
+                this.repositoryUOW.HelperOledb.Commit();
                 return suceed;
             
 

@@ -487,8 +487,9 @@
                                     Background="White"
                                     BorderBrush="#c7d2fe"
                                     Foreground="#667eea"
+                                    Click="BrowsePdf_Click"
                                     >
-                                <!--Click="BrowsePdf_Click"-->
+                                
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="📄 " FontSize="13"/>
                                     <TextBlock Text="Browse" VerticalAlignment="Center"/>

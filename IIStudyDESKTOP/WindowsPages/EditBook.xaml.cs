@@ -32,6 +32,7 @@ namespace IIStudyDESKTOP.WindowsPages
         private string _selectedImagePath = null;
         private string _selectedPdfPath = null;
         private string ImageFileName = null;
+        private string PdfFileName = null;
         private Dictionary<string,string> Subjects { get; set; }
 
         // Raised when save is successful so the parent window can refresh
@@ -165,8 +166,9 @@ namespace IIStudyDESKTOP.WindowsPages
 
             if (dlg.ShowDialog() == true)
             {
-                _selectedPdfPath = dlg.FileName;
-                TxtPdfPath.Text = System.IO.Path.GetFileName(dlg.FileName);
+                this._selectedPdfPath = dlg.FileName;
+                this.PdfFileName = System.IO.Path.GetFileName(dlg.FileName);
+                TxtPdfPath.Text = this.PdfFileName;
                 TxtPdfPath.Foreground = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString("#4338ca"));
             }
@@ -223,7 +225,22 @@ namespace IIStudyDESKTOP.WindowsPages
                 client.Host = "localhost";
                 client.Port = 5049;
                 client.Path = "api/Admin/UpdateFullBook";
-                ApiResultModel<Book> response = await client.PostAsyncRet<Book, Book>(this.book, this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) });
+
+                List<(Stream, string)> files_list = new List<(Stream, string)>();
+
+                if (this.ImageFileName != null)
+                {
+                    files_list.Add((File.OpenRead(this._selectedImagePath), this.ImageFileName));
+                }
+                if(this.PdfFileName != null)
+                {
+                    files_list.Add((File.OpenRead(this._selectedPdfPath), this.PdfFileName));
+
+                }
+
+
+
+                ApiResultModel<Book> response = await client.PostAsyncRet<Book, Book>(this.book,files_list ); //this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) }
                 if (response.Success)
                 {
                     this.book.BookImagePath = response.Data.BookImagePath;
