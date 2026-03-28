@@ -144,21 +144,20 @@ namespace LLstudyWS.Controllers
 
         //return ID
         [HttpPost]
-        public bool Pay( PaymentViewModel payment)
+        public bool Pay(Order order) //Not in use
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 this.repositoryUOW.HelperOledb.OpenTransaction();
-                this.repositoryUOW.OrderRepository.Create(payment.Order);
-                string orderID = this.repositoryUOW.OrderRepository.GetLastID() ;
-                Console.WriteLine("OrderID-> "+ orderID);
-                foreach (string bookID in payment.BooksID)
-                {
-                    Console.Write(bookID + "->");
-                    this.repositoryUOW.OrderRepository.AddRealationOfBooksAndOrder(orderID, bookID);
-                }
-                Console.WriteLine(  );
+
+                order.Total_price = this.repositoryUOW.ShoppingCartRepository.GetTotalPriceForUser(order.RegisteredID);
+                this.repositoryUOW.OrderRepository.Create(order);
+                string orderID = this.repositoryUOW.OrderRepository.GetLastID();
+
+                this.repositoryUOW.OrderRepository.AddRealationOfBooksAndOrder(orderID, order.RegisteredID);
+                this.repositoryUOW.ShoppingCartRepository.RemoveAllBooksForUser(order.RegisteredID);
+
                 this.repositoryUOW.HelperOledb.Commit();
 
                 return true ;
@@ -176,6 +175,8 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
+
+        
 
         //[HttpPost]
 
@@ -303,7 +304,7 @@ namespace LLstudyWS.Controllers
 
                 if (this.repositoryUOW.ShoppingCartRepository.CountBookForUser(record.BookID,record.RegisteredID) > 1)
                 {
-                    return this.repositoryUOW.ShoppingCartRepository.RemoveOneBookForUuser(record.BookID,record.RegisteredID);
+                    return this.repositoryUOW.ShoppingCartRepository.RemoveOneBookForUser(record.BookID,record.RegisteredID);
                 }
                 return this.repositoryUOW.ShoppingCartRepository.RemoveBookForUser(record.BookID,record.RegisteredID);
             }

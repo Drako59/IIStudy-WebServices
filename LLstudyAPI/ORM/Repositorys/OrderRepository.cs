@@ -10,14 +10,21 @@ namespace LLstudyWS.ORM
     {
         public OrderRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
-        //NOT IN USE
-        public bool AddRealationOfBooksAndOrder(string orderID, string bookID)
+        
+        public bool AddRealationOfBooksAndOrder(string orderID, string registeredID)
         {
-            string sql = @$"INSERT INTO Orders_Books (OrderID, BookID) VALUES (@OrderID,@BookID)";
+            string sql = @$"INSERT INTO Orders_Books (OrderID, BookID,Amount) VALUES (@OrderID,@BookID,@Amount)";
 
+            sql = $@"INSERT INTO Orders_Books (OrderID, BookID, Amount)
+                    SELECT 
+                        @OrderID,
+                        BookID,
+                        CountBooks
+                    FROM Shopping_carts
+                    WHERE RegisteredID = @RegisteredID";
 
             this.helperOledb.AddParameter("@OrderID", orderID);
-            this.helperOledb.AddParameter("@BookID", bookID);
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
 
             return this.helperOledb.Insert(sql) > 0;
         }

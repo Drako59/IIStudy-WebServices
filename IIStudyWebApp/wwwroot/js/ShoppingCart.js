@@ -162,12 +162,14 @@ function checkEmptyCart() {
 }
 
 function checkout() {
-    alert('Proceeding to checkout...');
+    window.location.href = `https://localhost:7121/Registered/PaymentPage`;
 }
 
 function continueShopping() {
     window.location.href = `https://localhost:7121/Registered/ViewBookCatalog`;
 }
+
+
 
 
 

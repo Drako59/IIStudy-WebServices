@@ -80,7 +80,7 @@ namespace LLstudyWS.ORM
                 return -1;
             }
         }
-        public bool RemoveOneBookForUuser(string BookID, string registeredID)
+        public bool RemoveOneBookForUser(string BookID, string registeredID)
         {
             string sql = "UPDATE Shopping_carts SET CountBooks = (CountBooks - 1) WHERE BookID = @BookID AND RegisteredID = @RegisteredID ";
             this.helperOledb.AddParameter("@BookID", BookID);
@@ -119,5 +119,55 @@ namespace LLstudyWS.ORM
         //INNER JOIN Books b ON sc.BookID = b.BookID
         //WHERE sc.RegisteredID = @RegisteredID;
 
+
+        public List<(string,int)> GetShoppingCartBooksID(string registeredID)
+        {
+            string sql = "SELECT BookID ,CountBook FROM Shopping_carts WHERE RegisteredID = @RegisteredID";
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            List<(string,int)> booksIDs = new List<(string,int)>();
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    booksIDs.Add((Convert.ToString(reader["BookID"]), Convert.ToInt32(reader["CountBook"])));
+                }
+            }
+
+            return booksIDs;
+
+            
+        }
+
+
+        public bool RemoveAllBooksForUser(string registeredID)
+        {
+            string sql = "DELETE * FROM Shopping_carts WHERE RegisteredID = @RegisteredID";
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+
+
+            return this.helperOledb.Delete(sql) > 0;
+        }
+
+        public double GetTotalPriceForUser(string registeredID)
+        {
+            string sql = $@"SELECT SUM( Books.Book_price * Shopping_carts.CountBooks)  as TotalPrice
+                        FROM Books 
+                        INNER JOIN Shopping_carts ON 
+                        Books.BookID = Shopping_carts.BookID 
+                        WHERE Shopping_carts.RegisteredID = @RegisteredID";
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToDouble(reader["TotalPrice"]);
+                }
+                else return -1;
+            }
+
+        }
     }
 }

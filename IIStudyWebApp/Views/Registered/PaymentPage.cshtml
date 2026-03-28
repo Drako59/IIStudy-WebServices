@@ -1,0 +1,355 @@
+﻿
+@{
+    ViewData["Title"] = "PaymentPage";
+    Layout = "~/Views/Shared/RegisteredMasterPage.cshtml";
+}
+@using LLStudy_Models.Models
+@model Order
+
+@{
+    Order order;
+    if (Model == null)
+    {
+        order = new Order() { Location = "123 Main Street" };
+    }
+    else
+    {
+        order = Model;
+    }
+}
+
+
+<link href="../Css/PaymentPage.css" rel="stylesheet" />
+
+<div class="payment-page">
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Payment Checkout</h1>
+            <p class="page-subtitle">Complete your order securely</p>
+        </div>
+
+        <form class="checkout-layout" asp-action="PayShoppingCart" asp-controller="Registered" method="post">
+            <!-- Payment Form Section -->
+            <div class="payment-section">
+                <!-- Payment Method Selection -->
+                <h2 class="section-title">Payment Method</h2>
+
+                <div class="payment-methods">
+                    <div class="payment-method active" onclick="selectPaymentMethod(this, 'card')">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                        <span class="payment-method-name">Credit Card</span>
+                    </div>
+
+                    <div class="payment-method" onclick="selectPaymentMethod(this, 'paypal')">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7.076 21c.358 0 .701-.147.946-.408l4.87-5.182c.242-.259.24-.67-.005-.926a.634.634 0 0 0-.925-.006l-4.87 5.182a.673.673 0 0 0 .007.925.634.634 0 0 0 .977.415z"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        <span class="payment-method-name">PayPal</span>
+                    </div>
+
+                    <div class="payment-method" onclick="selectPaymentMethod(this, 'bank')">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        <span class="payment-method-name">Bank Transfer</span>
+                    </div>
+                </div>
+
+                <!-- Credit Card Form -->
+                <div id="cardForm" class="payment-form active">
+                    <div class="card-icons">
+                        <div class="card-icon">VISA</div>
+                        <div class="card-icon">MC</div>
+                        <div class="card-icon">AMEX</div>
+                        <div class="card-icon">DISC</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Card Number</label>
+                        <input type="text" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Cardholder Name</label>
+                        <input type="text" class="form-input" placeholder="John Doe">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="text" class="form-input" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CVV</label>
+                            <input type="text" class="form-input" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" class="checkbox-input" id="saveCard">
+                        <label class="checkbox-label" for="saveCard">
+                            Save this card for future purchases
+                        </label>
+                    </div>
+                </div>
+
+                <!-- PayPal Form -->
+                <div id="paypalForm" class="payment-form">
+                    <div class="info-banner">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <div class="info-banner-text">
+                            You will be redirected to PayPal to complete your payment securely. Please enter your PayPal account credentials below.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">PayPal Email Address</label>
+                        <input type="email" class="form-input" placeholder="your.email@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">PayPal Password</label>
+                        <input type="password" class="form-input" placeholder="Enter your PayPal password">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" class="checkbox-input" id="savePaypal">
+                        <label class="checkbox-label" for="savePaypal">
+                            Remember my PayPal account for future purchases
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Bank Transfer Form -->
+                <div id="bankForm" class="payment-form">
+                    <div class="info-banner">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <div class="info-banner-text">
+                            Direct bank transfer payment. Your order will be processed once we receive confirmation of the transfer. Please use your Order ID as the payment reference.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Bank Name</label>
+                        <input type="text" class="form-input" placeholder="Enter your bank name">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Account Holder Name</label>
+                        <input type="text" class="form-input" placeholder="John Doe">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Account Number</label>
+                        <input type="text" class="form-input" placeholder="Enter your account number">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Routing Number</label>
+                            <input type="text" class="form-input" placeholder="123456789">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Swift/BIC Code</label>
+                            <input type="text" class="form-input" placeholder="ABCDUS33">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Account Type</label>
+                        <select class="form-input">
+                            <option value="">Select account type</option>
+                            <option value="checking">Checking</option>
+                            <option value="savings">Savings</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Billing Address -->
+                <h2 class="section-title" style="margin-top: 40px;">Billing Address</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Street Address</label>
+                    <input asp-for="Location" type="text" class="form-input" placeholder="@order.Location" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <input type="text" class="form-input" placeholder="New York">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Postal Code</label>
+                        <input type="text" class="form-input" placeholder="10001">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Country</label>
+                    <input type="text" class="form-input" placeholder="United States">
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" class="checkbox-input" id="terms" checked required>
+                    <label class="checkbox-label" for="terms">
+                        I agree to the <strong>Terms & Conditions</strong> and <strong>Privacy Policy</strong>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Order Summary Section -->
+            <div class="order-summary-section">
+                <h2 class="section-title">Order Summary</h2>
+
+                <!-- Order Information -->
+                <div class="order-info-card">
+                    <div class="info-row">
+                        <span class="info-label">Order ID</span>
+                        <span class="info-value">#ORD-2024-1312</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Registered ID</span>
+                        <span class="info-value">REG-45892</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Delivered</span>
+                        <span class="info-value">Standard Shipping</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Location</span>
+                        <span class="info-value">New York, USA</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Date</span>
+                        <span class="info-value">Jan 28, 2026</span>
+                    </div>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <!-- Price Breakdown -->
+                <div class="summary-row">
+                    <span class="summary-label">Subtotal</span>
+                    <span class="summary-value">$163.00</span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">Shipping</span>
+                    <span class="summary-value">$5.00</span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">Tax (10%)</span>
+                    <span class="summary-value">$16.30</span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <!-- Total -->
+                <div class="total-row">
+                    <span class="total-label">Total Price</span>
+                    <span class="total-value">$184.30</span>
+                </div>
+
+                <!-- Pay Button -->
+                <input type="submit" class="pay-button" value="Complete Payment">
+
+                <div class="secure-badge">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Secure 256-bit SSL Encryption
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let currentPaymentMethod = 'card';
+
+    function selectPaymentMethod(element, method) {
+        // Remove active class from all payment methods
+        document.querySelectorAll('.payment-method').forEach(pm => {
+            pm.classList.remove('active');
+        });
+
+        // Add active class to selected method
+        element.classList.add('active');
+
+        // Hide all payment forms
+        document.querySelectorAll('.payment-form').forEach(form => {
+            form.classList.remove('active');
+        });
+
+        // Show appropriate form based on selection
+        currentPaymentMethod = method;
+        if (method === 'card') {
+            document.getElementById('cardForm').classList.add('active');
+        } else if (method === 'paypal') {
+            document.getElementById('paypalForm').classList.add('active');
+        } else if (method === 'bank') {
+            document.getElementById('bankForm').classList.add('active');
+        }
+    }
+
+    function processPayment() {
+        const termsChecked = document.getElementById('terms').checked;
+
+        if (!termsChecked) {
+            alert('Please accept the Terms & Conditions to proceed.');
+            return;
+        }
+
+        let paymentMethodText = '';
+        switch(currentPaymentMethod) {
+            case 'card':
+                paymentMethodText = 'Credit Card';
+                break;
+            case 'paypal':
+                paymentMethodText = 'PayPal';
+                break;
+            case 'bank':
+                paymentMethodText = 'Bank Transfer';
+                break;
+        }
+
+        // Simulate payment processing
+        alert(`Processing payment via ${paymentMethodText}...\n\nOrder ID: #ORD-2024-1312\nTotal: $184.30\n\nThank you for your purchase!`);
+    }
+
+    // Format card number input
+    const cardNumberInput = document.querySelector('#cardForm input[placeholder="1234 5678 9012 3456"]');
+    if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+    }
+
+    // Format expiry date input
+    const expiryInput = document.querySelector('#cardForm input[placeholder="MM/YY"]');
+    if (expiryInput) {
+        expiryInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value;
+        });
+    }
+</script>

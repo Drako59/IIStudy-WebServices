@@ -3,6 +3,7 @@ using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Registerd;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -437,6 +438,47 @@ namespace IIStudyWebApp.Controllers
             //}
             
             return File(file.Bytes, file.ContentType);
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> PayShoppingCart(Order order )
+        {
+
+            order.OrderID = "0";
+            DateTime now = DateTime.Now;
+            string customFormat = now.ToString("yyyy-MM-dd");
+
+            order.Date = customFormat;
+            order.Delivered = false;
+            order.RegisteredID = HttpContext.Session.GetString("RegisteredID");
+
+
+            ApiClient<Order> client = new ApiClient<Order>();
+
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Registered/Pay";
+            
+            ApiResultModel<bool> status = await client.PostAsyncRet<Order, bool>(order);
+            if(status.Success && status.Data)
+                return RedirectToAction("RegisteredHomePage", "Registered");
+            return RedirectToAction("PaymentPage", "Registered", order);
+
+            //if (status.Success && status.Data)
+            //    return View();
+            //return View();
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PaymentPage()
+        {
+            Registered registered = GetRegisteredDeatils().Result;
+            ViewData["Registered"] = registered;
+            return View();
+            
         }
     }
 }

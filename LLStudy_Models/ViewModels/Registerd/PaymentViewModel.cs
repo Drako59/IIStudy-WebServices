@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.ViewModels.Registerd
 {
-    public class PaymentViewModel
+    public class PaymentViewModel //NOT IN USE
     {
-        public List<string> BooksID { get; set; }
         public Order Order { get; set; }
 
     }
