@@ -16,9 +16,12 @@ namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+
+   
     public class GuestController : ControllerBase
     {
         readonly string BooksPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "BooksImages");
+
         Dictionary<string, string> subjectsDict;
 
         private void debugList<T>(List<T> list)

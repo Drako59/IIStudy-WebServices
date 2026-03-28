@@ -15,6 +15,8 @@ namespace LLstudyWS.Controllers
     {
         RepositoryUOW repositoryUOW;
         string path = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "RegisteredImages");
+        readonly string BooksPdfPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Files", "BooksFiles");
+
         public RegisteredController() {
             this.repositoryUOW = new RepositoryUOW();
         }
@@ -30,7 +32,7 @@ namespace LLstudyWS.Controllers
                 List<Book> books = new List<Book>();
                 books = this.repositoryUOW.BookRepository.GetUserNameBooks(registeredID);
                 model.Books = books;
-                model.User = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
+                model.User = this.repositoryUOW.RegisteredRepository.GetByID(registeredID,exludes : new List<string>() { "Password", "RegisteredSalt"});
                 return model;
             }
             catch (Exception ex)
@@ -401,6 +403,34 @@ namespace LLstudyWS.Controllers
             {
                 Console.WriteLine(ex.ToString());
                 return  StatusCode(500, "Error loading image");
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetBookFile(string bookID, string registeredID)
+        {
+            try
+            {
+                string AbsoultePath;
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                Book book = this.repositoryUOW.BookRepository.GetByID(bookID);
+                AbsoultePath = Path.Combine(this.BooksPdfPath, book.Pdf_url_book);
+                if (!(book.Pdf_url_book != null && book.Pdf_url_book.ToLower() != "none" && System.IO.File.Exists(AbsoultePath) && this.repositoryUOW.OrderRepository.CheckIfBookExistForUser(bookID,registeredID)))
+                    return StatusCode(404);
+
+
+                var (stream, contentType) = this.repositoryUOW.BookRepository.GetPdf(AbsoultePath);
+
+                return File(stream, contentType);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
             }
             finally
             {

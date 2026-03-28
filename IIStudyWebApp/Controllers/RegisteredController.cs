@@ -41,7 +41,7 @@ namespace IIStudyWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
-            Registered registered = GetRegisteredDeatils().Result;
+            Registered registered = await GetRegisteredDeatils();
 
             //RegisteredViewModel registeredInfo = new RegisteredViewModel();
             //registeredInfo.registered = GetRegisteredDeatils().Result;
@@ -152,7 +152,7 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Registered/Pay";
 
 
-            bool success = client.PostAsync(payment).Result;
+            bool success = await client.PostAsync(payment);
 
             if (!success)
                 return View("Failed to pay.");
@@ -181,7 +181,7 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Registered/RemoveFromCart";
 
 
-            bool success = client.PostAsync(record).Result;
+            bool success = await client.PostAsync(record);
 
 
             return Json(new { success = success });
@@ -209,7 +209,7 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Registered/RemoveAllBooksFromCart";
 
 
-            bool success = client.PostAsync(record).Result;
+            bool success =await client.PostAsync(record);
 
 
             return Json(new { success = success });
@@ -242,7 +242,7 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Registered/AddToCart";
 
 
-            bool success = client.PostAsync(record).Result;
+            bool success = await client.PostAsync(record);
 
             
             return  Json(new { success = success });
@@ -281,7 +281,7 @@ namespace IIStudyWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewBookCatalog()
         {
-            Registered registered = GetRegisteredDeatils().Result;
+            Registered registered = await GetRegisteredDeatils();
             //RegisteredViewModel registeredInfo = new RegisteredViewModel();
             //registeredInfo.registered = GetRegisteredDeatils().Result;
 
@@ -302,7 +302,7 @@ namespace IIStudyWebApp.Controllers
 
         public async Task<IActionResult> ViewBookPreview(string bookID)
         {
-            Registered registered = GetRegisteredDeatils().Result;
+            Registered registered = await GetRegisteredDeatils();
             //RegisteredViewModel registeredInfo = new RegisteredViewModel();
             //registeredInfo.registered = GetRegisteredDeatils().Result;
 
@@ -392,7 +392,7 @@ namespace IIStudyWebApp.Controllers
                 return RedirectToAction("Profile", "Registered");
                 
             }
-            Registered reg = GetRegisteredDeatils().Result;
+            Registered reg = await GetRegisteredDeatils();
             if(reg == null)
             {
                 return RedirectToAction( "ViewSignInPage", "Guest");
@@ -430,7 +430,7 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Registered/GetProfileImage";
             client.AddParameter("registeredID", registeredID);
-            ApiFileResultModel file = client.GetAsyncFile().Result ;
+            ApiFileResultModel file = await client.GetAsyncFile();
 
             //if(file == null)
             //{
@@ -475,10 +475,50 @@ namespace IIStudyWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> PaymentPage()
         {
-            Registered registered = GetRegisteredDeatils().Result;
+            Registered registered = await GetRegisteredDeatils();
             ViewData["Registered"] = registered;
             return View();
             
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBookFile(string bookID)
+        {
+            ApiClient<Registered> client = new ApiClient<Registered>();
+
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Registered/GetBookFile";
+            client.AddParameter("bookID", bookID);
+            client.AddParameter("registeredID", HttpContext.Session.GetString("RegisteredID"));
+
+            ApiFileResultModel file = await client.GetAsyncFile();
+
+           
+            if (file == null)
+            {
+                return StatusCode(404);
+            }
+            return File(file.Bytes, file.ContentType);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewMyLibary()
+        {
+            ApiClient<ViewOwnedBooksModel> client = new ApiClient<ViewOwnedBooksModel>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Registered/GetUserBooks";
+            client.AddParameter("registeredID", HttpContext.Session.GetString("RegisteredID"));
+
+            ViewOwnedBooksModel viewOwnedBooksModels = await client.GetAsync();
+            if (viewOwnedBooksModels.User == null)
+                return StatusCode(500);
+            ViewData["Registered"] = viewOwnedBooksModels.User;
+
+            return View(viewOwnedBooksModels);
         }
     }
 }

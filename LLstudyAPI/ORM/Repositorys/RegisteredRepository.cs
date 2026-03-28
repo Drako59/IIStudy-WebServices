@@ -13,6 +13,7 @@ namespace LLstudyWS.ORM
 {
     public class RegisteredRepository : Repository<Registered>, IRepository<Registered>
     {
+
         public RegisteredRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
         public Registered Login( string password, string? signTool = null)
@@ -90,6 +91,8 @@ namespace LLstudyWS.ORM
             //};
             return (stream, contentType);
         }
+
+        
 
         public string ChangeImage(IFormFile file, string registeredID)
         {

@@ -3,6 +3,7 @@ using LLstudyWS.ORM.CreatorsModels;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace LLstudyWS.ORM
 {
@@ -13,9 +14,9 @@ namespace LLstudyWS.ORM
         
         public bool AddRealationOfBooksAndOrder(string orderID, string registeredID)
         {
-            string sql = @$"INSERT INTO Orders_Books (OrderID, BookID,Amount) VALUES (@OrderID,@BookID,@Amount)";
+            //string sql = @$"INSERT INTO Orders_Books (OrderID, BookID,Amount) VALUES (@OrderID,@BookID,@Amount)";
 
-            sql = $@"INSERT INTO Orders_Books (OrderID, BookID, Amount)
+            string sql = $@"INSERT INTO Orders_Books (OrderID, BookID, Amount)
                     SELECT 
                         @OrderID,
                         BookID,
@@ -74,6 +75,30 @@ namespace LLstudyWS.ORM
             return books;
 
 
+        }
+
+        public bool CheckIfBookExistForUser(string bookID, string registeredID)
+        {
+            string sql = $@"SELECT COUNT(*) AS BooksNum FROM  Books
+                                    INNER JOIN (
+                                        Orders_Books
+                                        INNER JOIN Orders ON Orders.orderID = Orders_Books.OrderID
+                                    ) ON Books.bookID = Orders_Books.BookID
+                                WHERE
+                                    Orders.RegisteredID = @RegisteredID AND Books.BookID = @BookID";
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            this.helperOledb.AddParameter("@BookID", bookID);
+
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    //Console.WriteLine("CountBooks Check-> " + Convert.ToInt32(reader["BooksNum"]));
+                    return Convert.ToInt32(reader["BooksNum"]) >  0;
+                }
+                return false;
+            }
         }
     }
 }
