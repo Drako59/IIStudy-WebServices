@@ -41,7 +41,7 @@
 <section class="search-section">
     <div class="container">
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="Search for books, authors, categories...">
+            <input type="text" id="search-input" class="search-input" placeholder="Search for books, authors, categories..." oninput="searchBooks()">
             <div class="search-icon">🔍</div>
         </div>
     </div>
@@ -82,7 +82,7 @@
                     if (book.In_stock)
                     {
                         string path = $"https://localhost:7121/Guest/ViewBookPreview?bookID={book.BookID}";
-                        <div class="book-card">
+                        <div class="book-card" data-title="@book.Book_name">
                             <a href=@path class="book-cover"><img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"></a>
                         <div class="book-info">
                             <h3>@book.Book_name</h3>
@@ -102,7 +102,7 @@
                     else
                     {
                         string path = $"https://localhost:7121/Guest/ViewBookPreview?bookID={book.BookID}";
-                        <div class="book-card">
+                        <div class="book-card" data-title="@book.Book_name">
                             <a href=@path class="book-cover"><img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"></a>
                             <div class="book-info">
                                 <h3>@book.Book_name</h3>
@@ -133,3 +133,20 @@
 
     </div>
 </main>
+
+<script>
+     function searchBooks() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        const bookCards = document.querySelectorAll('.book-card');
+
+        bookCards.forEach(card => {
+            const title = card.dataset.title.toLowerCase();
+            const author = card.querySelector(".book-author").textContent.toLowerCase();
+            if (title.includes(searchTerm) || author.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+</script>

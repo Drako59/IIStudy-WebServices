@@ -451,7 +451,7 @@ namespace LLstudyWS.Controllers
 
 
             [HttpPost]
-
+            [RequestSizeLimit(104857600)]
             public Book UpdateFullBook([FromForm] string model)
             {
                 try
@@ -514,7 +514,7 @@ namespace LLstudyWS.Controllers
             }
 
         [HttpPost]
-
+        [RequestSizeLimit(104857600)]
         public bool CreateNewBook([FromForm] string model)
         {
             try

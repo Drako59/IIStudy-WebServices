@@ -108,7 +108,7 @@
 
             <div class="books-grid" id="booksGrid">
                 <!-- Books-->
-                @foreach (Book book in Model.Books)
+                @foreach (ViewOwnedBook book in Model.Books)
                 {
                     //@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })
                     <a class="book-card" data-title="@book.Book_name" href="@Url.Action("GetBookFile", "Registered", new { bookID = book.BookID })" target="_blank">
@@ -124,7 +124,7 @@
                                     <path d="M7 8h10M7 12h8M7 16h6" />
                                 </svg>
                             }
-                            <div class="book-badge">PDF</div>
+                            <div class="book-badge">@book.Subject_name</div>
                         </div>
                         <div class="book-info">
                             <h3 class="book-title">@book.Book_name</h3>
@@ -135,7 +135,7 @@
                                 <span class="meta-label">Rating</span>
                                 <div class="book-rating">
                                     <span class="star">★</span>
-                                    <span class="meta-value">4.8</span>
+                                    <span class="meta-value">@book.AvgRate</span>
                                 </div>
                             </div>
                             <div class="book-meta-item">
@@ -165,7 +165,8 @@
 
         bookCards.forEach(card => {
             const title = card.dataset.title.toLowerCase();
-            if (title.includes(searchTerm)) {
+            const author = card.querySelector(".book-author").textContent.toLowerCase();
+            if (title.includes(searchTerm) || author.includes(searchTerm)) {
                 card.style.display = 'block';
             } else {
                 card.style.display = 'none';

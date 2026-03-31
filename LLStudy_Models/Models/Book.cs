@@ -36,6 +36,7 @@ namespace LLStudy_Models.Models
         public double Book_price { get { return book_price; } set { book_price = value; } }
         public string Pdf_url_book { get { return pdf_url_book; } set { pdf_url_book = value; } }
 
+        public string BookDetails { get; set; }
         public string BookImagePath { get; set; }
 
         public bool IsDeleted { get; set; }

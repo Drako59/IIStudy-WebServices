@@ -29,7 +29,7 @@ namespace LLstudyWS.Controllers
             {
                 ViewOwnedBooksModel model = new ViewOwnedBooksModel();
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                List<Book> books = new List<Book>();
+                List<ViewOwnedBook> books = new List<ViewOwnedBook>();
                 books = this.repositoryUOW.BookRepository.GetUserNameBooks(registeredID);
                 model.Books = books;
                 model.User = this.repositoryUOW.RegisteredRepository.GetByID(registeredID,exludes : new List<string>() { "Password", "RegisteredSalt"});

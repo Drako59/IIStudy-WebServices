@@ -21,15 +21,28 @@ namespace LLstudyWS.ORM
 
        
 
-        public List<Book> GetUserNameBooks(string RegisteredID)
+        public List<ViewOwnedBook> GetUserNameBooks(string RegisteredID)
         {
-            List<Book> books = new List<Book>();
+            List<ViewOwnedBook> books = new List<ViewOwnedBook>();
 
-            string sql = $@"SELECT Books.BookID AS [BookID], * FROM  Books
+            string sql = $@"SELECT Subjects.SubjectID AS SubjectID, Books.BookID AS [BookID], * ,
+                                    (
+                                        SELECT ROUND(IIf(IsNull(AVG(Reviews.Rate)), 0, AVG(Reviews.Rate)),1)
+                                        FROM Reviews
+                                        WHERE Reviews.BookID = Books.BookID
+                                    ) AS AvgRate
+                                    FROM
+                                    (
+                                        Books
+                                        INNER JOIN (
+                                            Orders_Books
+                                            INNER JOIN Orders ON Orders.orderID = Orders_Books.OrderID
+                                        ) ON Books.bookID = Orders_Books.BookID
+                                    ) 
                                     INNER JOIN (
-                                        Orders_Books
-                                        INNER JOIN Orders ON Orders.orderID = Orders_Books.OrderID
-                                    ) ON Books.bookID = Orders_Books.BookID
+                                        
+                                        Subjects
+                                    ) ON Subjects.SubjectID = Books.BookID
                                 WHERE
                                     Orders.RegisteredID = @RegisteredID";
 
@@ -38,7 +51,7 @@ namespace LLstudyWS.ORM
             {
                 while (reader.Read())
                 {
-                    books.Add(this.moderlRefCreator.CreateModel<Book>(reader));
+                    books.Add(this.moderlRefCreator.CreateModel<ViewOwnedBook>(reader));
                 }
             }
             return books;
@@ -292,6 +305,7 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book AS Pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    IIf(IsNull(b.BookDetails), '', b.BookDetails) AS BookDetails,
                     s.Subject_name,
                     COUNT(r.ReviewID) AS ReviewsNumber,
                     IIF(COUNT(r.ReviewID) = 0, 0, ROUND(AVG(r.Rate), 1)) AS Rate
@@ -312,6 +326,7 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    b.BookDetails,
                     s.Subject_name";
             this.helperOledb.AddParameter("@BookID", bookID);
                 
@@ -319,7 +334,7 @@ namespace LLstudyWS.ORM
             {
                 if (reader.Read())
                 {
-                    book = this.moderlRefCreator.CreateModel<ViewBookViewModel>(reader, exludes: new List<string> { "book", "reviews" });
+                    book = this.moderlRefCreator.CreateModel<ViewBookViewModel>(reader, exludes: new List<string> { "book", "reviews", "PurchaseNum" });
                     book.book = this.moderlRefCreator.CreateModel<Book>(reader);
 
                     
@@ -332,6 +347,7 @@ namespace LLstudyWS.ORM
             
             //book.Rate = this.GetBookRate(book.book.BookID);
             book.reviews = this.GetReviewsByBook(book.book.BookID);
+            book.PurchaseNum = this.HowManyPurchased(book.book.BookID);
             //book.reviewsNumber = book.reviews.Count();
             return book;
         }
@@ -351,6 +367,7 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book AS Pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    IIf(IsNull(b.BookDetails), '', b.BookDetails) AS BookDetails,
                     s.Subject_name,
                     COUNT(r.ReviewID) AS ReviewsNumber,
                     IIF(COUNT(r.ReviewID) = 0, 0, ROUND(AVG(r.Rate), 1)) AS Rate
@@ -370,13 +387,14 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    b.BookDetails,
                     s.Subject_name;";
             ViewBookViewModel model;
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 while (reader.Read())
                 {
-                    model = this.moderlRefCreator.CreateModel<ViewBookViewModel>(reader,exludes : new List<string> { "book" , "reviews" });
+                    model = this.moderlRefCreator.CreateModel<ViewBookViewModel>(reader,exludes : new List<string> { "book" , "reviews", "PurchaseNum" });
                     model.book = this.moderlRefCreator.CreateModel<Book>(reader);
                     
                     books.Add(model);
@@ -388,6 +406,7 @@ namespace LLstudyWS.ORM
             {
                 //book.Rate = this.GetBookRate(book.book.BookID);
                 book.reviews = this.GetReviewsByBook(book.book.BookID);
+                book.PurchaseNum = this.HowManyPurchased(book.book.BookID);
                 //book.reviewsNumber = book.reviews.Count();
             }
             return books;
@@ -401,14 +420,15 @@ namespace LLstudyWS.ORM
 
             sql = $@"SELECT
                     b.BookID,
-                    b.author_name AS Author_name,
-                    b.book_name AS Book_name,
-                    b.in_stock AS In_stock,
+                    b.Author_name AS Author_name,
+                    b.Book_name AS Book_name,
+                    b.In_stock AS In_stock,
                     b.SubjectID,
-                    b.book_price AS Book_price,
-                    b.pdf_url_book AS Pdf_url_book,
+                    b.Book_price AS Book_price,
+                    b.Pdf_url_book AS Pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    IIf(IsNull(b.BookDetails), '', b.BookDetails) AS BookDetails,
                     s.Subject_name,
                     COUNT(r.ReviewID) AS ReviewsNum,
                     IIF(COUNT(r.ReviewID) = 0, 0, ROUND(AVG(r.Rate), 1)) AS Rate
@@ -428,6 +448,7 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    b.BookDetails,
                     s.Subject_name;";
 
             BookShownDesktop model;
@@ -485,6 +506,24 @@ namespace LLstudyWS.ORM
                 
             }
             return books;
+        }
+
+        public int HowManyPurchased(string bookID)
+        {
+            string sql = "SELECT IIf(IsNull(SUM(Amount)), 0, SUM(Amount)) AS Count_purchase FROM Orders_Books WHERE BookID = @BookID";
+            this.helperOledb.AddParameter("@BookID", bookID);
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt32(reader["Count_purchase"]);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
     }
 }

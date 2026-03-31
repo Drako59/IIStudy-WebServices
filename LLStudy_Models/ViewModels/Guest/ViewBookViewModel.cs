@@ -13,7 +13,7 @@ namespace LLStudy_Models.ViewModels
     {
         public double Rate { get; set; }
         public Book book { get; set; }
-
+        public int PurchaseNum { get; set; }
         public string Subject_name { get; set; }
         public List<ViewReview> reviews { get; set; }
         public int reviewsNumber { get; set; }

@@ -13,7 +13,7 @@
 <section class="search-section">
     <div class="container">
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="Search for books, authors, categories...">
+            <input type="text" id="search-input" class="search-input" placeholder="Search for books, authors, categories..." oninput="searchBooks()">
             <div class="search-icon">🔍</div>
         </div>
     </div>
@@ -24,24 +24,7 @@
 
     <div class="container">
         <div class="books-grid">
-            <!-- Book Cards -->
-            @* @if (Model != null && Model.Any())
-            {
-                @foreach (Book book in Model)
-                {
-                    <div class="book-card">
-                            <span class="category-tag">Fiction</span>
-                        <div class="book-image">
-                            <img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg">
-                        </div>
-                        <h3 class="book-title">@book.Book_name</h3>
-                        <div class="book-actions">
-                            <button class="action-btn btn-add-cart">Add to Cart</button>
-                            <button class="action-btn btn-preview">Preview</button>
-                        </div>
-                    </div>
-                }
-            } *@
+           
 
 
 
@@ -54,7 +37,7 @@
                     if (book.In_stock)
                     {
                         string path = $"https://localhost:7121/Registered/ViewBookPreview?bookID={book.BookID}";
-                        <div class="book-card">
+                        <div class="book-card" data-title="@book.Book_name">
                             <a href=@path class="book-cover"><img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"></a>
                             <div class="book-info">
                                 <h3>@book.Book_name</h3>
@@ -74,7 +57,7 @@
                     else
                     {
                         string path = $"https://localhost:7121/Registered/ViewBookPreview?bookID={book.BookID}";
-                        <div class="book-card">
+                        <div class="book-card" data-title="@book.Book_name">
                             <a href=@path class="book-cover"><img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"></a>
                             <div class="book-info">
                                 <h3>@book.Book_name</h3>
@@ -172,10 +155,46 @@
         }, 2000);
     }
 
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    
+
+     function searchBooks() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        const bookCards = document.querySelectorAll('.book-card');
+        bookCards.forEach(card => {
+            const title = card.dataset.title.toLowerCase();
+            const author = card.querySelector(".book-author").textContent.toLowerCase();;
+            if (title.includes(searchTerm) || author.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     }
 </script>
+
+
+
+
+
+<!-- Book Cards -->
+@* @if (Model != null && Model.Any())
+            {
+                @foreach (Book book in Model)
+                {
+                    <div class="book-card">
+                            <span class="category-tag">Fiction</span>
+                        <div class="book-image">
+                            <img class="image_div" src="../Images/HomePage_Guest_Images/0b9b4d7903c0f8b8cdd4d451e7ae3d19.jpg">
+                        </div>
+                        <h3 class="book-title">@book.Book_name</h3>
+                        <div class="book-actions">
+                            <button class="action-btn btn-add-cart">Add to Cart</button>
+                            <button class="action-btn btn-preview">Preview</button>
+                        </div>
+                    </div>
+                }
+            } *@
+
 
 
 @*  <script>

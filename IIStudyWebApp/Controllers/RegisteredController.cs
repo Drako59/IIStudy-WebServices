@@ -514,7 +514,7 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("registeredID", HttpContext.Session.GetString("RegisteredID"));
 
             ViewOwnedBooksModel viewOwnedBooksModels = await client.GetAsync();
-            if (viewOwnedBooksModels.User == null)
+            if (viewOwnedBooksModels == null ||viewOwnedBooksModels.User == null)
                 return StatusCode(500);
             ViewData["Registered"] = viewOwnedBooksModels.User;
 
