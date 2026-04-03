@@ -28,10 +28,10 @@ namespace IIStudyDESKTOP.UserControllers
     {
 
 
-        private List<Registered> registereds = null;
+        private List<Registered> registereds = new List<Registered>();
         private RegisteredDetails registeredDetail;
         private ObservableCollection<Registered> _allUsers = new();
-        private List<Registered> filtered;
+        private List<Registered> filtered = new List<Registered>();
         private string _filterMode = "All";
 
         public RegisteredsPage()
