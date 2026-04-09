@@ -67,17 +67,19 @@ namespace IIStudyWebApp.Controllers
             ViewExamsModel examView = await client.GetAsync();
             return View(examView);
         }
+        [HttpGet]
 
-        public async Task<IActionResult> ViewCalender()
+        public async Task<IActionResult> ViewCalendar()
         {
-            ApiClient<List<Event>> client = new ApiClient<List<Event>>();
-            client.Scheme = "http";
-            client.Host = "localhost";
-            client.Port = 5049;
-            client.Path = "api/Guest/GetExams";
+            
+            //ApiClient<List<Event>> client = new ApiClient<List<Event>>();
+            //client.Scheme = "http";
+            //client.Host = "localhost";
+            //client.Port = 5049;
+            //client.Path = "api/Guest/GetExams";
 
-            List<Event> calender = await client.GetAsync();
-            return View(calender);
+            //List<Event> calender = await client.GetAsync();
+            return View();
         }
 
         public async Task<IActionResult> SignIn(SignInViewModel SignInModel)

@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewData["Title"] = "ViewCalendar";
+    Layout = "~/Views/Shared/RegisteredMasterPage.cshtml";
+}
+
+
+
+
+
+<link href="~/css/calendar.css" rel="stylesheet" />
+<!-- Calendar Page -->
+<div class="calendar-page">
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Events Calendar</h1>
+            <p class="page-subtitle">View and manage upcoming events</p>
+        </div>
+
+        <!-- Calendar Section -->
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <h2 class="calendar-title" id="calendarTitle">January 2026</h2>
+                <div class="calendar-controls">
+                    <button class="nav-btn" onclick="previousMonth()" title="Previous Month">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="today-btn" onclick="goToToday()">Today</button>
+                    <button class="nav-btn" onclick="nextMonth()" title="Next Month">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div id="loadingState" class="loading-state" style="display: none;">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Loading events...</div>
+            </div>
+
+            <div id="calendarGrid">
+                <div class="calendar-grid">
+                    <div class="calendar-day-header">Sun</div>
+                    <div class="calendar-day-header">Mon</div>
+                    <div class="calendar-day-header">Tue</div>
+                    <div class="calendar-day-header">Wed</div>
+                    <div class="calendar-day-header">Thu</div>
+                    <div class="calendar-day-header">Fri</div>
+                    <div class="calendar-day-header">Sat</div>
+                    <!-- Calendar days will be dynamically generated -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Events List -->
+        <div class="events-list-section">
+            <h2 class="section-title">Upcoming Events</h2>
+            <div id="eventsList">
+                <!-- Events will be dynamically loaded -->
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/calendar.js"></script>
+
+
+
+
+

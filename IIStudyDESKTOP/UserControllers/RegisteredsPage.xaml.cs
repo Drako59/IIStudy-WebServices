@@ -308,12 +308,12 @@ namespace IIStudyDESKTOP.UserControllers
             Registered reg = btn.Tag as Registered;
             if(reg.Role.ToLower() == "admin")
             {
-                var confirm = MessageBox.Show("Are you sure you want to remove to this user the admin role???", "Confirm Admin", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                var confirm = MessageBox.Show($@"Are you sure you want to remove to {reg.UserName}'s the admin role???", "Confirm Admin", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 RemoveAdminButton(sender, e);
             }
             else
             {
-                var confirm = MessageBox.Show("Are you sure you want to set this user as admin???", "Confirm Admin", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                var confirm = MessageBox.Show($@"Are you sure you want to set {reg.UserName}'s as admin???", "Confirm Admin", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 SetAdminButton(sender, e);
             }
         }

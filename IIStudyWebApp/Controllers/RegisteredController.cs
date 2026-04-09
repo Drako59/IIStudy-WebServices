@@ -520,5 +520,14 @@ namespace IIStudyWebApp.Controllers
 
             return View(viewOwnedBooksModels);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewCalendar()
+        {
+            Registered registered = await this.GetRegisteredDeatils();
+            ViewData["Registered"] = registered;
+
+            return View();
+        }
     }
 }
