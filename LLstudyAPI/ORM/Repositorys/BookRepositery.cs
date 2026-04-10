@@ -305,6 +305,7 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book AS Pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    b.IsOnline,
                     IIf(IsNull(b.BookDetails), '', b.BookDetails) AS BookDetails,
                     s.Subject_name,
                     COUNT(r.ReviewID) AS ReviewsNumber,
@@ -326,6 +327,7 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    b.IsOnline,
                     b.BookDetails,
                     s.Subject_name";
             this.helperOledb.AddParameter("@BookID", bookID);
@@ -367,6 +369,7 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book AS Pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    b.IsOnline,
                     IIf(IsNull(b.BookDetails), '', b.BookDetails) AS BookDetails,
                     s.Subject_name,
                     COUNT(r.ReviewID) AS ReviewsNumber,
@@ -387,6 +390,7 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    b.IsOnline, 
                     b.BookDetails,
                     s.Subject_name;";
             ViewBookViewModel model;
@@ -428,6 +432,7 @@ namespace LLstudyWS.ORM
                     b.Pdf_url_book AS Pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    b.IsOnline,
                     IIf(IsNull(b.BookDetails), '', b.BookDetails) AS BookDetails,
                     s.Subject_name,
                     COUNT(r.ReviewID) AS ReviewsNum,
@@ -448,6 +453,7 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
+                    b.IsOnline, 
                     b.BookDetails,
                     s.Subject_name;";
 
@@ -523,6 +529,28 @@ namespace LLstudyWS.ORM
                 {
                     return 0;
                 }
+            }
+        }
+
+        public List<string> GetOwnedOnlineBooksIDsForUser(string registeredID)
+        {
+            string sql = $@"SELECT Books.BookID AS BookID FROM Books INNER JOIN (
+                                          Orders_Books INNER JOIN Orders 
+                                          ON Orders_Books.OrderID = Orders.OrderID
+                                          ) ON Books.BookID = Orders_Books.BookID
+                                    WHERE Orders.RegisteredID = @RegisteredID AND IsOnline = True;
+                                    ";
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);   
+            List<string> booksIDs = new List<string>();
+
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while(reader.Read())
+                {
+                    booksIDs.Add(Convert.ToString(reader["BookID"]));
+                }
+                return booksIDs;
             }
         }
     }

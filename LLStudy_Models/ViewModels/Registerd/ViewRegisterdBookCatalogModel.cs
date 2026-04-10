@@ -1,15 +1,17 @@
-﻿using System;
+﻿using LLStudy_Models.Models;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LLStudy_Models.Models;
 
 namespace LLStudy_Models.ViewModels
 {
-    internal class ViewRegisterdBookCatalogModel
+    public class ViewRegisterdBookCatalogModel
     {
-        Registered User { get; set; }
-        List<Book> Books { get; set; }
+        public List<Book> books { get; set; } 
+        public List<string> OwnedOnlineBooksIDs { get; set; }
+        public List<string> OnlineBooksInShoppingCartIDs { get; set; }
     }
 }

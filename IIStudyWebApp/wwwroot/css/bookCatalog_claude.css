@@ -374,3 +374,15 @@ button.add-to-cart.in-cart {
     display: block; /* מוריד מרווחים מוזרים של inline */
     flex-shrink: 0; /* לא ימעכו את האייקון */
 }
+
+.add-to-cart.purchased {
+    background: linear-gradient(135deg, #ffb347, #ff8c00);
+    color: white;
+    border: none;
+    cursor: default;
+}
+
+    .add-to-cart.purchased:hover {
+        transform: none;
+        opacity: 1;
+    }

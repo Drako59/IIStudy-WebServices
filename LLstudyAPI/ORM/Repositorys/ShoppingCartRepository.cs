@@ -9,7 +9,7 @@ namespace LLstudyWS.ORM
     {
         public ShoppingCartRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
 
-        
+
         public override Shopping_Cart GetByID(string RegisteredID, List<string>? exludes = null)
         {
             string sql = "SELECT * FROM Registereds WHERE RegisteredID = @RegisteredID";
@@ -27,16 +27,16 @@ namespace LLstudyWS.ORM
             }
             return new Shopping_Cart();
         }
-        public bool RemoveBook (string bookID)
+        public bool RemoveBook(string bookID)
         {
             string sql = "DELETE * FROM Shopping_carts WHERE BookID = @BookID";
             this.helperOledb.AddParameter("@BookID", bookID);
             return this.helperOledb.Delete(sql) >= 0;
         }
 
-        public bool RemoveBookForUser( string BookID, string registeredID)
+        public bool RemoveBookForUser(string BookID, string registeredID)
         {
-            Console.WriteLine(BookID + " "+registeredID);
+            Console.WriteLine(BookID + " " + registeredID);
             string sql = "DELETE * FROM Shopping_carts WHERE BookID = @BookID AND RegisteredID = @RegisteredID";
             this.helperOledb.AddParameter("@BookID", BookID);
 
@@ -47,7 +47,7 @@ namespace LLstudyWS.ORM
 
         }
 
-        public bool AppendToCart( string BookID , string registeredID)
+        public bool AppendToCart(string BookID, string registeredID)
         {
             string sql = "UPDATE Shopping_carts SET CountBooks = (CountBooks + 1) WHERE BookID = @BookID AND RegisteredID = @RegisteredID ";
             this.helperOledb.AddParameter("@BookID", BookID);
@@ -120,11 +120,11 @@ namespace LLstudyWS.ORM
         //WHERE sc.RegisteredID = @RegisteredID;
 
 
-        public List<(string,int)> GetShoppingCartBooksID(string registeredID)
+        public List<(string, int)> GetShoppingCartBooksID(string registeredID)
         {
             string sql = "SELECT BookID ,CountBook FROM Shopping_carts WHERE RegisteredID = @RegisteredID";
             this.helperOledb.AddParameter("@RegisteredID", registeredID);
-            List<(string,int)> booksIDs = new List<(string,int)>();
+            List<(string, int)> booksIDs = new List<(string, int)>();
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 while (reader.Read())
@@ -135,7 +135,7 @@ namespace LLstudyWS.ORM
 
             return booksIDs;
 
-            
+
         }
 
 
@@ -159,7 +159,7 @@ namespace LLstudyWS.ORM
 
             this.helperOledb.AddParameter("@RegisteredID", registeredID);
 
-            using(IDataReader reader = this.helperOledb.Select(sql))
+            using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 if (reader.Read())
                 {
@@ -168,6 +168,23 @@ namespace LLstudyWS.ORM
                 else return -1;
             }
 
+        }
+
+        public List<string> GetRegCartOnlieBooksIDs(string registeredID)
+        {
+            string sql = @$"SELECT Books.BookID AS BookID FROM Books INNER JOIN Shopping_carts ON Books.BookID = Shopping_carts.BookID 
+                                    WHERE RegisteredID = @RegisteredID AND IsOnline = True";
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                List<string> onlineBooksIDs = new List<string>();
+                while (reader.Read())
+                {
+                    onlineBooksIDs.Add(Convert.ToString(reader["BookID"]));
+                }
+                return onlineBooksIDs;
+            }
         }
     }
 }

@@ -41,5 +41,7 @@ namespace LLStudy_Models.Models
 
         public bool IsDeleted { get; set; }
 
+        public bool IsOnline { get; set; }
+
     }
 }

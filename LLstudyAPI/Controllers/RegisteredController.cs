@@ -20,7 +20,51 @@ namespace LLstudyWS.Controllers
         public RegisteredController() {
             this.repositoryUOW = new RepositoryUOW();
         }
-        
+
+
+        [HttpGet]
+        public ViewRegisterdBookCatalogModel GetBooks(string registeredID,string? subjectID = null, string? author_name = null, string? search = null, string? book_name = null, string? price_min = null, string? price_max = null, string? type = null)
+        {
+
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+
+                ViewRegisterdBookCatalogModel viewModel = new ViewRegisterdBookCatalogModel();
+                List<Book> books = new List<Book>();
+
+                if (search == null && subjectID == null && author_name == null && book_name == null && price_min == null && price_max == null && type == null)
+                    books =  this.repositoryUOW.BookRepository.GetExistBooks();
+                //return this.repositoryUOW.BookRepository.GetAll();
+
+
+                if (search != null)
+                    books.AddRange(this.repositoryUOW.BookRepository.GetByName(search));
+
+                viewModel.books = books;
+                viewModel.OwnedOnlineBooksIDs = this.repositoryUOW.BookRepository.GetOwnedOnlineBooksIDsForUser(registeredID);
+                viewModel.OnlineBooksInShoppingCartIDs = this.repositoryUOW.ShoppingCartRepository.GetRegCartOnlieBooksIDs(registeredID);
+    
+
+
+
+
+                return viewModel;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
+
+
 
         [HttpGet]
         public ViewOwnedBooksModel GetUserBooks(string registeredID)
@@ -431,6 +475,30 @@ namespace LLstudyWS.Controllers
             {
                 Console.WriteLine(ex.ToString());
                 return StatusCode(500);
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+        [HttpGet]
+        public ViewRegisteredBookPreviewModel GetBookFullView(string bookID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                ViewRegisteredBookPreviewModel viewModel = new ViewRegisteredBookPreviewModel();
+
+                viewModel.BookViewModel = this.repositoryUOW.BookRepository.GetFullBook(bookID);
+
+                return viewModel;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
             }
             finally
             {
