@@ -186,5 +186,21 @@ namespace LLstudyWS.ORM
                 return onlineBooksIDs;
             }
         }
+
+        public bool IsOnlineBookInCart(string registeredID, string bookID)
+        {
+            string sql = @$"SELECT COUNT(*) AS IsOnlineBookInCart FROM Books INNER JOIN Shopping_carts ON Books.BookID = Shopping_carts.BookID 
+                                    WHERE RegisteredID = @RegisteredID AND Books.BookID = @BookID AND IsOnline = True";
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            this.helperOledb.AddParameter("@BookID", bookID);
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt32(reader["IsOnlineBookInCart"]) > 0;
+                }
+                else return false;
+            }
+        }
     }
 }

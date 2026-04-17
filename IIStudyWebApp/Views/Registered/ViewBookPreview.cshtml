@@ -6,20 +6,20 @@
 
 @using LLStudy_Models.Models
 @using LLStudy_Models.ViewModels
-@model ViewBookViewModel
+@model ViewRegisteredBookPreviewModel
 
 <link href="~/css/bookpreview.css" rel="stylesheet" />
 <div class="book-details-page">
     <div class="container">
         <div class="breadcrumb">
-            <a href="#">Home</a> / <a href="#">Fiction</a> / <strong>@Model.book.Book_name</strong>
+            <a href="#">Home</a> / <a href="#">Fiction</a> / <strong>@Model.BookViewModel.book.Book_name</strong>
         </div>
 
         <!-- Main Book Information -->
         <div class="book-main-section">
             <div class="book-header">
                 <div class="book-cover-main">
-                    <img class="book-cover-image" src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })" /> <!-- CHANE TO A REAL IMAGE-->
+                    <img class="book-cover-image" src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.BookViewModel.book.BookID })" /> <!-- CHANE TO A REAL IMAGE-->
                     @* <svg viewBox="0 0 24 24" fill="none">
                         <rect x="3" y="4" width="18" height="16" rx="2" />
                         <path d="M7 8h10M7 12h8M7 16h6" />
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="book-info-main">
-                    @if (Model.book.In_stock)
+                    @if (Model.BookViewModel.book.In_stock)
                     {
                         <span class="stock-badge in-stock">
                             <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; stroke: currentColor; fill: none;">
@@ -46,14 +46,14 @@
                         </span>
                     }
 
-                    <h1 class="book-title-main">@Model.book.Book_name</h1>
-                    <p class="book-author-main">@Model.book.Author_name</p>
+                    <h1 class="book-title-main">@Model.BookViewModel.book.Book_name</h1>
+                    <p class="book-author-main">@Model.BookViewModel.book.Author_name</p>
 
                     <div class="rating-section">
                         <div class="stars-large">
                             @{
                                 int totalStars = 5;
-                                double starsAmount = Math.Floor(Model.Rate);
+                                double starsAmount = Math.Floor(Model.BookViewModel.Rate);
 
                                 for (int i = 0; i < starsAmount; i++)
                                 {
@@ -64,7 +64,7 @@
 
 
                                 }
-                                if (Model.Rate - starsAmount > 0)
+                                if (Model.BookViewModel.Rate - starsAmount > 0)
                                 {
                                     <svg viewBox="0 0 24 24" width="24" height="24">
                                         <defs>
@@ -85,7 +85,7 @@
                                     </svg>
 
                                 }
-                                for (int i = 0; i < totalStars - Math.Round(Model.Rate); i++)
+                                for (int i = 0; i < totalStars - Math.Round(Model.BookViewModel.Rate); i++)
                                 {
                                     <svg viewBox="0 0 24 24" width="24" height="24">
                                         <path d="M12 .587l3.668 7.431L23.327 9.75l-5.664 5.51L18.997 24 12 19.897 5.003 24l1.334-8.74L.673 9.75l7.659-1.732z"
@@ -96,9 +96,9 @@
                             }
                         </div>
                         <span class="rating-info">
-                            @if (Model.Rate != 0)
+                            @if (Model.BookViewModel.Rate != 0)
                             {
-                                <span class="rating-count">@Math.Round(Model.Rate,3)</span>
+                                <span class="rating-count">@Math.Round(Model.BookViewModel.Rate, 3)</span>
                             }
                             else
                             {
@@ -106,7 +106,7 @@
                             }
 
 
-                            (@Model.reviews.Count reviews)
+                            (@Model.BookViewModel.reviews.Count reviews)
                         </span>
                     </div>
 
@@ -118,7 +118,7 @@
                             </svg>
                             <div>
                                 <div class="meta-label">Price</div>
-                                <div class="meta-value">@Model.book.Book_price</div>
+                                <div class="meta-value">@Model.BookViewModel.book.Book_price</div>
                             </div>
                         </div>
 
@@ -129,7 +129,7 @@
                             </svg>
                             <div>
                                 <div class="meta-label">Purchase number</div>
-                                <div class="meta-value">@Model.PurchaseNum</div>
+                                <div class="meta-value">@Model.BookViewModel.PurchaseNum</div>
                             </div>
                         </div>
 
@@ -151,26 +151,35 @@
                             </svg>
                             <div>
                                 <div class="meta-label">Subject ID</div>
-                                <div class="meta-value">@Model.Subject_name</div>
+                                <div class="meta-value">@Model.BookViewModel.Subject_name</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="action-buttons">
-                        @if (Model.book.In_stock)
+                        @if (Model.BookViewModel.book.In_stock)
                         {
-                            <button class="btn-large btn-add-to-cart" id="book-@Model.book.BookID" onclick="AddToCart(@Model.book.BookID)">
+                            bool isPurchased = Model.IsOwned;
+                            bool isInCart = Model.IsInShoppingCart;
+                            <button class="btn-large btn-add-to-cart @(isPurchased? "purchased": isInCart ? "in-cart" : "")" id="book-@Model.BookViewModel.book.BookID" onclick="@(isInCart ? " " : $"AddToCart({Model.BookViewModel.book.BookID})")">
                                 <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
                                     <circle cx="9" cy="21" r="1"></circle>
                                     <circle cx="20" cy="21" r="1"></circle>
                                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                                 </svg>
-                                Add to Cart
+                                @if (isPurchased)
+                                {
+                                    <a href="@Url.Action("GetBookFile", "Registered", new { bookID = Model.BookViewModel.book.BookID })" target="_blank">Read Book</a>
+                                }
+
+                                else @(isInCart ? "In Cart" : "Add to Cart")
+                                
+
                             </button>
                         }
                         else
                         {
-                            <button class="btn-large btn-add-to-cart error" disabled id="book-@Model.book.BookID" onclick="AddToCart(@Model.book.BookID)">
+                            <button class="btn-large btn-add-to-cart error" disabled id="book-@Model.BookViewModel.book.BookID" onclick="AddToCart(@Model.BookViewModel.book.BookID)">
                                 <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
                                     <circle cx="9" cy="21" r="1"></circle>
                                     <circle cx="20" cy="21" r="1"></circle>
@@ -194,22 +203,22 @@
             <h2 class="section-title">Book Preview Gallery</h2>
             <div class="gallery-grid">
                 <div class="gallery-item">
-                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.BookViewModel.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
                 <div class="gallery-item">
-                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.BookViewModel.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
                 <div class="gallery-item">
-                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.BookViewModel.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
                 <div class="gallery-item">
-                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })"
+                    <img src="@Url.Action("GetBookImage", "Guest", new { bookID = Model.BookViewModel.book.BookID })"
                          alt="Preview page 2"
                          class="gallery-image" />
                 </div>
@@ -222,9 +231,9 @@
                 <h2 class="section-title">Customer Reviews</h2>
                 <button class="write-review-btn" onclick="openReviewForm()">Write a Review</button>
             </div>
-            @if (Model.reviews != null && Model.reviews.Any())
+            @if (Model.BookViewModel.reviews != null && Model.BookViewModel.reviews.Any())
             {
-                @foreach (ViewReview review in Model.reviews)
+                @foreach (ViewReview review in Model.BookViewModel.reviews)
                 {
                     <div class="review-item">
                         <div class="review-header-section">
@@ -416,7 +425,7 @@
                           required
                           minlength="10"></textarea>
             </div>
-            <input name="BookID" value="@Model.book.BookID" style="display: none;" />
+            <input name="BookID" value="@Model.BookViewModel.book.BookID" style="display: none;" />
 
             <!-- Form Actions -->
             <div class="form-actions">

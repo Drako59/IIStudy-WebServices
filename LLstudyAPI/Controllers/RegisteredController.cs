@@ -482,7 +482,7 @@ namespace LLstudyWS.Controllers
             }
         }
         [HttpGet]
-        public ViewRegisteredBookPreviewModel GetBookFullView(string bookID)
+        public ViewRegisteredBookPreviewModel GetBookFullView(string registeredID ,string bookID)
         {
             try
             {
@@ -491,7 +491,8 @@ namespace LLstudyWS.Controllers
                 ViewRegisteredBookPreviewModel viewModel = new ViewRegisteredBookPreviewModel();
 
                 viewModel.BookViewModel = this.repositoryUOW.BookRepository.GetFullBook(bookID);
-
+                viewModel.IsOwned = this.repositoryUOW.BookRepository.IsOwnedOnlineBook(bookID,registeredID);
+                viewModel.IsInShoppingCart = this.repositoryUOW.ShoppingCartRepository.IsOnlineBookInCart(registeredID,bookID);
                 return viewModel;
 
             }

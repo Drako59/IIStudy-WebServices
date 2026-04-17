@@ -42,9 +42,9 @@ namespace LLstudyWS.ORM
                                     INNER JOIN (
                                         
                                         Subjects
-                                    ) ON Subjects.SubjectID = Books.BookID
+                                    ) ON Subjects.SubjectID = Books.SubjectID
                                 WHERE
-                                    Orders.RegisteredID = @RegisteredID";
+                                    Orders.RegisteredID = @RegisteredID AND Books.IsOnline = True";
 
             this.helperOledb.AddParameter("@RegisteredID", RegisteredID);
             using (IDataReader reader = this.helperOledb.Select(sql))
@@ -551,6 +551,32 @@ namespace LLstudyWS.ORM
                     booksIDs.Add(Convert.ToString(reader["BookID"]));
                 }
                 return booksIDs;
+            }
+        }
+
+        public bool IsOwnedOnlineBook(string bookID, string registeredID) 
+        {
+            string sql = $@"SELECT COUNT(*) as count_exist FROM Books INNER JOIN (
+                                            Orders_Books INNER JOIN Orders
+                                            ON Orders_Books.OrderID = Orders.OrderID
+                                            ) ON Books.BookID = Orders_Books.BookID
+                                        WHERE Orders.RegisteredID = @RegisteredID AND Books.BookID = @BookID AND IsOnline = True;
+                                            ";
+
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            this.helperOledb.AddParameter("@BookID", bookID);
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if(reader.Read())
+                {
+                    return Convert.ToInt32(reader["count_exist"]) > 0;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
     }

@@ -992,3 +992,17 @@ button.btn-add-to-cart.in-cart {
                 align-items: flex-start;
             }
         }
+
+
+button.btn-add-to-cart.purchased {
+    background: linear-gradient(135deg, #ffb347, #ff8c00);
+    color: white;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* בלי hover */
+.btn-add-to-cart.purchased:hover {
+    transform: none;
+    box-shadow: none;
+}

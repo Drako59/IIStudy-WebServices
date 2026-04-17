@@ -311,14 +311,15 @@ namespace IIStudyWebApp.Controllers
             {
                 return RedirectToAction("ViewBookPreview", "Guest");
             }
-            ApiClient<ViewBookViewModel> client = new ApiClient<ViewBookViewModel>();
+            ApiClient<ViewRegisteredBookPreviewModel> client = new ApiClient<ViewRegisteredBookPreviewModel>();
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
-            client.Path = "api/Guest/GetBookFullView";
+            client.Path = "api/Registered/GetBookFullView";
             client.AddParameter("bookID", bookID);
+            client.AddParameter("registeredID", registered.RegisteredID);
 
-            ViewBookViewModel bookView = await client.GetAsync();
+            ViewRegisteredBookPreviewModel bookView = await client.GetAsync();
             ViewData["Registered"] = registered;
             
             return View(bookView);
