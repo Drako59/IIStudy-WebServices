@@ -85,7 +85,7 @@
                                     </svg>
 
                                 }
-                                for (int i = 0; i < Math.Floor(totalStars - Math.Round(Model.BookViewModel.Rate)); i++)
+                                for (int i = 0; i < totalStars - (!double.IsInteger(Model.BookViewModel.Rate) ? Math.Floor(Model.BookViewModel.Rate) + 1 : Math.Floor(Model.BookViewModel.Rate)) ; i++)
                                 {
                                     <svg viewBox="0 0 24 24" width="24" height="24">
                                         <path d="M12 .587l3.668 7.431L23.327 9.75l-5.664 5.51L18.997 24 12 19.897 5.003 24l1.334-8.74L.673 9.75l7.659-1.732z"
@@ -140,7 +140,7 @@
                             </svg>
                             <div>
                                 <div class="meta-label">Type</div>
-                                <div class="meta-value">PDF Format</div>
+                                <div class="meta-value">@(Model.BookViewModel.book.IsOnline ? "Online" : "Physical")</div>
                             </div>
                         </div>
 

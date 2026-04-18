@@ -50,5 +50,23 @@ namespace LLstudyWS.ORM
             }
             return regReviews;
         }
+
+        public string GetUserReviewOnBook(string registeredID, string bookID)
+        {
+            string sql = $@"SELECT ReviewID FROM Reviews WHERE RegisteredID = @RegisteredID AND BookID = @BookID";
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            this.helperOledb.AddParameter("@BookID", bookID);
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToString(reader["ReviewID"]);
+                }
+                return "0";
+            }
+
+        }
     }
 }

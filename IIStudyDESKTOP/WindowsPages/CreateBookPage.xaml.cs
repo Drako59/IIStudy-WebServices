@@ -168,10 +168,10 @@ namespace IIStudyDESKTOP.WindowsPages
                     Author_name = InputAuthorName.Text.Trim(),
                     Book_price = price,
                     SubjectID = InputSubjectID.SelectedValue.ToString(),
-                    //Type = InputType.Text.Trim(),
+                    IsOnline = this.InputType.IsChecked == true,
                     //BookAuthor = InputBookAuthor.Text.Trim(),
                     In_stock = InputInStock.IsChecked == true,
-                    Pdf_url_book = _selectedPdfPath == null? "None" : this._selectedPdfPath,
+                    Pdf_url_book = _selectedPdfPath == null ? "None" : this._selectedPdfPath,
                     BookImagePath = _selectedImagePath
                 };
 

@@ -242,10 +242,11 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Registered/AddToCart";
 
 
-            bool success = await client.PostAsync(record);
+            ApiResultModel<bool> success = await client.PostAsyncRet<Shopping_Cart, bool>(record);
 
-            
-            return  Json(new { success = success });
+            if (!success.Success)
+                return StatusCode(500);
+            return  Json(new { success = success.Data });
         }
 
         public async Task<IActionResult> AddReview(Review record)
@@ -255,11 +256,14 @@ namespace IIStudyWebApp.Controllers
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Registered/AddReview";
+
             string registeredID = HttpContext.Session.GetString("RegisteredID");
+
             if (registeredID == null) { return RedirectToAction("viewSignInPage", "Guest"); }
+            
             record.RegisteredID = registeredID;
             record.ReviewID = "0";
-            bool success = client.PostAsync(record).Result;
+            bool success = await client.PostAsync(record);
 
             if (!success)
                 return RedirectToAction("ViewBookPreview","Registered", new { bookID = record.BookID });
@@ -479,6 +483,18 @@ namespace IIStudyWebApp.Controllers
         {
             Registered registered = await GetRegisteredDeatils();
             ViewData["Registered"] = registered;
+
+            ApiClient<Order> client = new ApiClient<Order>();
+
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Registered/Pay";
+
+            //string totalPrice = client.GetAsync();
+
+            //To continue
+
             return View();
             
         }

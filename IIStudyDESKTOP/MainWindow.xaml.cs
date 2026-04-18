@@ -19,6 +19,7 @@ namespace IIStudyDESKTOP
     public partial class MainWindow : Window
     {
         ViewBooks viewBooks;
+        ViewBooksCatalog viewBooksCatalog;
         BookView bookView;
         ViewOrders viewOrders;
         RegisteredsPage registeredsPage;
@@ -41,9 +42,9 @@ namespace IIStudyDESKTOP
 
         private void ViewBooks(object sender, RoutedEventArgs e)
         {
-            if (this.viewBooks == null)
-                this.viewBooks = new ViewBooks();
-            this.MainContent.Content = this.viewBooks;
+            if (this.viewBooksCatalog == null)
+                this.viewBooksCatalog = new ViewBooksCatalog();
+            this.MainContent.Content = this.viewBooksCatalog;
             this.ClickButtonNav(sender);
 
         }

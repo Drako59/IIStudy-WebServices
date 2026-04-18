@@ -1,0 +1,900 @@
+﻿<UserControl x:Class="IIStudyDESKTOP.UserControllers.ViewBooksCatalog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IIStudyDESKTOP.UserControllers"
+             mc:Ignorable="d" 
+             xmlns:convertor="clr-namespace:IIStudyDESKTOP"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <convertor:UrlConverter x:Key="UrlConverter">
+
+        </convertor:UrlConverter>
+        <Style x:Key="MetaLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#94a3b8"/>
+            <Setter Property="Margin" Value="0,0,0,2"/>
+        </Style>
+
+        <Style x:Key="MetaValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+        </Style>
+
+        <!-- Stat card -->
+        <Style x:Key="StatCard" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="Padding" Value="20,16"/>
+            <Setter Property="Margin" Value="0,0,12,0"/>
+        </Style>
+
+        <!-- Action button -->
+        <Style x:Key="ActionBtn" TargetType="Button">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="b" Background="{TemplateBinding Background}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="b" Property="Opacity" Value="0.82"/>
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.05" ScaleY="1.05"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="b" Property="Opacity" Value="0.82"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="b" Property="Opacity" Value="0.65"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            
+        </Style>
+
+        <!-- Filter chip -->
+        <Style x:Key="FilterChip" TargetType="Border">
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Padding" Value="16,7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+        <!--<Style x:Key="BookCardHover" TargetType="Border">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform Y="0"/>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <TranslateTransform Y="-4"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>-->
+        
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Gradient header banner -->
+            <RowDefinition Height="*"/>
+            <!-- Main content area -->
+        </Grid.RowDefinitions>
+
+        <!-- ══════════════════════════════════════════════════════
+             GRADIENT HEADER BANNER
+             ══════════════════════════════════════════════════════ -->
+        <Border Grid.Row="0">
+          
+
+            <StackPanel Margin="28,22,28,22">
+
+                <!-- Title row -->
+                <Grid Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Books"
+                                   FontSize="24" FontWeight="ExtraBold"
+                                   Foreground="White"/>
+                        <TextBlock Text="Manage your book inventory"
+                                   FontSize="12" Foreground="#ddd6fe"
+                                   Margin="0,3,0,0"/>
+                    </StackPanel>
+
+                    <!-- Add New Book -->
+                    <Button Grid.Column="1"
+                            Height="40" Padding="18,0"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Click="CreateBookPopUp">
+                        <Button.Background>
+                            <SolidColorBrush Color="#ffffff"/>
+                        </Button.Background>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="b" Background="White"
+                                        CornerRadius="10" Padding="18,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="+" FontSize="17" FontWeight="ExtraBold"
+                                                   Foreground="#5b5fcf" VerticalAlignment="Center"
+                                                   Margin="0,0,6,0"/>
+                                        <TextBlock Text="Add New Book" FontSize="13" FontWeight="Bold"
+                                                   Foreground="#5b5fcf" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="b" Property="Opacity" Value="0.85"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+
+                <!-- STAT CARDS ROW -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Total Books -->
+                    <Border Grid.Column="0" Style="{StaticResource StatCard}">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.08"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Total Books" FontSize="11" FontWeight="Bold" Foreground="#64748b"/>
+                            <TextBlock x:Name="TxtTotalBooks" Text="0"
+                                       FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="#0f172a" Margin="0,4,0,2"/>
+                            <TextBlock Text="All books" FontSize="11" Foreground="#94a3b8"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- In Stock -->
+                    <Border Grid.Column="1" Style="{StaticResource StatCard}">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.08"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="In Stock" FontSize="11" FontWeight="Bold" Foreground="#64748b"/>
+                            <TextBlock x:Name="TxtInStock" Text="0"
+                                       FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="#16a34a" Margin="0,4,0,2"/>
+                            <TextBlock Text="Available now" FontSize="11" Foreground="#94a3b8"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Out of Stock -->
+                    <Border Grid.Column="2" Style="{StaticResource StatCard}">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.08"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Out of Stock" FontSize="11" FontWeight="Bold" Foreground="#64748b"/>
+                            <TextBlock x:Name="TxtOutOfStock" Text="0"
+                                       FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="#ef4444" Margin="0,4,0,2"/>
+                            <TextBlock Text="Unavailable" FontSize="11" Foreground="#94a3b8"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Subjects -->
+                    <Border Grid.Column="3" Style="{StaticResource StatCard}" Margin="0">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.08"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Subjects" FontSize="11" FontWeight="Bold" Foreground="#64748b"/>
+                            <TextBlock x:Name="TxtSubjectCount" Text="0"
+                                       FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="#7c3aed" Margin="0,4,0,2"/>
+                            <TextBlock Text="Categories" FontSize="11" Foreground="#94a3b8"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+
+        <!-- ══════════════════════════════════════════════════════
+             MAIN CONTENT (search + chips + list + subjects)
+             ══════════════════════════════════════════════════════ -->
+        <Grid Grid.Row="1" Margin="28,16,28,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <!-- Subjects side panel -->
+                <ColumnDefinition Width="270"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ─────────────────────────────────
+                 LEFT: Search + Chips + Book Cards
+                 ───────────────────────────────── -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Search + filter row -->
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="*"/>
+                    <!-- Book cards -->
+                </Grid.RowDefinitions>
+
+                <!-- Search + chip filters -->
+                <Border Grid.Row="0"
+                        Background="White"
+                        CornerRadius="14"
+                        Padding="14,10">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="14" ShadowDepth="0" Opacity="0.05"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Search box -->
+                        <Grid Grid.Column="0">
+                            <Border Background="#f8fafc" CornerRadius="10" Height="40">
+                                <Grid>
+                                    <TextBlock Text="🔍" FontSize="14"
+                                               VerticalAlignment="Center"
+                                               Margin="12,0,0,0"
+                                               IsHitTestVisible="False"/>
+                                    <TextBox x:Name="SearchBox"
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             FontSize="13" Foreground="#1e293b"
+                                             Padding="34,0,12,0"
+                                             VerticalContentAlignment="Center"
+                                             TextChanged="SearchUpdate"/>
+                                    <!--<TextBlock x:Name="SearchPlaceholder"
+                                               Text="Search books..."
+                                               FontSize="13" Foreground="#cbd5e1"
+                                               VerticalAlignment="Center"
+                                               Margin="34,0,0,0"
+                                               IsHitTestVisible="False"/>-->
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <!-- Filter chips -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+
+                            <!-- All chip -->
+                            <Border x:Name="ChipAll"
+                                    Style="{StaticResource FilterChip}"
+                                    MouseLeftButtonUp="AllFillter">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#5b5fcf" Offset="0"/>
+                                        <GradientStop Color="#7c6fd4" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <TextBlock x:Name="ChipAllText" Text="All" FontSize="12" FontWeight="Bold" Foreground="White"/>
+                            </Border>
+
+                            <!-- In Stock chip -->
+                            <Border x:Name="ChipInStock"
+                                    Style="{StaticResource FilterChip}"
+                                    Background="#f0fdf4"
+                                    MouseLeftButtonUp="InStockFillter">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="✅ " FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="ChipInStockText" Text="In Stock" FontSize="12" FontWeight="Bold"
+                                                Foreground="#16a34a" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Out of Stock chip -->
+                            <Border x:Name="ChipOutOfStock"
+                                    Style="{StaticResource FilterChip}"
+                                    Background="#fef2f2"
+                                    Margin="0"
+                                    MouseLeftButtonUp="OutStockFillter">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="❌ " FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="ChipOutStockText" Text="Out of Stock" FontSize="12" FontWeight="Bold"
+                                               Foreground="#dc2626" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Book Cards ScrollViewer -->
+                <Border Grid.Row="2"
+                        Background="White"
+                        CornerRadius="16"
+                        ClipToBounds="True">
+                    <!--Style="{StaticResource BookCardHover}"-->
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="16" ShadowDepth="0" Opacity="0.05"/>
+                    </Border.Effect>
+                    <Grid>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,6,0,6">
+                            <ItemsControl x:Name="BooksList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        
+                                        <Border Margin="14,5,14,5"
+                                                CornerRadius="14"
+                                                Background="White"
+                                                BorderBrush="#f1f5f9"
+                                                BorderThickness="1">
+                                            <Border.Effect>
+                                                <DropShadowEffect Color="Black" BlurRadius="12"
+                                                                  ShadowDepth="0" Opacity="0.04"/>
+                                            </Border.Effect>
+
+                                            <Grid Margin="14,12,14,12">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="60"/>
+                                                    <ColumnDefinition Width="12"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="12"/>
+                                                    <ColumnDefinition Width="80"/>
+                                                    <ColumnDefinition Width="12"/>
+                                                    <ColumnDefinition Width="90"/>
+                                                    <ColumnDefinition Width="12"/>
+                                                    <ColumnDefinition Width="76"/>
+                                                    <ColumnDefinition Width="12"/>
+                                                    <ColumnDefinition Width="96"/>
+                                                    <ColumnDefinition Width="12"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Cover -->
+                                                <Border Grid.Column="0"
+                                                        Width="60" Height="82"
+                                                        CornerRadius="8" ClipToBounds="True">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Color="Black" BlurRadius="8"
+                                                                          ShadowDepth="0" Opacity="0.14"/>
+                                                    </Border.Effect>
+                                                    <Grid>
+                                                        <Border>
+                                                            <Border.Background>
+                                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                    <GradientStop Color="#eef2ff" Offset="0"/>
+                                                                    <GradientStop Color="#f5f3ff" Offset="1"/>
+                                                                </LinearGradientBrush>
+                                                            </Border.Background>
+                                                        </Border>
+                                                        <TextBlock Text="📚" FontSize="24"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"/>
+                                                        <Image Source="{Binding BookImagePath,Converter={StaticResource UrlConverter } ,ConverterParameter=Book}"
+                                                               Stretch="UniformToFill"
+                                                               Visibility="{Binding BookImagePath}"/>
+                                                    </Grid>
+                                                </Border>
+
+                                                <!-- Name + Author + ID -->
+                                                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                                    <Border CornerRadius="5" Padding="6,2"
+                                                            HorizontalAlignment="Left" Margin="0,0,0,4"
+                                                            Background="#eef2ff">
+                                                        <TextBlock Text="{Binding BookID}"
+                                                                   FontSize="9" FontWeight="Bold"
+                                                                   Foreground="#5b5fcf"/>
+                                                    </Border>
+                                                    <TextBlock Text="{Binding Book_name}"
+                                                               FontSize="14" FontWeight="ExtraBold"
+                                                               Foreground="#0f172a"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               MaxWidth="160"/>
+                                                    <TextBlock Text="{Binding Author_name}"
+                                                               FontSize="11" Foreground="#64748b"
+                                                               Margin="0,3,0,0"/>
+                                                </StackPanel>
+
+                                                <!-- Subject -->
+                                                <StackPanel Grid.Column="4" VerticalAlignment="Center">
+                                                    <TextBlock Text="SUBJECT" Style="{StaticResource MetaLabel}"/>
+                                                    <TextBlock Text="{Binding Subject_name}"
+                                                               Style="{StaticResource MetaValue}"/>
+                                                </StackPanel>
+
+                                                <!-- Reviews + Rating -->
+
+                                                <Grid Grid.Column="6" VerticalAlignment="Center">
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="10"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="10"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="10"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- REVIEWS -->
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock Text="REVIEWS" Style="{StaticResource MetaLabel}"/>
+                                                        <TextBlock Text="{Binding reviewsNum}"
+                                                                   FontSize="14"
+                                                                   FontWeight="ExtraBold"
+                                                                   Foreground="#5b5fcf"/>
+                                                    </StackPanel>
+
+                                                    <!-- מפריד -->
+                                                    <Border Grid.Column="1" Width="1" Background="#e5e7eb" Margin="4,0"/>
+
+                                                    <!-- RATE -->
+                                                    <StackPanel Grid.Column="2">
+                                                        <TextBlock Text="RATING" Style="{StaticResource MetaLabel}"/>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="⭐" Margin="0,0,4,0"/>
+                                                            <TextBlock Text="{Binding Rate}"
+                                                                       FontSize="12"
+                                                                       FontWeight="Bold"
+                                                                       Foreground="#f59e0b"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+
+                                                    <!-- מפריד -->
+                                                    <Border Grid.Column="3" Width="1" Background="#e5e7eb" Margin="4,0"/>
+
+                                                    <!-- SOLD (חדש) -->
+                                                    <StackPanel Grid.Column="4">
+                                                        <TextBlock Text="SOLD" Style="{StaticResource MetaLabel}"/>
+                                                        <TextBlock Text="{Binding SoldCount}"
+                                                                   FontSize="13"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="#16a34a"/>
+                                                    </StackPanel>
+
+                                                    <!-- מפריד -->
+                                                    <Border Grid.Column="5" Width="1" Background="#e5e7eb" Margin="4,0"/>
+
+                                                    <!-- STOCK COUNT (חדש) -->
+                                                    <StackPanel Grid.Column="6">
+                                                        <TextBlock Text="STOCK" Style="{StaticResource MetaLabel}"/>
+                                                        <TextBlock Text="{Binding StockCount}"
+                                                                    FontSize="13"
+                                                                    FontWeight="Bold"
+                                                                    Foreground="#0ea5e9"/>
+                                                    </StackPanel>
+
+                                                </Grid>
+
+                                                <!--<StackPanel Grid.Column="6" VerticalAlignment="Center">
+                                                    <TextBlock Text="REVIEWS" Style="{StaticResource MetaLabel}"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding reviewsNum}"
+                                                                   FontSize="14" FontWeight="ExtraBold"
+                                                                   Foreground="#5b5fcf"/>
+                                                        <TextBlock Text=" ✩ " FontSize="11"
+                                                                   VerticalAlignment="Center" Margin="3,0,0,0"/>
+                                                        <TextBlock Text="{Binding Rate}"
+                                                            FontSize="12"
+                                                            FontWeight="Bold"
+                                                            VerticalAlignment="Center">
+
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Foreground" Value="#ef4444"/>
+
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding Rate}" Value="5">
+                                                                            <Setter Property="Foreground" Value="#16a34a"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding Rate}" Value="4">
+                                                                            <Setter Property="Foreground" Value="#22c55e"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding Rate}" Value="3">
+                                                                            <Setter Property="Foreground" Value="#eab308"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </StackPanel>-->
+
+                                                <!-- Price -->
+                                                <StackPanel Grid.Column="8" VerticalAlignment="Center">
+                                                    <TextBlock Text="PRICE" Style="{StaticResource MetaLabel}"/>
+                                                    <TextBlock Text="{Binding Book_price, StringFormat=\{0:C\}}"
+                                                               FontSize="14" FontWeight="ExtraBold">
+                                                        <TextBlock.Foreground>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="#5b5fcf" Offset="0"/>
+                                                                <GradientStop Color="#7c3aed" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </TextBlock.Foreground>
+                                                    </TextBlock>
+                                                </StackPanel>
+
+                                                <!-- Stock badge -->
+                                                <Border Grid.Column="10"
+                                                    CornerRadius="20"
+                                                    Padding="10,5"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Left">                         
+
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="#e5e7eb"/>
+
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding In_stock}" Value="True">
+                                                                    <Setter Property="Background" Value="#dcfce7"/>
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding In_stock}" Value="False">
+                                                                    <Setter Property="Background" Value="#fee2e2"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+
+                                                    <TextBlock FontSize="11"
+                                                        FontWeight="Bold"
+                                                        HorizontalAlignment="Center">
+
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Foreground" Value="#374151"/>
+                                                                <Setter Property="Text" Value="Unknown"/>
+
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding In_stock}" Value="True">
+                                                                        <Setter Property="Text" Value="✔ In Stock"/>
+                                                                        <Setter Property="Foreground" Value="#16a34a"/>
+                                                                    </DataTrigger>
+
+                                                                    <DataTrigger Binding="{Binding In_stock}" Value="False">
+                                                                        <Setter Property="Text" Value="✖ Out of Stock"/>
+                                                                        <Setter Property="Foreground" Value="#dc2626"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+
+                                                    </TextBlock>
+                                                </Border>
+
+                                                <!-- Actions -->
+                                                <StackPanel Grid.Column="12"
+                                                            Orientation="Vertical"
+                                                            VerticalAlignment="Center"
+                                                            >
+                                                    <Button Style="{StaticResource ActionBtn}"
+                                                            CommandParameter="{Binding}" Click="ViewReviewsPage"
+                                                            Background="#6366f1">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="💬 " FontSize="11"/>
+                                                            <TextBlock Text="Reviews" FontSize="11"
+                                                                       FontWeight="Bold" Foreground="White"/>
+                                                        </StackPanel>
+                                                    </Button>
+                                                    <Button Style="{StaticResource ActionBtn}"
+                                                            Tag="{Binding}" Click="ViewBookDetails"
+                                                            Background="#0ea5e9">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="✏️ " FontSize="11"/>
+                                                            <TextBlock Text="Edit" FontSize="11"
+                                                                       FontWeight="Bold" Foreground="White"/>
+                                                        </StackPanel>
+                                                    </Button>
+                                                    <Button 
+                                                            Tag="{Binding}" Click="ToggleDeleteButton"
+                                                            >
+                                                        <Button.Style>
+                                                            <Style BasedOn="{StaticResource ActionBtn}" TargetType="Button">
+
+                                                                <!-- DEFAULT = DELETE -->
+                                                                <Setter Property="Content" Value="🗑 Delete"/>
+                                                                <Setter Property="Background" Value="#ef4444"/>
+                                                                <Setter Property="Foreground" Value="White"/>
+
+                                                                <Style.Triggers>
+
+                                                                    <!-- אם מחוק -->
+                                                                    <DataTrigger Binding="{Binding IsDeleted}" Value="True">
+                                                                        <Setter Property="Content" Value="♻ Restore"/>
+                                                                        <Setter Property="Background" Value="#16a34a"/>
+                                                                        <Setter Property="Foreground" Value="White"/>
+                                                                    </DataTrigger>
+
+                                                                </Style.Triggers>
+
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+
+                        <!-- Empty state -->
+                        <Border x:Name="EmptyState" Visibility="Collapsed"
+                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel HorizontalAlignment="Center" Margin="0,30">
+                                <TextBlock Text="📚" FontSize="48" HorizontalAlignment="Center"/>
+                                <TextBlock Text="No books found"
+                                           FontSize="15" FontWeight="SemiBold"
+                                           Foreground="#64748b"
+                                           HorizontalAlignment="Center" Margin="0,10,0,4"/>
+                                <TextBlock Text="Try adjusting your search or filter."
+                                           FontSize="12" Foreground="#94a3b8"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+
+            </Grid>
+
+            <!-- ─────────────────────────────────
+                 RIGHT: Subjects Panel
+                 ───────────────────────────────── -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Background="White" CornerRadius="16" ClipToBounds="False">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="16" ShadowDepth="0" Opacity="0.05"/>
+                    </Border.Effect>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!-- Panel header -->
+                            <RowDefinition Height="Auto"/>
+                            <!-- Add subject row -->
+                            <RowDefinition Height="*"/>
+                            <!-- Subject list -->
+                        </Grid.RowDefinitions>
+
+                        <!-- Panel header -->
+                        <Border Grid.Row="0"
+                                CornerRadius="16,16,0,0"
+                                Padding="16,14">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#f5f3ff" Offset="0"/>
+                                    <GradientStop Color="#ede9fe" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="🏷" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Subjects"
+                                               FontSize="14" FontWeight="ExtraBold"
+                                               Foreground="#5b21b6" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <Border Grid.Column="1"
+                                        Background="#7c3aed" CornerRadius="10" Padding="8,3">
+                                    <TextBlock x:Name="TxtSubjectBadge"
+                                               Text="0"
+                                               FontSize="11" FontWeight="Bold" Foreground="White"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Add subject input row -->
+                        <Border Grid.Row="1"
+                                Background="#fafafa"
+                                BorderBrush="#f1f5f9"
+                                BorderThickness="0,1,0,1"
+                                Padding="12,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="6"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                                        Background="White"
+                                        BorderBrush="#e2e8f0"
+                                        BorderThickness="1.5"
+                                        CornerRadius="8"
+                                        Padding="10,0"
+                                        Height="36">
+                                    <TextBox x:Name="NewSubjectBox"
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             FontSize="12" Foreground="#1e293b"
+                                             VerticalContentAlignment="Center"
+                                             /> <!--KeyDown="NewSubject_KeyDown"-->
+                                </Border>
+
+                                <!-- Add button -->
+                                <Button Grid.Column="2"
+                                        Width="36" Height="36"
+                                        BorderThickness="0"
+                                        Cursor="Hand"
+                                        ><!--Click="AddSubject_Click"-->
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="b" CornerRadius="8">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                        <GradientStop Color="#5b5fcf" Offset="0"/>
+                                                        <GradientStop Color="#7c3aed" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <TextBlock Text="+" FontSize="20" FontWeight="ExtraBold"
+                                                           Foreground="White"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="b" Property="Opacity" Value="0.82"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
+                        </Border>
+
+                        <!-- Subject list -->
+                        <ScrollViewer Grid.Row="2"
+                                      VerticalScrollBarVisibility="Auto"
+                                      Padding="12,8,12,10">
+                            <Grid>
+                                <ItemsControl x:Name="SubjectsList">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="0,0,0,6"
+                                                    CornerRadius="10"
+                                                    Background="White"
+                                                    BorderBrush="#ede9fe"
+                                                    BorderThickness="1"
+                                                    Padding="12,9"
+                                                    MouseLeftButtonUp="SubjectFilter"
+                                                    Tag="{Binding Key}">
+                                                <Border.Effect>
+                                                    <DropShadowEffect Color="#7c3aed" BlurRadius="8"
+                                                                      ShadowDepth="0" Opacity="0.05"/>
+                                                </Border.Effect>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="6"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- ID pill -->
+                                                    <Border Grid.Column="0"
+                                                            Background="#ede9fe"
+                                                            CornerRadius="6" Padding="6,2"
+                                                            Margin="0,0,8,0">
+                                                        <TextBlock Text="{Binding Key}"
+                                                                   FontSize="9" FontWeight="Bold"
+                                                                   Foreground="#7c3aed"/>
+                                                    </Border>
+
+                                                    <!-- Name -->
+                                                    <TextBlock Grid.Column="1"
+                                                               Text="{Binding Value}"
+                                                               FontSize="12" FontWeight="SemiBold"
+                                                               Foreground="#1e293b"
+                                                               VerticalAlignment="Center"
+                                                               TextTrimming="CharacterEllipsis"/>
+
+                                                    <!-- Book count -->
+                                                    <Border Grid.Column="2"
+                                                            Background="#f5f3ff"
+                                                            CornerRadius="8" Padding="6,2">
+                                                        <TextBlock Text="{Binding BookCountLabel}"
+                                                                   FontSize="10" FontWeight="Bold"
+                                                                   Foreground="#7c3aed"/>
+                                                    </Border>
+
+                                                    <!-- Delete --><!--
+                                                    <Button Grid.Column="4"
+                                                            Width="24" Height="24"
+                                                            BorderThickness="0"
+                                                            Cursor="Hand"
+                                                            Tag="{Binding}"
+                                                           >--><!--Click="DeleteSubject_Click"--><!--
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border x:Name="b"
+                                                                        Background="Transparent"
+                                                                        CornerRadius="6">
+                                                                    <TextBlock Text="✕" FontSize="11"
+                                                                               FontWeight="Bold"
+                                                                               Foreground="#94a3b8"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="b"
+                                                                                Property="Background"
+                                                                                Value="#fee2e2"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                    </Button>-->
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <!-- Empty subjects -->
+                                <Border x:Name="EmptySubjects"
+                                        Visibility="Collapsed"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Padding="0,20">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="🏷" FontSize="30"
+                                                   HorizontalAlignment="Center"/>
+                                        <TextBlock Text="No subjects yet"
+                                                   FontSize="12" FontWeight="SemiBold"
+                                                   Foreground="#94a3b8"
+                                                   HorizontalAlignment="Center"
+                                                   Margin="0,8,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</UserControl>

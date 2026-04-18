@@ -579,5 +579,20 @@ namespace LLstudyWS.ORM
                 }
             }
         }
+
+        public bool IsOnlineBook(string bookID)
+        {
+            string sql = @$"SELECT COUNT(*) as CountBooks FROM Books WHERE BookID = @BookID AND Books.IsOnline = True";
+            this.helperOledb.AddParameter("@BookID", bookID);
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    int exist = Convert.ToInt32(reader["CountBooks"]);
+                    return exist > 0;
+                }
+                else return false;
+            }
+        }
     }
 }

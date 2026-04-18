@@ -347,7 +347,7 @@ namespace LLstudyWS.ORM
 
             foreach(PropertyInfo pro in props)
             {
-                Console.WriteLine(@$"@{pro.Name} : {pro.GetValue(model, null).GetType()}");
+                //Console.WriteLine(@$"@{pro.Name} : {pro.GetValue(model, null).GetType()}");
                 this.helperOledb.AddParameter(@$"@{pro.Name}", pro.GetValue(model, null) ?? "");
             }
 

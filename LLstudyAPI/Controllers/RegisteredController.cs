@@ -6,6 +6,7 @@ using System.IO;
 using System.Net.Mime;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Contracts;
 
 namespace LLstudyWS.Controllers
 {
@@ -252,9 +253,11 @@ namespace LLstudyWS.Controllers
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 int exist = this.repositoryUOW.ShoppingCartRepository.CheckIfExist(record.BookID, record.RegisteredID);
-                Console.WriteLine(@$"exist: {exist}");
+                //Console.WriteLine(@$"exist: {exist}");
                 if (exist == 1)
                 {
+                    if (this.repositoryUOW.BookRepository.IsOnlineBook(record.BookID))
+                        return false;
                     return this.repositoryUOW.ShoppingCartRepository.AppendToCart(record.BookID, record.RegisteredID);
                 }
                 else if (exist == -1)
@@ -280,7 +283,9 @@ namespace LLstudyWS.Controllers
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-
+                model.ReviewID = this.repositoryUOW.ReviewRepository.GetUserReviewOnBook(model.RegisteredID, model.BookID);
+                if (model.ReviewID != "0")
+                    return this.repositoryUOW.ReviewRepository.Update(model);
                 return this.repositoryUOW.ReviewRepository.Create(model);
 
                 

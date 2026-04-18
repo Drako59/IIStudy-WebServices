@@ -133,8 +133,8 @@ function updateTotal() {
         const taxPay = document.querySelector(".tax-value");
 
         sumPay.textContent = `$${sum.toFixed(2)}`;
-        taxPay.textContent = `$${(sum / 10).toFixed(2)}`;
-        totalPay.textContent = `$${(sum + (sum / 10)).toFixed(2)}`;
+        taxPay.textContent = `$0.00`; //${(sum / 10).toFixed(2)}
+        totalPay.textContent = `$${(sum).toFixed(2)}`;// + (sum / 10)
 
     }
     catch (err) {
@@ -194,9 +194,8 @@ async function AddToCart(btn,bookId) {
 
         const data = await response.json(); // { success: true/false }
         //alert(data.success);
-
-        
-        updateQty(btn, 1);
+        if (data.success)
+            updateQty(btn, 1);
        
         //if (data.success) {
         //    showAddToCartSuccess(bookId);

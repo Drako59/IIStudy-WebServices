@@ -440,8 +440,11 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="TYPE" Style="{StaticResource FieldLabel}"/>
-                            <TextBox x:Name="EditType" Text="PDF" Style="{StaticResource EditBox}"/>
+                            <TextBlock Text="Is online books" Style="{StaticResource FieldLabel}"/>
+                            <CheckBox x:Name="EditType" IsChecked="{Binding IsOnline}" >
+                                <TextBlock Text="✅  Mark as Is online" FontSize="13" FontWeight="SemiBold"/>
+
+                            </CheckBox>
                         </StackPanel>
                         <!--<StackPanel Grid.Column="2">
                             <TextBlock Text="BOOK AUTHOR" Style="{StaticResource FieldLabel}"/>

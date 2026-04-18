@@ -1,10 +1,9 @@
 ﻿using IIStudyDESKTOP.WindowsPages;
 using IIstudyWSClient;
-using LLStudy_Models;
 using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels.Guest;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,21 +16,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using IIStudyDESKTOP.WindowsPages;
-using System.Runtime.CompilerServices;
-using LLStudy_Models.ViewModels;
-using LLStudy_Models.ViewModels.Guest;
-using System.Text.Json.Nodes;
 
 namespace IIStudyDESKTOP.UserControllers
 {
     /// <summary>
-    /// Interaction logic for ViewBooks.xaml
+    /// Interaction logic for ViewBooksCatalog.xaml
     /// </summary>
-    public partial class ViewBooks : UserControl
+    public partial class ViewBooksCatalog : UserControl
     {
-        //private ObservableCollection<Book> allBooks;
-        //private List<ViewBookViewModel> fullBooks;
         private List<BookShownDesktop> filteredBooks;
         private List<BookShownDesktop> books;
         private BookDetails bookDetails;
@@ -41,23 +33,23 @@ namespace IIStudyDESKTOP.UserControllers
         private string SelectedSubject { get; set; }
         private Dictionary<string, string> Subjects { get; set; }
         private string searchBar;
-        
-        public  ViewBooks()
+
+        public ViewBooksCatalog()
         {
             InitializeComponent();
             this.init_page();
-            
+
         }
 
         private async Task init_page()
         {
-            await this.LoadBooks();
             await this.LoadSubjects();
+            await this.LoadBooks();
         }
 
         private async Task GetBooks()
         {
-            ApiClient<List<BookShownDesktop>> client = new ApiClient<List<BookShownDesktop>> ();
+            ApiClient<List<BookShownDesktop>> client = new ApiClient<List<BookShownDesktop>>();
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
@@ -69,26 +61,27 @@ namespace IIStudyDESKTOP.UserControllers
         }
         private async Task LoadSubjects()
         {
-            ApiClient<Dictionary<string,string>> client = new ApiClient<Dictionary<string, string>>();
+            ApiClient<Dictionary<string, string>> client = new ApiClient<Dictionary<string, string>>();
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Guest/GetAllSubjectsDict";
             this.Subjects = await client.GetAsync();
+
+            if(this.Subjects == null)
+            {
+                MessageBox.Show("Faild to Load subjects", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Subjects = new Dictionary<string, string>();
+            }
             this.SubjectsNames = this.Subjects.Values.ToList();
             this.Subjects.Add("0", "All");
-            this.cmbFilter.ItemsSource = this.Subjects;
-            this.SelectedSubject = "0";
-            this.cmbFilter.SelectedValue = this.SelectedSubject;
-
-            
-
-            //cmbFilter.ItemsSource = this.SubjectsNames;
+           
+            this.SubjectsList.ItemsSource = this.Subjects;
+            this.TxtSubjectBadge.Text = this.Subjects.Count().ToString();
             this.SubjectsNames.Insert(0, "All");
-            //this.cmbFilter.SelectedItem = this.SelectedSubject;
         }
 
-       
+
 
         //private async Task GetFullBooks()
         //{
@@ -106,127 +99,120 @@ namespace IIStudyDESKTOP.UserControllers
         {
             await this.GetBooks();
             this.DataContext = this.books;
-            this.dgBooks.ItemsSource = this.books;
+            this.BooksList.ItemsSource = this.books;
             this.UpdateStatistics();
         }
-        private async Task LoadBooks(int removeThisAfter)
-        {
-            try
-            {
-                // Load books from your database
-                // For demo purposes, using sample data
-                //allBooks = new ObservableCollection<Book>
-                //{
-                //    new Book
-                //    {
-                //        BookID = "BK-001",
-                //        Book_name = "To Kill a Mockingbird",
-                //        Author_name = "Harper Lee",
-                //        Book_price = 24.99,
-                //        In_stock = true,
-                //        SubjectID = "1"
-                //    },
-                //    new Book
-                //    {
-                //        BookID = "BK-001",
-                //        Book_name = "To Kill a Mockingbird",
-                //        Author_name = "Harper Lee",
-                //        Book_price = 24.99,
-                //        In_stock = true,
-                //        SubjectID = "1"
-                //    },
-                //    new Book
-                //    {
-                //        BookID = "BK-001",
-                //        Book_name = "To Kill a Mockingbird",
-                //        Author_name = "Harper Lee",
-                //        Book_price = 24.99,
-                //        In_stock = true,
-                //        SubjectID = "1"
-                //    },
-                //    new Book
-                //    {
-                //        BookID = "BK-001",
-                //        Book_name = "To Kill a Mockingbird",
-                //        Author_name = "Harper Lee",
-                //        Book_price = 24.99,
-                //        In_stock = true,
-                //        SubjectID = "1"
-                //    },
-                //    new Book
-                //    {
-                //        BookID = "BK-001",
-                //        Book_name = "To Kill a Mockingbird",
-                //        Author_name = "Harper Lee",
-                //        Book_price = 24.99,
-                //        In_stock = true,
-                //        SubjectID = "1"
-                //    },
-                //    new Book
-                //    {
-                //        BookID = "BK-002",
-                //        Book_name = "To Kill a Mockingbird",
-                //        Author_name = "Harper Lee",
-                //        Book_price = 24.99,
-                //        In_stock = true,
-                //        SubjectID = "1"
-                //    },
-                //    new Book
-                //    {
-                //        BookID = "BK-002",
-                //        Book_name = "To Kill a Mockingbird",
-                //        Author_name = "Harper Lee",
-                //        Book_price = 24.99,
-                //        In_stock = true,
-                //        SubjectID = "1"
-                //    } };
+        
 
-                ////filteredBooks = new ObservableCollection<Book>(allBooks);
-                //dgBooks.ItemsSource = allBooks;
-
-                UpdateStatistics();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Error loading books: {ex.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
-            }
-        }
+        
 
         private void SearchUpdate(object sender, TextChangedEventArgs e)
         {
-            this.searchBar = this.txtSearch.Text;
+            this.filteredBooks = this.books;
+            this.searchBar = this.SearchBox.Text;
             ApplyFilters();
             this.UpdateStatistics();
         }
+
+
+        private void InStockFillter(object sender, MouseButtonEventArgs e)
+        {
+            this.filteredBooks = this.books.Where(b => b.In_stock).ToList();
+            this.BooksList.ItemsSource = this.filteredBooks;
+            SetActiveChip(ChipInStock);
+            this.ApplyFilters();
+        }
+
+        private void OutStockFillter(object sender, MouseButtonEventArgs e)
+        {
+            this.filteredBooks = this.books.Where(b => !b.In_stock).ToList();
+            this.BooksList.ItemsSource = this.filteredBooks;
+            SetActiveChip(ChipOutOfStock);
+            this.ApplyFilters();
+        }
+        private void AllFillter(object sender, MouseButtonEventArgs e)
+        {
+            
+            this.BooksList.ItemsSource = this.books;
+            this.filteredBooks = this.books;
+            SetActiveChip(ChipAll);
+            this.ApplyFilters();
+        }
+
+        private void SubjectFilter(object sender, MouseButtonEventArgs e)
+        {
+            Border btn = sender as Border;
+            string key = btn.Tag as string;
+
+            this.filteredBooks = this.books.Where(b => { return b.SubjectID == key || key == "0"; }).ToList();
+            this.ApplyFilters();
+
+        }
+
+        private void SetActiveChip(Border active)
+        {
+            // RESET
+            ChipAll.Background = new SolidColorBrush(Colors.Transparent);
+            ChipInStock.Background = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#f0fdf4"));
+            ChipOutOfStock.Background = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#fef2f2"));
+            ChipAllText.Foreground = Brushes.Black;
+            ChipInStockText.Foreground = Brushes.Green;
+            ChipOutStockText.Foreground = Brushes.Red;
+            // ACTIVE STATES
+            if (active == ChipAll)
+            {
+                ChipAll.Background = new LinearGradientBrush(
+                    (Color)ColorConverter.ConvertFromString("#5b5fcf"),
+                    (Color)ColorConverter.ConvertFromString("#7c6fd4"),
+                    new Point(0, 0.5), new Point(1, 0.5));
+            }
+
+            else if (active == ChipInStock)
+            {
+                ChipInStock.Background = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString("#16a34a"));
+            }
+
+            else if (active == ChipOutOfStock)
+            {
+                ChipOutOfStock.Background = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString("#dc2626"));
+            }
+        }
+
         private void ApplyFilters()
         {
             this.searchBar = this.searchBar != null ? this.searchBar.Trim().ToLower() : "";
-            this.filteredBooks = this.books.Where(b =>
+            //if (this.searchBar == null) this.SearchPlaceholder.Text = "Search books.....";
+            //else
+            //{
+            //    this.SearchPlaceholder.Text = "";
+            //}
+            this.filteredBooks = this.filteredBooks.Where(b =>
             {
-                bool search = b.Book_name.ToLower().Contains(this.searchBar) || 
-                              b.Author_name.ToLower().Contains(this.searchBar) ||
-                              b.BookID.ToLower() == this.searchBar;
+                bool search = b.Book_name.ToLower().Contains(this.searchBar) ||
+                                b.Author_name.ToLower().Contains(this.searchBar) ||
+                                b.BookID.ToLower() == this.searchBar;
 
 
                 return search;
             }
             ).ToList();
+
             //this.DataContext = this.filteredBooks;
-            this.dgBooks.ItemsSource = this.filteredBooks;
+            this.BooksList.ItemsSource = this.filteredBooks;
 
         }
         private void UpdateStatistics()
         {
             if (this.filteredBooks != null && this.filteredBooks.Any())
             {
-                txtTotalBooks.Text = this.filteredBooks.Count.ToString();
-                txtInStock.Text = this.filteredBooks.Count(b => b.In_stock).ToString();
-                txtOutOfStock.Text = this.filteredBooks.Count(b => !b.In_stock).ToString();
+                TxtTotalBooks.Text = this.filteredBooks.Count.ToString();
+                TxtInStock.Text = this.filteredBooks.Count(b => b.In_stock).ToString();
+                TxtOutOfStock.Text = this.filteredBooks.Count(b => !b.In_stock).ToString();
+                TxtSubjectCount.Text = this.Subjects.Count.ToString();
             }
         }
 
@@ -245,8 +231,8 @@ namespace IIStudyDESKTOP.UserControllers
             Window parentWindow = Window.GetWindow(this);
             this.bookDetails.Owner = parentWindow;
             this.bookDetails.Show();
-            this.dgBooks.ItemsSource = null;
-            this.dgBooks.ItemsSource = this.books;
+            this.BooksList.ItemsSource = null;
+            this.BooksList.ItemsSource = this.books;
         }
 
         private async void DeleteBook(object sender, RoutedEventArgs e)
@@ -260,10 +246,10 @@ namespace IIStudyDESKTOP.UserControllers
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Admin/RemoveBook";
-            result = await client.PostAsyncRet<Book,bool>(book);
-            if(!result.Success || !result.Data)
+            result = await client.PostAsyncRet<Book, bool>(book);
+            if (!result.Success || !result.Data)
             {
-                MessageBox.Show("Delete was failed.", "Validation", MessageBoxButton.OK ,MessageBoxImage.Error);
+                MessageBox.Show("Delete was failed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
@@ -271,12 +257,12 @@ namespace IIStudyDESKTOP.UserControllers
                 //this.filteredBooks = this.books;
                 //this.books.Remove((BookShownDesktop)book);
                 this.DataContext = null;
-                this.dgBooks.ItemsSource = null;
+                this.BooksList.ItemsSource = null;
                 this.DataContext = this.books;
-                this.dgBooks.ItemsSource = this.books;
+                this.BooksList.ItemsSource = this.books;
                 //MessageBox.Show("Delete succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            
+
         }
 
         private async void RestoreBook(object sender, RoutedEventArgs e)
@@ -301,9 +287,9 @@ namespace IIStudyDESKTOP.UserControllers
                 //this.filteredBooks = this.books;
                 //this.books.Remove((BookShownDesktop)book);
                 this.DataContext = null;
-                this.dgBooks.ItemsSource = null;
+                this.BooksList.ItemsSource = null;
                 this.DataContext = this.books;
-                this.dgBooks.ItemsSource = this.books;
+                this.BooksList.ItemsSource = this.books;
                 //MessageBox.Show("Restore succeed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
@@ -348,7 +334,7 @@ namespace IIStudyDESKTOP.UserControllers
             Book book = btn.CommandParameter as Book;
             BookShownDesktop details = btn.CommandParameter as BookShownDesktop;
             if (this.reviews == null)
-                this.reviews = new ViewReviews(book,reviewsAmount: details.reviewsNum, avgRate: details.Rate);
+                this.reviews = new ViewReviews(book, reviewsAmount: details.reviewsNum, avgRate: details.Rate);
             else
             {
                 this.reviews = new ViewReviews(book, reviewsAmount: details.reviewsNum, avgRate: details.Rate);
@@ -357,7 +343,7 @@ namespace IIStudyDESKTOP.UserControllers
 
             this.reviews.Owner = parentWindow;
             this.reviews.Show();
-            
+
         }
 
         private void CreateBookPopUp(object sender, RoutedEventArgs e)
@@ -381,13 +367,14 @@ namespace IIStudyDESKTOP.UserControllers
 
                 }
                 ).ToList();
-                this.dgBooks.ItemsSource = null;
-                this.dgBooks.ItemsSource = this.filteredBooks;
+                this.BooksList.ItemsSource = null;
+                this.BooksList.ItemsSource = this.filteredBooks;
                 //this.DataContext = this.filteredBooks;
             }
-            else {
-                this.dgBooks.ItemsSource = null;
-                this.dgBooks.ItemsSource = this.books;
+            else
+            {
+                this.BooksList.ItemsSource = null;
+                this.BooksList.ItemsSource = this.books;
                 //this.DataContext = this.books;
             }
 
