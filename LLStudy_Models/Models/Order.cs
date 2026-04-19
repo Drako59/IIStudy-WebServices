@@ -19,8 +19,9 @@ namespace LLStudy_Models.Models
 
         string registeredID;
         public string OrderID { get { return orderID; } set { orderID = value; } }
-        [Required]
-        public bool Delivered { get { return delivered; } set { delivered = value; } }
+        
+        //[Required]
+        //public bool Delivered { get { return delivered; } set { delivered = value; } }
 
         public string Location { get { return location; } set { location = value; } }
         [Required]
@@ -30,6 +31,8 @@ namespace LLStudy_Models.Models
         //[Data]
         public string Date { get; set; }
 
+        [Required]
+        public int DeliveryStatus { get; set; }
 
     }
 }

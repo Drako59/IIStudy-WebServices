@@ -11,7 +11,7 @@ namespace LLstudyWS.ORM
             {
                 OrderID = Convert.ToString(dataReader["OrderID"]),
                 RegisteredID = Convert.ToString(dataReader["RegisteredID"]),
-                Delivered = Convert.ToBoolean(dataReader["Delivered"]),
+                //Delivered = Convert.ToBoolean(dataReader["Delivered"]),
                 Location = Convert.ToString(dataReader["Location"]),
                 Total_price = Convert.ToDouble(dataReader["Total_price"])
 

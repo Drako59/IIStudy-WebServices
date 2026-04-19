@@ -191,20 +191,32 @@ namespace LLstudyWS.Controllers
 
         //return ID
         [HttpPost]
-        public bool Pay(Order order) //Not in use
+        public bool Pay(Order order) 
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 this.repositoryUOW.HelperOledb.OpenTransaction();
+                if (this.repositoryUOW.ShoppingCartRepository.CartIsEmpty(order.RegisteredID)) 
+                    return false;
+
+                //Create the order
+                if (!(this.repositoryUOW.ShoppingCartRepository.GetRegCartPhysicalBooksIDs(order.RegisteredID).Any()))
+                    order.DeliveryStatus = (int)OrderStatus.Delivered;
 
                 order.Total_price = this.repositoryUOW.ShoppingCartRepository.GetTotalPriceForUser(order.RegisteredID);
                 this.repositoryUOW.OrderRepository.Create(order);
+
+
+                //Add the relations of books and order
                 string orderID = this.repositoryUOW.OrderRepository.GetLastID();
 
                 this.repositoryUOW.OrderRepository.AddRealationOfBooksAndOrder(orderID, order.RegisteredID);
-                this.repositoryUOW.ShoppingCartRepository.RemoveAllBooksForUser(order.RegisteredID);
 
+                
+                //remove the books that got bought from shopping cart
+                this.repositoryUOW.ShoppingCartRepository.RemoveAllBooksForUser(order.RegisteredID);
+                
                 this.repositoryUOW.HelperOledb.Commit();
 
                 return true ;

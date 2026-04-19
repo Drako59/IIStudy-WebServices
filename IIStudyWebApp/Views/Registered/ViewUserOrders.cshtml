@@ -29,7 +29,16 @@
             <!-- Order 1 - Delivered -->
             @foreach (ViewOrderDetailsModel order in Model.Orders)
             {
-                string delivered = order.Order.Delivered ? "delivered" : "shipped";
+                string delivered = (OrderStatus)order.Order.DeliveryStatus switch
+                {
+                    OrderStatus.Delivered => "delivered",
+                    OrderStatus.Shipped => "shipped",
+                        OrderStatus.Processing => "processing",
+                    _ => "processing"
+                };
+
+
+
                 <div class="order-card" data-status="@delivered">
                     <div class="order-header">
                         <div class="order-info-left">
@@ -45,11 +54,15 @@
                     </div>
 
                     <div class="order-items">
-                       
+                        @{
+                            int counter = 0;
+                            int totalBooks = order.Books?.Count ?? 0;
+                            int remainingBooks = totalBooks > 3 ? totalBooks - 3 : 0;
+                         }
                         @foreach (OrderBook book in order.Books)
                         {
-                            
-                                <div class="order-item">
+                            counter++;
+                            <div class="order-item">
                                     <div class="order-item-image">
                                         <img src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"
                                                  alt="To Kill a Mockingbird cover">
@@ -57,13 +70,23 @@
                                     <div class="order-item-details">
                                         <h4>@book.Book_name</h4>
                                         <p>by @book.Author_name</p>
-                                        <p>PDF Format • Fiction</p>
+                                        <p>@(book.IsOnline? "Online" : "Physical") Format</p>
                                     </div>
                                     <div class="order-item-price">
                                         <div class="item-price-main">@book.Book_price</div>
                                         <div class="item-quantity">Qty: @book.Amount</div>
                                     </div>
+                            </div>
+                            if (counter >= 3) break;
+                        }
+
+                        @{
+                            if(remainingBooks > 0)
+                            {
+                                <div class="more-items-label">
+                                    +@remainingBooks more book@(remainingBooks > 1 ? "s" : "")
                                 </div>
+                            }
                         }
 
                       

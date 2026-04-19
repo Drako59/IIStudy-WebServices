@@ -63,8 +63,8 @@ namespace IIStudyDESKTOP.UserControllers
             {
                 bool passFilter = _filterMode switch
                 {
-                    "Delivered" => o.Delivered,
-                    "Pending" => !o.Delivered,
+                    "Delivered" => o.DeliveryStatus == (int)OrderStatus.Delivered,
+                    "Pending" => o.DeliveryStatus == (int)OrderStatus.Pending,
                     _ => true
                 };
 
@@ -85,8 +85,8 @@ namespace IIStudyDESKTOP.UserControllers
         private void UpdateStats()
         {
             TxtTotalOrders.Text = _allOrders.Count.ToString();
-            TxtDelivered.Text = _allOrders.Count(o => o.Delivered).ToString();
-            TxtPending.Text = _allOrders.Count(o => !o.Delivered).ToString();
+            TxtDelivered.Text = _allOrders.Count(o => o.DeliveryStatus == (int)OrderStatus.Delivered).ToString();
+            TxtPending.Text = _allOrders.Count(o => o.DeliveryStatus == (int)OrderStatus.Pending).ToString();
             TxtRevenue.Text = $"₪{_allOrders.Sum(o => o.Total_price):N0}";
         }
 

@@ -162,7 +162,23 @@ function checkEmptyCart() {
 }
 
 function checkout() {
+    const cartItems = document.querySelectorAll('.cart-item');
+    if (cartItems.length == 0) {
+        ShowEmptyToast("The cart is empty....🤓");
+        return;
+    }
     window.location.href = `https://localhost:7121/Registered/PaymentPage`;
+}
+
+function ShowEmptyToast(msg){
+    const toastDiv = document.createElement("div");
+    toastDiv.innerText = msg;
+    toastDiv.className = "toast";
+    document.body.appendChild(toastDiv);
+
+    setTimeout(() => {
+        toastDiv.remove();
+    }, 3000);
 }
 
 function continueShopping() {

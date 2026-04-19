@@ -402,3 +402,15 @@
             object-fit: cover; /* או contain אם לא בא לך חיתוך */
             display: block;
         }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }

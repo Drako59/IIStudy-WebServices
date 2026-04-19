@@ -1,6 +1,7 @@
 ﻿using LLStudy_Models.Models;
 using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
+using System.Diagnostics.Contracts;
 using System.Net;
 
 namespace LLstudyWS.ORM
@@ -187,6 +188,23 @@ namespace LLstudyWS.ORM
             }
         }
 
+        public List<string> GetRegCartPhysicalBooksIDs(string registeredID)
+        {
+            string sql = @$"SELECT Books.BookID AS BookID FROM Books INNER JOIN Shopping_carts ON Books.BookID = Shopping_carts.BookID 
+                                    WHERE RegisteredID = @RegisteredID AND IsOnline = False";
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                List<string> physicalBooksIDs = new List<string>();
+                while (reader.Read())
+                {
+                    physicalBooksIDs.Add(Convert.ToString(reader["BookID"]));
+                }
+                return physicalBooksIDs;
+            }
+        }
+
         public bool IsOnlineBookInCart(string registeredID, string bookID)
         {
             string sql = @$"SELECT COUNT(*) AS IsOnlineBookInCart FROM Books INNER JOIN Shopping_carts ON Books.BookID = Shopping_carts.BookID 
@@ -198,6 +216,21 @@ namespace LLstudyWS.ORM
                 if (reader.Read())
                 {
                     return Convert.ToInt32(reader["IsOnlineBookInCart"]) > 0;
+                }
+                else return false;
+            }
+        }
+
+        public bool CartIsEmpty(string registeredID)
+        {
+            string sql = $@"SELECT COUNT(*) AS BooksNum FROM Shopping_carts WHERE RegisteredID = @RegisteredID";
+
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt32(reader["BooksNum"]) == 0;
                 }
                 else return false;
             }

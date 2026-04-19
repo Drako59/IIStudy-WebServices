@@ -357,6 +357,8 @@
     line-height: 1.6;
 }
 
+
+
 @media (max-width: 1024px) {
     .checkout-layout {
         grid-template-columns: 1fr;

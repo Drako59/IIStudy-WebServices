@@ -456,7 +456,8 @@ namespace IIStudyWebApp.Controllers
             string customFormat = now.ToString("yyyy-MM-dd");
 
             order.Date = customFormat;
-            order.Delivered = false;
+            //order.Delivered = false;
+            order.DeliveryStatus = (int)OrderStatus.Pending;
             order.RegisteredID = HttpContext.Session.GetString("RegisteredID");
 
 
