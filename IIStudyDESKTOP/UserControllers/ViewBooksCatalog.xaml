@@ -798,7 +798,7 @@
                                                     BorderThickness="1"
                                                     Padding="12,9"
                                                     MouseLeftButtonUp="SubjectFilter"
-                                                    Tag="{Binding Key}">
+                                                    Tag="{Binding SubjectID}">
                                                 <Border.Effect>
                                                     <DropShadowEffect Color="#7c3aed" BlurRadius="8"
                                                                       ShadowDepth="0" Opacity="0.05"/>
@@ -817,14 +817,14 @@
                                                             Background="#ede9fe"
                                                             CornerRadius="6" Padding="6,2"
                                                             Margin="0,0,8,0">
-                                                        <TextBlock Text="{Binding Key}"
+                                                        <TextBlock Text="{Binding SubjectID}"
                                                                    FontSize="9" FontWeight="Bold"
                                                                    Foreground="#7c3aed"/>
                                                     </Border>
 
                                                     <!-- Name -->
                                                     <TextBlock Grid.Column="1"
-                                                               Text="{Binding Value}"
+                                                               Text="{Binding Subject_name}"
                                                                FontSize="12" FontWeight="SemiBold"
                                                                Foreground="#1e293b"
                                                                VerticalAlignment="Center"
@@ -834,7 +834,7 @@
                                                     <Border Grid.Column="2"
                                                             Background="#f5f3ff"
                                                             CornerRadius="8" Padding="6,2">
-                                                        <TextBlock Text="{Binding BookCountLabel}"
+                                                        <TextBlock Text="{Binding BooksCount}"
                                                                    FontSize="10" FontWeight="Bold"
                                                                    Foreground="#7c3aed"/>
                                                     </Border>

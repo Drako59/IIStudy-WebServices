@@ -34,18 +34,19 @@ namespace LLStudy_Models.Models
         public string RegisteredSalt { get; set; }
 
         [Required]
+        [FirstLetterCapital(ErrorMessage = "Valid Password is requierd")]
+
         [StringLength(maximumLength: 20,MinimumLength =2,ErrorMessage ="Valid username is required")]
         public string UserName { get; set; }
         
         [Required]
-        //[FirstLetterCapital(ErrorMessage ="Valid Password is requierd")]
-        //[StringLength(maximumLength: 20, MinimumLength = 2, ErrorMessage = "Valid password is required")]
+        [FirstLetterCapital(ErrorMessage = "Valid Password is requierd")]
+        [MinLength(8)]
         public string Password { get; set; }
         [EmailAddress(ErrorMessage = "Valid email is required")]
         public string Email { get; set; }
-        //[LegalRole(ErrorMessage ="Valid role is required")]
         public string Role { get; set; }
-
+        [ValidDate]
         public string Birth { get; set; }
 
         public string ImagePath { get { return imagePath; } set { this.imagePath = value;  } }

@@ -1,4 +1,5 @@
 ﻿using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels.Guest;
 using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 
@@ -43,6 +44,35 @@ namespace LLstudyWS.ORM
 
             }
             return names;
+        }
+
+        public List<SubjectDetails> GetSubjectsDetailsList()
+        {
+            string sql = $@"SELECT
+                                Subject_name,
+                                Subjects.SubjectID AS SubjectID,
+                                COUNT(BookID) AS BooksCount
+                            FROM
+                                Subjects
+                                LEFT JOIN Books ON Books.SubjectID = Subjects.SubjectID
+                            GROUP BY
+                                Subjects.SubjectID,
+                                Subject_name
+                            ORDER BY
+                                Subjects.SubjectID;";
+
+            List<SubjectDetails> subjectsDetails = new List<SubjectDetails>();
+
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    subjectsDetails.Add(this.moderlRefCreator.CreateModel<SubjectDetails>(reader));
+                }
+
+                return subjectsDetails;
+                
+            }
         }
     }
 }

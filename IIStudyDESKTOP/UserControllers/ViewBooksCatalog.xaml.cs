@@ -4,10 +4,12 @@ using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels.Guest;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -32,6 +34,7 @@ namespace IIStudyDESKTOP.UserControllers
         private List<string> SubjectsNames { get; set; }
         private string SelectedSubject { get; set; }
         private Dictionary<string, string> Subjects { get; set; }
+        private List<SubjectDetails> SubjectsDetails { get; set; }
         private string searchBar;
 
         public ViewBooksCatalog()
@@ -43,7 +46,8 @@ namespace IIStudyDESKTOP.UserControllers
 
         private async Task init_page()
         {
-            await this.LoadSubjects();
+            await this.LoadSubjectsDict();
+            await this.LoadSubjectsDetails();
             await this.LoadBooks();
         }
 
@@ -59,7 +63,7 @@ namespace IIStudyDESKTOP.UserControllers
             //UpdateStatistics();
 
         }
-        private async Task LoadSubjects()
+        private async Task LoadSubjectsDict()
         {
             ApiClient<Dictionary<string, string>> client = new ApiClient<Dictionary<string, string>>();
             client.Scheme = "http";
@@ -76,9 +80,30 @@ namespace IIStudyDESKTOP.UserControllers
             this.SubjectsNames = this.Subjects.Values.ToList();
             this.Subjects.Add("0", "All");
            
-            this.SubjectsList.ItemsSource = this.Subjects;
+            //this.SubjectsList.ItemsSource = this.Subjects;
             this.TxtSubjectBadge.Text = this.Subjects.Count().ToString();
             this.SubjectsNames.Insert(0, "All");
+
+
+           
+
+        }
+
+        private async Task LoadSubjectsDetails(){
+            ApiClient<List<SubjectDetails>> client = new ApiClient<List<SubjectDetails>>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetAllSubjectsDetails";
+            this.SubjectsDetails = await client.GetAsync();
+            if (this.SubjectsDetails == null)
+            {
+                MessageBox.Show("Faild to Load subjects", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.SubjectsDetails = new List<SubjectDetails>();
+            }
+
+            this.SubjectsList.ItemsSource = this.SubjectsDetails;
+
         }
 
 

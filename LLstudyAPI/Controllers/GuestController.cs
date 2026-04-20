@@ -414,7 +414,7 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpGet]
-        public List<Subject> GetAllSubjects()
+        public List<Subject> GetAllSubjects() //Not In Use I think
         {
             try 
             {
@@ -452,7 +452,7 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpGet]
-        public List<string> GetSubjectsNamesList()
+        public List<string> GetSubjectsNamesList() //Not In Use I think
         {
             try
             {
@@ -466,6 +466,24 @@ namespace LLstudyWS.Controllers
             }
             finally
             {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public List<SubjectDetails> GetAllSubjectsDetails()
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.SubjectRepository.GetSubjectsDetailsList();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally{
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
