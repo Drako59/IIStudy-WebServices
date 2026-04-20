@@ -118,6 +118,19 @@ namespace IIStudyWebApp.Controllers
             reg.RegisteredID = "6";
             reg.RegisteredSalt = " ";
             reg.ImagePath = "None";
+
+            //reg.Validate();
+            //var dict = reg.AllErrors();
+            //Console.WriteLine(reg.Password);
+            //foreach (KeyValuePair<string, List<string>> pair in dict)
+            //{
+            //    Console.WriteLine(pair.Key);
+            //    foreach (string error in pair.Value)
+            //    {
+            //        Console.WriteLine($@"\t{error}");
+            //    }
+            //}
+            
              ApiResultModel<Registered> success = client.PostAsyncRet<Registered, Registered>(reg).Result;
 
             //888888888888888888888888888888888888

@@ -34,7 +34,7 @@ namespace LLstudyWS.ORM
         {
             List<Order> orders = new List<Order>();
 
-            string sql = "SELECT * FROM Orders WHERE RegisteredID = @ID";
+            string sql = "SELECT * FROM Orders WHERE RegisteredID = @ID ORDER BY OrderID DESC";
             this.helperOledb.AddParameter("@ID", ID);
 
             using(IDataReader reader = this.helperOledb.Select(sql))

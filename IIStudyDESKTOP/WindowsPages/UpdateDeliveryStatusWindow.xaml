@@ -1,0 +1,378 @@
+﻿<Window x:Class="IIStudyDESKTOP.WindowsPages.UpdateDeliveryStatusWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
+        mc:Ignorable="d"
+        Title="UpdateDeliveryStatusWindow" Height="480" Width="420">
+    <Border Margin="16" CornerRadius="20" Background="White">
+        <Border.Effect>
+            <DropShadowEffect Color="#764ba2" BlurRadius="36" ShadowDepth="0" Opacity="0.18"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Header -->
+                <RowDefinition Height="*"/>
+                <!-- Status options -->
+                <RowDefinition Height="Auto"/>
+                <!-- Footer -->
+            </Grid.RowDefinitions>
+
+            <!-- ── HEADER ── -->
+            <Border Grid.Row="0" CornerRadius="20,20,0,0" Padding="22,18,18,18">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#667eea" Offset="0"/>
+                        <GradientStop Color="#764ba2" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="🚚  Update Delivery Status"
+                                   FontSize="16" FontWeight="ExtraBold"
+                                   Foreground="White"/>
+                        <TextBlock x:Name="TxtOrderID"
+                                   Text="Order #—"
+                                   FontSize="12" Foreground="#ddd6fe"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Width="28" Height="28"
+                            BorderThickness="0" Cursor="Hand"
+                            VerticalAlignment="Top"
+                            Click="Cancel_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="b" Background="Transparent" CornerRadius="7">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="b" Property="Background" Value="#ffffff22"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock Text="✕" FontSize="13" Foreground="White" FontWeight="Bold"/>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- ── STATUS OPTIONS ── -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="18,14,18,6">
+                <StackPanel>
+                    <TextBlock Text="Select the new status:"
+                               FontSize="12" FontWeight="Bold"
+                               Foreground="#64748b"
+                               Margin="0,0,0,12"/>
+
+                    <!-- 0 Pending -->
+                    <Border x:Name="Card0" CornerRadius="12" Margin="0,0,0,8"
+                            BorderThickness="2" Cursor="Hand"
+                            MouseLeftButtonUp="StatusCard_Click" Tag="0">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#fafafa"/>
+                                <Setter Property="BorderBrush" Value="#e2e8f0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#fffbeb"/>
+                                        <Setter Property="BorderBrush" Value="#fbbf24"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid Margin="14,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="10"
+                                    Background="#fffbeb" Margin="0,0,12,0">
+                                <TextBlock Text="⏳" FontSize="18"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Pending" FontSize="13" FontWeight="Bold" Foreground="#1e293b"/>
+                                <TextBlock Text="Order received, not yet processed"
+                                           FontSize="11" Foreground="#94a3b8" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Border Grid.Column="2" CornerRadius="6" Padding="8,3"
+                                    Background="#fffbeb" VerticalAlignment="Center">
+                                <TextBlock Text="0" FontSize="10" FontWeight="Bold" Foreground="#d97706"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 1 Processing -->
+                    <Border x:Name="Card1" CornerRadius="12" Margin="0,0,0,8"
+                            BorderThickness="2" Cursor="Hand"
+                            MouseLeftButtonUp="StatusCard_Click" Tag="1">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#fafafa"/>
+                                <Setter Property="BorderBrush" Value="#e2e8f0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#eef2ff"/>
+                                        <Setter Property="BorderBrush" Value="#667eea"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid Margin="14,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="10"
+                                    Background="#eef2ff" Margin="0,0,12,0">
+                                <TextBlock Text="⚙️" FontSize="18"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Processing" FontSize="13" FontWeight="Bold" Foreground="#1e293b"/>
+                                <TextBlock Text="Order is being prepared"
+                                           FontSize="11" Foreground="#94a3b8" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Border Grid.Column="2" CornerRadius="6" Padding="8,3"
+                                    Background="#eef2ff" VerticalAlignment="Center">
+                                <TextBlock Text="1" FontSize="10" FontWeight="Bold" Foreground="#667eea"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 2 Shipped -->
+                    <Border x:Name="Card2" CornerRadius="12" Margin="0,0,0,8"
+                            BorderThickness="2" Cursor="Hand"
+                            MouseLeftButtonUp="StatusCard_Click" Tag="2">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#fafafa"/>
+                                <Setter Property="BorderBrush" Value="#e2e8f0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#f0f9ff"/>
+                                        <Setter Property="BorderBrush" Value="#0ea5e9"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid Margin="14,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="10"
+                                    Background="#f0f9ff" Margin="0,0,12,0">
+                                <TextBlock Text="📦" FontSize="18"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Shipped" FontSize="13" FontWeight="Bold" Foreground="#1e293b"/>
+                                <TextBlock Text="Package is on its way"
+                                           FontSize="11" Foreground="#94a3b8" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Border Grid.Column="2" CornerRadius="6" Padding="8,3"
+                                    Background="#f0f9ff" VerticalAlignment="Center">
+                                <TextBlock Text="2" FontSize="10" FontWeight="Bold" Foreground="#0ea5e9"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 3 Delivered -->
+                    <Border x:Name="Card3" CornerRadius="12" Margin="0,0,0,8"
+                            BorderThickness="2" Cursor="Hand"
+                            MouseLeftButtonUp="StatusCard_Click" Tag="3">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#fafafa"/>
+                                <Setter Property="BorderBrush" Value="#e2e8f0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#f0fdf4"/>
+                                        <Setter Property="BorderBrush" Value="#22c55e"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid Margin="14,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="10"
+                                    Background="#f0fdf4" Margin="0,0,12,0">
+                                <TextBlock Text="✅" FontSize="18"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Delivered" FontSize="13" FontWeight="Bold" Foreground="#1e293b"/>
+                                <TextBlock Text="Order successfully delivered"
+                                           FontSize="11" Foreground="#94a3b8" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Border Grid.Column="2" CornerRadius="6" Padding="8,3"
+                                    Background="#f0fdf4" VerticalAlignment="Center">
+                                <TextBlock Text="3" FontSize="10" FontWeight="Bold" Foreground="#22c55e"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 4 Canceled -->
+                    <Border x:Name="Card4" CornerRadius="12" Margin="0,0,0,8"
+                            BorderThickness="2" Cursor="Hand"
+                            MouseLeftButtonUp="StatusCard_Click" Tag="4">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#fafafa"/>
+                                <Setter Property="BorderBrush" Value="#e2e8f0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#fef2f2"/>
+                                        <Setter Property="BorderBrush" Value="#ef4444"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid Margin="14,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="10"
+                                    Background="#fef2f2" Margin="0,0,12,0">
+                                <TextBlock Text="❌" FontSize="18"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Canceled" FontSize="13" FontWeight="Bold" Foreground="#1e293b"/>
+                                <TextBlock Text="Order has been canceled"
+                                           FontSize="11" Foreground="#94a3b8" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Border Grid.Column="2" CornerRadius="6" Padding="8,3"
+                                    Background="#fef2f2" VerticalAlignment="Center">
+                                <TextBlock Text="4" FontSize="10" FontWeight="Bold" Foreground="#ef4444"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 5 Refund -->
+                    <Border x:Name="Card5" CornerRadius="12" Margin="0,0,0,4"
+                            BorderThickness="2" Cursor="Hand"
+                            MouseLeftButtonUp="StatusCard_Click" Tag="5">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#fafafa"/>
+                                <Setter Property="BorderBrush" Value="#e2e8f0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#fdf4ff"/>
+                                        <Setter Property="BorderBrush" Value="#a855f7"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid Margin="14,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="10"
+                                    Background="#fdf4ff" Margin="0,0,12,0">
+                                <TextBlock Text="💸" FontSize="18"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Refund" FontSize="13" FontWeight="Bold" Foreground="#1e293b"/>
+                                <TextBlock Text="Refund issued to customer"
+                                           FontSize="11" Foreground="#94a3b8" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Border Grid.Column="2" CornerRadius="6" Padding="8,3"
+                                    Background="#fdf4ff" VerticalAlignment="Center">
+                                <TextBlock Text="5" FontSize="10" FontWeight="Bold" Foreground="#a855f7"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ── FOOTER ── -->
+            <Border Grid.Row="2" Padding="18,10,18,18">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Cancel -->
+                    <Button Grid.Column="0" Height="42" BorderThickness="0"
+                            Cursor="Hand" Click="Cancel_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="b" Background="#f1f5f9" CornerRadius="12">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="b" Property="Opacity" Value="0.8"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock Text="Cancel" FontSize="13" FontWeight="Bold" Foreground="#64748b"/>
+                    </Button>
+
+                    <!-- Confirm -->
+                    <Button Grid.Column="2" Height="42" BorderThickness="0"
+                            Cursor="Hand" Click="Confirm_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="b" CornerRadius="12">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#667eea" Offset="0"/>
+                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#667eea" BlurRadius="14"
+                                                          ShadowDepth="0" Opacity="0.30"/>
+                                    </Border.Effect>
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="b" Property="Opacity" Value="0.85"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🚚 " FontSize="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="Confirm" FontSize="13" FontWeight="Bold"
+                                       Foreground="White" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</Window>

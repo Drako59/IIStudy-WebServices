@@ -102,6 +102,8 @@ namespace IIStudyDESKTOP.UserControllers
                 this.SubjectsDetails = new List<SubjectDetails>();
             }
 
+            this.SubjectsDetails.Insert(0,new SubjectDetails() { BooksCount = 0, SubjectID = "0", Subject_name = "All"});
+
             this.SubjectsList.ItemsSource = this.SubjectsDetails;
 
         }

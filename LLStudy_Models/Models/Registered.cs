@@ -34,13 +34,12 @@ namespace LLStudy_Models.Models
         public string RegisteredSalt { get; set; }
 
         [Required]
-        [FirstLetterCapital(ErrorMessage = "Valid Password is requierd")]
 
-        [StringLength(maximumLength: 20,MinimumLength =2,ErrorMessage ="Valid username is required")]
+        [StringLength(maximumLength: 20,MinimumLength = 2,ErrorMessage ="Valid username is required")]
         public string UserName { get; set; }
         
         [Required]
-        [FirstLetterCapital(ErrorMessage = "Valid Password is requierd")]
+        //[FirstLetterCapital(ErrorMessage = "Valid Password is requierd")]
         [MinLength(8)]
         public string Password { get; set; }
         [EmailAddress(ErrorMessage = "Valid email is required")]

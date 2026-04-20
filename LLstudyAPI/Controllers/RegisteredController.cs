@@ -116,7 +116,7 @@ namespace LLstudyWS.Controllers
 
 
         [HttpGet]
-        public ViewShoppingCartModel GetShoppingCart(string registeredID)
+        public IActionResult GetShoppingCart(string registeredID)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace LLstudyWS.Controllers
                 viewModel.CartBooks = new List<CartBookViewModel>();
                 viewModel.User = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
                 viewModel.CartBooks = this.repositoryUOW.BookRepository.GetShoppingCartBooks(registeredID);
-                return viewModel;
+                return Ok(viewModel);
 
             }
             catch (Exception ex)
@@ -437,7 +437,7 @@ namespace LLstudyWS.Controllers
                 }
                 else
                 {
-                    return null;
+                    return NoContent();
                     AbsoultePath = Path.Combine(this.path, "zoro2.jpg");
                 }
 
