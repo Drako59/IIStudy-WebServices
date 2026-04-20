@@ -49,7 +49,7 @@
                             Width="28" Height="28"
                             BorderThickness="0" Cursor="Hand"
                             VerticalAlignment="Top"
-                            Click="Cancel_Click">
+                            >
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="b" Background="Transparent" CornerRadius="7">
@@ -78,7 +78,7 @@
                     <!-- 0 Pending -->
                     <Border x:Name="Card0" CornerRadius="12" Margin="0,0,0,8"
                             BorderThickness="2" Cursor="Hand"
-                            MouseLeftButtonUp="StatusCard_Click" Tag="0">
+                             Tag="0">
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Background" Value="#fafafa"/>
@@ -117,7 +117,7 @@
                     <!-- 1 Processing -->
                     <Border x:Name="Card1" CornerRadius="12" Margin="0,0,0,8"
                             BorderThickness="2" Cursor="Hand"
-                            MouseLeftButtonUp="StatusCard_Click" Tag="1">
+                             Tag="1">
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Background" Value="#fafafa"/>
@@ -156,7 +156,7 @@
                     <!-- 2 Shipped -->
                     <Border x:Name="Card2" CornerRadius="12" Margin="0,0,0,8"
                             BorderThickness="2" Cursor="Hand"
-                            MouseLeftButtonUp="StatusCard_Click" Tag="2">
+                             Tag="2">
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Background" Value="#fafafa"/>
@@ -195,7 +195,7 @@
                     <!-- 3 Delivered -->
                     <Border x:Name="Card3" CornerRadius="12" Margin="0,0,0,8"
                             BorderThickness="2" Cursor="Hand"
-                            MouseLeftButtonUp="StatusCard_Click" Tag="3">
+                             Tag="3">
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Background" Value="#fafafa"/>
@@ -234,7 +234,7 @@
                     <!-- 4 Canceled -->
                     <Border x:Name="Card4" CornerRadius="12" Margin="0,0,0,8"
                             BorderThickness="2" Cursor="Hand"
-                            MouseLeftButtonUp="StatusCard_Click" Tag="4">
+                             Tag="4">
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Background" Value="#fafafa"/>
@@ -273,7 +273,7 @@
                     <!-- 5 Refund -->
                     <Border x:Name="Card5" CornerRadius="12" Margin="0,0,0,4"
                             BorderThickness="2" Cursor="Hand"
-                            MouseLeftButtonUp="StatusCard_Click" Tag="5">
+                             Tag="5">
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Background" Value="#fafafa"/>
@@ -323,7 +323,7 @@
 
                     <!-- Cancel -->
                     <Button Grid.Column="0" Height="42" BorderThickness="0"
-                            Cursor="Hand" Click="Cancel_Click">
+                            Cursor="Hand" >
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="b" Background="#f1f5f9" CornerRadius="12">
@@ -341,7 +341,7 @@
 
                     <!-- Confirm -->
                     <Button Grid.Column="2" Height="42" BorderThickness="0"
-                            Cursor="Hand" Click="Confirm_Click">
+                            Cursor="Hand">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="b" CornerRadius="12">

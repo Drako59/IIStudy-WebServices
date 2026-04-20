@@ -313,7 +313,7 @@ namespace LLstudyWS.Controllers
 
         [HttpGet]
 
-        public List<ViewBookViewModel> GetAllBookFullView() //with reviews, don't in use .
+        public List<ViewBookViewModel> GetAllBookFullView() //with reviews, not in use .
         {
             try
             {
