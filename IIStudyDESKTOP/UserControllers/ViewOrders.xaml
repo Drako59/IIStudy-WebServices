@@ -421,7 +421,7 @@
 
                                     <!-- Total Price -->
                                     <TextBlock Grid.Column="4"
-                                               Text="{Binding TotalPrice, StringFormat='₪{0:N0}'}"
+                                               Text="{Binding Total_price, StringFormat='₪{0:N0}'}"
                                                FontWeight="Bold"
                                                FontSize="14"
                                                Foreground="#1e293b"
@@ -429,7 +429,7 @@
 
                                     <!-- Date -->
                                     <TextBlock Grid.Column="5"
-                                               Text="{Binding OrderDate, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                               Text="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"
                                                Style="{StaticResource TableCell}"
                                                Foreground="#64748b"/>
 

@@ -437,6 +437,7 @@ namespace LLstudyWS.Controllers
                 }
                 else
                 {
+                    return null;
                     AbsoultePath = Path.Combine(this.path, "zoro2.jpg");
                 }
 

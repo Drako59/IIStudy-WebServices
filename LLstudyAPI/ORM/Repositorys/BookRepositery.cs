@@ -44,7 +44,7 @@ namespace LLstudyWS.ORM
                                         Subjects
                                     ) ON Subjects.SubjectID = Books.SubjectID
                                 WHERE
-                                    Orders.RegisteredID = @RegisteredID AND Books.IsOnline = True";
+                                    Orders.RegisteredID = @RegisteredID AND Books.IsOnline = True AND NOT Orders.DeliveryStatus = {(int)OrderStatus.Canceled} AND NOT Orders.DeliveryStatus = {(int)OrderStatus.Refund}";
 
             this.helperOledb.AddParameter("@RegisteredID", RegisteredID);
             using (IDataReader reader = this.helperOledb.Select(sql))

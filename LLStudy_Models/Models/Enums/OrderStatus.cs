@@ -11,6 +11,8 @@ namespace LLStudy_Models.Models
         Pending = 0,
         Processing = 1,
         Shipped = 2,
-        Delivered = 3
+        Delivered = 3,
+        Canceled = 4,
+        Refund = 5
     }
 }

@@ -47,8 +47,8 @@ namespace IIStudyDESKTOP.WindowsPages
         void LoadRegistered()
         {
             TxtInitials.Text = this.reg.UserName.Length >= 2
-                   ? $"{char.ToUpper(this.reg.UserName[0])}{char.ToUpper(this.reg.UserName[1])}"
-                   : char.ToUpper(this.reg.UserName[0]).ToString();
+                   ? $"{this.reg.UserName[0]}{this.reg.UserName[1]}"
+                   : this.reg.UserName[0].ToString();
 
             // Role badge
             if (RoleStyle.TryGetValue(this.reg.Role.ToLower(), out var rs))

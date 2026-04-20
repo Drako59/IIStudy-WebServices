@@ -15,6 +15,9 @@
         <convertor:ToLowerConverter x:Key="ToLowerConverter">
             
         </convertor:ToLowerConverter>
+        <convertor:InitialsConvertor x:Key ="InitialsConvertor">
+            
+        </convertor:InitialsConvertor>
         <Style x:Key="TableHeader" TargetType="TextBlock">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -367,19 +370,41 @@
                                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
 
                                         <Border Width="38"
-                                            Height="38"
-                                            CornerRadius="19"
-                                            Margin="0,0,12,0"
-                                            VerticalAlignment="Center"
-                                            BorderBrush="#e0e7ff"
-                                            BorderThickness="2"
-                                            ClipToBounds="True">
-                                            <Border.Background>
-                                                <ImageBrush ImageSource="{Binding RegisteredID,
-                                           Converter={StaticResource UrlConverter},
-                                           ConverterParameter=Registered}"
-                                            Stretch="UniformToFill"/>
-                                            </Border.Background>
+                                                Height="38"
+                                                CornerRadius="19"
+                                                Margin="0,0,12,0"
+                                                VerticalAlignment="Center"
+                                                BorderBrush="#e0e7ff"
+                                                BorderThickness="2"
+                                                ClipToBounds="True"
+                                                Background="{Binding AvatarColor}">             
+
+                                            <!-- Initials fallback — always rendered underneath -->
+                                            <Grid>
+                                                <Border CornerRadius="60" x:Name="AvatarColorBg">
+                                                    <Border.Background>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                            <GradientStop Color="#a78bfa" Offset="0"/>
+                                                            <GradientStop Color="#7c3aed" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                </Border>
+                                                <TextBlock Text="{Binding UserName, Converter={StaticResource InitialsConvertor}}"
+                                                           FontSize="14" FontWeight="Bold"
+                                                           Foreground="White"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+
+                                                <!-- Real image sits on top; transparent when broken -->
+                                                <Ellipse>
+                                                    <Ellipse.Fill>
+                                                        <ImageBrush ImageSource="{Binding RegisteredID,
+                                                                                Converter={StaticResource UrlConverter},
+                                                                                ConverterParameter=Registered}"
+                                                                            Stretch="UniformToFill"/>
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                            </Grid>
                                         </Border>
 
                                         <!-- Username -->
@@ -500,7 +525,7 @@
 
                                                     <Style.Triggers>
 
-                                                        <!-- אם הספר לא פעיל -->
+                                                        
                                                         <DataTrigger Binding="{Binding Role,Converter={StaticResource ToLowerConverter}}" Value="admin">
                                                             <Setter Property="Content" Value="💔"/>
                                                             <Setter Property="Foreground" Value="#ef4444"/>
