@@ -1,4 +1,5 @@
-﻿using IIstudyWSClient;
+﻿using IIStudyDESKTOP.WindowsPages;
+using IIstudyWSClient;
 using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
 using System;
@@ -145,7 +146,20 @@ namespace IIStudyDESKTOP.UserControllers
             this.OrdersListView.ItemsSource = this.orders;
         }
         
+        private void UpadateStatus(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Order order = btn.Tag as Order;
+            UpdateDeliveryStatusWindow StatusWindow = new UpdateDeliveryStatusWindow(order);
 
+
+            Window parentWindow = Window.GetWindow(this);
+            StatusWindow.Owner = parentWindow;
+            StatusWindow.ShowDialog();
+            this.OrdersListView.ItemsSource = null;
+            this.OrdersListView.ItemsSource = this.orders;
+
+        }
        
     }
 }

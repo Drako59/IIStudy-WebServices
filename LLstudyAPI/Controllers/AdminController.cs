@@ -385,133 +385,152 @@ namespace LLstudyWS.Controllers
                     this.repositoryUOW.HelperOledb.CloseConnection();
                 }
             }
-            [HttpGet]
-            public List<Order> GetAllOrders()
-            {
-                try
-                {
-
-
-                    this.repositoryUOW.HelperOledb.OpenConnection();
-
-                    List<Order> orders = new List<Order>();
-
-                
-                    orders = this.repositoryUOW.OrderRepository.GetAll();
-
-                    return orders;
-
-
-
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return null;
-                }
-                finally
-                {
-                    this.repositoryUOW.HelperOledb.CloseConnection();
-                }
-
-            }
-            [HttpGet]
-            public List<Registered> GetAllRegistereds()
-            {
-                try
-                {
-
-
-                    this.repositoryUOW.HelperOledb.OpenConnection();
-
-                    List<Registered> orders = new List<Registered>();
-
-
-                    orders = this.repositoryUOW.RegisteredRepository.GetAll();
-
-                    return orders;
-
-
-
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return null;
-                }
-                finally
-                {
-                    this.repositoryUOW.HelperOledb.CloseConnection();
-                }
-
-            }
-
-
-
             [HttpPost]
-            [RequestSizeLimit(104857600)]
-            public Book UpdateFullBook([FromForm] string model)
+        public bool UpdateOrder(Order order)
+        {
+            try
             {
-                try
-                {
-                    this.repositoryUOW.HelperOledb.OpenConnection();
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.OrderRepository.Update(order);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public List<Order> GetAllOrders()
+        {
+            try
+            {
+
+
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                List<Order> orders = new List<Order>();
+
+                
+                orders = this.repositoryUOW.OrderRepository.GetAll();
+
+                return orders;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
+        [HttpGet]
+        public List<Registered> GetAllRegistereds()
+        {
+            try
+            {
+
+
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                List<Registered> orders = new List<Registered>();
+
+
+                orders = this.repositoryUOW.RegisteredRepository.GetAll();
+
+                return orders;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
+
+
+
+        [HttpPost]
+        [RequestSizeLimit(104857600)]
+        public Book UpdateFullBook([FromForm] string model)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
                 
 
-                    JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
-                    jsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                    Book modelBook = JsonSerializer.Deserialize<Book>(model, jsonSerializerOptions);
+                JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                Book modelBook = JsonSerializer.Deserialize<Book>(model, jsonSerializerOptions);
 
-                    if (HttpContext.Request.Form.Files.Count != 0)
+                if (HttpContext.Request.Form.Files.Count != 0)
+                {
+                    foreach (IFormFile file in HttpContext.Request.Form.Files)
                     {
-                        foreach (IFormFile file in HttpContext.Request.Form.Files)
+                        string ext = Path.GetExtension(file.FileName);
+                        //Console.WriteLine($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
+
+                        if (string.IsNullOrEmpty(ext))
                         {
-                            string ext = Path.GetExtension(file.FileName);
-                            //Console.WriteLine($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
-
-                            if (string.IsNullOrEmpty(ext))
+                            ext = (file.ContentType ?? "").ToLowerInvariant() switch
                             {
-                                ext = (file.ContentType ?? "").ToLowerInvariant() switch
-                                {
-                                    "image/jpeg" => ".jpg",
-                                    "image/png" => ".png",
-                                    "image/gif" => ".gif",
-                                    "application/pdf" => ".pdf",
-                                    _ => throw new Exception("Unsupported file type")
-                                };
-                            }
-
-                            if(ext == ".pdf")
-                            {
-                                modelBook.Pdf_url_book = this.repositoryUOW.BookRepository.ChangeFile(file, modelBook.BookID);
-
-                            }
-                            else
-                            {
-                                modelBook.BookImagePath = this.repositoryUOW.BookRepository.ChangeImage(file, modelBook.BookID);
-
-                            }
+                                "image/jpeg" => ".jpg",
+                                "image/png" => ".png",
+                                "image/gif" => ".gif",
+                                "application/pdf" => ".pdf",
+                                _ => throw new Exception("Unsupported file type")
+                            };
                         }
 
+                        if(ext == ".pdf")
+                        {
+                            modelBook.Pdf_url_book = this.repositoryUOW.BookRepository.ChangeFile(file, modelBook.BookID);
+
+                        }
+                        else
+                        {
+                            modelBook.BookImagePath = this.repositoryUOW.BookRepository.ChangeImage(file, modelBook.BookID);
+
+                        }
                     }
 
+                }
 
-                    if (this.repositoryUOW.BookRepository.Update(modelBook))
-                        return modelBook;
-                    return null;
 
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return null;
-                }
-                finally
-                {
-                    this.repositoryUOW.HelperOledb.CloseConnection();
-                }
+                if (this.repositoryUOW.BookRepository.Update(modelBook))
+                    return modelBook;
+                return null;
+
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
 
         [HttpPost]
         [RequestSizeLimit(104857600)]

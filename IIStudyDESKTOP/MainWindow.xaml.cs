@@ -24,6 +24,7 @@ namespace IIStudyDESKTOP
         ViewOrders viewOrders;
         RegisteredsPage registeredsPage;
         BookDetails bookDetails;
+        ViewExams viewExams;
         public MainWindow()
         {
             InitializeComponent();
@@ -49,9 +50,12 @@ namespace IIStudyDESKTOP
 
         }
 
-        private void ViewBook(object sender, RoutedEventArgs e)
+        private void ViewExams(object sender, RoutedEventArgs e)
         {
-            
+            if (this.viewExams == null)
+                this.viewExams = new ViewExams();
+            this.MainContent.Content = this.viewExams;
+            this.ClickButtonNav(sender);
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)

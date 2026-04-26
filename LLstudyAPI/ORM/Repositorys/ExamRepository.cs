@@ -2,6 +2,7 @@
 using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 using static System.Reflection.Metadata.BlobBuilder;
+using LLStudy_Models.ViewModels;
 
 namespace LLstudyWS.ORM
 {
@@ -38,6 +39,22 @@ namespace LLstudyWS.ORM
             }
             return books;
 
+        }
+
+        public List<ExamDetails> GetExamDetails()
+        {
+            string sql = $@"SELECT *, Subjects.SubjectID AS SubjectID FROM Exams INNER JOIN Subjects ON Exams.SubjectID = Subjects.SubjectID";
+
+            List<ExamDetails> exams = new List<ExamDetails>();
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    exams.Add(this.moderlRefCreator.CreateModel<ExamDetails>(reader));
+                }
+                return exams;
+            }
         }
 
     }

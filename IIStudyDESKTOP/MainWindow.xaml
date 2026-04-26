@@ -216,7 +216,7 @@
                         </Button>
 
                         <!-- Exams Button -->
-                        <Button Style="{StaticResource SidebarButton}" x:Name="ExamsNav">
+                        <Button Style="{StaticResource SidebarButton}" x:Name="ExamsNav" Click="ViewExams">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="📝" FontSize="18" Margin="0,0,12,0"/>
                                 <TextBlock Text="Exams" VerticalAlignment="Center"/>

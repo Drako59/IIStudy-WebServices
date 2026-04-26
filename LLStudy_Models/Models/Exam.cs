@@ -20,15 +20,20 @@ namespace LLStudy_Models.Models
         //[IsDigits(ErrorMessage = "ID must contain only digits.")]
         public string ExamID { get { return examID; } set { examID = value; } }
         [Required]
-        public string SubjectID { get { return subjectID; } set { subjectID = value; } }
+        public string SubjectID { get { return subjectID; } set { subjectID = value; ValidateProperty(value, "SubjectID"); } }
         
         public bool Access { get { return access; } set { access = value; } }
         [Required]
-        public string File_path_url { get { return file_path_url; } set { file_path_url = value; } }
+        [StringLength(maximumLength: 20, ErrorMessage = "Max File_path Length is 255")]
+        public string File_path_url { get { return file_path_url; } set { file_path_url = value; ValidateProperty(value, "File_path_url"); } }
         [Required]
-        public string Exam_Name { get { return exam_Name; } set { exam_Name = value; } }
-        public string Exam_Year { get { return exam_Year; } set { exam_Year = value; } }
+        [StringLength(maximumLength: 20, ErrorMessage = "Max Exam_name Length is 255")]
 
+        public string Exam_Name { get { return exam_Name; } set { exam_Name = value; ValidateProperty(value, "Exam_Name"); } }
+        [StringLength(maximumLength: 10, ErrorMessage = "Max Date Length is 10")]
 
+        public string Exam_Year { get { return exam_Year; } set { exam_Year = value; ValidateProperty(value, "Exam_Year"); } }
+
+        public bool IsDeleted { get; set; }
     }
 }

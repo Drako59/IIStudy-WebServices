@@ -169,7 +169,7 @@ namespace LLstudyWS.Controllers
 
         }
         [HttpGet]
-        public ViewExamsModel GetExams(string year = null, string subjectID = null, int pages = 0)
+        public ViewExamsModel GetExamsWithSolutions(string year = null, string subjectID = null, int pages = 0) //Not In Use
         {
             try
             {
@@ -181,19 +181,7 @@ namespace LLstudyWS.Controllers
 
                 if (year == null && subjectID == null && pages == 0)
                 {
-                    Console.WriteLine("here");
-
-                    viewExamsModel.Exams = this.repositoryUOW.ExamRepository.GetAll();
-                    viewExamsModel.Solutions = this.repositoryUOW.SolutionRepository.GetAll();
-                    Console.WriteLine("here");
-                    this.debugList(viewExamsModel.Exams);
-                    this.debugList(viewExamsModel.Solutions);
-                    Console.WriteLine("Here");
-                    viewExamsModel.Exams = this.repositoryUOW.ExamRepository.GetAll();
-                    viewExamsModel.Solutions = this.repositoryUOW.SolutionRepository.GetAll();
-                    Console.WriteLine("here");
-                    this.debugList(viewExamsModel.Exams);
-                    this.debugList(viewExamsModel.Solutions);
+                    
 
                     return viewExamsModel;
 
@@ -233,6 +221,25 @@ namespace LLstudyWS.Controllers
 
 
             
+        }
+
+        [HttpGet]
+        public List<ExamDetails> GetExams()
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.ExamRepository.GetExamDetails();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
         }
 
         [HttpGet]

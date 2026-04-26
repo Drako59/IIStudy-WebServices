@@ -463,7 +463,8 @@
                                                 Background="#f0fdf4"
                                                 Foreground="#16a34a"
                                                 Content="🚚"
-                                                Tag="{Binding OrderID}"
+                                                Tag="{Binding}"
+                                                Click="UpadateStatus"
                                                />
                                         <!--Click="ToggleDelivery_Click"-->
                                     </StackPanel>
