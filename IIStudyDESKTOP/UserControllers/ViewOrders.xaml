@@ -456,7 +456,8 @@
                                                 Foreground="#3b82f6"
                                                 Content="👁"
                                                 Margin="0,0,6,0"
-                                                Tag="{Binding OrderID}"
+                                                Tag="{Binding}"
+                                                Click="ViewOrderDetails"
                                                 />
                                         <Button Style="{StaticResource ActionBtn}"
                                                 ToolTip="Toggle Delivery"
@@ -464,7 +465,7 @@
                                                 Foreground="#16a34a"
                                                 Content="🚚"
                                                 Tag="{Binding}"
-                                                Click="UpadateStatus"
+                                                Click="UpdateStatus"
                                                />
                                         <!--Click="ToggleDelivery_Click"-->
                                     </StackPanel>

@@ -5,6 +5,7 @@ using LLStudy_Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -146,7 +147,7 @@ namespace IIStudyDESKTOP.UserControllers
             this.OrdersListView.ItemsSource = this.orders;
         }
         
-        private void UpadateStatus(object sender, RoutedEventArgs e)
+        private void UpdateStatus(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
             Order order = btn.Tag as Order;
@@ -158,6 +159,19 @@ namespace IIStudyDESKTOP.UserControllers
             StatusWindow.ShowDialog();
             this.OrdersListView.ItemsSource = null;
             this.OrdersListView.ItemsSource = this.orders;
+
+        }
+        private void ViewOrderDetails(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Order order = btn.Tag as Order;
+            OrderDetails orderDetailsWindow = new OrderDetails(order);
+
+            Window parentWindow = Window.GetWindow(this);
+            orderDetailsWindow.Owner = parentWindow;
+            orderDetailsWindow.Show();
+
+            
 
         }
        

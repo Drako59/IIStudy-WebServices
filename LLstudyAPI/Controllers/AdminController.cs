@@ -661,6 +661,25 @@ namespace LLstudyWS.Controllers
 
         }
 
+        [HttpGet]
+        public List<OrderBook> GetOrderBooks(string orderID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.OrderRepository.GetOrderBooks(orderID);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
 
     }
 }
