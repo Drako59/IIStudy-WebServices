@@ -189,17 +189,17 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">City</label>
-                        <input type="text" class="form-input" placeholder="New York">
+                        <input asp-for="City" type="text" class="form-input" placeholder="New York" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Postal Code</label>
-                        <input type="text" class="form-input" placeholder="10001">
+                        <input asp-for="Postal" type="text" class="form-input" placeholder="10001" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Country</label>
-                    <input type="text" class="form-input" placeholder="United States">
+                    <input asp-for="Country" type="text" class="form-input" placeholder="United States" required>
                 </div>
 
                 <div class="checkbox-group">

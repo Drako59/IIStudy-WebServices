@@ -1,0 +1,449 @@
+﻿<Window x:Class="IIStudyDESKTOP.WindowsPages.OrderBooksWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
+        xmlns:converter="clr-namespace:IIStudyDESKTOP"
+        mc:Ignorable="d"
+        Title="OrderBooksWindow" Height="620" Width="580">
+    <Window.Resources>
+        <converter:UrlConverter x:Key="UrlConverter"></converter:UrlConverter>
+        <Style x:Key="MetaLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="9"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#94a3b8"/>
+            <Setter Property="Margin" Value="0,0,0,2"/>
+        </Style>
+        <Style x:Key="MetaValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style x:Key="FilterChip" TargetType="Border">
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="12,5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- Outer glow -->
+    <Border Margin="16" CornerRadius="22" Background="White">
+        <Border.Effect>
+            <DropShadowEffect Color="#667eea" BlurRadius="40" ShadowDepth="0" Opacity="0.18"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Header -->
+                <RowDefinition Height="*"/>
+                <!-- Book list -->
+                <RowDefinition Height="Auto"/>
+                <!-- Footer -->
+            </Grid.RowDefinitions>
+
+            <!-- ══════════════════════════════════════
+                 HEADER
+                 ══════════════════════════════════════ -->
+            <Border Grid.Row="0" CornerRadius="22,22,0,0" ClipToBounds="True">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#667eea" Offset="0"/>
+                        <GradientStop Color="#764ba2" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Grid>
+                    <!-- Decorative blobs -->
+                    <Ellipse Width="180" Height="180"
+                             HorizontalAlignment="Right" VerticalAlignment="Top"
+                             Margin="0,-70,-40,0" Opacity="0.10" IsHitTestVisible="False">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+
+                    <Grid Margin="22,18,16,18">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Icon badge -->
+                        <Border Grid.Column="0"
+                                Width="50" Height="50"
+                                CornerRadius="14"
+                                Background="White"
+                                Margin="0,0,16,0"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="📚" FontSize="26"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <!-- Title + subtitle -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="BOOKS IN ORDER"
+                                       FontSize="10" FontWeight="Bold"
+                                       Foreground="#c4b5fd" Margin="0,0,0,4"/>
+                            <TextBlock x:Name="TxtOrderTitle"
+                                       Text="Order #—"
+                                       FontSize="19" FontWeight="ExtraBold"
+                                       Foreground="White"/>
+                            <!-- Book count + filter chips -->
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <!-- Count badge -->
+                                <Border Background="White" CornerRadius="8" Padding="8,3"
+                                        Margin="0,0,10,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="📖 " FontSize="12"/>
+                                        <TextBlock x:Name="TxtBookCount"
+                                                   Text="0 books"
+                                                   FontSize="12" FontWeight="Bold"
+                                                   Foreground="#667eea"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- ALL chip -->
+                                <Border x:Name="ChipAll"
+                                        Style="{StaticResource FilterChip}"
+                                        Background="White"
+                                        MouseLeftButtonUp="Chip_All"
+                                        >
+                                    <TextBlock Text="All"
+                                               FontSize="11" FontWeight="Bold"
+                                               Foreground="#667eea"/>
+                                </Border>
+
+                                <!-- Physical chip -->
+                                <Border x:Name="ChipPhysical"
+                                        Style="{StaticResource FilterChip}"
+                                        Background="White"
+                                        MouseLeftButtonUp="Chip_Physical"
+                                        
+                                        >
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="📦 " FontSize="11"/>
+                                        <TextBlock Text="Physical"
+                                                   FontSize="11" FontWeight="Bold"
+                                                   Foreground="#667eea"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Online chip -->
+                                <Border x:Name="ChipOnline"
+                                        Style="{StaticResource FilterChip}"
+                                        Background="White"
+                                        MouseLeftButtonDown="Chip_Online"
+                                        >
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="🌐 " FontSize="11"/>
+                                        <TextBlock Text="Online"
+                                                   FontSize="11" FontWeight="Bold"
+                                                   Foreground="#667eea"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Close -->
+                        <Button Grid.Column="2"
+                                Width="30" Height="30"
+                                BorderThickness="0" Cursor="Hand"
+                                VerticalAlignment="Top"
+                                Click="Close_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="b" Background="Transparent" CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="b" Property="Background" Value="#ffffff22"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <TextBlock Text="✕" FontSize="13" Foreground="White" FontWeight="Bold"/>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- ══════════════════════════════════════
+                 BOOK LIST
+                 ══════════════════════════════════════ -->
+            <Grid Grid.Row="1">
+
+                <!-- Scrollable list -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="18,12,18,12">
+                    <ItemsControl x:Name="BooksList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+
+                                <!-- ── BOOK CARD ── -->
+                                <Border Margin="0,0,0,10"
+                                        CornerRadius="16"
+                                        Background="White"
+                                        BorderBrush="#ede9fe"
+                                        BorderThickness="1">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#667eea" BlurRadius="14"
+                                                          ShadowDepth="0" Opacity="0.06"/>
+                                    </Border.Effect>
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <!-- Top bar: cover + name + price -->
+                                            <RowDefinition Height="Auto"/>
+                                            <!-- Bottom bar: meta fields -->
+                                        </Grid.RowDefinitions>
+
+                                        <!-- ── TOP: cover + title + price ── -->
+                                        <Border Grid.Row="0" CornerRadius="16,16,0,0" Padding="14,12">
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#faf9ff" Offset="0"/>
+                                                    <GradientStop Color="#f3f0ff" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Book icon / cover placeholder -->
+                                                <Border Grid.Column="0"
+                                                        Width="44" Height="58"
+                                                        CornerRadius="8"
+                                                        Margin="0,0,12,0">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Color="Black" BlurRadius="22" ShadowDepth="0" Opacity="0.28"/>
+                                                    </Border.Effect>
+                                                    <Grid ClipToBounds="True">
+                                                        <!-- Placeholder -->
+                                                        <Border CornerRadius="10">
+                                                            <Border.Background>
+                                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                    <GradientStop Color="#eef2ff" Offset="0"/>
+                                                                    <GradientStop Color="#f5f3ff" Offset="1"/>
+                                                                </LinearGradientBrush>
+                                                            </Border.Background>
+                                                        </Border>
+                                                        <TextBlock Text="📚" FontSize="30" x:Name="BookCoverEmoji"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center" Visibility="Visible"/>
+                                                        <!-- Real image -->
+                                                        <Border CornerRadius="10" ClipToBounds="True">
+                                                            <Image x:Name="BookCoverImage" Source="{Binding BookImagePath,Converter={StaticResource UrlConverter } ,ConverterParameter=Book}"
+                                                                   Stretch="UniformToFill"
+                                                                   Visibility="Visible"
+                                                                   />
+                                                            <!--Visibility="Collapsed"-->
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+
+                                                <!-- Book name + author + ID pill -->
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <!-- ID pill -->
+                                                    <Border CornerRadius="5" Padding="6,2"
+                                                            HorizontalAlignment="Left"
+                                                            Margin="0,0,0,4"
+                                                            Background="#ede9fe">
+                                                        <TextBlock Text="{Binding BookID}"
+                                                                   FontSize="9" FontWeight="Bold"
+                                                                   Foreground="#7c3aed"/>
+                                                    </Border>
+                                                    <TextBlock Text="{Binding Book_name}"
+                                                               FontSize="14" FontWeight="ExtraBold"
+                                                               Foreground="#0f172a"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               MaxWidth="280"/>
+                                                    <TextBlock Text="{Binding Author_name}"
+                                                               FontSize="11" Foreground="#64748b"
+                                                               Margin="0,3,0,0"/>
+                                                </StackPanel>
+
+                                                <!-- Price (top-right) -->
+                                                <StackPanel Grid.Column="2" VerticalAlignment="Center"
+                                                            HorizontalAlignment="Right">
+                                                    <TextBlock Text="PRICE" Style="{StaticResource MetaLabel}"
+                                                               HorizontalAlignment="Right"/>
+                                                    <TextBlock Text="{Binding Book_price, StringFormat='₪{0:N2}'}"
+                                                               FontSize="16" FontWeight="ExtraBold"
+                                                               HorizontalAlignment="Right">
+                                                        <TextBlock.Foreground>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="#667eea" Offset="0"/>
+                                                                <GradientStop Color="#764ba2" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </TextBlock.Foreground>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- ── BOTTOM: Subject + Type ── -->
+                                        <Border Grid.Row="1"
+                                                CornerRadius="0,0,16,16"
+                                                Padding="14,8,14,10"
+                                                Background="#fafafa"
+                                                BorderBrush="#f1f5f9"
+                                                BorderThickness="0,1,0,0">
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <!-- Subject -->
+                                                <StackPanel Margin="0,0,24,0">
+                                                    <TextBlock Text="SUBJECT" Style="{StaticResource MetaLabel}"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="🏷 " FontSize="12"/>
+                                                        <TextBlock Text="{Binding Subject_name}"
+                                                                   Style="{StaticResource MetaValue}"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <!-- Vertical divider -->
+                                                <Border Width="1" Background="#e2e8f0"
+                                                        Margin="0,0,24,0" VerticalAlignment="Stretch"/>
+
+                                                <!-- Type -->
+                                                <StackPanel>
+                                                    <TextBlock Text="TYPE" Style="{StaticResource MetaLabel}"/>
+                                                    <Border CornerRadius="8" Padding="8,3"
+                                                            Background="#eef2ff"
+                                                            HorizontalAlignment="Left">
+                                                        <TextBlock Text="{Binding Type}"
+                                                                   FontSize="11" FontWeight="Bold"
+                                                                   Foreground="#667eea"/>
+                                                    </Border>
+                                                </StackPanel>
+                                                <!--Amount-->
+                                                <StackPanel>
+                                                    <TextBlock Margin ="10,0,0,0" Text="Quntity" Style="{StaticResource MetaLabel}"/>
+                                                    <Border CornerRadius="8" Padding="8,3" Margin ="10,0,0,0"
+                                                            Background="#eef2ff"
+                                                            HorizontalAlignment="Left">
+                                                        <TextBlock Text="{Binding Amount}"
+                                                                   FontSize="11" FontWeight="Bold"
+                                                                   Foreground="#667eea"/>
+                                                    </Border>
+                                                </StackPanel>
+
+                                            </StackPanel>
+                                        </Border>
+
+                                    </Grid>
+                                </Border>
+
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Empty state -->
+                <Border x:Name="EmptyState"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Center" Margin="0,20">
+                        <TextBlock Text="📭" FontSize="44" HorizontalAlignment="Center"/>
+                        <TextBlock Text="No books in this order"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="#64748b"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,10,0,4"/>
+                        <TextBlock Text="This order has no linked books."
+                                   FontSize="12" Foreground="#94a3b8"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+
+            <!-- ══════════════════════════════════════
+                 FOOTER
+                 ══════════════════════════════════════ -->
+            <Border Grid.Row="2" Padding="18,10,18,18">
+                <!-- Total row + close button -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Total price sum -->
+                    <Border Grid.Column="0"
+                            Background="#f8fafc" CornerRadius="12" Padding="14,10">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="💰  Total Order Value:"
+                                       FontSize="12" FontWeight="Bold"
+                                       Foreground="#64748b"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock x:Name="TxtTotalValue"
+                                       Text="₪0.00"
+                                       FontSize="16" FontWeight="ExtraBold"
+                                       VerticalAlignment="Center">
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#667eea" Offset="0"/>
+                                        <GradientStop Color="#764ba2" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Close button -->
+                    <!--<Button Grid.Column="2"
+                            Height="44" Padding="28,0"
+                            BorderThickness="0" Cursor="Hand"
+                            Click="Close_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="b" CornerRadius="12">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#667eea" Offset="0"/>
+                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#667eea" BlurRadius="14"
+                                                          ShadowDepth="0" Opacity="0.28"/>
+                                    </Border.Effect>
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="b" Property="Opacity" Value="0.85"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock Text="Close" FontSize="14" FontWeight="Bold" Foreground="White"/>
+                    </Button>-->
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</Window>

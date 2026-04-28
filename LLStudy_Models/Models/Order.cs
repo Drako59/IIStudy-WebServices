@@ -33,6 +33,14 @@ namespace LLStudy_Models.Models
 
         [Required]
         public int DeliveryStatus { get; set; }
+        [Postal]
+        [Required]
+        public string Postal { get; set; }
+
+        [Required]
+        public string Country { get; set; }
+        [Required]
+        public string City { get; set; }
 
     }
 }

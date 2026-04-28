@@ -15,8 +15,11 @@ namespace LLstudyWS.Controllers
     public class RegisteredController : ControllerBase
     {
         RepositoryUOW repositoryUOW;
-        string path = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "RegisteredImages");
+        string RegisteredsImagePath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "RegisteredImages");
         readonly string BooksPdfPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Files", "BooksFiles");
+        readonly string ExamsPdfPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Files", "ExamsFiles");
+        readonly string SolutionsPdfPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Files", "SolutionsFiles");
+
 
         public RegisteredController() {
             this.repositoryUOW = new RepositoryUOW();
@@ -266,9 +269,11 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 int exist = this.repositoryUOW.ShoppingCartRepository.CheckIfExist(record.BookID, record.RegisteredID);
                 //Console.WriteLine(@$"exist: {exist}");
+                if (this.repositoryUOW.BookRepository.IsOwnedOnlineBook(record.BookID, record.RegisteredID))
+                    return false;
                 if (exist == 1)
                 {
-                    if (this.repositoryUOW.BookRepository.IsOnlineBook(record.BookID))
+                    if (this.repositoryUOW.BookRepository.IsOnlineBook(record.BookID) )
                         return false;
                     return this.repositoryUOW.ShoppingCartRepository.AppendToCart(record.BookID, record.RegisteredID);
                 }
@@ -432,13 +437,13 @@ namespace LLstudyWS.Controllers
                 Registered reg = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
                 if(reg.ImagePath != null && reg.ImagePath != "None")
                 {
-                    AbsoultePath = Path.Combine(this.path, reg.ImagePath);
+                    AbsoultePath = Path.Combine(this.RegisteredsImagePath, reg.ImagePath);
 
                 }
                 else
                 {
                     return NoContent();
-                    AbsoultePath = Path.Combine(this.path, "zoro2.jpg");
+                    AbsoultePath = Path.Combine(this.RegisteredsImagePath, "zoro2.jpg");
                 }
 
                 //FileStream stream = System.IO.File.OpenRead(AbsoultePath);
@@ -499,6 +504,65 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
+
+        [HttpGet]
+        public IActionResult GetExamFile(string examID)
+        {
+            try
+            {
+                string AbsoultePath;
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                Exam exam = this.repositoryUOW.ExamRepository.GetByID(examID);
+                AbsoultePath =  Path.Combine(this.ExamsPdfPath, exam.File_path_url);
+                ;
+                if (!(exam != null && exam.File_path_url != null && exam.File_path_url.ToLower() != "none" && System.IO.File.Exists(AbsoultePath) ))
+                    return StatusCode(404);
+
+
+                var (stream, contentType) = this.repositoryUOW.ExamRepository.GetPdf(AbsoultePath);
+
+                return File(stream, contentType);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetSolutionFile(string solutionID)
+        {
+            try
+            {
+                string AbsoultePath;
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                Solution solution = this.repositoryUOW.SolutionRepository.GetByID(solutionID);
+                AbsoultePath = Path.Combine(this.SolutionsPdfPath, solution.File_path_url);
+                
+                if (!(solution != null && solution.File_path_url != null && solution.File_path_url.ToLower() != "none" && System.IO.File.Exists(AbsoultePath)))
+                    return StatusCode(404);
+
+                
+                var (stream, contentType) = this.repositoryUOW.SolutionRepository.GetPdf(AbsoultePath);
+
+                return File(stream, contentType);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
         [HttpGet]
         public ViewRegisteredBookPreviewModel GetBookFullView(string registeredID ,string bookID)
         {

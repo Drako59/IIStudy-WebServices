@@ -13,4 +13,5 @@ public class OrderBook: Book
    
 
     public int Amount { get; set; }
+    public string Subject_name { get; set; }
 }

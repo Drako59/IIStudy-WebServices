@@ -16,7 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using IIStudyDESKTOP.WindowsPages;
 namespace IIStudyDESKTOP.UserControllers
 {
     /// <summary>
@@ -26,6 +26,9 @@ namespace IIStudyDESKTOP.UserControllers
     {
         private List<ExamDetails> Exams { get; set; }
         private List<SubjectDetails> SubjectsDetails { get; set; }
+
+        private ExamDetailsWindow ExamWindow { get; set; }
+
         public ViewExams()
         {
             InitializeComponent();
@@ -67,6 +70,21 @@ namespace IIStudyDESKTOP.UserControllers
             this.SubjectsDetails.Insert(0, new SubjectDetails() { BooksCount = 0, SubjectID = "0", Subject_name = "All" });
 
             this.SubjectsList.ItemsSource = this.SubjectsDetails;
+        }
+
+        public void ViewExamDetailsWindow(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            ExamDetails exam = btn.Tag as ExamDetails;
+
+            this.ExamWindow = new ExamDetailsWindow(exam);
+
+            Window parentWindow = Window.GetWindow(this);
+            this.ExamWindow.Owner = parentWindow;
+            this.ExamWindow.Show();
+
+
+
         }
     }
 }

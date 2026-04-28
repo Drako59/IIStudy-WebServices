@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
         mc:Ignorable="d"
-        Title="CreateBookPage" Height="540" Width="700">
+        Title="CreateBookPage" Height="700" Width="540">
     <Window.Resources>
         <Style x:Key="FieldLabel" TargetType="TextBlock">
             <Setter Property="FontSize" Value="11"/>

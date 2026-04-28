@@ -4,9 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IIStudyDESKTOP.UserControllers"
+             xmlns:converter ="clr-namespace:IIStudyDESKTOP"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <converter:StatusBackgroundConvertor x:Key="StatusBackgroundConverter" >
+            
+        </converter:StatusBackgroundConvertor>
+        <converter:StatusNameConverter x:Key="StatusNameConverter">
+            
+        </converter:StatusNameConverter>
         <!-- Header style for table columns -->
         <Style x:Key="TableHeader" TargetType="TextBlock">
             <Setter Property="FontSize" Value="12"/>
@@ -190,8 +197,8 @@
                     <DropShadowEffect Color="Black" BlurRadius="16" ShadowDepth="0" Opacity="0.06"/>
                 </Border.Effect>
                 <StackPanel>
-                    <TextBlock Text="Total Revenue" FontSize="12" FontWeight="SemiBold" Foreground="#94a3b8"/>
-                    <TextBlock x:Name="TxtRevenue" Text="—"
+                    <TextBlock Text="Total Money" FontSize="12" FontWeight="SemiBold" Foreground="#94a3b8"/>
+                    <TextBlock x:Name="TxtMoney" Text="—"
                                FontSize="30" FontWeight="ExtraBold" Margin="0,6,0,0">
                         <TextBlock.Foreground>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -247,7 +254,7 @@
                                                 <Grid>
                                                     <!--Visibility="{Binding Text.IsEmpty, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static BooleanToVisibilityConverter}}"-->
 
-                                                    <TextBlock Text="Search orders, locations, books..."
+                                                    <TextBlock Text=""
                                                                Foreground="#94a3b8"
                                                                FontSize="13"
                                                                VerticalAlignment="Center"
@@ -265,26 +272,71 @@
 
                 <!-- Filter Chips -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <Button Style="{StaticResource FilterChip}"
-                            x:Name="FilterAll"
-                            Content="All Orders"
-                            Background="#667eea"
-                            Foreground="White"
-                            Margin="0,0,8,0"
-                            Click="Filter_All"/>
-                    <Button Style="{StaticResource FilterChip}"
-                            x:Name="FilterDelivered"
-                            Content="✅ Delivered"
-                            Background="#f0fdf4"
-                            Foreground="#16a34a"
-                            Margin="0,0,8,0"
-                            Click="Filter_Delivered"/>
-                    <Button Style="{StaticResource FilterChip}"
-                            x:Name="FilterPending"
-                            Content="⏳ Pending"
-                            Background="#fffbeb"
-                            Foreground="#d97706"
-                            Click="Filter_Pending"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                        <!-- All -->
+                        <Button Style="{StaticResource FilterChip}" x:Name="FilterAll"
+                                Content="All Orders"
+                                Background="#667eea"
+                                Foreground="White"
+                                Margin="0,0,8,0"
+                                Click="Filter_All"
+                                Tag="-1"/>
+
+                        <!-- Pending -->
+                        <Button Style="{StaticResource FilterChip}" x:Name="FilterPending"
+                                Content="⏳ Pending"
+                                Background="#fffbeb"
+                                Foreground="#fbbf24"
+                                Margin="0,0,8,0"
+                                Click="Filter"
+                                Tag="0"/>
+
+                        <!-- Processing -->
+                        <Button Style="{StaticResource FilterChip}" x:Name="FilterProcessing"
+                                Content="🔄 Processing"
+                                Background="#eef2ff"
+                                Foreground="#667eea"
+                                Margin="0,0,8,0"
+                                Click="Filter"
+                                Tag="1"/>
+
+                        <!-- Shipped -->
+                        <Button Style="{StaticResource FilterChip}" x:Name="FilterShipped"
+                                Content="📦 Shipped"
+                                Background="#f0f9ff"
+                                Foreground="#0ea5e9"
+                                Margin="0,0,8,0"
+                                Click="Filter"
+                                Tag="2"/>
+
+                        <!-- Delivered -->
+                        <Button Style="{StaticResource FilterChip}" x:Name="FilterDelivered"
+                                Content="✅ Delivered"
+                                Background="#f0fdf4"
+                                Foreground="#22c55e"
+                                Margin="0,0,8,0"
+                                Click="Filter"
+                                Tag="3"/>
+
+                        <!-- Canceled -->
+                        <Button Style="{StaticResource FilterChip}" x:Name="FilterCanceled"
+                                Content="❌ Canceled"
+                                Background="#fef2f2"
+                                Foreground="#ef4444"
+                                Margin="0,0,8,0"
+                                Click="Filter"
+                                Tag="4"/>
+
+                        <!-- Refund -->
+                        <Button Style="{StaticResource FilterChip}" x:Name="FilterRefund"
+                                Content="💸 Refund"
+                                Background="#fdf4ff"
+                                Foreground="#a855f7"
+                                Click="Filter"
+                                Tag="5"/>
+
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Border>
@@ -324,6 +376,12 @@
                             <ColumnDefinition Width="120"/>
                             <!-- Location -->
                             <ColumnDefinition Width="110"/>
+                            <!-- City -->
+                            <ColumnDefinition Width="110"/>
+                            <!-- Country -->
+                            <ColumnDefinition Width="110"/>
+                            <!-- Postal -->
+                            <ColumnDefinition Width="110"/>
                             <!-- Total Price -->
                             <ColumnDefinition Width="110"/>
                             <!-- Date -->
@@ -335,12 +393,14 @@
 
                         <TextBlock Grid.Column="0" Text="Order ID"   Style="{StaticResource TableHeader}"/>
                         <TextBlock Grid.Column="1" Text="User ID"    Style="{StaticResource TableHeader}"/>
-                        <TextBlock Grid.Column="2" Text="Books"      Style="{StaticResource TableHeader}"/>
                         <TextBlock Grid.Column="3" Text="Location"   Style="{StaticResource TableHeader}"/>
-                        <TextBlock Grid.Column="4" Text="Total (₪)"  Style="{StaticResource TableHeader}"/>
-                        <TextBlock Grid.Column="5" Text="Date"       Style="{StaticResource TableHeader}"/>
-                        <TextBlock Grid.Column="6" Text="Status"     Style="{StaticResource TableHeader}"/>
-                        <TextBlock Grid.Column="7" Text="Actions"    Style="{StaticResource TableHeader}"/>
+                        <TextBlock Grid.Column="4" Text="City" Style="{StaticResource TableHeader}"/>
+                        <TextBlock Grid.Column="5" Text="Country" Style="{StaticResource TableHeader}"/>
+                        <TextBlock Grid.Column="6" Text="Postal" Style="{StaticResource TableHeader}"/>
+                        <TextBlock Grid.Column="7" Text="Total (₪)"  Style="{StaticResource TableHeader}"/>
+                        <TextBlock Grid.Column="8" Text="Date"       Style="{StaticResource TableHeader}"/>
+                        <TextBlock Grid.Column="9" Text="Status"     Style="{StaticResource TableHeader}"/>
+                        <TextBlock Grid.Column="10" Text="Actions"    Style="{StaticResource TableHeader}"/>
                     </Grid>
                 </Border>
 
@@ -361,6 +421,9 @@
                                         <ColumnDefinition Width="70"/>
                                         <ColumnDefinition Width="80"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="120"/>
                                         <ColumnDefinition Width="120"/>
                                         <ColumnDefinition Width="110"/>
                                         <ColumnDefinition Width="110"/>
@@ -418,9 +481,22 @@
                                                    Style="{StaticResource TableCell}"
                                                    MaxWidth="90"/>
                                     </StackPanel>
-
-                                    <!-- Total Price -->
+                                    <!-- City -->
                                     <TextBlock Grid.Column="4"
+                                               Text="{Binding City}"
+                                               Style="{StaticResource TableCell}"/>
+
+                                    <!-- Country -->
+                                    <TextBlock Grid.Column="5"
+                                               Text="{Binding Country}"
+                                               Style="{StaticResource TableCell}"/>
+
+                                    <!-- Postal -->
+                                    <TextBlock Grid.Column="6"
+                                               Text="{Binding Postal}"
+                                               Style="{StaticResource TableCell}"/>
+                                    <!-- Total Price -->
+                                    <TextBlock Grid.Column="7"
                                                Text="{Binding Total_price, StringFormat='₪{0:N0}'}"
                                                FontWeight="Bold"
                                                FontSize="14"
@@ -428,26 +504,26 @@
                                                VerticalAlignment="Center"/>
 
                                     <!-- Date -->
-                                    <TextBlock Grid.Column="5"
+                                    <TextBlock Grid.Column="8"
                                                Text="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"
                                                Style="{StaticResource TableCell}"
                                                Foreground="#64748b"/>
 
                                     <!-- Status Badge -->
-                                    <Border Grid.Column="6"
+                                    <Border Grid.Column="9"
                                             CornerRadius="8"
                                             Padding="10,4"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
-                                            Background="{Binding DeliveredBackground}">
-                                        <TextBlock Text="{Binding DeliveredLabel}"
+                                            Background="{Binding DeliveryStatus , Converter= {StaticResource StatusBackgroundConverter}}">
+                                        <TextBlock Text="{Binding DeliveryStatus, Converter= {StaticResource StatusNameConverter}}"
                                                    FontSize="12"
                                                    FontWeight="SemiBold"
                                                    Foreground="{Binding DeliveredForeground}"/>
                                     </Border>
 
                                     <!-- Action Buttons -->
-                                    <StackPanel Grid.Column="7"
+                                    <StackPanel Grid.Column="10"
                                                 Orientation="Horizontal"
                                                 VerticalAlignment="Center">
                                         <Button Style="{StaticResource ActionBtn}"
@@ -459,6 +535,14 @@
                                                 Tag="{Binding}"
                                                 Click="ViewOrderDetails"
                                                 />
+                                        <Button Style="{StaticResource ActionBtn}"
+                                                ToolTip="Toggle Delivery"
+                                                Background="#fceec0"
+                                                Foreground="#ffb13d"
+                                                Content="🕮"
+                                                Tag="{Binding}"
+                                                Click="ViewOrderBooks"
+                                               />
                                         <Button Style="{StaticResource ActionBtn}"
                                                 ToolTip="Toggle Delivery"
                                                 Background="#f0fdf4"

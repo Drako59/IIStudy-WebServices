@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
         mc:Ignorable="d"
         xmlns:convertor="clr-namespace:IIStudyDESKTOP"
-        Title="ViewReviews" Height="450" Width="800">
+        Title="ViewReviews" Height="680" Width="560">
     <Window.Resources>
 
         <!-- Star rating converter is handled in code-behind via binding -->

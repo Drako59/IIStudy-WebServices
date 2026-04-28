@@ -4,9 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
+        xmlns:converter ="clr-namespace:IIStudyDESKTOP"
         mc:Ignorable="d"
         Title="OrderDetails" Height="700" Width="520">
     <Window.Resources>
+        <converter:StatusBackgroundConvertor x:Key="StatusBackgroundConverter">
+            
+        </converter:StatusBackgroundConvertor>
+        <converter:StatusNameConverter x:Key="StatusNameConverter">
+            
+        </converter:StatusNameConverter>
         <Style x:Key="InfoLabel" TargetType="TextBlock">
             <Setter Property="FontSize" Value="10"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -101,11 +108,12 @@
                                        FontSize="10" FontWeight="Bold"
                                        Foreground="#c4b5fd" Margin="0,0,0,4"/>
                             <TextBlock x:Name="TxtHeroOrderID"
-                                       Text="Order #—"
+                                       Text="{Binding OrderID}"  
                                        FontSize="20" FontWeight="ExtraBold"
                                        Foreground="White"/>
+                            <!--Add an # or Order # at start with a convertor-->
                             <TextBlock x:Name="TxtHeroDate"
-                                       Text="—"
+                                       Text="{Binding Date}"
                                        FontSize="12" Foreground="#ddd6fe"
                                        Margin="0,4,0,0"/>
                         </StackPanel>
@@ -227,7 +235,11 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="🚚 " FontSize="14"/>
                                     <TextBlock x:Name="TxtDeliveryStatusLabel"
-                                               Text="{Binding DeliveryStatus}" Style="{StaticResource InfoValue}"/>
+                                               FontSize ="13"
+                                               FontWeight ="SemiBold"
+                                               TextWrapping="Wrap"
+                                               Foreground="{Binding DeliveryStatus ,Converter={StaticResource StatusBackgroundConverter}}" 
+                                               Text="{Binding DeliveryStatus ,Converter={StaticResource StatusNameConverter}}" Style="{StaticResource InfoValue}"/>
                                 </StackPanel>
                             </StackPanel>
                             <!-- Coloured status badge -->

@@ -385,7 +385,7 @@ namespace LLstudyWS.Controllers
                     this.repositoryUOW.HelperOledb.CloseConnection();
                 }
             }
-            [HttpPost]
+        [HttpPost]
         public bool UpdateOrder(Order order)
         {
             try
@@ -533,6 +533,98 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
+        public bool CreateNewSolution([FromForm] string model)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+                JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                Solution modelSolution = JsonSerializer.Deserialize<Solution>(model, jsonSerializerOptions);
+
+                bool succeed = this.repositoryUOW.SolutionRepository.Create(modelSolution);
+
+                string lastID = this.repositoryUOW.SolutionRepository.GetLastID();
+                if (HttpContext.Request.Form.Files.Count > 0)
+                {
+                    IFormFile file = HttpContext.Request.Form.Files[0];
+                    string ext = Path.GetExtension(file.FileName);
+                    if (string.IsNullOrEmpty(ext))
+                    {
+                        ext = (file.ContentType ?? "").ToLowerInvariant() switch
+                        {
+                            "application/pdf" => ".pdf",
+                            _ => throw new Exception("Unsupported file type")
+                        };
+                    }
+
+                    modelSolution.File_path_url = this.repositoryUOW.SolutionRepository.ChangeFile(file, modelSolution.ExamID);
+                    this.repositoryUOW.SolutionRepository.Update(modelSolution);
+                }
+
+                return succeed;
+                this.repositoryUOW.HelperOledb.Commit();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                this.repositoryUOW.HelperOledb.RollBack();
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+            }
+        }
+
+        [HttpPost]
+        public bool CreateNewExam([FromForm] string model)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+                JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                Exam modelExam = JsonSerializer.Deserialize<Exam>(model, jsonSerializerOptions);
+
+                bool succeed = this.repositoryUOW.ExamRepository.Create(modelExam);
+
+                string lastID = this.repositoryUOW.ExamRepository.GetLastID();
+                if(HttpContext.Request.Form.Files.Count > 0)
+                {
+                    IFormFile file = HttpContext.Request.Form.Files[0];
+                    string ext = Path.GetExtension(file.FileName);
+                    if (string.IsNullOrEmpty(ext))
+                    {
+                        ext = (file.ContentType ?? "").ToLowerInvariant() switch
+                        {
+                            "application/pdf" => ".pdf",
+                            _ => throw new Exception("Unsupported file type")
+                        };
+                    }
+
+                    modelExam.File_path_url = this.repositoryUOW.ExamRepository.ChangeFile(file, modelExam.ExamID);
+                    this.repositoryUOW.ExamRepository.Update(modelExam);
+                }
+
+                return succeed;
+                this.repositoryUOW.HelperOledb.Commit();
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                this.repositoryUOW.HelperOledb.RollBack();
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+            }
+        }
+
+        [HttpPost]
         [RequestSizeLimit(104857600)]
         public bool CreateNewBook([FromForm] string model)
         {
@@ -574,10 +666,10 @@ namespace LLstudyWS.Controllers
                             //IFormFile file = HttpContext.Request.Form.Files[0];
                             modelBook.BookImagePath = this.repositoryUOW.BookRepository.ChangeImage(file, modelBook.BookID);
                         }
-                        this.repositoryUOW.BookRepository.Update(modelBook);
 
 
                     }
+                    this.repositoryUOW.BookRepository.Update(modelBook);
 
                 }
 

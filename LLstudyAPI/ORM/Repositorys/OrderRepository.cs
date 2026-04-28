@@ -49,19 +49,20 @@ namespace LLstudyWS.ORM
 
         public List<OrderBook> GetOrderBooks(string orderID)
         {
-            string sql = @$"SELECT Books.BookID AS [BookID],
+            string sql = @$"SELECT Books.BookID AS [BookID], Subjects.SubjectID AS [SubjectID],
                             *
                         FROM
-                            Orders
+                            (Orders
                             INNER JOIN (
                                 Books
                                 INNER JOIN Orders_Books ON Books.BookID = Orders_Books.BookID
                             ) ON (
                                 Orders_Books.OrderID = Orders.OrderID
-                            )
+                            ))
+                            INNER JOIN Subjects ON Subjects.SubjectID = Books.SubjectID
                         WHERE
                             (Orders.OrderID = @OrderID)";
-
+            // INNER JOIN Subjects ON Subjects.SubjectID = Books.SubjectID
             List<OrderBook> books = new List<OrderBook>();
 
             this.helperOledb.AddParameter("@OrderID",orderID);

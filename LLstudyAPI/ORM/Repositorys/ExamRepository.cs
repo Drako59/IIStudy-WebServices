@@ -57,5 +57,49 @@ namespace LLstudyWS.ORM
             }
         }
 
+        public string ChangeFile(IFormFile file, string examID)
+        {
+
+
+            if (file == null || file.Length == 0)
+                throw new Exception("Empty file");
+
+            //NEED TO ADD**********************************************************************
+            //Registered reg2 = this.GetByID(registeredID);
+            //File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "RegisteredImages",reg2.ImagePath));
+
+            //string path = Path.Combine(Directory.GetCurrentDirectory()!, "App_Data","RegisteredsImages");
+            string path = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Files", "ExamsFiles");
+
+            Directory.CreateDirectory(path);
+
+            string ext = Path.GetExtension(file.FileName);
+            //Console.WriteLine($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
+
+            if (string.IsNullOrEmpty(ext))
+            {
+                ext = (file.ContentType ?? "").ToLowerInvariant() switch
+                {
+                    "application/pdf" => ".pdf",
+                    _ => throw new Exception("Unsupported file type")
+                };
+            }
+
+            string fileName = $"Exam{examID}{ext}";
+
+            path = Path.Combine(path, fileName);
+            //Console.WriteLine("********************************" + path);
+
+
+            using (FileStream stream = new FileStream(path, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+
+
+            return fileName;
+        }
+
     }
 }

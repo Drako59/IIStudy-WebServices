@@ -394,5 +394,18 @@ namespace LLstudyWS.ORM
             }
             return reviews;
         }
+
+        public (Stream, string) GetPdf(string AboslutePath)
+        {
+            FileStream stream = System.IO.File.OpenRead(AboslutePath);
+            string ext = Path.GetExtension(AboslutePath).ToLowerInvariant();
+            string contentType = ext switch
+            {
+                ".pdf" => "application/pdf",
+                _ => throw new Exception("Unsupported file type")
+            };
+
+            return (stream, contentType);
+        }
     }
 }
