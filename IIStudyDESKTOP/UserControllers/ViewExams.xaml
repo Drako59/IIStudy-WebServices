@@ -511,16 +511,16 @@
                                                     </Button>
 
                                                     <!-- Edit -->
-                                                    <Button Style="{StaticResource ActionBtn}"
+                                                    <!--<Button Style="{StaticResource ActionBtn}"
                                                             Tag="{Binding}"
                                                             Background="#0ea5e9"
-                                                            Margin="0,0,0,5"> <!--Click="EditExam"-->
+                                                            Margin="0,0,0,5"> --><!--Click="EditExam"--><!--
                                                         <StackPanel Orientation="Horizontal">
                                                             <TextBlock Text="✏️ " FontSize="11"/>
                                                             <TextBlock Text="Edit" FontSize="11"
                                                                        FontWeight="Bold" Foreground="White"/>
                                                         </StackPanel>
-                                                    </Button>
+                                                    </Button>-->
 
                                                     <!-- Delete / Restore -->
                                                     <Button Tag="{Binding}"

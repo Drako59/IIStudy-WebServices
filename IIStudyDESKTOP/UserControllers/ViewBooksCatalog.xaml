@@ -744,11 +744,12 @@
                                         CornerRadius="8"
                                         Padding="10,0"
                                         Height="36">
-                                    <TextBox x:Name="NewSubjectBox"
+                                    <TextBox x:Name="SubjectSearchBox"
                                              Background="Transparent"
                                              BorderThickness="0"
                                              FontSize="12" Foreground="#1e293b"
                                              VerticalContentAlignment="Center"
+                                             TextChanged="SearchSubject"
                                              /> <!--KeyDown="NewSubject_KeyDown"-->
                                 </Border>
 

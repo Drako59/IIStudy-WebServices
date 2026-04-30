@@ -108,10 +108,10 @@ namespace IIStudyDESKTOP.UserControllers
 
         private void UpdateStats()
         {
-            TxtTotal.Text = this.registereds.Count.ToString();
-            TxtAdmins.Text = this.registereds.Count(u => u.Role?.ToLower() == "admin").ToString();
-            TxtBanned.Text = this.registereds.Count(u => u.IsBanned).ToString();
-            TxtUsers.Text = this.registereds.Count(u => u.Role?.ToLower() == "user").ToString();
+            TxtTotal.Text = this.registereds?.Count.ToString() ?? "0";
+            TxtAdmins.Text = this?.registereds.Count(u => u.Role?.ToLower() == "admin").ToString() ?? "0";
+            TxtBanned.Text = this?.registereds.Count(u => u.IsBanned).ToString() ?? "0";
+            TxtUsers.Text = this?.registereds.Count(u => u.Role?.ToLower() == "user").ToString() ?? "0";
         }
 
         // ════════════════════════════════════════════════════════════

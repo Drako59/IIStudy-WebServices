@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -406,5 +407,13 @@ namespace IIStudyDESKTOP.UserControllers
             }
 
         }
+
+        private void SearchSubject(object sender, RoutedEventArgs e)
+        {
+            string searchText = this.SubjectSearchBox.Text;
+            this.SubjectsList.ItemsSource = this.SubjectsDetails.Where(s => s.Subject_name.ToLower().Contains(searchText.ToLower())).ToList();
+        }
+
+        
     }
 }

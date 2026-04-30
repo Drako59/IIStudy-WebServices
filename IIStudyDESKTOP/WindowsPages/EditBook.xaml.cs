@@ -40,17 +40,20 @@ namespace IIStudyDESKTOP.WindowsPages
 
         public EditBook(BookShownDesktop book, Dictionary<string, string> subjects) 
         {
-            this._selectedImagePath = null;
             InitializeComponent();
+            
+            
+            this._selectedImagePath = null;
+
             // Allow dragging the borderless window
             MouseLeftButtonDown += (_, e) => { try { DragMove(); } catch { } };
             this.book = book;
             this.Subjects = subjects;
             LoadBook();
-
             //PopulateFields(book);
         }
 
+        
         // ════════════════════════════════════════════════════════════
         //  POPULATE FIELDS
         // ════════════════════════════════════════════════════════════

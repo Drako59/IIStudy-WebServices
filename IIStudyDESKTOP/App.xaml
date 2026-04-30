@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:IIStudyDESKTOP"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="Control">
+            <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
+        </Style>
     </Application.Resources>
 </Application>

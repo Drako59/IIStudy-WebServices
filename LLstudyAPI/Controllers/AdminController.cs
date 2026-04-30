@@ -193,7 +193,7 @@ namespace LLstudyWS.Controllers
 
             [HttpPost]
 
-            public bool RemoveSolution([FromBody] Solution solution)
+            public bool RemoveSolution([FromBody] Solution solution) 
             {
                 try
                 {
@@ -213,7 +213,7 @@ namespace LLstudyWS.Controllers
 
             [HttpPost]
 
-            public bool AddExam(Exam exam)
+            public bool AddExam(Exam exam) //To Remove
             {
                 try 
                 {
@@ -232,7 +232,7 @@ namespace LLstudyWS.Controllers
                 }
             }
             [HttpPost]
-            public bool AddSolution(Exam exam)
+            public bool AddSolution(Exam exam) //To Remove
             {
                 try
                 {
@@ -252,7 +252,7 @@ namespace LLstudyWS.Controllers
             }
 
             [HttpPost]
-            public bool AddBook(Book book)
+            public bool AddBook(Book book) //To Remove
             {
                 try
                 {
@@ -273,7 +273,7 @@ namespace LLstudyWS.Controllers
 
             [HttpPost]
 
-            public bool UpdateBook(Book book)
+            public bool UpdateBook(Book book) //To remove
             {
                 try
                 {
@@ -300,34 +300,34 @@ namespace LLstudyWS.Controllers
                 }
             }
 
-            [HttpPost]
+            //[HttpPost] 
 
-            public bool UpdateExam(Exam exam)
-            {
-                try
-                {
-                    this.repositoryUOW.HelperOledb.OpenConnection();
-                    List<string> exludes = new List<string>();
-                    Type examType = exam.GetType();
-                    PropertyInfo[] pros = examType.GetProperties().Where(p => p.GetValue(exam, null) == null).ToArray();
-                    foreach (PropertyInfo pro in pros)
-                    {
-                        exludes.Add(pro.Name);
-                    }
+            //public bool UpdateExam(Exam exam) //To remove
+            //{
+            //    try
+            //    {
+            //        this.repositoryUOW.HelperOledb.OpenConnection();
+            //        List<string> exludes = new List<string>();
+            //        Type examType = exam.GetType();
+            //        PropertyInfo[] pros = examType.GetProperties().Where(p => p.GetValue(exam, null) == null).ToArray();
+            //        foreach (PropertyInfo pro in pros)
+            //        {
+            //            exludes.Add(pro.Name);
+            //        }
 
 
-                    return this.repositoryUOW.ExamRepository.Update(exam, exludes);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return false;
-                }
-                finally
-                {
-                    this.repositoryUOW.HelperOledb.CloseConnection();
-                }
-            }
+            //        return this.repositoryUOW.ExamRepository.Update(exam, exludes);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.ToString());
+            //        return false;
+            //    }
+            //    finally
+            //    {
+            //        this.repositoryUOW.HelperOledb.CloseConnection();
+            //    }
+            //}
             [HttpPost]
 
             public bool UpdateSolution(Solution solution)
@@ -533,6 +533,66 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
+        [RequestSizeLimit(104857600)]
+
+        public Exam UpdateExam([FromForm] string model)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+
+                JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                Exam modelExam = JsonSerializer.Deserialize<Exam>(model, jsonSerializerOptions);
+
+                if (HttpContext.Request.Form.Files.Count != 0)
+                {
+                    foreach (IFormFile file in HttpContext.Request.Form.Files)
+                    {
+                        string ext = Path.GetExtension(file.FileName);
+                        //Console.WriteLine($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
+
+                        if (string.IsNullOrEmpty(ext))
+                        {
+                            ext = (file.ContentType ?? "").ToLowerInvariant() switch
+                            {
+                                
+                                "application/pdf" => ".pdf",
+                                _ => throw new Exception("Unsupported file type")
+                            };
+                        }
+
+
+                        modelExam.File_path_url = this.repositoryUOW.ExamRepository.ChangeFile(file, modelExam.ExamID);
+
+                        
+                        
+                    }
+
+                }
+
+
+                if (this.repositoryUOW.ExamRepository.Update(modelExam))
+                    return modelExam;
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+
+        [HttpPost]
+        [RequestSizeLimit(104857600)]
+
         public bool CreateNewSolution([FromForm] string model)
         {
             try
@@ -579,6 +639,8 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
+        [RequestSizeLimit(104857600)]
+
         public bool CreateNewExam([FromForm] string model)
         {
             try

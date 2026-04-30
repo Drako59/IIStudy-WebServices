@@ -120,6 +120,7 @@
                         <Button x:Name="BtnEditToggle"
                                 BorderThickness="0" Cursor="Hand"
                                 Padding="12,6"
+                                Click="ViewEditExamWindow"
                                 >
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">

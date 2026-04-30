@@ -77,7 +77,7 @@ namespace IIStudyDESKTOP.UserControllers
             Button btn = sender as Button;
             ExamDetails exam = btn.Tag as ExamDetails;
 
-            this.ExamWindow = new ExamDetailsWindow(exam);
+            this.ExamWindow = new ExamDetailsWindow(exam, SubjectsDetails);
 
             Window parentWindow = Window.GetWindow(this);
             this.ExamWindow.Owner = parentWindow;

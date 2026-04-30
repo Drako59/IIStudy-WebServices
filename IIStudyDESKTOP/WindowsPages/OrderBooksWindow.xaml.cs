@@ -17,9 +17,7 @@ using System.Windows.Shapes;
 
 namespace IIStudyDESKTOP.WindowsPages
 {
-    /// <summary>
-    /// Interaction logic for OrderBooksWindow.xaml
-    /// </summary>
+    
     public partial class OrderBooksWindow : Window
     {
         private List<OrderBook> OrderBooks { get; set; }
@@ -138,7 +136,7 @@ namespace IIStudyDESKTOP.WindowsPages
 
             int count = filtered.Count();
             TxtBookCount.Text = $"{count} book{(count == 1 ? "" : "s")}";
-            TxtTotalValue.Text = $"₪{filtered.Sum(b => b.Book_price):N2}";
+            
 
             EmptyState.Visibility = count == 0
                 ? Visibility.Visible : Visibility.Collapsed;

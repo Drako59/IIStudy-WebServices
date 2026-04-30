@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.Models
 {
-    public abstract class Model
+    public abstract class Model : INotifyDataErrorInfo
     {
         private Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -68,6 +68,31 @@ namespace LLStudy_Models.Models
                     errors.Remove(propertyName);
                 OnErrorsChanged(propertyName);
                 HandleValidationResults(validationResults);
+            }
+        }
+
+        public void ValidateAll()
+        {
+            lock (threadLock)
+            {
+                errors.Clear();
+
+                var validationContext = new ValidationContext(this);
+                var validationResults = new List<ValidationResult>();
+
+                Validator.TryValidateObject(this, validationContext, validationResults, true);
+
+                foreach (var result in validationResults)
+                {
+                    foreach (var member in result.MemberNames)
+                    {
+                        if (!errors.ContainsKey(member))
+                            errors[member] = new List<string>();
+
+                        errors[member].Add(result.ErrorMessage);
+                        OnErrorsChanged(member);
+                    }
+                }
             }
         }
 
