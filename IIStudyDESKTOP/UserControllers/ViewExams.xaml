@@ -524,13 +524,13 @@
                                                     </Button>-->
 
                                                     <!-- Delete / Restore -->
-                                                    <Button Tag="{Binding}"
+                                                    <Button Tag="{Binding}" Click="ToggleDeleteButton"
                                                             ><!--Click="ToggleDeleteButton"-->
                                                         <Button.Style>
                                                             <Style BasedOn="{StaticResource ActionBtn}" TargetType="Button">
                                                                 <Setter Property="Background" Value="#ef4444"/>
                                                                 <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsDeleted}" Value="True">
+                                                                    <DataTrigger Binding="{Binding IsDeleted,UpdateSourceTrigger=PropertyChanged}" Value="True">
                                                                         <Setter Property="Background" Value="#16a34a"/>
                                                                     </DataTrigger>
                                                                 </Style.Triggers>
@@ -542,7 +542,7 @@
                                                                     <Style TargetType="TextBlock">
                                                                         <Setter Property="Text" Value="🗑 "/>
                                                                         <Style.Triggers>
-                                                                            <DataTrigger Binding="{Binding IsDeleted}" Value="True">
+                                                                            <DataTrigger Binding="{Binding IsDeleted,UpdateSourceTrigger=PropertyChanged}" Value="True">
                                                                                 <Setter Property="Text" Value="♻ "/>
                                                                             </DataTrigger>
                                                                         </Style.Triggers>
@@ -554,7 +554,7 @@
                                                                     <Style TargetType="TextBlock">
                                                                         <Setter Property="Text" Value="Delete"/>
                                                                         <Style.Triggers>
-                                                                            <DataTrigger Binding="{Binding IsDeleted}" Value="True">
+                                                                            <DataTrigger Binding="{Binding IsDeleted,UpdateSourceTrigger=PropertyChanged}" Value="True">
                                                                                 <Setter Property="Text" Value="Restore"/>
                                                                             </DataTrigger>
                                                                         </Style.Triggers>

@@ -316,7 +316,7 @@
                                  FontSize="14"
                                  Padding="14,12"
                                  SelectionChanged="FilterSubject"
-                                 ItemsSource="{Binding Subjects}"
+                                 ItemsSource="{Binding Subjects, UpdateSourceTrigger=PropertyChanged}"
                                  DisplayMemberPath="Value"
                                  SelectedValuePath="Key"
                                  >
@@ -387,7 +387,7 @@
                         <DataGrid.Columns>
                             <!-- Book ID -->
                             <DataGridTextColumn Header="ID" 
-                                               Binding="{Binding BookID}" 
+                                               Binding="{Binding BookID, UpdateSourceTrigger=PropertyChanged}" 
                                                Width="80"
                                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
@@ -408,7 +408,7 @@
                                                CornerRadius="8"
                                                Background="#f0f0f0"
                                                VerticalAlignment="Center">
-                                            <Image Source="{Binding BookImagePath,Converter={StaticResource UrlConverter } ,ConverterParameter=Book}"/>
+                                        <Image Source="{Binding BookImagePath,Converter={StaticResource UrlConverter } ,ConverterParameter=Book, UpdateSourceTrigger=PropertyChanged}"/>
                                         </Border>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -416,7 +416,7 @@
 
                             <!-- Book Name -->
                             <DataGridTextColumn Header="Book Name" 
-                                               Binding="{Binding Book_name}" 
+                                               Binding="{Binding Book_name, UpdateSourceTrigger=PropertyChanged}" 
                                                Width="*"
                                                MinWidth="200"
                                                IsReadOnly="True">
@@ -432,7 +432,7 @@
 
                             <!-- Author -->
                             <DataGridTextColumn Header="Author" 
-                                               Binding="{Binding Author_name}" 
+                                               Binding="{Binding Author_name, UpdateSourceTrigger=PropertyChanged}" 
                                                Width="180"
                                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
@@ -444,7 +444,7 @@
                             </DataGridTextColumn>
                         <!-- Author -->
                         <DataGridTextColumn Header="Subject" 
-                                            Binding="{Binding Subject_name}" 
+                                            Binding="{Binding Subject_name, UpdateSourceTrigger=PropertyChanged}" 
                                             Width="180"
                                             IsReadOnly="True">          
                             <DataGridTextColumn.ElementStyle>
@@ -458,7 +458,7 @@
 
                         <!--Reviews-->
                         <DataGridTextColumn Header="Reviews" 
-                                            Binding="{Binding reviewsNum}" 
+                                            Binding="{Binding reviewsNum, UpdateSourceTrigger=PropertyChanged}" 
                                             Width="100"
                                             IsReadOnly="True"> 
                             <DataGridTextColumn.ElementStyle>
@@ -472,7 +472,7 @@
                         </DataGridTextColumn>
                         <!--Rate-->
                         <DataGridTextColumn Header="Rate" 
-                                           Binding="{Binding Rate}" 
+                                           Binding="{Binding Rate, UpdateSourceTrigger=PropertyChanged}" 
                                            Width="100"
                                            IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
@@ -486,7 +486,7 @@
                         </DataGridTextColumn>
                         <!-- Price -->
                         <DataGridTextColumn Header="Price" 
-                                           Binding="{Binding Book_price, StringFormat=\{0:C\}}" 
+                                           Binding="{Binding Book_price, StringFormat=\{0:C\}, UpdateSourceTrigger=PropertyChanged}" 
                                            Width="100"
                                            IsReadOnly="True">       
                             <DataGridTextColumn.ElementStyle>
@@ -507,7 +507,7 @@
                                             <Border.Style>
                                                 <Style TargetType="Border" BasedOn="{StaticResource StockBadge}">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding In_stock}" Value="True">
+                                                    <DataTrigger Binding="{Binding In_stock, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                                             <Setter Property="Background">
                                                                 <Setter.Value>
                                                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -517,7 +517,7 @@
                                                                 </Setter.Value>
                                                             </Setter>
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding In_stock}" Value="False">
+                                                    <DataTrigger Binding="{Binding In_stock, UpdateSourceTrigger=PropertyChanged}" Value="False">
                                                             <Setter Property="Background">
                                                                 <Setter.Value>
                                                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -537,10 +537,10 @@
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding In_stock}" Value="True">
+                                                        <DataTrigger Binding="{Binding In_stock, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                                                 <Setter Property="Text" Value="✓ In Stock"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding In_stock}" Value="False">
+                                                            <DataTrigger Binding="{Binding In_stock, UpdateSourceTrigger=PropertyChanged}" Value="False">
                                                                 <Setter Property="Text" Value="✗ Out of Stock"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>

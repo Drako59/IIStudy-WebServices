@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.Models
 {
-    public abstract class Model : INotifyDataErrorInfo
+    public abstract class Model : INotifyDataErrorInfo/*, INotifyPropertyChanged*/
     {
         private Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+        //public event PropertyChangedEventHandler? PropertyChanged;
+
         private object threadLock = new object();
         private bool isValid;
 

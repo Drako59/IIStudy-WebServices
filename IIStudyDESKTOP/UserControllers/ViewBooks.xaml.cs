@@ -182,12 +182,9 @@ namespace IIStudyDESKTOP.UserControllers
             else
             {
                 book.IsDeleted = true;
-                //this.filteredBooks = this.books;
-                //this.books.Remove((BookShownDesktop)book);
                 this.DataContext = null;
-                this.dgBooks.ItemsSource = null;
+                this.dgBooks.Items.Refresh();
                 this.DataContext = this.books;
-                this.dgBooks.ItemsSource = this.books;
                 //MessageBox.Show("Delete succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             
@@ -207,17 +204,15 @@ namespace IIStudyDESKTOP.UserControllers
             result = await client.PostAsyncRet<Book, bool>(book);
             if (!result.Success || !result.Data)
             {
-                MessageBox.Show("Restore was failed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Restore  failed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
                 book.IsDeleted = false;
-                //this.filteredBooks = this.books;
-                //this.books.Remove((BookShownDesktop)book);
+                
                 this.DataContext = null;
-                this.dgBooks.ItemsSource = null;
+                this.dgBooks.Items.Refresh();
                 this.DataContext = this.books;
-                this.dgBooks.ItemsSource = this.books;
                 //MessageBox.Show("Restore succeed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 

@@ -16,6 +16,7 @@ namespace LLStudy_Models.Models
         string file_path_url;
         string exam_Name;
         string exam_Year;
+        bool isDeleted;
         //[Required]
         //[IsDigits(ErrorMessage = "ID must contain only digits.")]
         public string ExamID { get { return examID; } set { examID = value; } }
@@ -25,7 +26,7 @@ namespace LLStudy_Models.Models
         public bool Access { get { return access; } set { access = value; } }
         [Required]
         [ValidFile(ErrorMessage ="File format isn't valid.")]
-        public string File_path_url { get { return file_path_url; } set { file_path_url = value; ValidateProperty(value, "File_path_url"); } }
+        public string File_path_url { get { return file_path_url; } set { file_path_url = value; ValidateProperty(value, "File_path_url");  } }
         [Required]
         [StringLength(maximumLength: 255, ErrorMessage = "Max Exam_name Length is 255.")]
 
@@ -34,6 +35,6 @@ namespace LLStudy_Models.Models
         [ValidDate(ErrorMessage ="The date isn't valid.")]
         public string Exam_Year { get { return exam_Year; } set { exam_Year = value; ValidateProperty(value, "Exam_Year"); } }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get {return isDeleted; } set { isDeleted = value; ValidateProperty(value, nameof(this.IsDeleted)); } }
     }
 }

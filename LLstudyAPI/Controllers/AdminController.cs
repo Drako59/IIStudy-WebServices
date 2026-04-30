@@ -172,24 +172,46 @@ namespace LLstudyWS.Controllers
 
             }
 
-            [HttpPost]
-            public bool RemoveExam([FromBody] Exam exam)
+        [HttpPost]
+        public bool RemoveExam(Exam exam)
+        {
+            try
             {
-                try
-                {
-                    this.repositoryUOW.HelperOledb.OpenConnection();
-                    return this.repositoryUOW.ExamRepository.Delete(exam.ExamID);
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return false; ;
-                }
-                finally 
-                {
-                    this.repositoryUOW.HelperOledb.CloseConnection();
-                }
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                exam.IsDeleted = true;
+                return this.repositoryUOW.ExamRepository.Update(exam, exludes: new List<string>() { nameof(exam.File_path_url), nameof(exam.Exam_Year), nameof(exam.Exam_Name) });
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false; ;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpPost]
+
+        public bool RestoreExam(Exam exam)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                exam.IsDeleted = false;
+                return this.repositoryUOW.ExamRepository.Update(exam,exludes: new List<string>() { nameof(exam.File_path_url),nameof(exam.Exam_Year),nameof(exam.Exam_Name)});
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false; ;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
 
             [HttpPost]
 

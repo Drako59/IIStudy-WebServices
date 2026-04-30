@@ -336,7 +336,40 @@
                                                Foreground="#dc2626" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
+                            <!-- Active chip -->
+                            <Border x:Name="ChipActive"
+                                    Style="{StaticResource FilterChip}"
+                                    Background="#ecfdf5"
+                                    MouseLeftButtonUp="ActiveFillter"
+                                    >              
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🟢 " FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="ChipActiveText"
+                                               Text="Active"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               Foreground="#16a34a"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
 
+                            <!-- Deleted chip -->
+                            <Border x:Name="ChipDeleted"
+                                    Style="{StaticResource FilterChip}"
+                                    Background="#fef2f2"
+                                    Margin="0"
+                                    MouseLeftButtonUp="DeletedFillter"
+                                    >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🗑 " FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="ChipDeletedText"
+                                               Text="Deleted"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               Foreground="#dc2626"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
                         </StackPanel>
                     </Grid>
                 </Border>

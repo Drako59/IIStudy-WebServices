@@ -17,6 +17,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IIStudyDESKTOP.WindowsPages;
+using System.Security.Permissions;
+using System.Net.NetworkInformation;
 namespace IIStudyDESKTOP.UserControllers
 {
     /// <summary>
@@ -92,6 +94,64 @@ namespace IIStudyDESKTOP.UserControllers
 
         }
 
+        private async void SoftDeleteExam(Exam exam)
+        {
+            ApiClient<bool> client = new ApiClient<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/RemoveExam";
+            ApiResultModel<bool> result = await client.PostAsyncRet<Exam, bool>(exam);
+
+            if (result == null || !result.Success || !result.Data)
+            {
+                MessageBox.Show("Soft delete failed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                exam.IsDeleted = true;
+                this.ExamsList.Items.Refresh();
+            }
+        }
+
+        private async void RestoreExam(Exam exam)
+        {
+            ApiClient<bool> client = new ApiClient<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Admin/RestoreExam";
+            ApiResultModel<bool> result = await client.PostAsyncRet<Exam, bool>(exam);
+
+            if(result == null || !result.Success || !result.Data)
+            {
+                MessageBox.Show("Restore failed.", "Validation", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                exam.IsDeleted = false;
+                this.ExamsList.Items.Refresh();
+            }
+        }
+
+        public void ToggleDeleteButton(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Exam exam = btn.Tag as Exam;
+
+            if (!exam.IsDeleted)
+            {
+                var confirm = MessageBox.Show($"Are you sure you want to temporary delete exam '{exam.Exam_Name}'?", "Validation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (confirm != MessageBoxResult.Yes) return;
+                this.SoftDeleteExam(exam);
+            }
+            else if (exam.IsDeleted)
+            {
+                var confirm = MessageBox.Show($"Are you sure you want to  restore exam '{exam.Exam_Name}'?", "Validation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (confirm != MessageBoxResult.Yes) return;
+                this.RestoreExam(exam);
+            }
+        }
         public void ViewCreateExamWindow(object sender, RoutedEventArgs e)
         {
 

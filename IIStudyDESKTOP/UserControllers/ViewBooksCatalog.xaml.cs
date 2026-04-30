@@ -158,6 +158,21 @@ namespace IIStudyDESKTOP.UserControllers
             SetActiveChip(ChipOutOfStock);
             this.ApplyFilters();
         }
+
+        private void ActiveFillter(object sender, MouseButtonEventArgs e)
+        {
+            this.filteredBooks = this.books.Where(b => !b.IsDeleted).ToList();
+            this.BooksList.ItemsSource = this.filteredBooks;
+            SetActiveChip(ChipActive);
+            this.ApplyFilters();
+        }
+        private void DeletedFillter(object sender, MouseButtonEventArgs e)
+        {
+            this.filteredBooks = this.books.Where(b => b.IsDeleted).ToList();
+            this.BooksList.ItemsSource = this.filteredBooks;
+            SetActiveChip(ChipDeleted);
+            this.ApplyFilters();
+        }
         private void AllFillter(object sender, MouseButtonEventArgs e)
         {
             
@@ -185,27 +200,34 @@ namespace IIStudyDESKTOP.UserControllers
                 (Color)ColorConverter.ConvertFromString("#f0fdf4"));
             ChipOutOfStock.Background = new SolidColorBrush(
                 (Color)ColorConverter.ConvertFromString("#fef2f2"));
+            ChipActive.Background = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#f0fdf4"));
+            ChipDeleted.Background = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#fef2f2"));
             ChipAllText.Foreground = Brushes.Black;
             ChipInStockText.Foreground = Brushes.Green;
             ChipOutStockText.Foreground = Brushes.Red;
+            ChipActiveText.Foreground = Brushes.Green;
+            ChipDeletedText.Foreground = Brushes.Red;
+
             // ACTIVE STATES
             if (active == ChipAll)
             {
-                ChipAll.Background = new LinearGradientBrush(
+                active.Background = new LinearGradientBrush(
                     (Color)ColorConverter.ConvertFromString("#5b5fcf"),
                     (Color)ColorConverter.ConvertFromString("#7c6fd4"),
                     new Point(0, 0.5), new Point(1, 0.5));
             }
 
-            else if (active == ChipInStock)
+            else if (active == ChipInStock || active == ChipActive)
             {
-                ChipInStock.Background = new SolidColorBrush(
+                active.Background = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString("#16a34a"));
             }
 
-            else if (active == ChipOutOfStock)
+            else if (active == ChipOutOfStock || active == ChipDeleted)
             {
-                ChipOutOfStock.Background = new SolidColorBrush(
+                active.Background = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString("#dc2626"));
             }
         }
