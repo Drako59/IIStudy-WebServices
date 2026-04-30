@@ -28,14 +28,19 @@ namespace IIStudyDESKTOP.UserControllers
         private List<SubjectDetails> SubjectsDetails { get; set; }
 
         private ExamDetailsWindow ExamWindow { get; set; }
-
+        private CreateExamWindow CreateExamWindow { get; set; }
         public ViewExams()
         {
             InitializeComponent();
-            Loaded += (_, __) => { LoadExams(); LoadSubjects(); };
+            this.Init_page();
         }
 
-        public async void LoadExams()
+        private async void Init_page()
+        {
+            await this.LoadExams();
+            await this.LoadSubjects();
+        }
+        public async Task LoadExams()
         {
             ApiClient<List<ExamDetails>> client = new ApiClient<List<ExamDetails>>();
             client.Scheme = "http";
@@ -53,7 +58,7 @@ namespace IIStudyDESKTOP.UserControllers
 
         }
 
-        public async void LoadSubjects()
+        public async Task LoadSubjects()
         {
             ApiClient<List<SubjectDetails>> client = new ApiClient<List<SubjectDetails>>();
             client.Scheme = "http";
@@ -82,6 +87,17 @@ namespace IIStudyDESKTOP.UserControllers
             Window parentWindow = Window.GetWindow(this);
             this.ExamWindow.Owner = parentWindow;
             this.ExamWindow.Show();
+
+
+
+        }
+
+        public void ViewCreateExamWindow(object sender, RoutedEventArgs e)
+        {
+
+            this.CreateExamWindow = new CreateExamWindow(this.SubjectsDetails);
+
+            this.CreateExamWindow.ShowDialog();
 
 
 

@@ -598,6 +598,7 @@ namespace LLstudyWS.Controllers
             try
             {
                 this.repositoryUOW.HelperOledb.CloseConnection();
+                this.repositoryUOW.HelperOledb.OpenTransaction();
                 JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
                 jsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 Solution modelSolution = JsonSerializer.Deserialize<Solution>(model, jsonSerializerOptions);
@@ -621,9 +622,9 @@ namespace LLstudyWS.Controllers
                     modelSolution.File_path_url = this.repositoryUOW.SolutionRepository.ChangeFile(file, modelSolution.ExamID);
                     this.repositoryUOW.SolutionRepository.Update(modelSolution);
                 }
+                this.repositoryUOW.HelperOledb.Commit();
 
                 return succeed;
-                this.repositoryUOW.HelperOledb.Commit();
 
             }
             catch (Exception ex)
@@ -634,7 +635,7 @@ namespace LLstudyWS.Controllers
             }
             finally
             {
-                this.repositoryUOW.HelperOledb.OpenConnection();
+                this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
 
@@ -645,7 +646,8 @@ namespace LLstudyWS.Controllers
         {
             try
             {
-                this.repositoryUOW.HelperOledb.CloseConnection();
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                this.repositoryUOW.HelperOledb.OpenTransaction();
                 JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
                 jsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 Exam modelExam = JsonSerializer.Deserialize<Exam>(model, jsonSerializerOptions);
@@ -669,9 +671,9 @@ namespace LLstudyWS.Controllers
                     modelExam.File_path_url = this.repositoryUOW.ExamRepository.ChangeFile(file, modelExam.ExamID);
                     this.repositoryUOW.ExamRepository.Update(modelExam);
                 }
+                this.repositoryUOW.HelperOledb.Commit();
 
                 return succeed;
-                this.repositoryUOW.HelperOledb.Commit();
 
             }
             catch(Exception ex)
@@ -682,7 +684,7 @@ namespace LLstudyWS.Controllers
             }
             finally
             {
-                this.repositoryUOW.HelperOledb.OpenConnection();
+                this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
 

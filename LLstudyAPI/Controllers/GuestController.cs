@@ -229,6 +229,7 @@ namespace LLstudyWS.Controllers
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
+                //return new List<ExamDetails>();
                 return this.repositoryUOW.ExamRepository.GetExamDetails();
             }
             catch(Exception ex)

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,12 +17,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+
 namespace IIStudyDESKTOP.WindowsPages
 {
     /// <summary>
-    /// Interaction logic for EditExamWindow.xaml
+    /// Interaction logic for CreateNewExamWIndow.xaml
     /// </summary>
-    public partial class EditExamWindow : Window
+    public partial class CreateExamWindow : Window
     {
         private string _selectedPdfPath { get; set; }
         private string PdfFileName { get; set; }
@@ -31,16 +31,17 @@ namespace IIStudyDESKTOP.WindowsPages
 
         private List<SubjectDetails> SubjectDetails { get; set; }
 
-        public EditExamWindow(ExamDetails exam, List<SubjectDetails> subjectDetails)
+        public CreateExamWindow(List<SubjectDetails> subjectDetails)
         {
             InitializeComponent();
-            this.Exam = exam;
+            this.Exam = new ExamDetails() { ExamID = "0" , File_path_url = "None", SubjectID = "1"};
             this.DataContext = this.Exam;
             this.SubjectDetails = subjectDetails;
             this.InputSubjectID.ItemsSource = this.SubjectDetails;
             this.InputSubjectID.SelectedValue = this.Exam.SubjectID;
             //this.ValidateAllFields();
         }
+
         private void BrowsePdf_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new OpenFileDialog
@@ -57,6 +58,8 @@ namespace IIStudyDESKTOP.WindowsPages
                 this.Exam.File_path_url = this.PdfFileName;
                 TxtSelectedFile.Foreground = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString("#4338ca"));
+                this.Exam.File_path_url = this.PdfFileName;
+
             }
             //this.ValidateAllFields();
         }
@@ -76,11 +79,13 @@ namespace IIStudyDESKTOP.WindowsPages
             return true;
         }
 
-        private async void UpdateExam(object sender, RoutedEventArgs e)
+        private async void CreateExam(object sender, RoutedEventArgs e)
         {
             //if (this.BtnSaveValidationClick(sender, e))
+            //this.Exam.SubjectID = this.InputSubject.ToString();
+            //this.Exam.Exam_Name = this.InputExamName.ToString();
+            //this.Exam.Exam_Year = this.InputExamYear.ToString();
             this.Exam.SubjectID = InputSubjectID.SelectedValue?.ToString() ?? "1";
-
             if (this.CheckValidation())
             {
                 try
@@ -89,7 +94,7 @@ namespace IIStudyDESKTOP.WindowsPages
                     client.Scheme = "http";
                     client.Host = "localhost";
                     client.Port = 5049;
-                    client.Path = "api/Admin/UpdateExam";
+                    client.Path = "api/Admin/CreateNewExam";
 
                     List<(Stream, string)> files_list = new List<(Stream, string)>();
 
@@ -102,13 +107,11 @@ namespace IIStudyDESKTOP.WindowsPages
 
 
 
-                    ApiResultModel<Exam> response = await client.PostAsyncRet<Exam, Exam>(this.Exam, files_list); //this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) }
+                    ApiResultModel<bool> response = await client.PostAsyncRet<Exam, bool>(this.Exam, files_list); //this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) }
                     if (response.Success)
                     {
 
-                        this.Exam.File_path_url = response.Data.File_path_url;
-                        this.Exam.Subject_name = this.SubjectDetails.Where(s => s.SubjectID == response.Data.SubjectID).ToList().Select(s => s.Subject_name).ToList()[0]; //select the right name out of the subjectsNames list.
-                        this.DataContext = this.Exam;
+
                         this.DialogResult = true;
                         this.Close();
 
@@ -133,7 +136,7 @@ namespace IIStudyDESKTOP.WindowsPages
             }
 
         }
-        private void ValidateAllFields() //Not In use
+        private void ValidateAllFields()
         {
             List<string> ProNames = new List<string>() { nameof(this.Exam.Exam_Name), nameof(this.Exam.Exam_Year) };
 
@@ -190,3 +193,5 @@ namespace IIStudyDESKTOP.WindowsPages
         }
     }
 }
+
+
