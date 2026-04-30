@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="EditExamWindow"  Height="560" Width="500">
     <Window.Resources>
+        <converter:StringToDateConverter x:Key="StringToDateConverter"></converter:StringToDateConverter>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
         <Style x:Key="ModernComboBox" TargetType="ComboBox">
             <Setter Property="FontSize" Value="14"/>
@@ -451,11 +452,23 @@
                         <TextBlock Style="{StaticResource FieldLabel}">
                             EXAM YEAR <Run Foreground="#ef4444">*</Run>
                         </TextBlock>
-                        <TextBox x:Name="InputExamYear"  Text="{Binding Exam_Year ,UpdateSourceTrigger=PropertyChanged,
-                                                                                    ValidatesOnDataErrors=True,
-                                                                                    ValidatesOnNotifyDataErrors=True,
-                                                                                    NotifyOnValidationError=True}" 
-                                                            Style="{StaticResource InputBox}"/> <!--TextChanged="ValidateFields"-->
+                        <DatePicker x:Name="InputExamYear"
+                                    SelectedDate="{Binding Exam_Year,
+                                                           Mode=TwoWay,
+                                                           UpdateSourceTrigger=PropertyChanged,Converter={StaticResource StringToDateConverter},
+                                                           ValidatesOnDataErrors=True,
+                                                           ValidatesOnNotifyDataErrors=True,
+                                                           NotifyOnValidationError=True}"
+                                     SelectedDateFormat="Short"
+                                    Language="en-CA"
+                                    FontSize="13"
+                                    FontWeight="SemiBold"
+                                    Foreground="#1e293b"
+                                    Background="White"
+                                    BorderBrush="#e2e8f0"
+                                    BorderThickness="1.5"
+                                    Height="40"
+                                    Padding="8,4"/>
                     </StackPanel>
 
                     <!-- PDF File -->
@@ -488,7 +501,7 @@
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                                     <TextBlock Text="📄 " FontSize="14" VerticalAlignment="Center"/>
                                     <TextBlock x:Name="TxtCurrentFile"
-                                               Text="{Binding File_path_url}"
+                                               Text="{Binding File_path_url,UpdateSourceTrigger=PropertyChanged}"
                                                FontSize="11" Foreground="#1565c0"
                                                TextDecorations="Underline"
                                                TextTrimming="CharacterEllipsis"
@@ -513,7 +526,7 @@
                                             Padding="10,0"
                                             Height="38">
                                         <TextBlock x:Name="TxtSelectedFile"
-                                                   Text="{Binding File_path_url}"
+                                                   Text="{Binding File_path_url,UpdateSourceTrigger=PropertyChanged}"
                                                    FontSize="11"
                                                    Foreground="#94a3b8"
                                                    VerticalAlignment="Center"

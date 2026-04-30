@@ -150,8 +150,9 @@ namespace IIStudyDESKTOP.WindowsPages
             {
                 this._selectedImagePath = dlg.FileName;
                 this.ImageFileName = System.IO.Path.GetFileName(dlg.FileName);
-                TxtImagePath.Text = this.ImageFileName;
-                TxtImagePath.Foreground = Brushes.White;
+                this.book.BookImagePath = this.ImageFileName;
+                TxtImagePath.Foreground = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString("#4338ca"));
                 TryShowCover(dlg.FileName);
             }
         }
@@ -171,7 +172,7 @@ namespace IIStudyDESKTOP.WindowsPages
             {
                 this._selectedPdfPath = dlg.FileName;
                 this.PdfFileName = System.IO.Path.GetFileName(dlg.FileName);
-                TxtPdfPath.Text = this.PdfFileName;
+                this.book.Pdf_url_book = this.PdfFileName;
                 TxtPdfPath.Foreground = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString("#4338ca"));
             }
@@ -218,10 +219,23 @@ namespace IIStudyDESKTOP.WindowsPages
             DialogResult = false;
             Close();
         }
-
+        private bool CheckValidation()
+        {
+            this.book.Validate();
+            if (this.book.HasErrors)
+            {
+                MessageBox.Show(
+                               "One or more field are not as requested",
+                               "Error",
+                               MessageBoxButton.OK,
+                               MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
         private async void UpdateBook(object sender,RoutedEventArgs e)
         {
-            if (this.BtnSaveValidationClick(sender, e))
+            if (this.CheckValidation())
             {
                 ApiClient<bool> client = new ApiClient<bool>();
                 client.Scheme = "http";

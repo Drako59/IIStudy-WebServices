@@ -30,6 +30,7 @@ namespace IIStudyDESKTOP.WindowsPages
         private string ImageFileName = null;
         private string _selectedImagePath = null;
         private string _selectedPdfPath = null;
+        private Book Book { get; set; }
         private Dictionary<string,string> Subjects { get; set; }
         // Raised after a successful insert so the caller can refresh its book list
         public event EventHandler<Book> OnBookCreated;
@@ -37,6 +38,13 @@ namespace IIStudyDESKTOP.WindowsPages
         public CreateBookPage(Dictionary<string, string> subjects)
         {
             InitializeComponent();
+            this.Book = new Book()
+            {
+                BookID = "0",
+                SubjectID = "1",
+                Pdf_url_book = "None", BookImagePath ="None"
+            };
+            this.DataContext = this.Book;
             this.Subjects = subjects;
             this.InputSubjectID.ItemsSource = this.Subjects;
             MouseLeftButtonDown += (_, e) => { try { DragMove(); } catch { } };
@@ -71,8 +79,9 @@ namespace IIStudyDESKTOP.WindowsPages
 
             _selectedImagePath = dlg.FileName;
             this.ImageFileName = System.IO.Path.GetFileName(dlg.FileName);
-            TxtImagePath.Text = this.ImageFileName;
-            TxtImagePath.Foreground = Brushes.White;
+            this.Book.BookImagePath = this.ImageFileName;
+            TxtImagePath.Foreground = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#4338ca"));
             TryShowCover(dlg.FileName);
         }
 
@@ -118,7 +127,7 @@ namespace IIStudyDESKTOP.WindowsPages
             _selectedPdfPath = dlg.FileName;
 
             this.fileName = System.IO.Path.GetFileName(dlg.FileName);
-            TxtPdfPath.Text = this.fileName;
+            this.Book.Pdf_url_book = this.fileName;
             TxtPdfPath.Foreground = new SolidColorBrush(
                 (Color)ColorConverter.ConvertFromString("#4338ca"));
         }
@@ -126,98 +135,97 @@ namespace IIStudyDESKTOP.WindowsPages
         // ════════════════════════════════════════════════════════════
         //  CREATE — validate + INSERT
         // ════════════════════════════════════════════════════════════
+
+
+        private bool CheckValidation()
+        {
+            this.Book.Validate();
+            if (this.Book.HasErrors)
+            {
+                MessageBox.Show(
+                               "One or more field are not as requested",
+                               "Error",
+                               MessageBoxButton.OK,
+                               MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
+
         private async void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
             // ── Validation ──────────────────────────────────────────
-            if (string.IsNullOrWhiteSpace(InputBookName.Text))
-            {
-                Shake(InputBookName);
-                MessageBox.Show("Book name is required.", "Validation",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            //if (string.IsNullOrWhiteSpace(InputBookName.Text))
+            //{
+            //    Shake(InputBookName);
+            //    MessageBox.Show("Book name is required.", "Validation",
+            //        MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    return;
+            //}
 
-            if (string.IsNullOrWhiteSpace(InputAuthorName.Text))
-            {
-                Shake(InputAuthorName);
-                MessageBox.Show("Author name is required.", "Validation",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            //if (string.IsNullOrWhiteSpace(InputAuthorName.Text))
+            //{
+            //    Shake(InputAuthorName);
+            //    MessageBox.Show("Author name is required.", "Validation",
+            //        MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    return;
+            //}
 
-            if (!double.TryParse(InputPrice.Text, out double price))
-            {
-                Shake(InputPrice);
-                MessageBox.Show("Please enter a valid numeric price.", "Validation",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            //if (!double.TryParse(InputPrice.Text, out double price))
+            //{
+            //    Shake(InputPrice);
+            //    MessageBox.Show("Please enter a valid numeric price.", "Validation",
+            //        MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    return;
+            //}
 
             // ── Insert ──────────────────────────────────────────────
-            try
+
+            if (this.CheckValidation())
             {
-
-
-                // Get the new BookID back
-
-                // Build the new Book object and raise event
-                var newBook = new Book
+                try
                 {
-                    BookID = "0",
-                    Book_name = InputBookName.Text.Trim(),
-                    Author_name = InputAuthorName.Text.Trim(),
-                    Book_price = price,
-                    SubjectID = InputSubjectID.SelectedValue.ToString(),
-                    IsOnline = this.InputType.IsChecked == true,
-                    //BookAuthor = InputBookAuthor.Text.Trim(),
-                    In_stock = InputInStock.IsChecked == true,
-                    Pdf_url_book = _selectedPdfPath == null ? "None" : this._selectedPdfPath,
-                    BookImagePath = _selectedImagePath
-                };
-
-                OnBookCreated?.Invoke(this, newBook);
+                    this.Book.SubjectID = InputSubjectID.SelectedValue.ToString();
 
 
+                    ApiClient<Book> client = new ApiClient<Book>();
+                    ApiResultModel<bool> result = new ApiResultModel<bool>();
+                    client.Scheme = "http";
+                    client.Host = "localhost";
+                    client.Port = 5049;
+                    client.Path = "api/Admin/CreateNewBook";
 
-                
+                    List<(Stream, string)> files_list = new List<(Stream, string)>();
 
-                ApiClient<Book> client = new ApiClient<Book>();
-                ApiResultModel<bool> result = new ApiResultModel<bool>();
-                client.Scheme = "http";
-                client.Host = "localhost";
-                client.Port = 5049;
-                client.Path = "api/Admin/CreateNewBook";
+                    if (this._selectedImagePath != null)
+                    {
+                        files_list.Add((File.OpenRead(this._selectedImagePath), this.ImageFileName));
+                    }
+                    if (this._selectedPdfPath != null)
+                    {
+                        files_list.Add((File.OpenRead(this._selectedPdfPath), this.fileName));
+                    }
 
-                List<(Stream, string)> files_list = new List<(Stream, string)>();
 
-                if (this._selectedImagePath != null)
-                {
-                    files_list.Add( (File.OpenRead(this._selectedImagePath), this.ImageFileName) );
+
+                    result = await client.PostAsyncRet<Book, bool>(this.Book, files_list); //this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) }
+                    if (!result.Success || !result.Data)
+                    {
+                        DialogResult = false;
+
+                        throw new Exception(message: "Failed to upload image");
+                    }
+
+                    MessageBox.Show($"✅  \"{this.Book.Book_name}\" was added successfully!",
+                        "Book Created", MessageBoxButton.OK, MessageBoxImage.Information);
+                    DialogResult = true;
+                    Close();
                 }
-                if (this._selectedPdfPath != null)
+                catch (Exception ex)
                 {
-                    files_list.Add(  (File.OpenRead(this._selectedPdfPath), this.fileName ) );
+                    MessageBox.Show($"Failed to create book:\n{ex.Message}",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-
-
-
-                result = await client.PostAsyncRet<Book,bool>(newBook, files_list); //this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) }
-                if (!result.Success || !result.Data)
-                {
-                    DialogResult = false;
-                    
-                    throw new Exception(message: "Failed to upload image");
-                }
-                
-                MessageBox.Show($"✅  \"{newBook.Book_name}\" was added successfully!",
-                    "Book Created", MessageBoxButton.OK, MessageBoxImage.Information); 
-                DialogResult = true;
-                Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to create book:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

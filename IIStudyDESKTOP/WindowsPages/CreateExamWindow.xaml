@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
+        xmlns:converter="clr-namespace:IIStudyDESKTOP"
         mc:Ignorable="d"
         Title="CreateExamWindow"  Height="560" Width="500">
     <Window.Resources>
-        
+        <converter:StringToDateConverter x:Key="StringToDateConverter"></converter:StringToDateConverter>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
         <Style x:Key="ModernComboBox" TargetType="ComboBox">
             <Setter Property="FontSize" Value="14"/>
@@ -432,11 +433,23 @@
                         <TextBlock Style="{StaticResource FieldLabel}">
                             EXAM YEAR <Run Foreground="#ef4444">*</Run>
                         </TextBlock>
-                        <TextBox x:Name="InputExamYear" TextChanged="ValidateFields" Text="{Binding Exam_Year ,UpdateSourceTrigger=PropertyChanged,
-                                                                                    ValidatesOnDataErrors=True,
-                                                                                    ValidatesOnNotifyDataErrors=True,
-                                                                                    NotifyOnValidationError=True}" 
-                                Style="{StaticResource InputBox}"/>
+                        <DatePicker x:Name="InputExamYear"
+                                    SelectedDate="{Binding Exam_Year,
+                                                           Mode=TwoWay,
+                                                           UpdateSourceTrigger=PropertyChanged,Converter={StaticResource StringToDateConverter},
+                                                           ValidatesOnDataErrors=True,
+                                                           ValidatesOnNotifyDataErrors=True,
+                                                           NotifyOnValidationError=True}"
+                                     SelectedDateFormat="Short"
+                                    Language="en-CA"
+                                    FontSize="13"
+                                    FontWeight="SemiBold"
+                                    Foreground="#1e293b"
+                                    Background="White"
+                                    BorderBrush="#e2e8f0"
+                                    BorderThickness="1.5"
+                                    Height="40"
+                                    Padding="8,4"/>
                     </StackPanel>
 
                     <!-- PDF File -->
@@ -459,7 +472,7 @@
                             Foreground="#ef4444"
                             Margin="4,4,0,0"
                             Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtSelectedFile}"
-/>
+                             />
 
                         </StackPanel>
                         <TextBlock Text="PDF FILE" Style="{StaticResource FieldLabel}"/>
@@ -469,7 +482,7 @@
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                                     <TextBlock Text="📄 " FontSize="14" VerticalAlignment="Center"/>
                                     <TextBlock x:Name="TxtCurrentFile"
-                                               Text="No file selected"
+                                               Text="{Binding File_path_url,UpdateSourceTrigger=PropertyChanged}"
                                                FontSize="11" Foreground="#1565c0"
                                                TextDecorations="Underline"
                                                TextTrimming="CharacterEllipsis"
@@ -480,7 +493,8 @@
                                 <!-- Browse row -->
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="4*"/>
                                         <ColumnDefinition Width="10"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
@@ -492,9 +506,9 @@
                                             BorderThickness="1.5"
                                             CornerRadius="9"
                                             Padding="10,0"
-                                            Height="38">
+                                            Height="38" Grid.ColumnSpan="2" Margin="0,1,0,1">
                                         <TextBlock x:Name="TxtSelectedFile"
-                                                   Text="No new file chosen"
+                                                   Text="{Binding File_path_url,UpdateSourceTrigger=PropertyChanged}"
                                                    FontSize="11"
                                                    Foreground="#94a3b8"
                                                    VerticalAlignment="Center"
@@ -504,7 +518,7 @@
                                     <!-- Browse button -->
                                     <Button Grid.Column="2"
                                             Style="{StaticResource BrowseBtn}"
-                                            Click="BrowsePdf_Click">
+                                            Click="BrowsePdf_Click" Grid.ColumnSpan="2" Margin="10,0,0,0">
                                         <StackPanel Orientation="Horizontal" Margin="12,0">
                                             <TextBlock Text="📂 " FontSize="13" VerticalAlignment="Center"/>
                                             <TextBlock Text="Browse" FontSize="12" FontWeight="Bold"
