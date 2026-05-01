@@ -41,7 +41,7 @@ namespace LLstudyWS.ORM
 
         }
 
-        public List<ExamDetails> GetExamDetails()
+        public List<ExamDetails> GetExamsDetails()
         {
             string sql = $@"SELECT *, Subjects.SubjectID AS [SubjectID] FROM Exams INNER JOIN Subjects ON Exams.SubjectID = Subjects.SubjectID";
 

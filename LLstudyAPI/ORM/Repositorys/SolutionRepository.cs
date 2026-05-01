@@ -1,6 +1,8 @@
 ﻿using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels;
 using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
+
 
 namespace LLstudyWS.ORM
 {
@@ -37,6 +39,24 @@ namespace LLstudyWS.ORM
                 }
             }
             return solutions;
+
+        }
+
+        public List<Solution> GetSolutionsByExam(string examID)
+        {
+            string sql = $@"SELECT * FROM Solutions WHERE ExamID = @examID";
+            this.helperOledb.AddParameter("@examID", examID);
+
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                List<Solution> solutions = new List<Solution>();
+                while (reader.Read())
+                {
+                    solutions.Add(this.moderlRefCreator.CreateModel<Solution>(reader));
+                }
+                return solutions;
+            }
+
 
         }
 

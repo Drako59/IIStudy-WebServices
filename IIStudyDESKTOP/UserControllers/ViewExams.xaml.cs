@@ -31,6 +31,8 @@ namespace IIStudyDESKTOP.UserControllers
 
         private ExamDetailsWindow ExamWindow { get; set; }
         private CreateExamWindow CreateExamWindow { get; set; }
+        private ExamSolutionsWindow ExamSolutionsWindow { get; set; }
+
         public ViewExams()
         {
             InitializeComponent();
@@ -151,6 +153,19 @@ namespace IIStudyDESKTOP.UserControllers
                 if (confirm != MessageBoxResult.Yes) return;
                 this.RestoreExam(exam);
             }
+        }
+
+        private void ViewExamSolutions(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            ExamDetails exam = btn.Tag as ExamDetails;
+
+            this.ExamSolutionsWindow = new ExamSolutionsWindow(exam);
+
+            Window parentWindow = Window.GetWindow(this);
+            this.ExamSolutionsWindow.Owner = parentWindow;
+            this.ExamSolutionsWindow.Show();
+
         }
         public void ViewCreateExamWindow(object sender, RoutedEventArgs e)
         {

@@ -230,7 +230,26 @@ namespace LLstudyWS.Controllers
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 //return new List<ExamDetails>();
-                return this.repositoryUOW.ExamRepository.GetExamDetails();
+                return this.repositoryUOW.ExamRepository.GetExamsDetails();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet] 
+        public List<Solution> GetSolutions(string examID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.SolutionRepository.GetSolutionsByExam(examID);
             }
             catch(Exception ex)
             {
