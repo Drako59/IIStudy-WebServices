@@ -56,6 +56,8 @@ namespace IIStudyDESKTOP.WindowsPages
                 this.Exam.File_path_url = this.PdfFileName;
                 TxtSelectedFile.Foreground = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString("#4338ca"));
+                TxtSelectedFile.Text = this.Exam.File_path_url;
+                TxtCurrentFile.Text = this.Exam.File_path_url;
             }
             //this.ValidateAllFields();
         }

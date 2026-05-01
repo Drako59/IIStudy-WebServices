@@ -25,6 +25,8 @@ namespace IIStudyDESKTOP.WindowsPages
 
         private List<Solution> Solutions { get; set; }
         private ExamDetails Exam { get; set; }
+        private CreateSolutionWindow CreateSolutionWindow { get; set; }
+        private EditSolutionWindow EditSolutionWindow { get; set; }
         public ExamSolutionsWindow(ExamDetails exam)
         {
             InitializeComponent();
@@ -73,6 +75,26 @@ namespace IIStudyDESKTOP.WindowsPages
             this.TxtSolutionCount.Text = this.Solutions?.Count().ToString() ?? "0";
         }
 
+        private void CreateSolution(object sender, RoutedEventArgs e)
+        {
+            this.CreateSolutionWindow = new CreateSolutionWindow(this.Exam);
+            this.CreateSolutionWindow.Owner = this;
+            this.CreateSolutionWindow.ShowDialog();
+
+        }
+
+        private void EditSolution(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Solution solution = btn.Tag as Solution;
+
+
+
+            this.EditSolutionWindow = new EditSolutionWindow(solution,this.Exam);
+            var result = this.EditSolutionWindow.ShowDialog();
+            if (result == true)
+                this.SolutionsList.Items.Refresh();
+        }
         private void Close_Click(object sender, RoutedEventArgs e) => Close();
     }
 }

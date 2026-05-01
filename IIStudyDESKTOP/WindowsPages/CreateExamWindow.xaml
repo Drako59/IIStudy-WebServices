@@ -377,7 +377,7 @@
                         <TextBlock Style="{StaticResource FieldLabel}">
                             EXAM NAME <Run Foreground="#ef4444">*</Run>
                         </TextBlock>
-                        <TextBox x:Name="InputExamName" TextChanged="ValidateFields" Style="{StaticResource InputBox}" Text="{Binding Exam_Name ,UpdateSourceTrigger=PropertyChanged,
+                        <TextBox x:Name="InputExamName"  Style="{StaticResource InputBox}" Text="{Binding Exam_Name ,UpdateSourceTrigger=PropertyChanged,
                                                                                                             ValidatesOnDataErrors=True,
                                                                                                             ValidatesOnNotifyDataErrors=True,
                                                                                                             NotifyOnValidationError=True}"/>

@@ -65,6 +65,7 @@ namespace IIStudyDESKTOP.WindowsPages
             }
             else
             {
+                //DOING THIS SO THE DATA WILL BE UPDATE ON ALL THE PAGES AND NOT ONLY THIS PAGE.
                 this.book.Author_name = copy.Author_name;
                 this.book.Book_name = copy.Book_name;
                 this.book.Pdf_url_book = copy.Pdf_url_book;

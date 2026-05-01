@@ -16,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace IIStudyDESKTOP.WindowsPages
 {
@@ -82,6 +83,8 @@ namespace IIStudyDESKTOP.WindowsPages
             this.Book.BookImagePath = this.ImageFileName;
             TxtImagePath.Foreground = new SolidColorBrush(
                 (Color)ColorConverter.ConvertFromString("#4338ca"));
+            TxtImagePath.Text = this.Book.BookImagePath;
+
             TryShowCover(dlg.FileName);
         }
 
@@ -130,6 +133,7 @@ namespace IIStudyDESKTOP.WindowsPages
             this.Book.Pdf_url_book = this.fileName;
             TxtPdfPath.Foreground = new SolidColorBrush(
                 (Color)ColorConverter.ConvertFromString("#4338ca"));
+            TxtPdfPath.Text = this.Book.Pdf_url_book;
         }
 
         // ════════════════════════════════════════════════════════════

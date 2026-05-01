@@ -206,7 +206,7 @@
                     </StackPanel>
 
                     <!-- Add button -->
-                    <Button Grid.Column="2"
+                    <Button Grid.Column="2" Click="CreateSolution"
                             Height="40" BorderThickness="0" Cursor="Hand"
                             >
                         <Button.Template>
@@ -419,11 +419,12 @@
                                             <StackPanel Orientation="Horizontal"
                                                         HorizontalAlignment="Right">
 
-                                                <!-- View Details -->
+                                                <!-- Edit Solution -->
                                                 <Button Style="{StaticResource CardBtn}"
                                                         Background="#e3f2fd"
                                                         Margin="0,0,8,0"
                                                         Tag="{Binding}"
+                                                        Click="EditSolution"
                                                         >
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="✏️ " FontSize="12"/>

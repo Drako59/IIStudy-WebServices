@@ -350,34 +350,34 @@ namespace LLstudyWS.Controllers
             //        this.repositoryUOW.HelperOledb.CloseConnection();
             //    }
             //}
-            [HttpPost]
+            //[HttpPost]
 
-            public bool UpdateSolution(Solution solution)
-            {
-                try
-                {
-                    this.repositoryUOW.HelperOledb.OpenConnection();
-                    List<string> exludes = new List<string>();
-                    Type solutionType = solution.GetType();
-                    PropertyInfo[] pros = solutionType.GetProperties().Where(p => p.GetValue(solution, null) == null).ToArray();
-                    foreach (PropertyInfo pro in pros)
-                    {
-                        exludes.Add(pro.Name);
-                    }
+            //public bool UpdateSolution(Solution solution) //NOT IN USE!!!
+            //{
+            //    try
+            //    {
+            //        this.repositoryUOW.HelperOledb.OpenConnection();
+            //        List<string> exludes = new List<string>();
+            //        Type solutionType = solution.GetType();
+            //        PropertyInfo[] pros = solutionType.GetProperties().Where(p => p.GetValue(solution, null) == null).ToArray();
+            //        foreach (PropertyInfo pro in pros)
+            //        {
+            //            exludes.Add(pro.Name);
+            //        }
 
 
-                    return this.repositoryUOW.SolutionRepository.Update(solution, exludes);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return false;
-                }
-                finally
-                {
-                    this.repositoryUOW.HelperOledb.CloseConnection();
-                }
-            }
+            //        return this.repositoryUOW.SolutionRepository.Update(solution, exludes);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.ToString());
+            //        return false;
+            //    }
+            //    finally
+            //    {
+            //        this.repositoryUOW.HelperOledb.CloseConnection();
+            //    }
+            //}
 
             [HttpPost]
 
@@ -554,6 +554,70 @@ namespace LLstudyWS.Controllers
             }
         }
 
+
+
+
+        [HttpPost]
+        [RequestSizeLimit(104857600)]
+
+        public Solution UpdateSolution([FromForm] string model)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                
+                JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
+                jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                Solution modelSolution = JsonSerializer.Deserialize<Solution>(model, jsonSerializerOptions);
+
+                if (!this.repositoryUOW.SolutionRepository.CheckIfValidExam(modelSolution.ExamID))
+                    return null;
+
+                if (HttpContext.Request.Form.Files.Count != 0)
+                {
+                    foreach (IFormFile file in HttpContext.Request.Form.Files)
+                    {
+                        string ext = Path.GetExtension(file.FileName);
+                        //Console.WriteLine($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
+
+                        if (string.IsNullOrEmpty(ext))
+                        {
+                            ext = (file.ContentType ?? "").ToLowerInvariant() switch
+                            {
+
+                                "application/pdf" => ".pdf",
+                                _ => throw new Exception("Unsupported file type")
+                            };
+                        }
+
+
+                        modelSolution.File_path_url = this.repositoryUOW.SolutionRepository.ChangeFile(file, modelSolution.SolutionID);
+
+
+
+                    }
+
+                }
+
+
+                if (this.repositoryUOW.SolutionRepository.Update(modelSolution))
+                    return modelSolution;
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+
         [HttpPost]
         [RequestSizeLimit(104857600)]
 
@@ -619,12 +683,16 @@ namespace LLstudyWS.Controllers
         {
             try
             {
-                this.repositoryUOW.HelperOledb.CloseConnection();
+                this.repositoryUOW.HelperOledb.OpenConnection();
                 this.repositoryUOW.HelperOledb.OpenTransaction();
+                
                 JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions();
                 jsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 Solution modelSolution = JsonSerializer.Deserialize<Solution>(model, jsonSerializerOptions);
-
+                if (!this.repositoryUOW.SolutionRepository.CheckIfValidExam(modelSolution.ExamID))
+                {
+                    return false;
+                }
                 bool succeed = this.repositoryUOW.SolutionRepository.Create(modelSolution);
 
                 string lastID = this.repositoryUOW.SolutionRepository.GetLastID();

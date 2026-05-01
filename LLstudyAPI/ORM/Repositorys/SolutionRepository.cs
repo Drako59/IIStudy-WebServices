@@ -44,7 +44,7 @@ namespace LLstudyWS.ORM
 
         public List<Solution> GetSolutionsByExam(string examID)
         {
-            string sql = $@"SELECT * FROM Solutions WHERE ExamID = @examID";
+            string sql = $@"SELECT * FROM Solutions WHERE ExamID = @examID ORDER BY SolutionID";
             this.helperOledb.AddParameter("@examID", examID);
 
             using(IDataReader reader = this.helperOledb.Select(sql))
@@ -102,6 +102,21 @@ namespace LLstudyWS.ORM
 
 
             return fileName;
+        }
+
+        public bool CheckIfValidExam(string examID)
+        {
+            string sql = "SELECT COUNT(*) AS CountExams FROM Exams WHERE ExamID = @ExamID";
+            this.helperOledb.AddParameter("@ExamID", examID);
+
+            using(IDataReader  reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt16(reader["CountExams"]) > 0 ;
+                }
+                return false;
+            }
         }
     }
 }

@@ -154,6 +154,8 @@ namespace IIStudyDESKTOP.WindowsPages
                 TxtImagePath.Foreground = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString("#4338ca"));
                 TryShowCover(dlg.FileName);
+                TxtImagePath.Text = this.book.BookImagePath;
+
             }
         }
 
@@ -175,6 +177,8 @@ namespace IIStudyDESKTOP.WindowsPages
                 this.book.Pdf_url_book = this.PdfFileName;
                 TxtPdfPath.Foreground = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString("#4338ca"));
+                TxtPdfPath.Text = this.book.Pdf_url_book;
+
             }
         }
 
