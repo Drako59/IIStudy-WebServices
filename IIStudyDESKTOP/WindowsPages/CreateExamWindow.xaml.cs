@@ -188,10 +188,7 @@ namespace IIStudyDESKTOP.WindowsPages
             this.Close();
         }
 
-        private void InputExamName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
+        
     }
 }
 

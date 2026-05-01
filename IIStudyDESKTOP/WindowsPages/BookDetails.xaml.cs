@@ -53,7 +53,6 @@ namespace IIStudyDESKTOP.WindowsPages
 
             this.editBook = new EditBook(book, this.Subjects);
 
-            this.editBook.Owner = this;
             bool? reponse = this.editBook.ShowDialog() ;
             
             if (reponse == true)

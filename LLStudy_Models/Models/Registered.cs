@@ -29,6 +29,7 @@ namespace LLStudy_Models.Models
         string registeredSalt;
         string role;
         string imagePath;
+        string password;
         public string RegisteredID { get; set; }
 
         public string RegisteredSalt { get; set; }
@@ -41,7 +42,7 @@ namespace LLStudy_Models.Models
         [Required]
         //[FirstLetterCapital(ErrorMessage = "Valid Password is requierd")]
         [MinLength(8)]
-        public string Password { get; set; }
+        public string Password { get { return password; } set { password = value;  } }
         [EmailAddress(ErrorMessage = "Valid email is required")]
         public string Email { get; set; }
         public string Role { get; set; }
@@ -49,6 +50,6 @@ namespace LLStudy_Models.Models
         public string Birth { get; set; }
 
         public string ImagePath { get { return imagePath; } set { this.imagePath = value;  } }
-       public bool IsBanned { get; set; }
+        public bool IsBanned { get; set; }
     }
 }

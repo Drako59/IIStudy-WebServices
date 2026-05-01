@@ -215,7 +215,7 @@ namespace LLstudyWS.Controllers
 
             [HttpPost]
 
-            public bool RemoveSolution([FromBody] Solution solution) 
+            public bool DeleteSolution(Solution solution) 
             {
                 try
                 {
@@ -466,12 +466,12 @@ namespace LLstudyWS.Controllers
 
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
-                List<Registered> orders = new List<Registered>();
+                List<Registered> regs = new List<Registered>();
 
 
-                orders = this.repositoryUOW.RegisteredRepository.GetAll();
-
-                return orders;
+                regs = this.repositoryUOW.RegisteredRepository.GetAll();
+                //regs.ForEach(r => r.Password = "None");
+                return regs;
 
 
 
@@ -864,7 +864,7 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public bool SetAdmin(Registered reg)
+        public bool SetAdmin([FromBody] Registered reg)
         {
             try
             {
@@ -886,7 +886,7 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public bool RemoveAdmin(Registered reg)
+        public bool RemoveAdmin([FromBody] Registered reg)
         {
             try
             {

@@ -1,7 +1,9 @@
 ﻿using IIstudyWSClient;
 using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +15,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using LLStudy_Models.ViewModels;
 
 namespace IIStudyDESKTOP.WindowsPages
 {
@@ -23,7 +24,7 @@ namespace IIStudyDESKTOP.WindowsPages
     public partial class ExamSolutionsWindow : Window
     {
 
-        private List<Solution> Solutions { get; set; }
+        private ObservableCollection<Solution> Solutions { get; set; }
         private ExamDetails Exam { get; set; }
         private CreateSolutionWindow CreateSolutionWindow { get; set; }
         private EditSolutionWindow EditSolutionWindow { get; set; }
@@ -52,11 +53,12 @@ namespace IIStudyDESKTOP.WindowsPages
                 client.Port = 5049;
                 client.Path = "api/Guest/GetSolutions";
                 client.AddParameter("examID", this.Exam.ExamID);
-                this.Solutions = await client.GetAsync();
+                List<Solution> solutions = await client.GetAsync();
+                this.Solutions = new ObservableCollection<Solution>(solutions);
 
                 if (this.Solutions == null)
                 {
-                    this.Solutions = new List<Solution>();
+                    this.Solutions = new ObservableCollection<Solution>();
                     MessageBox.Show("Failed in reciving the books from web service", "Request Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 }
@@ -78,7 +80,6 @@ namespace IIStudyDESKTOP.WindowsPages
         private void CreateSolution(object sender, RoutedEventArgs e)
         {
             this.CreateSolutionWindow = new CreateSolutionWindow(this.Exam);
-            this.CreateSolutionWindow.Owner = this;
             this.CreateSolutionWindow.ShowDialog();
 
         }
@@ -95,6 +96,44 @@ namespace IIStudyDESKTOP.WindowsPages
             if (result == true)
                 this.SolutionsList.Items.Refresh();
         }
+        private void HardDeleteSolution(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Solution solution = btn.Tag as Solution;
+            DeleteSolution(solution);
+
+        }
+        public async void DeleteSolution(Solution solution)
+        {
+            try
+            {
+                ApiClient<bool> client = new ApiClient<bool>();
+                client.Scheme = "http";
+                client.Host = "localhost";
+                client.Port = 5049;
+                client.Path = "api/Admin/DeleteSolution";
+                ApiResultModel<bool> result = await client.PostAsyncRet<Solution,bool>(solution);
+
+                if (result == null || !result.Success || !result.Data)
+                {
+                    MessageBox.Show($"Failed in deleting solution #{solution.SolutionID}", "Delete Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                this.Solutions.Remove(solution);
+
+                this.SolutionsList.Items.Refresh();
+
+                //this.SolutionsList.ItemsSource = null;
+                //this.SolutionsList.ItemsSource = this.Solutions;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Faild to connect to host.", "Network Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        
         private void Close_Click(object sender, RoutedEventArgs e) => Close();
     }
 }

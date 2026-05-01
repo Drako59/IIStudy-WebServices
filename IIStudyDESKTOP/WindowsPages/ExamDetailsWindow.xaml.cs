@@ -43,7 +43,6 @@ namespace IIStudyDESKTOP.WindowsPages
             var copy = JsonSerializer.Deserialize<ExamDetails>(json);
 
             this.examDetailsWindow = new EditExamWindow(this.Exam, this.SubjectsDetails);
-            this.examDetailsWindow.Owner = this;
             bool? response = this.examDetailsWindow.ShowDialog();
             
             
