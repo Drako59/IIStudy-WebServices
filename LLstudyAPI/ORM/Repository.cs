@@ -298,7 +298,7 @@ namespace LLstudyWS.ORM
             List<T> records = new List<T>();
 
             string Class_name = typeof(T).Name;
-            string sql = $@"SELECT * FROM {Class_name}s";
+            string sql = $@"SELECT * FROM {Class_name}s ORDER BY {Class_name}ID "; //Added ORDER BY
             Console.WriteLine(sql);
 
             using (IDataReader reader = this.helperOledb.Select(sql))

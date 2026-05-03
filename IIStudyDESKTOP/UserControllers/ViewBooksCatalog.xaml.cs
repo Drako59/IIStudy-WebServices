@@ -36,6 +36,7 @@ namespace IIStudyDESKTOP.UserControllers
         private string SelectedSubject { get; set; }
         private Dictionary<string, string> Subjects { get; set; }
         private List<SubjectDetails> SubjectsDetails { get; set; }
+        private SubjectsWindow SubjectsWindow { get; set; }
         private string searchBar;
 
         public ViewBooksCatalog()
@@ -214,7 +215,7 @@ namespace IIStudyDESKTOP.UserControllers
             if (active == ChipAll)
             {
                 active.Background = new LinearGradientBrush(
-                    (Color)ColorConverter.ConvertFromString("#5b5fcf"),
+                    (Color)ColorConverter.ConvertFromString("#1565c0"),
                     (Color)ColorConverter.ConvertFromString("#7c6fd4"),
                     new Point(0, 0.5), new Point(1, 0.5));
             }
@@ -395,7 +396,13 @@ namespace IIStudyDESKTOP.UserControllers
             this.reviews.Show();
 
         }
-
+        private void ViewSubjects(object sender, RoutedEventArgs e)
+        {
+            this.SubjectsWindow = new SubjectsWindow();
+            Window parentWindow = Window.GetWindow(this);
+            this.SubjectsWindow.Owner = parentWindow;
+            this.SubjectsWindow.Show();
+        }
         private void CreateBookPopUp(object sender, RoutedEventArgs e)
         {
 

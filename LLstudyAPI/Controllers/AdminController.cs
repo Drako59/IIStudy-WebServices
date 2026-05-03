@@ -469,8 +469,9 @@ namespace LLstudyWS.Controllers
                 List<Registered> regs = new List<Registered>();
 
 
-                regs = this.repositoryUOW.RegisteredRepository.GetAll();
-                //regs.ForEach(r => r.Password = "None");
+                regs = this.repositoryUOW.RegisteredRepository.GetAll(exludes: new List<string>() { nameof(Registered.Password), nameof(Registered.RegisteredSalt)});
+                regs.ForEach(r => r.Password = "NoneNoneNone");
+                regs.ForEach(r => r.RegisteredSalt = "None");
                 return regs;
 
 
@@ -919,6 +920,25 @@ namespace LLstudyWS.Controllers
             {
                 Console.WriteLine(ex.ToString());
                 return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpPost]
+        public bool CreateSubject([FromBody] Subject subject)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.SubjectRepository.Create(subject);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
             }
             finally
             {

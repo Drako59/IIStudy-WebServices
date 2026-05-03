@@ -1,9 +1,9 @@
-﻿To Do:
+﻿To Do list:
 	Remove uncessery functions in WPF WebApp and WS Controllers.
 	Remove uncessery Attribute, viewModel, page and Rpostorys function together with removing the models creator except for the reflection one.
 	Remove the SubjectID filed From Solutions and Access from both Exam And Solution.
 	Add the missing details for book catalog and ViewBooks user control in wpf.
 	Fixed the Profile page in WebApp and add Update.
 	Remove uncessery things from the WebApp's html.
-
+	Add the deleted and active fillter to ViewExams
 ADD ICON TO THE WPF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

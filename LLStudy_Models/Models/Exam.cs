@@ -28,7 +28,7 @@ namespace LLStudy_Models.Models
         [ValidFile(ErrorMessage ="File format isn't valid.")]
         public string File_path_url { get { return file_path_url; } set { file_path_url = value; ValidateProperty(value, "File_path_url");  } }
         [Required]
-        [StringLength(maximumLength: 255, ErrorMessage = "Max Exam_name Length is 255.")]
+        [StringLength(maximumLength: 255, ErrorMessage = "Max Exam name Length is 255.")]
 
         public string Exam_Name { get { return exam_Name; } set { exam_Name = value; ValidateProperty(value, "Exam_Name"); } }
         [StringLength(maximumLength: 10, ErrorMessage = "Max Date Length is 10.")]

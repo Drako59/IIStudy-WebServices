@@ -515,5 +515,25 @@ namespace LLstudyWS.Controllers
             }
         }
 
+
+        [HttpGet]
+        public List<Subject> GetSubjects()
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.SubjectRepository.GetAll();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
     }
 }

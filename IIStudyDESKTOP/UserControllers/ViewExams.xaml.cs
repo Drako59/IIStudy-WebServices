@@ -32,7 +32,7 @@ namespace IIStudyDESKTOP.UserControllers
         private ExamDetailsWindow ExamWindow { get; set; }
         private CreateExamWindow CreateExamWindow { get; set; }
         private ExamSolutionsWindow ExamSolutionsWindow { get; set; }
-
+        private SubjectsWindow SubjectsWindow { get; set; }
         public ViewExams()
         {
             InitializeComponent();
@@ -176,6 +176,85 @@ namespace IIStudyDESKTOP.UserControllers
 
 
 
+        }
+
+        private void SetSelectedChip(Border active)
+        {
+            // ── Reset all chips to their inactive (muted) look ──────────
+
+            // ChipAll — blue gradient when active, transparent when not
+            // RESET
+            ChipAll.Background = new SolidColorBrush(Colors.Transparent);
+            TxtAllChip.Foreground = new LinearGradientBrush(
+                    (Color)ColorConverter.ConvertFromString("#5b5fcf"),
+                    (Color)ColorConverter.ConvertFromString("#1976d2"),
+                    new Point(0, 0.5), new Point(1, 0.5));
+            ChipActive.Background = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#f0fdf4"));
+            ChipDeleted.Background = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#fef2f2"));
+            
+
+            // ── Highlight the active chip ────────────────────────────────
+            active.Opacity = 1.0;
+
+            if (active == ChipAll)
+            {
+                ChipAll.Background = new LinearGradientBrush(
+                    (Color)ColorConverter.ConvertFromString("#5b5fcf"),
+                    (Color)ColorConverter.ConvertFromString("#1976d2"),
+                    new Point(0, 0.5), new Point(1, 0.5));
+                TxtAllChip.Foreground = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#ffffff"));
+            }
+            else if (active == ChipActive)
+            {
+                ChipActive.Background = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString("#16a34a"));
+            }
+            else if (active == ChipDeleted)
+            {
+                ChipDeleted.Background = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString("#dc2626"));
+            }
+        }
+
+        private void Filter(object sender, MouseButtonEventArgs e)
+        {
+            Border btn = sender as Border;
+            int status = int.Parse(btn.Tag.ToString());
+
+            if (status == -1)
+            {
+                this.ExamsList.ItemsSource = this.Exams;
+                return;
+            }
+            List<ExamDetails> filtered;
+            switch (status)
+            {
+                case 1:
+                    filtered = this.Exams.Where(e => !e.IsDeleted).ToList();
+                    SetSelectedChip(this.ChipActive);
+                    break;
+                case 2:
+                    filtered = this.Exams.Where(e => e.IsDeleted).ToList();
+                    SetSelectedChip(this.ChipDeleted);
+                    break;
+                default:
+                    filtered = this.Exams;
+                    SetSelectedChip(this.ChipAll);
+                    break;
+            }
+            this.ExamsList.ItemsSource = filtered;
+
+
+        }
+        private void ViewSubjects(object sender, RoutedEventArgs e)
+        {
+            this.SubjectsWindow = new SubjectsWindow();
+            Window parentWindow = Window.GetWindow(this);
+            this.SubjectsWindow.Owner = parentWindow;
+            this.SubjectsWindow.Show();
         }
     }
 }

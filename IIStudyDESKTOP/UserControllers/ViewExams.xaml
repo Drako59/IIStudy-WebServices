@@ -266,6 +266,7 @@
 
                             <Border x:Name="ChipAll"
                                     Style="{StaticResource FilterChip}"
+                                    MouseLeftButtonUp="Filter" Tag="-1"
                                     >
                                 <Border.Background>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -273,28 +274,29 @@
                                         <GradientStop Color="#1976d2" Offset="1"/>
                                     </LinearGradientBrush>
                                 </Border.Background>
-                                <TextBlock Text="All" FontSize="12" FontWeight="Bold" Foreground="White"/>
+                                <TextBlock x:Name="TxtAllChip" Text="All" FontSize="12" FontWeight="Bold" Foreground="White"/>
                             </Border>
 
-                            <Border x:Name="ChipOpen"
+                            <Border x:Name="ChipActive"
                                     Style="{StaticResource FilterChip}"
                                     Background="#f0fdf4"
+                                    MouseLeftButtonUp="Filter" Tag="1"
                                     >
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" >
                                     <TextBlock Text="🔓 " FontSize="12" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Open" FontSize="12" FontWeight="Bold"
+                                    <TextBlock Text="Active" FontSize="12" FontWeight="Bold"
                                                Foreground="#16a34a" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
 
-                            <Border x:Name="ChipRestricted"
+                            <Border x:Name="ChipDeleted" MouseLeftButtonUp="Filter" Tag="2"
                                     Style="{StaticResource FilterChip}"
                                     Background="#fef2f2"
                                     Margin="0"
                                     >
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="🔒 " FontSize="12" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Restricted" FontSize="12" FontWeight="Bold"
+                                    <TextBlock Text="Deleted" FontSize="12" FontWeight="Bold"
                                                Foreground="#dc2626" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
@@ -670,6 +672,7 @@
                                     Width="36" Height="36"
                                     BorderThickness="0"
                                     Cursor="Hand"
+                                    Click="ViewSubjects"
                                     >
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">

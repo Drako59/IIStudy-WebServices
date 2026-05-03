@@ -791,6 +791,7 @@
                                         Width="36" Height="36"
                                         BorderThickness="0"
                                         Cursor="Hand"
+                                        Click="ViewSubjects"
                                         ><!--Click="AddSubject_Click"-->
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
