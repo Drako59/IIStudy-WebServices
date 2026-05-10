@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +27,7 @@ namespace IIStudyDESKTOP.WindowsPages
     {
         private ObservableCollection<Subject> Subjects { get; set; }
         private AddSubjectWindow AddSubjectWindow { get; set; }
+        private EditSubjectWindow EditSubjectWindow { get; set; }
         public SubjectsWindow()
         {
             InitializeComponent();
@@ -74,6 +77,24 @@ namespace IIStudyDESKTOP.WindowsPages
 
             if (result == true)
                 this.RefreshSubjects();
+        }
+
+        private async void EditSubject(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Subject subject = btn.Tag as Subject;
+
+            var json = JsonSerializer.Serialize(subject);
+            Subject copy = JsonSerializer.Deserialize<Subject>(json);
+
+            this.EditSubjectWindow = new EditSubjectWindow(subject);
+            bool? result = this.EditSubjectWindow.ShowDialog();
+
+            if(result != true)
+            {
+                subject.Subject_name = copy.Subject_name;
+                this.SubjectsList.Items.Refresh();
+            }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e) => Close();

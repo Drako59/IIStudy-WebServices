@@ -84,7 +84,6 @@ namespace IIStudyDESKTOP.WindowsPages
         private async void UpdateExam(object sender, RoutedEventArgs e)
         {
             //if (this.BtnSaveValidationClick(sender, e))
-            
 
             if (this.CheckValidation())
             {

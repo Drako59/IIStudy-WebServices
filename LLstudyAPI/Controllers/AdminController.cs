@@ -946,6 +946,25 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        [HttpPost]
+        public bool EditSubject([FromBody] Subject subject)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.SubjectRepository.Update(subject);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
 
     }
 }

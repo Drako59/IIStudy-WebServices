@@ -84,7 +84,7 @@ namespace IIStudyDESKTOP.WindowsPages
             //this.Exam.SubjectID = this.InputSubject.ToString();
             //this.Exam.Exam_Name = this.InputExamName.ToString();
             //this.Exam.Exam_Year = this.InputExamYear.ToString();
-           
+
             if (this.CheckValidation())
             {
                 try
@@ -117,20 +117,23 @@ namespace IIStudyDESKTOP.WindowsPages
                     }
                     else
                     {
+
                         MessageBox.Show(
                                     "The operation failed.",
                                     "Error",
                                     MessageBoxButton.OK,
                                     MessageBoxImage.Error);
+
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(
-                                    "Couldn't send the request due to network error on the host or the client.",
-                                    "Error",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Error);
+                                "Couldn't send the request due to network error on the host or the client.",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+
                 }
             }
 

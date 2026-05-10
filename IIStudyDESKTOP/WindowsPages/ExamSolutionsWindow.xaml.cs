@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -62,7 +63,7 @@ namespace IIStudyDESKTOP.WindowsPages
                     MessageBox.Show("Failed in reciving the books from web service", "Request Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 }
-
+                this.SolutionsList.ItemsSource = null;
                 this.SolutionsList.ItemsSource = this.Solutions;
 
             }
@@ -80,7 +81,9 @@ namespace IIStudyDESKTOP.WindowsPages
         private void CreateSolution(object sender, RoutedEventArgs e)
         {
             this.CreateSolutionWindow = new CreateSolutionWindow(this.Exam);
-            this.CreateSolutionWindow.ShowDialog();
+            bool? result = this.CreateSolutionWindow.ShowDialog();
+            if (result == true)
+                this.init_page();
 
         }
 
@@ -89,12 +92,24 @@ namespace IIStudyDESKTOP.WindowsPages
             Button btn = sender as Button;
             Solution solution = btn.Tag as Solution;
 
-
+            var json = JsonSerializer.Serialize(solution);
+            Solution copySolution = JsonSerializer.Deserialize<Solution>(json);
 
             this.EditSolutionWindow = new EditSolutionWindow(solution,this.Exam);
             var result = this.EditSolutionWindow.ShowDialog();
             if (result == true)
+            {
                 this.SolutionsList.Items.Refresh();
+            }
+
+            else
+            {
+                solution.Solution_Name = copySolution.Solution_Name;
+                solution.Solution_Year = copySolution.Solution_Year;
+                solution.File_path_url = copySolution.File_path_url;
+                this.SolutionsList.Items.Refresh();
+
+            }
         }
         private void HardDeleteSolution(object sender, RoutedEventArgs e)
         {

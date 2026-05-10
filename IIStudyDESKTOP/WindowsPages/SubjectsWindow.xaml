@@ -314,6 +314,7 @@
                                                 Style="{StaticResource CardBtn}"
                                                 Background="#e3f2fd"
                                                 Tag="{Binding}"
+                                                Click="EditSubject"
                                                 >
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="✏️ " FontSize="12"/>

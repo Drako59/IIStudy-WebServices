@@ -170,10 +170,12 @@ namespace IIStudyDESKTOP.UserControllers
             Order order = btn.Tag as Order;
             UpdateDeliveryStatusWindow StatusWindow = new UpdateDeliveryStatusWindow(order);
 
-
+            int statusCopy = order.DeliveryStatus;
             Window parentWindow = Window.GetWindow(this);
             StatusWindow.Owner = parentWindow;
-            StatusWindow.ShowDialog();
+            bool? result = StatusWindow.ShowDialog();
+            if (result != true)
+                order.DeliveryStatus = statusCopy;
             this.OrdersListView.ItemsSource = null;
             this.OrdersListView.ItemsSource = this.orders;
             this.UpdateStats();
