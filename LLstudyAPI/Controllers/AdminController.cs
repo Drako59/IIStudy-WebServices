@@ -12,6 +12,7 @@ namespace LLstudyWS.Controllers
     [ApiController]
         public class AdminController : ControllerBase
         {
+            readonly string SolutionsPdfPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Files", "SolutionsFiles");
             RepositoryUOW repositoryUOW;
             public AdminController() {
                 this.repositoryUOW = new RepositoryUOW();
@@ -213,25 +214,40 @@ namespace LLstudyWS.Controllers
             }
         }
 
-            [HttpPost]
+        [HttpPost]
 
-            public bool DeleteSolution(Solution solution) 
+        public bool DeleteSolution(Solution solution) 
+        {
+            try
             {
-                try
-                {
-                    this.repositoryUOW.HelperOledb.OpenConnection();
-                    return this.repositoryUOW.SolutionRepository.Delete(solution.SolutionID);
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                this.repositoryUOW.HelperOledb.OpenTransaction();
+                Solution solution_db = this.repositoryUOW.SolutionRepository.GetByID(solution.SolutionID);
+
+                if (solution_db.File_path_url != null && solution_db.File_path_url.ToLower() != "none") {
+                    if (!solution_db.File_path_url.StartsWith($"Solution{solution_db.SolutionID}"))
+                        throw new Exception(message: "file path value isn't valid.");
+
+
+
+                    string file_path_to_delete = Path.Combine(this.SolutionsPdfPath, solution_db.File_path_url);
+                    this.repositoryUOW.SolutionRepository.DeleteFile(file_path_to_delete);
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return false; ;
-                }
-                finally
-                {
-                    this.repositoryUOW.HelperOledb.CloseConnection();
-                }
+                bool status =  this.repositoryUOW.SolutionRepository.Delete(solution.SolutionID);
+                this.repositoryUOW.HelperOledb.Commit();
+                return status;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                this.repositoryUOW.HelperOledb.RollBack();
+                return false; ;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
 
             [HttpPost]
 
@@ -696,7 +712,8 @@ namespace LLstudyWS.Controllers
                 }
                 bool succeed = this.repositoryUOW.SolutionRepository.Create(modelSolution);
 
-                string lastID = this.repositoryUOW.SolutionRepository.GetLastID();
+                modelSolution.SolutionID = this.repositoryUOW.SolutionRepository.GetLastID();
+                
                 if (HttpContext.Request.Form.Files.Count > 0)
                 {
                     IFormFile file = HttpContext.Request.Form.Files[0];
@@ -710,7 +727,7 @@ namespace LLstudyWS.Controllers
                         };
                     }
 
-                    modelSolution.File_path_url = this.repositoryUOW.SolutionRepository.ChangeFile(file, modelSolution.ExamID);
+                    modelSolution.File_path_url = this.repositoryUOW.SolutionRepository.ChangeFile(file, modelSolution.SolutionID);
                     this.repositoryUOW.SolutionRepository.Update(modelSolution);
                 }
                 this.repositoryUOW.HelperOledb.Commit();
@@ -745,7 +762,7 @@ namespace LLstudyWS.Controllers
 
                 bool succeed = this.repositoryUOW.ExamRepository.Create(modelExam);
 
-                string lastID = this.repositoryUOW.ExamRepository.GetLastID();
+                modelExam.ExamID = this.repositoryUOW.ExamRepository.GetLastID();
                 if(HttpContext.Request.Form.Files.Count > 0)
                 {
                     IFormFile file = HttpContext.Request.Form.Files[0];

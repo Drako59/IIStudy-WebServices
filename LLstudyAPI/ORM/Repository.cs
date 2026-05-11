@@ -407,5 +407,18 @@ namespace LLstudyWS.ORM
 
             return (stream, contentType);
         }
+
+        public bool DeleteFile(string path)
+        {
+            try
+            {
+                File.Delete(path);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }
