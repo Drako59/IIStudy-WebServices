@@ -194,13 +194,14 @@
                                      FontSize="12" Foreground="#1e293b"
                                      Padding="32,0,10,0"
                                      VerticalContentAlignment="Center"
+                                     TextChanged="SearchSubject"
                                      />
-                            <TextBlock x:Name="SearchPlaceholder"
+                            <!--<TextBlock x:Name="SearchPlaceholder"
                                        Text="Search subjects..."
                                        FontSize="12" Foreground="#cbd5e1"
                                        VerticalAlignment="Center"
                                        Margin="32,0,0,0"
-                                       IsHitTestVisible="False"/>
+                                       IsHitTestVisible="False"/>-->
                         </Grid>
                     </Border>
 

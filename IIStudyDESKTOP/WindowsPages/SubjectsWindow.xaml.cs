@@ -1,5 +1,6 @@
 ﻿using IIstudyWSClient;
 using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels.Guest;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,6 +29,7 @@ namespace IIStudyDESKTOP.WindowsPages
         private ObservableCollection<Subject> Subjects { get; set; }
         private AddSubjectWindow AddSubjectWindow { get; set; }
         private EditSubjectWindow EditSubjectWindow { get; set; }
+        private string SearchSubjectText { get; set; } = "";
         public SubjectsWindow()
         {
             InitializeComponent();
@@ -95,6 +97,18 @@ namespace IIStudyDESKTOP.WindowsPages
                 subject.Subject_name = copy.Subject_name;
                 this.SubjectsList.Items.Refresh();
             }
+        }
+
+        private void SearchSubject(object sender, TextChangedEventArgs e)
+        {
+            this.SearchSubjectText = this.SearchBox.Text;
+            ObservableCollection<Subject> filteredSubjects = new ObservableCollection<Subject>(this.Subjects.Where(s => {
+                bool name = s.Subject_name.ToLower().Contains(this.SearchSubjectText.ToLower());
+                bool subjectID = s.SubjectID == this.SearchSubjectText;
+                return name || subjectID;
+                }));
+            this.SubjectsList.ItemsSource = null;
+            this.SubjectsList.ItemsSource = filteredSubjects;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e) => Close();

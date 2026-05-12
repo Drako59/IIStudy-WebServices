@@ -302,7 +302,7 @@
                             <!-- All chip -->
                             <Border x:Name="ChipAll"
                                     Style="{StaticResource FilterChip}"
-                                    MouseLeftButtonUp="AllFillter">
+                                    MouseLeftButtonUp="SetChipFilter">
                                 <Border.Background>
                                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                                         <GradientStop Color="#5b5fcf" Offset="0"/>
@@ -316,7 +316,7 @@
                             <Border x:Name="ChipInStock"
                                     Style="{StaticResource FilterChip}"
                                     Background="#f0fdf4"
-                                    MouseLeftButtonUp="InStockFillter">
+                                    MouseLeftButtonUp="SetChipFilter">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="✅ " FontSize="12" VerticalAlignment="Center"/>
                                     <TextBlock x:Name="ChipInStockText" Text="In Stock" FontSize="12" FontWeight="Bold"
@@ -329,7 +329,7 @@
                                     Style="{StaticResource FilterChip}"
                                     Background="#fef2f2"
                                     Margin="0"
-                                    MouseLeftButtonUp="OutStockFillter">
+                                    MouseLeftButtonUp="SetChipFilter">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="❌ " FontSize="12" VerticalAlignment="Center"/>
                                     <TextBlock x:Name="ChipOutStockText" Text="Out of Stock" FontSize="12" FontWeight="Bold"
@@ -340,7 +340,7 @@
                             <Border x:Name="ChipActive"
                                     Style="{StaticResource FilterChip}"
                                     Background="#ecfdf5"
-                                    MouseLeftButtonUp="ActiveFillter"
+                                    MouseLeftButtonUp="SetChipFilter"
                                     >              
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="🟢 " FontSize="12" VerticalAlignment="Center"/>
@@ -358,7 +358,7 @@
                                     Style="{StaticResource FilterChip}"
                                     Background="#fef2f2"
                                     Margin="0"
-                                    MouseLeftButtonUp="DeletedFillter"
+                                    MouseLeftButtonUp="SetChipFilter"
                                     >
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="🗑 " FontSize="12" VerticalAlignment="Center"/>

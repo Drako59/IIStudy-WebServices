@@ -280,7 +280,7 @@
                                 Background="#667eea"
                                 Foreground="White"
                                 Margin="0,0,8,0"
-                                Click="Filter_All"
+                                Click="FilterByChip"
                                 Tag="-1"/>
 
                         <!-- Pending -->
@@ -289,7 +289,7 @@
                                 Background="#fffbeb"
                                 Foreground="#fbbf24"
                                 Margin="0,0,8,0"
-                                Click="Filter"
+                                Click="FilterByChip"
                                 Tag="0"/>
 
                         <!-- Processing -->
@@ -298,7 +298,7 @@
                                 Background="#eef2ff"
                                 Foreground="#667eea"
                                 Margin="0,0,8,0"
-                                Click="Filter"
+                                Click="FilterByChip"
                                 Tag="1"/>
 
                         <!-- Shipped -->
@@ -307,7 +307,7 @@
                                 Background="#f0f9ff"
                                 Foreground="#0ea5e9"
                                 Margin="0,0,8,0"
-                                Click="Filter"
+                                Click="FilterByChip"
                                 Tag="2"/>
 
                         <!-- Delivered -->
@@ -316,7 +316,7 @@
                                 Background="#f0fdf4"
                                 Foreground="#22c55e"
                                 Margin="0,0,8,0"
-                                Click="Filter"
+                                Click="FilterByChip"
                                 Tag="3"/>
 
                         <!-- Canceled -->
@@ -325,7 +325,7 @@
                                 Background="#fef2f2"
                                 Foreground="#ef4444"
                                 Margin="0,0,8,0"
-                                Click="Filter"
+                                Click="FilterByChip"
                                 Tag="4"/>
 
                         <!-- Refund -->
@@ -333,7 +333,7 @@
                                 Content="💸 Refund"
                                 Background="#fdf4ff"
                                 Foreground="#a855f7"
-                                Click="Filter"
+                                Click="FilterByChip"
                                 Tag="5"/>
 
                     </StackPanel>

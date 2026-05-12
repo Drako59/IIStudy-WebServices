@@ -29,7 +29,8 @@ namespace IIStudyDESKTOP.UserControllers
     public partial class ViewOrders : UserControl
     {
         List<Order> orders;
-
+        private OrderStatus FilterStatus { get; set; } = (OrderStatus)(-1);
+        private string SearchText { get; set; } = "";
         private OrderBooksWindow orderBooksWindow { get; set; }
         public ViewOrders()
         {
@@ -60,40 +61,14 @@ namespace IIStudyDESKTOP.UserControllers
         private void LoadOrders()
         {
             EmptyState.Visibility = Visibility.Collapsed;
-
-            ApplyFilters();
+            this.Filter();
             UpdateStats();
         }
 
         // ════════════════════════════════════════════════════════════
         //  FILTER + SEARCH
         // ════════════════════════════════════════════════════════════
-        private void ApplyFilters()
-        {
-            var search = SearchBox?.Text?.Trim().ToLower() ?? "";
-
-            var filtered = this.orders.Where(o =>
-            {
-                bool passFilter = _filterMode switch
-                {
-                    "Delivered" => o.DeliveryStatus == (int)OrderStatus.Delivered,
-                    "Pending" => o.DeliveryStatus == (int)OrderStatus.Pending,
-                    _ => true
-                };
-
-                bool passSearch = string.IsNullOrEmpty(search)
-                    || o.OrderID.ToString().Contains(search)
-                    || o.Location.ToLower().Contains(search); //|| o.Books.Any(b => b.Title.ToLower().Contains(search)
-
-            return passFilter && passSearch;
-            }).ToList();
-
-            _displayed = new ObservableCollection<Order>(filtered);
-            OrdersListView.ItemsSource = _displayed;
-
-            EmptyState.Visibility = filtered.Count == 0
-                ? Visibility.Visible : Visibility.Collapsed;
-        }
+        
 
         private void UpdateStats()
         {
@@ -109,28 +84,12 @@ namespace IIStudyDESKTOP.UserControllers
         //  EVENT HANDLERS
         // ════════════════════════════════════════════════════════════
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
-            => ApplyFilters();
-
-        private void Filter_All(object sender, RoutedEventArgs e)
         {
-            _filterMode = "All";
-            SetActiveChip(FilterAll);
-            ApplyFilters();
+            this.SearchText = this.SearchBox.Text;
+            this.Filter();
         }
 
-        private void Filter_Delivered(object sender, RoutedEventArgs e)
-        {
-            _filterMode = "Delivered";
-            SetActiveChip(FilterDelivered);
-            ApplyFilters();
-        }
-
-        private void Filter_Pending(object sender, RoutedEventArgs e)
-        {
-            _filterMode = "Pending";
-            SetActiveChip(FilterPending);
-            ApplyFilters();
-        }
+        
 
         private void SetActiveChip(Button active)
         {
@@ -205,19 +164,20 @@ namespace IIStudyDESKTOP.UserControllers
             orderBooksWindow.Show();
         }
 
-        private void Filter(object sender, RoutedEventArgs e)
+        private void FilterByChip(object sender, RoutedEventArgs e)
         {
-            Button btn = sender as Button;
-            int status = int.Parse(btn.Tag.ToString());
+            Button chip = sender as Button;
+            this.FilterStatus = (OrderStatus)int.Parse(chip.Tag.ToString());
+            Filter();
+        }
 
-            if (status == -1)
-            {
-                SetActiveChip(this.FilterAll);
-                this.OrdersListView.ItemsSource = this.orders;
-                return;
-            }
+        private void Filter()
+        {
+            OrderStatus status = this.FilterStatus;
+
+            
             List<Order> filtered;
-            switch ((OrderStatus)status) {
+            switch (status) {
                 case OrderStatus.Pending:
                     filtered = this.orders.Where(b => (OrderStatus)b.DeliveryStatus == OrderStatus.Pending).ToList();
                     SetActiveChip(this.FilterPending);
@@ -244,12 +204,60 @@ namespace IIStudyDESKTOP.UserControllers
                     break;
                 default:
                     filtered = this.orders;
+                    SetActiveChip(this.FilterAll);
+
                     break;
             }
+
+            
+
+            filtered = filtered.Where(o =>
+            {
+                
+
+                bool passSearch = string.IsNullOrEmpty(this.SearchText)
+                    || o.OrderID.ToString().Contains(this.SearchText.ToLower())
+                    || o.Location.ToLower().Contains(this.SearchText.ToLower()); //|| o.Books.Any(b => b.Title.ToLower().Contains(search)
+
+                return passSearch;
+            }).ToList();
+
+            _displayed = new ObservableCollection<Order>(filtered);
+            OrdersListView.ItemsSource = _displayed;
+
+            EmptyState.Visibility = filtered.Count == 0
+                ? Visibility.Visible : Visibility.Collapsed;
             this.OrdersListView.ItemsSource =  filtered;
 
 
         }
 
+
+//private void ApplyFilters()
+        //{
+        //    var search = SearchBox?.Text?.Trim().ToLower() ?? "";
+
+        //    var filtered = this.orders.Where(o =>
+        //    {
+        //        bool passFilter = _filterMode switch
+        //        {
+        //            "Delivered" => o.DeliveryStatus == (int)OrderStatus.Delivered,
+        //            "Pending" => o.DeliveryStatus == (int)OrderStatus.Pending,
+        //            _ => true
+        //        };
+
+        //        bool passSearch = string.IsNullOrEmpty(search)
+        //            || o.OrderID.ToString().Contains(search)
+        //            || o.Location.ToLower().Contains(search); //|| o.Books.Any(b => b.Title.ToLower().Contains(search)
+
+        //    return passFilter && passSearch;
+        //    }).ToList();
+
+        //    _displayed = new ObservableCollection<Order>(filtered);
+        //    OrdersListView.ItemsSource = _displayed;
+
+        //    EmptyState.Visibility = filtered.Count == 0
+        //        ? Visibility.Visible : Visibility.Collapsed;
+        //}
     }
 }

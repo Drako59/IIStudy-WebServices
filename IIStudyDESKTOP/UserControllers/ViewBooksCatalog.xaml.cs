@@ -1,6 +1,7 @@
 ﻿using IIStudyDESKTOP.WindowsPages;
 using IIstudyWSClient;
 using LLStudy_Models.Models;
+using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Guest;
 using System;
 using System.Collections.Generic;
@@ -25,19 +26,32 @@ namespace IIStudyDESKTOP.UserControllers
     /// <summary>
     /// Interaction logic for ViewBooksCatalog.xaml
     /// </summary>
+    
+    enum FilterStatus
+    {
+        All = 0,
+        InStock = 1,
+        OutOfStock = 2,
+        Active = 3,
+        Deleted = 4
+    }
+
     public partial class ViewBooksCatalog : UserControl
     {
-        private List<BookShownDesktop> filteredBooks;
         private List<BookShownDesktop> books;
         private BookDetails bookDetails;
         private ViewReviews reviews;
         private CreateBookPage createBookPage;
         private List<string> SubjectsNames { get; set; }
-        private string SelectedSubject { get; set; }
         private Dictionary<string, string> Subjects { get; set; }
         private List<SubjectDetails> SubjectsDetails { get; set; }
         private SubjectsWindow SubjectsWindow { get; set; }
-        private string searchBar;
+
+        private FilterStatus filterStatus { get; set; } = FilterStatus.All;
+        private string SearchSubjectText { get; set; } = "";
+        private string SearchText { get; set; } = "";
+        private string SelectedSubject { get; set; } = "0";
+
 
         public ViewBooksCatalog()
         {
@@ -48,9 +62,11 @@ namespace IIStudyDESKTOP.UserControllers
 
         private async Task init_page()
         {
+            await this.LoadBooks();
             await this.LoadSubjectsDict();
             await this.LoadSubjectsDetails();
-            await this.LoadBooks();
+            this.UpdateStatistics();
+
         }
 
         private async Task GetBooks()
@@ -61,7 +77,6 @@ namespace IIStudyDESKTOP.UserControllers
             client.Port = 5049;
             client.Path = "api/Guest/GetDesktopBooks";
             this.books = await client.GetAsync();
-            this.filteredBooks = this.books;
             //UpdateStatistics();
 
         }
@@ -83,7 +98,7 @@ namespace IIStudyDESKTOP.UserControllers
             this.Subjects.Add("0", "All");
            
             //this.SubjectsList.ItemsSource = this.Subjects;
-            this.TxtSubjectBadge.Text = this.Subjects.Count().ToString();
+            this.TxtSubjectBadge.Text = this.books.Count().ToString();
             this.SubjectsNames.Insert(0, "All");
 
 
@@ -105,7 +120,7 @@ namespace IIStudyDESKTOP.UserControllers
             }
 
             this.SubjectsDetails.Insert(0,new SubjectDetails() { BooksCount = 0, SubjectID = "0", Subject_name = "All"});
-
+            this.SubjectsDetails[0].BooksCount = this.SubjectsDetails.Count();
             this.SubjectsList.ItemsSource = this.SubjectsDetails;
 
         }
@@ -129,7 +144,6 @@ namespace IIStudyDESKTOP.UserControllers
             await this.GetBooks();
             this.DataContext = this.books;
             this.BooksList.ItemsSource = this.books;
-            this.UpdateStatistics();
         }
         
 
@@ -137,58 +151,37 @@ namespace IIStudyDESKTOP.UserControllers
 
         private void SearchUpdate(object sender, TextChangedEventArgs e)
         {
-            this.filteredBooks = this.books;
-            this.searchBar = this.SearchBox.Text;
-            ApplyFilters();
-            this.UpdateStatistics();
-        }
-
-
-        private void InStockFillter(object sender, MouseButtonEventArgs e)
-        {
-            this.filteredBooks = this.books.Where(b => b.In_stock).ToList();
-            this.BooksList.ItemsSource = this.filteredBooks;
-            SetActiveChip(ChipInStock);
-            this.ApplyFilters();
-        }
-
-        private void OutStockFillter(object sender, MouseButtonEventArgs e)
-        {
-            this.filteredBooks = this.books.Where(b => !b.In_stock).ToList();
-            this.BooksList.ItemsSource = this.filteredBooks;
-            SetActiveChip(ChipOutOfStock);
-            this.ApplyFilters();
-        }
-
-        private void ActiveFillter(object sender, MouseButtonEventArgs e)
-        {
-            this.filteredBooks = this.books.Where(b => !b.IsDeleted).ToList();
-            this.BooksList.ItemsSource = this.filteredBooks;
-            SetActiveChip(ChipActive);
-            this.ApplyFilters();
-        }
-        private void DeletedFillter(object sender, MouseButtonEventArgs e)
-        {
-            this.filteredBooks = this.books.Where(b => b.IsDeleted).ToList();
-            this.BooksList.ItemsSource = this.filteredBooks;
-            SetActiveChip(ChipDeleted);
-            this.ApplyFilters();
-        }
-        private void AllFillter(object sender, MouseButtonEventArgs e)
-        {
             
-            this.BooksList.ItemsSource = this.books;
-            this.filteredBooks = this.books;
-            SetActiveChip(ChipAll);
-            this.ApplyFilters();
+            this.SearchText = this.SearchBox.Text;
+            ApplyFilters();
+            
         }
+
+        private void SetChipFilter(object sender, MouseButtonEventArgs e)
+        {
+            Border chip = sender as Border;
+            if (chip == this.ChipAll)
+                this.filterStatus = FilterStatus.All;
+            else if (chip == this.ChipInStock)
+                this.filterStatus = FilterStatus.InStock;
+            else if (chip == this.ChipOutOfStock)
+                this.filterStatus = FilterStatus.OutOfStock;
+            else if (chip == this.ChipActive)
+                this.filterStatus = FilterStatus.Active;
+            else if (chip == this.ChipDeleted)
+                this.filterStatus = FilterStatus.Deleted;
+            SetActiveChip(chip);
+            ApplyFilters();
+        }
+
+       
 
         private void SubjectFilter(object sender, MouseButtonEventArgs e)
         {
             Border btn = sender as Border;
             string key = btn.Tag as string;
 
-            this.filteredBooks = this.books.Where(b => { return b.SubjectID == key || key == "0"; }).ToList();
+            this.SelectedSubject = key;
             this.ApplyFilters();
 
         }
@@ -235,36 +228,47 @@ namespace IIStudyDESKTOP.UserControllers
 
         private void ApplyFilters()
         {
-            this.searchBar = this.searchBar != null ? this.searchBar.Trim().ToLower() : "";
-            //if (this.searchBar == null) this.SearchPlaceholder.Text = "Search books.....";
-            //else
-            //{
-            //    this.SearchPlaceholder.Text = "";
-            //}
-            this.filteredBooks = this.filteredBooks.Where(b =>
+            List<BookShownDesktop> filtered;
+            switch (this.filterStatus)
             {
-                bool search = b.Book_name.ToLower().Contains(this.searchBar) ||
-                                b.Author_name.ToLower().Contains(this.searchBar) ||
-                                b.BookID.ToLower() == this.searchBar;
+                case FilterStatus.Active:
+                    filtered = this.books.Where(e => !e.IsDeleted).ToList();
+                    break;
+                case FilterStatus.Deleted:
+                    filtered = this.books.Where(e => e.IsDeleted).ToList();
+                    break;
+                case FilterStatus.InStock:
+                    filtered = this.books.Where(e => e.In_stock).ToList();
+                    break;
+                case FilterStatus.OutOfStock:
+                    filtered = this.books.Where(e => !e.In_stock).ToList();
+                    break;
+                default:
+                    filtered = this.books;
+                    break;
+            }
+            filtered = filtered.Where(b =>
+            {
+                bool search = b.Book_name.ToLower().Contains(this.SearchText.ToLower()) ||
+                                b.Author_name.ToLower().Contains(this.SearchText.ToLower());
+                               
+                bool subjectFilter = this.SelectedSubject == "0" ? true : b.SubjectID == this.SelectedSubject;
 
-
-                return search;
+                return search && subjectFilter;
             }
             ).ToList();
 
             //this.DataContext = this.filteredBooks;
-            this.BooksList.ItemsSource = this.filteredBooks;
+            this.BooksList.ItemsSource = null;
+            this.BooksList.ItemsSource = filtered;
 
         }
         private void UpdateStatistics()
         {
-            if (this.filteredBooks != null && this.filteredBooks.Any())
-            {
-                TxtTotalBooks.Text = this.filteredBooks.Count.ToString();
-                TxtInStock.Text = this.filteredBooks.Count(b => b.In_stock).ToString();
-                TxtOutOfStock.Text = this.filteredBooks.Count(b => !b.In_stock).ToString();
-                TxtSubjectCount.Text = this.Subjects.Count.ToString();
-            }
+            TxtTotalBooks.Text = this.books.Count.ToString();
+            TxtInStock.Text = this.books.Count(b => b.In_stock).ToString();
+            TxtOutOfStock.Text = this.books.Count(b => !b.In_stock).ToString();
+            TxtSubjectCount.Text = this.Subjects.Count.ToString();
         }
 
         private void ViewBookDetails(object sender, RoutedEventArgs e)
@@ -281,6 +285,12 @@ namespace IIStudyDESKTOP.UserControllers
             }
             Window parentWindow = Window.GetWindow(this);
             this.bookDetails.Owner = parentWindow;
+
+            this.bookDetails.Closed += (s, args) =>
+            {
+                parentWindow.Activate();
+            };
+
             this.bookDetails.Show();
             this.BooksList.ItemsSource = null;
             this.BooksList.ItemsSource = this.books;
@@ -411,38 +421,79 @@ namespace IIStudyDESKTOP.UserControllers
             this.createBookPage.ShowDialog();
         }
 
-        private void FilterSubject(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox comboBox = sender as ComboBox;
-            string subjectID = comboBox.SelectedValue?.ToString();
-            if (subjectID != "0")
-            {
-                this.filteredBooks = this.books.Where(b =>
-                {
-                    bool found = (b.SubjectID == subjectID);
-                    return found;
+        //private void FilterSubject(object sender, SelectionChangedEventArgs e)
+        //{
+        //    ComboBox comboBox = sender as ComboBox;
+        //    string subjectID = comboBox.SelectedValue?.ToString();
+        //    if (subjectID != "0")
+        //    {
+        //        this.filteredBooks = this.books.Where(b =>
+        //        {
+        //            bool found = (b.SubjectID == subjectID);
+        //            return found;
 
-                }
-                ).ToList();
-                this.BooksList.ItemsSource = null;
-                this.BooksList.ItemsSource = this.filteredBooks;
-                //this.DataContext = this.filteredBooks;
-            }
-            else
-            {
-                this.BooksList.ItemsSource = null;
-                this.BooksList.ItemsSource = this.books;
-                //this.DataContext = this.books;
-            }
+        //        }
+        //        ).ToList();
+        //        this.BooksList.ItemsSource = null;
+        //        this.BooksList.ItemsSource = this.filteredBooks;
+        //        //this.DataContext = this.filteredBooks;
+        //    }
+        //    else
+        //    {
+        //        this.BooksList.ItemsSource = null;
+        //        this.BooksList.ItemsSource = this.books;
+        //        //this.DataContext = this.books;
+        //    }
 
-        }
+        //}
 
         private void SearchSubject(object sender, RoutedEventArgs e)
         {
-            string searchText = this.SubjectSearchBox.Text;
-            this.SubjectsList.ItemsSource = this.SubjectsDetails.Where(s => s.Subject_name.ToLower().Contains(searchText.ToLower())).ToList();
+            this.SearchSubjectText = this.SubjectSearchBox.Text;
+            this.SubjectsList.ItemsSource = this.SubjectsDetails.Where(s => {
+                bool name = s.Subject_name.ToLower().Contains(this.SearchSubjectText.ToLower());
+                bool subjectID = s.SubjectID == this.SearchSubjectText;
+                return name || subjectID;
+            }).ToList();
         }
 
-        
+        // private void InStockFillter(object sender, MouseButtonEventArgs e)
+        //{
+        //    this.filteredBooks = this.books.Where(b => b.In_stock).ToList();
+        //    this.BooksList.ItemsSource = this.filteredBooks;
+        //    SetActiveChip(ChipInStock);
+        //    this.ApplyFilters();
+        //}
+
+        //private void OutStockFillter(object sender, MouseButtonEventArgs e)
+        //{
+        //    this.filteredBooks = this.books.Where(b => !b.In_stock).ToList();
+        //    this.BooksList.ItemsSource = this.filteredBooks;
+        //    SetActiveChip(ChipOutOfStock);
+        //    this.ApplyFilters();
+        //}
+
+        //private void ActiveFillter(object sender, MouseButtonEventArgs e)
+        //{
+        //    this.filteredBooks = this.books.Where(b => !b.IsDeleted).ToList();
+        //    this.BooksList.ItemsSource = this.filteredBooks;
+        //    SetActiveChip(ChipActive);
+        //    this.ApplyFilters();
+        //}
+        //private void DeletedFillter(object sender, MouseButtonEventArgs e)
+        //{
+        //    this.filteredBooks = this.books.Where(b => b.IsDeleted).ToList();
+        //    this.BooksList.ItemsSource = this.filteredBooks;
+        //    SetActiveChip(ChipDeleted);
+        //    this.ApplyFilters();
+        //}
+        //private void AllFillter(object sender, MouseButtonEventArgs e)
+        //{
+            
+        //    this.BooksList.ItemsSource = this.books;
+        //    this.filteredBooks = this.books;
+        //    SetActiveChip(ChipAll);
+        //    this.ApplyFilters();
+        //}
     }
 }

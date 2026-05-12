@@ -24,6 +24,15 @@ namespace IIStudyDESKTOP.UserControllers
     /// <summary>
     /// Interaction logic for UsersPage.xaml
     /// </summary>
+    
+    enum RegisteredsFilter
+    {
+        All = 0,
+        Admins = 1,
+        Banned = 2,
+        Users = 3
+    }
+
     public partial class RegisteredsPage : UserControl
     {
 
@@ -31,9 +40,9 @@ namespace IIStudyDESKTOP.UserControllers
         private List<Registered> registereds = new List<Registered>();
         private RegisteredDetails registeredDetail;
         private ObservableCollection<Registered> _allUsers = new();
-        private List<Registered> filtered = new List<Registered>();
-        private string _filterMode = "All";
-
+        
+        private RegisteredsFilter filterStatus { get; set; } = RegisteredsFilter.All;
+        private string SearchText { get; set; } = "";
         public RegisteredsPage()
         {
             InitializeComponent();
@@ -69,7 +78,7 @@ namespace IIStudyDESKTOP.UserControllers
             client.Port = 5049;
             client.Path = "api/Admin/GetAllRegistereds";
             this.registereds = await client.GetAsync();
-            this.filtered = this.registereds;
+            
             this.DataContext = this.registereds;
             this.UsersListView.ItemsSource = this.registereds;
         }
@@ -79,27 +88,39 @@ namespace IIStudyDESKTOP.UserControllers
         // ════════════════════════════════════════════════════════════
         private void ApplyFilters()
         {
-            var search = SearchBox?.Text?.Trim().ToLower() ?? "";
 
-            this.filtered = this.registereds.Where(u =>
+            List<Registered> filtered = null;
+
+            switch (this.filterStatus)
             {
-                bool passFilter = _filterMode switch
-                {
-                    "Admin" => u.Role?.ToLower() == "admin",
-                    "Banned" => u.IsBanned,
-                    "User" => u.Role?.ToLower() == "user",
-                    _ => true
-                };
+                case RegisteredsFilter.Admins:
+                    filtered = this.registereds.Where(r => r.Role.ToLower() == "admin").ToList();
+                    break;
+                case RegisteredsFilter.Banned:
+                    filtered = this.registereds.Where(r => r.IsBanned).ToList();
+                    break;
+                case RegisteredsFilter.Users:
+                    filtered = this.registereds.Where(r => r.Role.ToLower() == "user").ToList();
+                    break;
+                default:
+                    filtered = this.registereds;
+                    break;
 
-                bool passSearch = string.IsNullOrEmpty(search)
-                    || u.UserName.ToLower().Contains(search)
-                    || u.Email.ToLower().Contains(search)
-                    || u.Role.ToLower().Contains(search)
-                    || u.RegisteredID.ToString().Contains(search);
+            }
 
-                return passFilter && passSearch;
+            filtered = filtered.Where(u =>
+            {
+                bool passSearch = string.IsNullOrEmpty(this.SearchText)
+                    || u.UserName.ToLower().Contains(this.SearchText.ToLower())
+                    || u.Email.ToLower().Contains(this.SearchText.ToLower())
+                    || u.Role.ToLower().Contains(this.SearchText.ToLower())
+                    || u.RegisteredID == this.SearchText;
+
+                return passSearch;
             }).ToList();
 
+
+            UsersListView.ItemsSource = null;
             UsersListView.ItemsSource = new ObservableCollection<Registered>(filtered);
 
             EmptyState.Visibility = filtered.Count == 0
@@ -118,31 +139,19 @@ namespace IIStudyDESKTOP.UserControllers
         //  EVENT HANDLERS
         // ════════════════════════════════════════════════════════════
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
-            => ApplyFilters();
+        {
+            this.SearchText = this.SearchBox.Text;
+            ApplyFilters();
+        }
 
-        private void Filter_All(object sender, RoutedEventArgs e)
+        private void SetFilterChip(object sender, RoutedEventArgs e)
         {
-            _filterMode = "All";
-            SetActiveChip(FilterAll);
+            Button btn = sender as Button;
+            this.filterStatus = (RegisteredsFilter)int.Parse(btn.Tag?.ToString() ?? "0");
+            SetActiveChip(btn);
             ApplyFilters();
-        }
-        private void Filter_Admins(object sender, RoutedEventArgs e)
-        {
-            _filterMode = "Admin";
-            SetActiveChip(FilterAdmins);
-            ApplyFilters();
-        }
-        private void Filter_Banned(object sender, RoutedEventArgs e)
-        {
-            _filterMode = "Banned";
-            SetActiveChip(FilterBanned);
-            ApplyFilters();
-        }
-        private void Filter_Users(object sender, RoutedEventArgs e)
-        {
-            _filterMode = "User";
-            SetActiveChip(FilterUsers);
-            ApplyFilters();
+
+
         }
 
         private void SetActiveChip(Button active)
@@ -229,10 +238,7 @@ namespace IIStudyDESKTOP.UserControllers
             else
             {
                 reg.IsBanned = true;
-                this.DataContext = null;
-                this.UsersListView.ItemsSource = null;
-                this.DataContext = this.registereds;
-                UsersListView.ItemsSource = new ObservableCollection<Registered>(this.filtered);
+                this.UsersListView.Items.Refresh();
                 //MessageBox.Show("Ban operation has succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
@@ -256,10 +262,7 @@ namespace IIStudyDESKTOP.UserControllers
             else
             {
                 reg.IsBanned = false;
-                this.DataContext = null;
-                this.UsersListView.ItemsSource = null;
-                this.DataContext = this.registereds;
-                UsersListView.ItemsSource = new ObservableCollection<Registered>(this.filtered);
+                this.UsersListView.Items.Refresh();
                 //MessageBox.Show("UnBan operation has succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
@@ -339,10 +342,7 @@ namespace IIStudyDESKTOP.UserControllers
             else
             {
                 reg.Role = "Admin";
-                this.DataContext = null;
-                this.UsersListView.ItemsSource = null;
-                this.DataContext = this.registereds;
-                UsersListView.ItemsSource = new ObservableCollection<Registered>(this.filtered);
+                this.UsersListView.Items.Refresh();
                 //MessageBox.Show("UnBan operation has succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
@@ -367,10 +367,7 @@ namespace IIStudyDESKTOP.UserControllers
             else
             {
                 reg.Role = "User";
-                this.DataContext = null;
-                this.UsersListView.ItemsSource = null;
-                this.DataContext = this.registereds;
-                UsersListView.ItemsSource = new ObservableCollection<Registered>(this.filtered);
+                this.UsersListView.Items.Refresh();
                 //MessageBox.Show("UnBan operation has succeed", "Validation", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }

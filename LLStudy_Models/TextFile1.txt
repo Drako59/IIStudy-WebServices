@@ -6,4 +6,5 @@
 	Fixed the Profile page in WebApp and add Update.
 	Remove uncessery things from the WebApp's html.
 	Add the deleted and active fillter to ViewExams
+	Add date filter to exams.
 ADD ICON TO THE WPF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -535,5 +535,24 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        [HttpGet]
+        public List<EventDetail> GetEventsDetails()
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.EventRepository.GetEventsDetails();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
     }
 }

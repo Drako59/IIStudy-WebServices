@@ -267,27 +267,31 @@
                             Background="#667eea"
                             Foreground="White"
                             Margin="0,0,8,0"
-                            Click="Filter_All"/>
+                            Click="SetFilterChip"
+                            Tag="0"/>
                     <Button x:Name="FilterAdmins"
                             Style="{StaticResource FilterChip}"
                             Content="👑 Admins"
                             Background="#eef2ff"
                             Foreground="#667eea"
                             Margin="0,0,8,0"
-                            Click="Filter_Admins"/>
+                            Click="SetFilterChip"
+                            Tag="1"/>
                     <Button x:Name="FilterBanned"
                             Style="{StaticResource FilterChip}"
                             Content="🚫 Banned"
                             Background="#ffe2e0"
                             Foreground="#e32b1e"
                             Margin="0,0,8,0"
-                            Click="Filter_Banned"/>
+                            Click="SetFilterChip"
+                            Tag="2"/>
                     <Button x:Name="FilterUsers"
                             Style="{StaticResource FilterChip}"
                             Content="👤 Users"
                             Background="#f0fdf4"
                             Foreground="#16a34a"
-                            Click="Filter_Users"/>
+                            Click="SetFilterChip"
+                            Tag="3"/>
                 </StackPanel>
             </Grid>
         </Border>

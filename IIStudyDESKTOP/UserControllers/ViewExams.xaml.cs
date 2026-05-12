@@ -1,10 +1,15 @@
-﻿using IIstudyWSClient;
+﻿using IIStudyDESKTOP.WindowsPages;
+using IIstudyWSClient;
 using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Guest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,17 +18,19 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using IIStudyDESKTOP.WindowsPages;
-using System.Security.Permissions;
-using System.Net.NetworkInformation;
 namespace IIStudyDESKTOP.UserControllers
 {
     /// <summary>
     /// Interaction logic for ViewExams.xaml
     /// </summary>
+    /// 
+    
+
+
     public partial class ViewExams : UserControl
     {
         private List<ExamDetails> Exams { get; set; }
@@ -33,6 +40,12 @@ namespace IIStudyDESKTOP.UserControllers
         private CreateExamWindow CreateExamWindow { get; set; }
         private ExamSolutionsWindow ExamSolutionsWindow { get; set; }
         private SubjectsWindow SubjectsWindow { get; set; }
+        private FilterStatus FilterStatus { get; set; } = FilterStatus.All;
+        private string SearchText { get; set; } = "";
+        private string SelectedSubject { get; set; } = "0";
+        private string SearchSubjectText { get; set; } = "";
+
+
         public ViewExams()
         {
             InitializeComponent();
@@ -43,6 +56,16 @@ namespace IIStudyDESKTOP.UserControllers
         {
             await this.LoadExams();
             await this.LoadSubjects();
+            this.UpdateStatistics();
+        }
+        private void UpdateStatistics()
+        {
+            this.TxtRestricted.Text = this.Exams?.Where(e => e.IsDeleted).ToList().Count().ToString() ?? "0";
+            this.TxtActive.Text = this.Exams?.Where(e => !e.IsDeleted).ToList().Count().ToString() ?? "0";
+            this.TxtTotalExams.Text = this.Exams?.Count().ToString() ?? "0";
+            this.TxtSubjectCount.Text = this.SubjectsDetails?.Count().ToString() ?? "0";
+            this.TxtSubjectBadge.Text = this.TxtSubjectCount.Text;
+
         }
         public async Task LoadExams()
         {
@@ -79,6 +102,7 @@ namespace IIStudyDESKTOP.UserControllers
             this.SubjectsDetails.Insert(0, new SubjectDetails() { BooksCount = 0, SubjectID = "0", Subject_name = "All" });
 
             this.SubjectsList.ItemsSource = this.SubjectsDetails;
+            
         }
 
         public void ViewExamDetailsWindow(object sender, RoutedEventArgs e)
@@ -90,6 +114,12 @@ namespace IIStudyDESKTOP.UserControllers
 
             Window parentWindow = Window.GetWindow(this);
             this.ExamWindow.Owner = parentWindow;
+            
+            this.ExamWindow.Closed += (s, args) =>
+            {
+                parentWindow.Activate();
+            };
+
             this.ExamWindow.Show();
 
 
@@ -164,6 +194,12 @@ namespace IIStudyDESKTOP.UserControllers
 
             Window parentWindow = Window.GetWindow(this);
             this.ExamSolutionsWindow.Owner = parentWindow;
+
+            this.ExamSolutionsWindow.Closed += (s, args) =>
+            {
+                parentWindow.Activate();
+            };
+
             this.ExamSolutionsWindow.Show();
 
         }
@@ -219,24 +255,19 @@ namespace IIStudyDESKTOP.UserControllers
             }
         }
 
-        private void Filter(object sender, MouseButtonEventArgs e)
+        private void Filter()
         {
-            Border btn = sender as Border;
-            int status = int.Parse(btn.Tag.ToString());
+            
 
-            if (status == -1)
-            {
-                this.ExamsList.ItemsSource = this.Exams;
-                return;
-            }
+            
             List<ExamDetails> filtered;
-            switch (status)
+            switch (this.FilterStatus)
             {
-                case 1:
+                case FilterStatus.Active:
                     filtered = this.Exams.Where(e => !e.IsDeleted).ToList();
                     SetSelectedChip(this.ChipActive);
                     break;
-                case 2:
+                case FilterStatus.Deleted:
                     filtered = this.Exams.Where(e => e.IsDeleted).ToList();
                     SetSelectedChip(this.ChipDeleted);
                     break;
@@ -245,10 +276,65 @@ namespace IIStudyDESKTOP.UserControllers
                     SetSelectedChip(this.ChipAll);
                     break;
             }
+            filtered = filtered.Where(e => 
+            {
+                bool searchBox = e.Exam_Name.ToLower().Contains(this.SearchText.ToLower());
+                bool subjectFilter = this.SelectedSubject == "0" ? true : e.SubjectID == this.SelectedSubject;
+                return searchBox && subjectFilter;
+            }).ToList();
+            this.ExamsList.ItemsSource = null;
             this.ExamsList.ItemsSource = filtered;
 
 
         }
+
+        private void SetFilterChip(object sender, MouseButtonEventArgs e)
+        {
+            Border btn = sender as Border;
+            int status = int.Parse(btn.Tag.ToString());
+
+            switch (status)
+            {
+                case 0:
+                    this.FilterStatus = FilterStatus.All;
+                    break;
+                case 1:
+                    this.FilterStatus = FilterStatus.Active;
+                    break;
+                case 2:
+                    this.FilterStatus = FilterStatus.Deleted;
+                    break;
+
+            }
+            this.Filter();
+
+        }
+
+        private void SearchTextUpadte(object sender, TextChangedEventArgs e)
+        {
+            this.SearchText = this.SearchBox.Text;
+            this.Filter();
+        }
+
+        private void SubjectFilter(object sender, MouseButtonEventArgs e)
+        {
+            Border btn = sender as Border;
+            string subjectID = btn.Tag.ToString();
+            this.SelectedSubject = subjectID;
+            this.Filter();
+        }
+        private void SearchSubject(object sender, TextChangedEventArgs e)
+        {
+            this.SearchSubjectText = this.SearchSubjectTxtBox.Text;
+            List<SubjectDetails> filteredSubjects = this.SubjectsDetails.Where(s => {
+                bool name = s.Subject_name.ToLower().Contains(this.SearchSubjectText.ToLower());
+                bool subjectID = s.SubjectID == this.SearchSubjectText;
+                return name || subjectID;
+            }).ToList();
+            this.SubjectsList.ItemsSource = null;
+            this.SubjectsList.ItemsSource = filteredSubjects;
+        }
+
         private void ViewSubjects(object sender, RoutedEventArgs e)
         {
             this.SubjectsWindow = new SubjectsWindow();
@@ -256,5 +342,7 @@ namespace IIStudyDESKTOP.UserControllers
             this.SubjectsWindow.Owner = parentWindow;
             this.SubjectsWindow.Show();
         }
+
+        
     }
 }

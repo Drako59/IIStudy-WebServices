@@ -244,15 +244,15 @@
                                Background="#f0f0f0" 
                                Margin="25,20,25,20"/>
 
-                        <!-- Settings Label -->
-                        <TextBlock Text="SETTINGS" 
+                        <!-- Others Label -->
+                        <TextBlock Text="OTHERS" 
                                   FontSize="11"
                                   FontWeight="Bold"
                                   Foreground="#94a3b8"
                                   Margin="25,0,0,12"/>
 
                         <!-- Calendar Button -->
-                        <Button Style="{StaticResource SidebarButton}" x:Name="CalendarsNav">
+                        <Button Style="{StaticResource SidebarButton}" x:Name="CalendarsNav" Click="ViewEvents">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="📅" FontSize="18" Margin="0,0,12,0"/>
                                 <TextBlock Text="Calendar" VerticalAlignment="Center"/>
@@ -260,20 +260,20 @@
                         </Button>
 
                         <!-- Reports Button -->
-                        <Button Style="{StaticResource SidebarButton}" x:Name="ReportsNav">
+                        <!--<Button Style="{StaticResource SidebarButton}" x:Name="ReportsNav">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="📊" FontSize="18" Margin="0,0,12,0"/>
                                 <TextBlock Text="Reports" VerticalAlignment="Center"/>
                             </StackPanel>
-                        </Button>
+                        </Button>-->
 
                         <!-- Settings Button -->
-                        <Button Style="{StaticResource SidebarButton}" x:Name="SettingsNav">
+                        <!--<Button Style="{StaticResource SidebarButton}" x:Name="SettingsNav">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="⚙️" FontSize="18" Margin="0,0,12,0"/>
                                 <TextBlock Text="Settings" VerticalAlignment="Center"/>
                             </StackPanel>
-                        </Button>
+                        </Button>-->
                     </StackPanel>
                 </ScrollViewer>
 

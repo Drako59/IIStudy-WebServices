@@ -1,0 +1,541 @@
+﻿<UserControl x:Class="IIStudyDESKTOP.UserControllers.ViewEvents"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IIStudyDESKTOP.UserControllers"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <Style x:Key="MetaLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#94a3b8"/>
+            <Setter Property="Margin" Value="0,0,0,2"/>
+        </Style>
+
+        <Style x:Key="StatCard" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="Padding" Value="20,16"/>
+            <Setter Property="Margin" Value="0,0,12,0"/>
+        </Style>
+
+        <Style x:Key="ActionBtn" TargetType="Button">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="b"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="b" Property="Opacity" Value="0.82"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="b" Property="Opacity" Value="0.65"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="FilterChip" TargetType="Border">
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+
+        <Style x:Key="DatePickerStyle" TargetType="DatePicker">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#e2e8f0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="8,0"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Gradient header -->
+            <RowDefinition Height="*"/>
+            <!-- Main content -->
+        </Grid.RowDefinitions>
+
+        <!-- ══════════════════════════════════════════════════════
+             GRADIENT HEADER BANNER
+             ══════════════════════════════════════════════════════ -->
+        <Border Grid.Row="0">
+            <!--<Border.Background>
+                --><!--<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#1a237e" Offset="0"/>
+                    <GradientStop Color="#283593" Offset="0.4"/>
+                    <GradientStop Color="#3949ab" Offset="1"/>
+                </LinearGradientBrush>--><!--
+            </Border.Background>-->
+
+            <StackPanel Margin="28,22,28,22">
+
+                <!-- Title row -->
+                <Grid Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Events"
+                                   FontSize="24" FontWeight="ExtraBold"
+                                   Foreground="White"/>
+                        <TextBlock Text="Manage your calendar events"
+                                   FontSize="12" Foreground="#9fa8da"
+                                   Margin="0,3,0,0"/>
+                    </StackPanel>
+
+                    <!-- Add New Event button -->
+                    <Button Grid.Column="1"
+                            Height="40" BorderThickness="0"
+                            Cursor="Hand"
+                            >
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="b" Background="White"
+                                        CornerRadius="10" Padding="18,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="+" FontSize="17" FontWeight="ExtraBold"
+                                                   Foreground="#3949ab" VerticalAlignment="Center"
+                                                   Margin="0,0,6,0"/>
+                                        <TextBlock Text="Add New Event" FontSize="13" FontWeight="Bold"
+                                                   Foreground="#3949ab" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="b" Property="Opacity" Value="0.85"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+
+                <!-- STAT CARDS ROW -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Total Events -->
+                    <Border Grid.Column="0" Style="{StaticResource StatCard}">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.08"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Total Events" FontSize="11" FontWeight="Bold" Foreground="#64748b"/>
+                            <TextBlock x:Name="TxtTotalEvents" Text="0"
+                                       FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="#0f172a" Margin="0,4,0,2"/>
+                            <TextBlock Text="All events" FontSize="11" Foreground="#94a3b8"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Upcoming -->
+                    <Border Grid.Column="1" Style="{StaticResource StatCard}">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.08"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Upcoming" FontSize="11" FontWeight="Bold" Foreground="#64748b"/>
+                            <TextBlock x:Name="TxtUpcoming" Text="0"
+                                       FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="#3949ab" Margin="0,4,0,2"/>
+                            <TextBlock Text="Future events" FontSize="11" Foreground="#94a3b8"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Today -->
+                    <Border Grid.Column="2" Style="{StaticResource StatCard}">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.08"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Today" FontSize="11" FontWeight="Bold" Foreground="#64748b"/>
+                            <TextBlock x:Name="TxtToday" Text="0"
+                                       FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="#f59e0b" Margin="0,4,0,2"/>
+                            <TextBlock Text="Events today" FontSize="11" Foreground="#94a3b8"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Past -->
+                    <Border Grid.Column="3" Style="{StaticResource StatCard}" Margin="0">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.08"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Past" FontSize="11" FontWeight="Bold" Foreground="#64748b"/>
+                            <TextBlock x:Name="TxtPast" Text="0"
+                                       FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="#64748b" Margin="0,4,0,2"/>
+                            <TextBlock Text="Passed events" FontSize="11" Foreground="#94a3b8"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+
+        <!-- ══════════════════════════════════════════════════════
+             MAIN CONTENT
+             ══════════════════════════════════════════════════════ -->
+        <Grid Grid.Row="1" Margin="28,16,28,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Search + filter bar -->
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="*"/>
+                <!-- Event cards -->
+            </Grid.RowDefinitions>
+
+            <!-- ── SEARCH + FILTER BAR ── -->
+            <Border Grid.Row="0"
+                    Background="White"
+                    CornerRadius="14"
+                    Padding="14,12">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="14" ShadowDepth="0" Opacity="0.05"/>
+                </Border.Effect>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <!-- Search -->
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="14"/>
+                        <!-- Date from -->
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="8"/>
+                        <!-- Date to -->
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="14"/>
+                        <!-- Filter chips -->
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Search box -->
+                    <Border Grid.Column="0" Background="#f8fafc" CornerRadius="10" Height="40">
+                        <Grid>
+                            <TextBlock Text="🔍" FontSize="14"
+                                       VerticalAlignment="Center"
+                                       Margin="12,0,0,0"
+                                       IsHitTestVisible="False"/>
+                            <TextBox x:Name="SearchBox"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     FontSize="13" Foreground="#1e293b"
+                                     Padding="34,0,12,0"
+                                     VerticalContentAlignment="Center"
+                                     TextChanged="SearchTextChanged"
+                                     />
+                            <!--<TextBlock x:Name="SearchPlaceholder"
+                                       Text="Search events..."
+                                       FontSize="13" Foreground="#cbd5e1"
+                                       VerticalAlignment="Center"
+                                       Margin="34,0,0,0"
+                                       IsHitTestVisible="False"/>-->
+                        </Grid>
+                    </Border>
+
+                    <!-- From date -->
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <TextBlock Text="FROM" FontSize="9" FontWeight="Bold"
+                                   Foreground="#94a3b8" Margin="2,0,0,3"/>
+                        <Border Background="#f8fafc" CornerRadius="10"
+                                BorderBrush="#e2e8f0" BorderThickness="1.5">
+                            <DatePicker x:Name="DateFrom"
+                                        Height="36" Width="130"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        FontSize="12"
+                                        />
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Arrow -->
+                    <TextBlock Grid.Column="3" Text="→"
+                               FontSize="14" Foreground="#94a3b8"
+                               VerticalAlignment="Bottom" Margin="0,0,0,8"/>
+
+                    <!-- To date -->
+                    <StackPanel Grid.Column="4" VerticalAlignment="Center">
+                        <TextBlock Text="TO" FontSize="9" FontWeight="Bold"
+                                   Foreground="#94a3b8" Margin="2,0,0,3"/>
+                        <Border Background="#f8fafc" CornerRadius="10"
+                                BorderBrush="#e2e8f0" BorderThickness="1.5">
+                            <DatePicker x:Name="DateTo"
+                                        Height="36" Width="130"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        FontSize="12"
+                                        />
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Filter chips -->
+                    <StackPanel Grid.Column="6" Orientation="Horizontal" VerticalAlignment="Center">
+
+                        <!-- All -->
+                        <Border x:Name="ChipAll"
+                                Style="{StaticResource FilterChip}"
+                                >
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#1a237e" Offset="0"/>
+                                    <GradientStop Color="#3949ab" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <TextBlock Text="All" FontSize="12" FontWeight="Bold" Foreground="White"/>
+                        </Border>
+
+                        <!-- Upcoming -->
+                        <Border x:Name="ChipUpcoming"
+                                Style="{StaticResource FilterChip}"
+                                Background="#eef2ff"
+                                >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📅 " FontSize="12" VerticalAlignment="Center"/>
+                                <TextBlock Text="Upcoming" FontSize="12" FontWeight="Bold"
+                                           Foreground="#3949ab" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Today -->
+                        <Border x:Name="ChipToday"
+                                Style="{StaticResource FilterChip}"
+                                Background="#fffbeb"
+                                Margin="0"
+                               >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⭐ " FontSize="12" VerticalAlignment="Center"/>
+                                <TextBlock Text="Today" FontSize="12" FontWeight="Bold"
+                                           Foreground="#d97706" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ── EVENT CARDS ── -->
+            <Border Grid.Row="2"
+                    Background="White"
+                    CornerRadius="16"
+                    ClipToBounds="True">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="16" ShadowDepth="0" Opacity="0.05"/>
+                </Border.Effect>
+
+                <Grid>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,6,0,6">
+                        <ItemsControl x:Name="EventsList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+
+                                    <!-- ═══ EVENT CARD ═══ -->
+                                    <Border Margin="16,5,16,5"
+                                            CornerRadius="14"
+                                            Background="White"
+                                            BorderBrush="#e0e7ff"
+                                            BorderThickness="1">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="Black" BlurRadius="12"
+                                                              ShadowDepth="0" Opacity="0.04"/>
+                                        </Border.Effect>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <!-- Date badge -->
+                                                <ColumnDefinition Width="Auto"/>
+                                                <!-- Divider -->
+                                                <ColumnDefinition Width="Auto"/>
+                                                <!-- Content -->
+                                                <ColumnDefinition Width="*"/>
+                                                <!-- Actions -->
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- ── LEFT DATE BADGE ── -->
+                                            <Border Grid.Column="0"
+                                                    CornerRadius="14,0,0,14"
+                                                    Width="72"
+                                                    Background="{Binding DateBadgeBackground}">
+                                                <StackPanel VerticalAlignment="Center"
+                                                            HorizontalAlignment="Center"
+                                                            Margin="0,14">
+                                                    <!-- Day -->
+                                                    <TextBlock Text="{Binding DayDisplay}"
+                                                               FontSize="26" FontWeight="ExtraBold"
+                                                               Foreground="{Binding DateBadgeForeground}"
+                                                               HorizontalAlignment="Center"/>
+                                                    <!-- Month -->
+                                                    <TextBlock Text="{Binding MonthDisplay}"
+                                                               FontSize="11" FontWeight="Bold"
+                                                               Foreground="{Binding DateBadgeForeground}"
+                                                               HorizontalAlignment="Center"
+                                                               Opacity="0.8"/>
+                                                    <!-- Year -->
+                                                    <TextBlock Text="{Binding YearDisplay}"
+                                                               FontSize="10"
+                                                               Foreground="{Binding DateBadgeForeground}"
+                                                               HorizontalAlignment="Center"
+                                                               Opacity="0.6"
+                                                               Margin="0,2,0,0"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- ── DIVIDER ── -->
+                                            <Border Grid.Column="1"
+                                                    Width="3"
+                                                    Background="{Binding AccentColor}"
+                                                    VerticalAlignment="Stretch"/>
+
+                                            <!-- ── CONTENT ── -->
+                                            <Grid Grid.Column="2" Margin="14,12,10,12">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="6"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+
+                                                <!-- Top row: ID pill + name + status badge -->
+                                                <Grid Grid.Row="0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- ID pill -->
+                                                    <Border Grid.Column="0"
+                                                            Background="#eef2ff"
+                                                            CornerRadius="5" Padding="6,2"
+                                                            Margin="0,0,8,0"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding EventIDLabel}"
+                                                                   FontSize="9" FontWeight="Bold"
+                                                                   Foreground="#3949ab"/>
+                                                    </Border>
+
+                                                    <!-- Event name -->
+                                                    <TextBlock Grid.Column="1"
+                                                               Text="{Binding Event_name}"
+                                                               FontSize="14" FontWeight="ExtraBold"
+                                                               Foreground="#0f172a"
+                                                               VerticalAlignment="Center"
+                                                               TextTrimming="CharacterEllipsis"/>
+
+                                                    <!-- Status badge -->
+                                                    <Border Grid.Column="2"
+                                                            CornerRadius="20" Padding="10,4"
+                                                            Background="{Binding StatusBackground}"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding StatusLabel}"
+                                                                   FontSize="10" FontWeight="Bold"
+                                                                   Foreground="{Binding StatusForeground}"/>
+                                                    </Border>
+                                                </Grid>
+
+                                                <!-- Details text -->
+                                                <TextBlock Grid.Row="2"
+                                                           Text="{Binding Details}"
+                                                           FontSize="12"
+                                                           Foreground="#64748b"
+                                                           TextWrapping="Wrap"
+                                                           MaxHeight="38"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           LineHeight="18"/>
+                                            </Grid>
+
+                                            <!-- ── ACTION BUTTONS ── -->
+                                            <StackPanel Grid.Column="3"
+                                                        Orientation="Vertical"
+                                                        VerticalAlignment="Center"
+                                                        Margin="0,0,14,0">
+
+                                                <!-- Edit -->
+                                                <Button Style="{StaticResource ActionBtn}"
+                                                        Background="#eef2ff"
+                                                        Margin="0,0,0,6"
+                                                        Tag="{Binding}"
+                                                        >
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="✏️ " FontSize="11"/>
+                                                        <TextBlock Text="Edit" FontSize="11"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="#3949ab"
+                                                                   VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Button>
+
+                                                <!-- Delete -->
+                                                <Button Style="{StaticResource ActionBtn}"
+                                                        Background="#fef2f2"
+                                                        Tag="{Binding}"
+                                                        >
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="🗑 " FontSize="11"/>
+                                                        <TextBlock Text="Delete" FontSize="11"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="#dc2626"
+                                                                   VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Button>
+
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!-- Empty state -->
+                    <Border x:Name="EmptyState" Visibility="Collapsed"
+                            VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel HorizontalAlignment="Center" Margin="0,30">
+                            <TextBlock Text="📅" FontSize="48" HorizontalAlignment="Center"/>
+                            <TextBlock Text="No events found"
+                                       FontSize="15" FontWeight="SemiBold"
+                                       Foreground="#64748b"
+                                       HorizontalAlignment="Center" Margin="0,10,0,4"/>
+                            <TextBlock Text="Try adjusting your search or date filter."
+                                       FontSize="12" Foreground="#94a3b8"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Grid>
+</UserControl>

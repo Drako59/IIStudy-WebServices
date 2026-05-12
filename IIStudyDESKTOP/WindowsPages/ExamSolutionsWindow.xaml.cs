@@ -60,7 +60,7 @@ namespace IIStudyDESKTOP.WindowsPages
                 if (this.Solutions == null)
                 {
                     this.Solutions = new ObservableCollection<Solution>();
-                    MessageBox.Show("Failed in reciving the books from web service", "Request Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Failed in reciving the solutions from web service", "Request Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 }
                 this.SolutionsList.ItemsSource = null;
