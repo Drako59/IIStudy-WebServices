@@ -14,26 +14,25 @@ namespace LLStudy_Models.Models
         bool delivered;
         string location;
         double total_price;
-        //[IsDigits(ErrorMessage = "ID must contain only digits.")]
-        //[Required]
-
         string registeredID;
-        public string OrderID { get { return orderID; } set { orderID = value; } }
-        
-        //[Required]
-        //public bool Delivered { get { return delivered; } set { delivered = value; } }
 
+        public string OrderID { get { return orderID; } set { orderID = value; } }
+
+        [Required]
         public string Location { get { return location; } set { location = value; } }
+        
         [Required]
         public double Total_price { get { return total_price; } set { total_price = value; } }
+        
         public string RegisteredID { get; set; }
 
-        //[Data]
+        [ValidDate(ErrorMessage = "The date isn't valid.")]
         public string Date { get; set; }
 
         [Required]
         public int DeliveryStatus { get; set; }
-        [Postal]
+
+        [Postal(ErrorMessage = "Postal number isn't valid for ISRAEL.")]
         [Required]
         public string Postal { get; set; }
 
@@ -41,6 +40,9 @@ namespace LLStudy_Models.Models
         public string Country { get; set; }
         [Required]
         public string City { get; set; }
+
+
+        //public bool Delivered { get { return delivered; } set { delivered = value; } }
 
     }
 }

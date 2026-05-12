@@ -9,6 +9,6 @@ namespace LLStudy_Models.ViewModels.Guest
 {
     public class SubjectDetails : Subject
     {
-        public int BooksCount { get; set; }
+        public int SubjectCounter { get; set; }
     }
 }

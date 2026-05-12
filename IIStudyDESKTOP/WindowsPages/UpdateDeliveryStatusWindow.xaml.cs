@@ -45,12 +45,13 @@ namespace IIStudyDESKTOP.WindowsPages
         {
             if (order == null)
             {
-                MessageBox.Show("Couldn't load order.","Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Couldn't load order.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 this.Close();
             }
             this.order = order;
             InitializeComponent();
             this.PreSelectCard(order.DeliveryStatus);
+            this.TxtOrderID.Text = $"Order #{this.order.OrderID}";
         }
 
         // ────────────────────────────────────────────────────────────

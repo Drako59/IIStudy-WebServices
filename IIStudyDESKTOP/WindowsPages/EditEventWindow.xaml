@@ -1,0 +1,345 @@
+﻿<Window x:Class="IIStudyDESKTOP.WindowsPages.EditEventWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
+        mc:Ignorable="d"
+        Title="EditEventWindow" Height="520" Width="480">
+    <Window.Resources>
+
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#64748b"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+
+        <Style x:Key="InputBox" TargetType="TextBox">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#e2e8f0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#0d9488"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#5eead4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DetailsBox" TargetType="TextBox">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#e2e8f0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#0d9488"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#5eead4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <!-- Outer shadow -->
+    <Border Margin="16" CornerRadius="22" Background="White">
+        <Border.Effect>
+            <DropShadowEffect Color="#0d9488" BlurRadius="40" ShadowDepth="0" Opacity="0.16"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Header -->
+                <RowDefinition Height="*"/>
+                <!-- Form -->
+                <RowDefinition Height="Auto"/>
+                <!-- Footer -->
+            </Grid.RowDefinitions>
+
+            <!-- ══════════════════════════════════════════
+                 HEADER
+                 ══════════════════════════════════════════ -->
+            <Border Grid.Row="0" CornerRadius="22,22,0,0" ClipToBounds="True">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#042f2e" Offset="0"/>
+                        <GradientStop Color="#0d9488" Offset="0.6"/>
+                        <GradientStop Color="#14b8a6" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Grid>
+                    <!-- Decorative blobs -->
+                    <Ellipse Width="160" Height="160"
+                             HorizontalAlignment="Right" VerticalAlignment="Top"
+                             Margin="0,-60,-35,0" Opacity="0.12" IsHitTestVisible="False">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="90" Height="90"
+                             HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                             Margin="-20,0,0,0" Opacity="0.10" IsHitTestVisible="False">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+
+                    <Grid Margin="22,18,16,18">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Icon badge -->
+                        <Border Grid.Column="0"
+                                Width="50" Height="50"
+                                CornerRadius="14"
+                                Background="White"
+                                Margin="0,0,16,0"
+                                VerticalAlignment="Center">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Black" BlurRadius="12"
+                                                  ShadowDepth="0" Opacity="0.14"/>
+                            </Border.Effect>
+                            <TextBlock Text="📅" FontSize="26"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- Title + subtitle -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Edit Event"
+                                       FontSize="18" FontWeight="ExtraBold"
+                                       Foreground="White"/>
+                            <TextBlock x:Name="TxtSubtitle"
+                                       Text="Update event information"
+                                       FontSize="11" Foreground="#99f6e4"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+
+                        <!-- Close -->
+                        <Button Grid.Column="2"
+                                Width="30" Height="30"
+                                BorderThickness="0" Cursor="Hand"
+                                VerticalAlignment="Top"
+                                Click="Close_click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="b" Background="Transparent" CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="b" Property="Background" Value="#ffffff22"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <TextBlock Text="✕" FontSize="13" Foreground="White" FontWeight="Bold"/>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- ══════════════════════════════════════════
+                 FORM FIELDS
+                 ══════════════════════════════════════════ -->
+            <ScrollViewer Grid.Row="1"
+                          VerticalScrollBarVisibility="Auto"
+                          Padding="26,20,26,10">
+                <StackPanel>
+
+                    <!-- Event ID — read only -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="EVENT ID" Style="{StaticResource FieldLabel}"/>
+                        <Border Background="#f0fdfa"
+                                BorderBrush="#ccfbf1"
+                                BorderThickness="1.5"
+                                CornerRadius="10"
+                                Padding="12,0" Height="40">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="🔖 " FontSize="13"/>
+                                <TextBlock x:Name="TxtEventIDReadOnly"
+                                           Text="—"
+                                           FontSize="13" FontWeight="Bold"
+                                           Foreground="#94a3b8"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Event Name -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Style="{StaticResource FieldLabel}">
+                            EVENT NAME <Run Foreground="#ef4444">*</Run>
+                        </TextBlock>
+                        <TextBox x:Name="InputEventName" Style="{StaticResource InputBox}"/>
+                        <TextBlock x:Name="ErrorEventName"
+                                   Text=""
+                                   FontSize="11" FontWeight="SemiBold"
+                                   Foreground="#ef4444"
+                                   Margin="4,4,0,0"
+                                   Visibility="Collapsed"/>
+                    </StackPanel>
+
+                    <!-- Date -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Style="{StaticResource FieldLabel}">
+                            EVENT DATE <Run Foreground="#ef4444">*</Run>
+                        </TextBlock>
+                        <Border Background="White"
+                                BorderBrush="#e2e8f0"
+                                BorderThickness="1.5"
+                                CornerRadius="10"
+                                x:Name="DateBorder">
+                            <DatePicker x:Name="InputDate"
+                                        Height="40"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        FontSize="13"
+                                        Padding="8,0"/>
+                        </Border>
+                        <TextBlock x:Name="ErrorDate"
+                                   Text=""
+                                   FontSize="11" FontWeight="SemiBold"
+                                   Foreground="#ef4444"
+                                   Margin="4,4,0,0"
+                                   Visibility="Collapsed"/>
+                    </StackPanel>
+
+                    <!-- Details -->
+                    <StackPanel Margin="0,0,0,6">
+                        <TextBlock Text="DETAILS" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="InputDetails"
+                                 Style="{StaticResource DetailsBox}"
+                                 Height="90"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ══════════════════════════════════════════
+                 FOOTER
+                 ══════════════════════════════════════════ -->
+            <Border Grid.Row="2" Padding="26,10,26,22">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Cancel -->
+                    <Button Grid.Column="0" Height="44" BorderThickness="0"
+                            Cursor="Hand" Click="Close_click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="b" Background="#f1f5f9" CornerRadius="12">
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="b" Property="Opacity" Value="0.80"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock Text="← Cancel" FontSize="13" FontWeight="Bold"
+                                   Foreground="#64748b"/>
+                    </Button>
+
+                    <!-- Save -->
+                    <Button Grid.Column="2" Height="44" BorderThickness="0"
+                            Cursor="Hand" >
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="b" CornerRadius="12">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#0d9488" Offset="0"/>
+                                            <GradientStop Color="#14b8a6" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#0d9488" BlurRadius="16"
+                                                          ShadowDepth="0" Opacity="0.30"/>
+                                    </Border.Effect>
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="b" Property="Opacity" Value="0.87"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="b" Property="Opacity" Value="0.72"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="💾 " FontSize="15" VerticalAlignment="Center"/>
+                            <TextBlock Text="Save Changes" FontSize="13" FontWeight="Bold"
+                                       Foreground="White" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</Window>

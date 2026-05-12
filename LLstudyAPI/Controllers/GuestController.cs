@@ -498,12 +498,12 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpGet]
-        public List<SubjectDetails> GetAllSubjectsDetails()
+        public List<SubjectDetails> GetBooksSubjectsDetails()
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return this.repositoryUOW.SubjectRepository.GetSubjectsDetailsList();
+                return this.repositoryUOW.SubjectRepository.GetBooksSubjectsDetailsList();
             }
             catch(Exception ex)
             {
@@ -515,6 +515,24 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        [HttpGet]
+        public List<SubjectDetails> GetExamsSubjectsDetails()
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.SubjectRepository.GetExamsSubjectsDetailsList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
 
         [HttpGet]
         public List<Subject> GetSubjects()

@@ -869,7 +869,7 @@
                                                     <Border Grid.Column="2"
                                                             Background="#f5f3ff"
                                                             CornerRadius="8" Padding="6,2">
-                                                        <TextBlock Text="{Binding BooksCount}"
+                                                        <TextBlock Text="{Binding SubjectCounter}"
                                                                    FontSize="10" FontWeight="Bold"
                                                                    Foreground="#7c3aed"/>
                                                     </Border>

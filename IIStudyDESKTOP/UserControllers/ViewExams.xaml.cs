@@ -91,7 +91,7 @@ namespace IIStudyDESKTOP.UserControllers
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
-            client.Path = "api/Guest/GetAllSubjectsDetails";
+            client.Path = "api/Guest/GetExamsSubjectsDetails";
             this.SubjectsDetails = await client.GetAsync();
             if (this.SubjectsDetails == null)
             {
@@ -99,7 +99,7 @@ namespace IIStudyDESKTOP.UserControllers
                 this.SubjectsDetails = new List<SubjectDetails>();
             }
 
-            this.SubjectsDetails.Insert(0, new SubjectDetails() { BooksCount = 0, SubjectID = "0", Subject_name = "All" });
+            this.SubjectsDetails.Insert(0, new SubjectDetails() { SubjectCounter = this.Exams.Count(), SubjectID = "0", Subject_name = "All" });
 
             this.SubjectsList.ItemsSource = this.SubjectsDetails;
             

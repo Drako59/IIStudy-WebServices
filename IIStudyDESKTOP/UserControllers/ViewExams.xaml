@@ -755,7 +755,7 @@
                                                 <Border Grid.Column="2"
                                                         Background="#e3f2fd"
                                                         CornerRadius="8" Padding="6,2">
-                                                    <TextBlock Text="{Binding ExamsCount}"
+                                                    <TextBlock Text="{Binding SubjectCounter}"
                                                                FontSize="10" FontWeight="Bold"
                                                                Foreground="#1565c0"/>
                                                 </Border>

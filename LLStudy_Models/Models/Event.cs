@@ -1,5 +1,6 @@
 ﻿
 
+using LLStudy_Models.Validation;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,9 +17,13 @@ namespace LLStudy_Models.Models
 		
 		public string EventID { get;set; }
         [Required]
-        public string Event_name { get; set; }
+        [StringLength(maximumLength: 40, ErrorMessage = "Max Event name Length is 40.")]
+        public string Event_name { get { return this.event_name; } set{this.event_name = value; ValidateProperty(value, nameof(this.Event_name)); } }
         [Required]
-        public string Date_event { get; set; }
-		public string Details { get; set; }
+        [ValidDate(ErrorMessage = "The date isn't valid.")]
+        public string Date_event { get { return this.date_event; } set {this.date_event = value; ValidateProperty(value, nameof(this.Date_event)); } }
+        [Required]
+        [StringLength(maximumLength: 255, ErrorMessage = "Max details length is 255.")]
+        public string Details { get { return this.details; } set { this.details = value; ValidateProperty(value, nameof(this.Details)); } }
     }
 }

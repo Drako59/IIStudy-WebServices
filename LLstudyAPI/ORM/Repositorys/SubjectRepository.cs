@@ -46,12 +46,12 @@ namespace LLstudyWS.ORM
             return names;
         }
 
-        public List<SubjectDetails> GetSubjectsDetailsList()
+        public List<SubjectDetails> GetBooksSubjectsDetailsList()
         {
             string sql = $@"SELECT
                                 Subject_name,
                                 Subjects.SubjectID AS SubjectID,
-                                COUNT(BookID) AS BooksCount
+                                COUNT(BookID) AS SubjectCounter
                             FROM
                                 Subjects
                                 LEFT JOIN Books ON Books.SubjectID = Subjects.SubjectID
@@ -72,6 +72,34 @@ namespace LLstudyWS.ORM
 
                 return subjectsDetails;
                 
+            }
+        }
+        public List<SubjectDetails> GetExamsSubjectsDetailsList()
+        {
+            string sql = $@"SELECT
+                                Subject_name,
+                                Subjects.SubjectID AS SubjectID,
+                                COUNT(ExamID) AS SubjectCounter
+                            FROM
+                                Subjects
+                                LEFT JOIN Exams ON Exams.SubjectID = Subjects.SubjectID
+                            GROUP BY
+                                Subjects.SubjectID,
+                                Subject_name
+                            ORDER BY
+                                Subjects.SubjectID;";
+
+            List<SubjectDetails> subjectsDetails = new List<SubjectDetails>();
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    subjectsDetails.Add(this.moderlRefCreator.CreateModel<SubjectDetails>(reader));
+                }
+
+                return subjectsDetails;
+
             }
         }
     }
