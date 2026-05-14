@@ -18,12 +18,10 @@ namespace IIStudyDESKTOP
     /// </summary>
     public partial class MainWindow : Window
     {
-        ViewBooks viewBooks;
         ViewBooksCatalog viewBooksCatalog;
         BookView bookView;
         ViewOrders viewOrders;
         RegisteredsPage registeredsPage;
-        BookDetails bookDetails;
         ViewExams viewExams;
         ViewEvents viewEvents;
         public MainWindow()
@@ -48,6 +46,8 @@ namespace IIStudyDESKTOP
                 this.viewBooksCatalog = new ViewBooksCatalog();
             this.MainContent.Content = this.viewBooksCatalog;
             this.ClickButtonNav(sender);
+            this.SetMainBackground2("#667eea", "#764ba2");
+
 
         }
 
@@ -57,19 +57,16 @@ namespace IIStudyDESKTOP
                 this.viewExams = new ViewExams();
             this.MainContent.Content = this.viewExams;
             this.ClickButtonNav(sender);
+            this.SetMainBackground2("#1976d2", "#1565c0");
+            
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            if (this.bookView == null)
-                this.bookView = new BookView();
-            this.MainContent.Content = this.bookView;
-        }
         private void ViewOrders(object sender, RoutedEventArgs e)
         {
             if (this.viewOrders == null)
                 this.viewOrders = new ViewOrders();
             this.MainContent.Content = this.viewOrders;
+            this.SetMainBackground2("#667eea", "#764ba2");
             this.ClickButtonNav(sender);
 
         }
@@ -79,14 +76,17 @@ namespace IIStudyDESKTOP
             if (this.registeredsPage == null)
                 this.registeredsPage = new RegisteredsPage();
             this.MainContent.Content = this.registeredsPage;
+            this.SetMainBackground2("#667eea", "#764ba2");
             this.ClickButtonNav(sender);
         }
 
         private void ViewEvents(object sender, RoutedEventArgs e)
         {
+            
             if (this.viewEvents == null)
                 this.viewEvents = new ViewEvents();
             this.MainContent.Content = this.viewEvents;
+            this.SetMainBackground2("#14b8a6", "#0d9488");
             this.ClickButtonNav(sender);
         }
 
@@ -103,6 +103,34 @@ namespace IIStudyDESKTOP
 
             Button btn = sender as Button;
             btn.Style = (Style)this.Resources["ActiveSidebarButton"];
+        }
+
+        private void SetMainBackground3(string color1, string color2, string color3)
+        {
+            LinearGradientBrush brush = new LinearGradientBrush();
+
+            brush.StartPoint = new Point(0, 0);
+            brush.EndPoint = new Point(1, 1);
+
+            brush.GradientStops.Add(new GradientStop(
+                (Color)ColorConverter.ConvertFromString(color1), 0.0));
+
+            brush.GradientStops.Add(new GradientStop(
+                (Color)ColorConverter.ConvertFromString(color2), 0.5));
+
+            brush.GradientStops.Add(new GradientStop(
+                (Color)ColorConverter.ConvertFromString(color3), 1.0));
+
+            MainContentArea.Background = brush;
+        }
+        private void SetMainBackground2(string color1, string color2)
+        {
+            MainContentArea.Background = new LinearGradientBrush(
+                (Color)ColorConverter.ConvertFromString(color1),
+                (Color)ColorConverter.ConvertFromString(color2),
+                new Point(0, 0),
+                new Point(1, 1)
+            );
         }
     }
 }

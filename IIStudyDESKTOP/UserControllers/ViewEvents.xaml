@@ -312,15 +312,10 @@
                         <Border x:Name="ChipAll"
                                 Style="{StaticResource FilterChip}"
                                 MouseLeftButtonUp="SelectChipFilter"
-                                Tag="0"
+                                Tag="0" Background="#14b8a6"
                                 >
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                    <GradientStop Color="#1a237e" Offset="0"/>
-                                    <GradientStop Color="#3949ab" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <TextBlock Text="All" FontSize="12" FontWeight="Bold" Foreground="White"/>
+                            
+                            <TextBlock x:Name="ChipAllTxt" Text="All" FontSize="12" FontWeight="Bold" Foreground="White"/>
                         </Border>
 
                         <!-- Upcoming -->
@@ -554,6 +549,7 @@
                                                 <Button Style="{StaticResource ActionBtn}"
                                                         Background="#fef2f2"
                                                         Tag="{Binding}"
+                                                        Click="DeleteEvent"
                                                         >
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="🗑 " FontSize="11"/>

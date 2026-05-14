@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
@@ -32,14 +33,20 @@ namespace IIStudyDESKTOP.UserControllers
         private OrderStatus FilterStatus { get; set; } = (OrderStatus)(-1);
         private string SearchText { get; set; } = "";
         private OrderBooksWindow orderBooksWindow { get; set; }
+
+        public DateTime? FromDate { get; set; } = null;
+        public DateTime? ToDate { get; set; } = null;
+
         public ViewOrders()
         {
             InitializeComponent();
             this.GetOrders();
+            this.DataContext = this;
+
             //Loaded += (_, __) => LoadOrders();
         }
 
-        
+
 
         private ObservableCollection<Order> _allOrders = new();
         private ObservableCollection<Order> _displayed = new();
@@ -117,7 +124,6 @@ namespace IIStudyDESKTOP.UserControllers
             this.orders = await client.GetAsync();
             if (this.orders == null)
                 this.orders = new List<Order>();
-            this.DataContext = this.orders;
             this.OrdersListView.ItemsSource = this.orders;
             this.UpdateStats();
 
@@ -168,7 +174,14 @@ namespace IIStudyDESKTOP.UserControllers
         {
             Button chip = sender as Button;
             this.FilterStatus = (OrderStatus)int.Parse(chip.Tag.ToString());
+            SetActiveChip(chip);
+
             Filter();
+        }
+
+        private void SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.Filter();
         }
 
         private void Filter()
@@ -180,32 +193,24 @@ namespace IIStudyDESKTOP.UserControllers
             switch (status) {
                 case OrderStatus.Pending:
                     filtered = this.orders.Where(b => (OrderStatus)b.DeliveryStatus == OrderStatus.Pending).ToList();
-                    SetActiveChip(this.FilterPending);
                     break;
                 case OrderStatus.Processing:
                     filtered = this.orders.Where(b => (OrderStatus)b.DeliveryStatus == OrderStatus.Processing).ToList();
-                    SetActiveChip(this.FilterProcessing);
                     break;
                 case OrderStatus.Shipped:
                     filtered = this.orders.Where(b => (OrderStatus)b.DeliveryStatus == OrderStatus.Shipped).ToList();
-                    SetActiveChip(this.FilterShipped);
                     break;
                 case OrderStatus.Delivered:
                     filtered = this.orders.Where(b => (OrderStatus)b.DeliveryStatus == OrderStatus.Delivered).ToList();
-                    SetActiveChip(this.FilterDelivered);
                     break;
                 case OrderStatus.Canceled:
                     filtered = this.orders.Where(b => (OrderStatus)b.DeliveryStatus == OrderStatus.Canceled).ToList();
-                    SetActiveChip(this.FilterCanceled);
                     break;
                 case OrderStatus.Refund:
                     filtered = this.orders.Where(b => (OrderStatus)b.DeliveryStatus == OrderStatus.Refund).ToList();
-                    SetActiveChip(this.FilterRefund);
                     break;
                 default:
                     filtered = this.orders;
-                    SetActiveChip(this.FilterAll);
-
                     break;
             }
 
@@ -213,13 +218,27 @@ namespace IIStudyDESKTOP.UserControllers
 
             filtered = filtered.Where(o =>
             {
-                
+                const string format = "yyyy-MM-dd";
+
+                DateTime orderDate = DateTime.ParseExact(
+                                        o.Date,
+                                        format,
+                                        CultureInfo.InvariantCulture,
+                                        DateTimeStyles.None
+                                    );
+                bool date = true;
+                if (this.FromDate != null && this.ToDate != null)
+                    date = orderDate >= this.FromDate.Value.Date && orderDate <= this.ToDate.Value.Date;
+                else if (this.FromDate != null)
+                    date = orderDate >= this.FromDate.Value.Date;
+                else if (this.ToDate != null)
+                    date = orderDate <= this.ToDate.Value.Date;
 
                 bool passSearch = string.IsNullOrEmpty(this.SearchText)
                     || o.OrderID.ToString().Contains(this.SearchText.ToLower())
                     || o.Location.ToLower().Contains(this.SearchText.ToLower()); //|| o.Books.Any(b => b.Title.ToLower().Contains(search)
 
-                return passSearch;
+                return passSearch && date;
             }).ToList();
 
             _displayed = new ObservableCollection<Order>(filtered);

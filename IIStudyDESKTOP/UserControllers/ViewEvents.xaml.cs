@@ -51,19 +51,30 @@ namespace IIStudyDESKTOP.UserControllers
         {
             InitializeComponent();
             this.DataContext = this;
-
+            
             Init_page();
+
+
         }
 
 
 
         private async void Init_page()
         {
-            this.GetEvents();
+            await this.GetEvents();
+            this.UpdateStatistics();
         }
 
+        private async void UpdateStatistics()
+        {
+            this.TxtPast.Text = this.Events.Count(e => e.Date.Date < DateTime.Now.Date).ToString();
+            this.TxtToday.Text = this.Events.Count(e => e.Date.Date == DateTime.Now.Date).ToString();
+            this.TxtUpcoming.Text = this.Events.Count(e => e.Date.Date > DateTime.Now.Date).ToString();
+            this.TxtTotalEvents.Text = this.Events.Count().ToString();
 
-        private async void GetEvents()
+        }
+
+        private async Task GetEvents()
         {
             try
             {
@@ -102,6 +113,7 @@ namespace IIStudyDESKTOP.UserControllers
         {
             Border btn = sender as Border;
             this.FilterMode = (FilterMode)int.Parse(btn.Tag.ToString());
+            this.SetActiveChip(btn);
             this.ApplyFilters();
             
         }
@@ -144,6 +156,49 @@ namespace IIStudyDESKTOP.UserControllers
             this.EventsList.ItemsSource = filtered;
         }
 
+        private void SetActiveChip(Border active)
+        {
+            ChipAll.Opacity = 0.45;
+            ChipUpcoming.Opacity = 0.45;
+            ChipToday.Opacity = 0.45;
+
+            ChipAllTxt.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#14b8a6"));
+            ChipAll.Background = new SolidColorBrush(Colors.Transparent);
+            ChipUpcoming.Background = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#eef2ff"));
+            ChipToday.Background = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#fffbeb"));
+            ChipPast.Background = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString("#f1f5f9"));
+            active.Opacity = 1.0;
+
+            if (active == ChipAll)
+            {
+                ChipAll.Background = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString("#14b8a6"));
+                ChipAllTxt.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
+                //ChipAll.Background = new LinearGradientBrush(
+                //    (Color)ColorConverter.ConvertFromString("#042f2e"),
+                //    (Color)ColorConverter.ConvertFromString("#14b8a6"),
+                //    new Point(0, 0.5), new Point(1, 0.5));
+            }
+            else if (active == ChipUpcoming)
+            {
+                ChipUpcoming.Background = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString("#c7d2fe"));
+            }
+            else if (active == ChipToday)
+            {
+                ChipToday.Background = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString("#fde68a"));
+            }
+            else if (active == ChipPast)
+            {
+                ChipPast.Background = new SolidColorBrush(
+                    (Color)ColorConverter.ConvertFromString("#cbd5e1"));
+            }
+        }
+
         private void UpdateEvent(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -173,6 +228,35 @@ namespace IIStudyDESKTOP.UserControllers
 
         }
 
+        private async void DeleteEvent(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn == null || btn.Tag == null) return;
+            Event Event = btn.Tag as Event;
+
+            try
+            {
+                ApiClient<bool> client = new ApiClient<bool>();
+
+                client.Scheme = "http";
+                client.Host = "localhost";
+                client.Port = 5049;
+                client.Path = "api/Admin/DeleteEvent";
+                ApiResultModel<bool> response = await client.PostAsyncRet<Event,bool>(Event);
+
+                if (response == null || !response.Success || !response.Data)
+                {
+                    MessageBox.Show("Failed in deleting Event from the data base", "Request Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+
+                }
+                this.Events.Remove((EventDetail)Event);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Faild to connect to host.", "Network Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {

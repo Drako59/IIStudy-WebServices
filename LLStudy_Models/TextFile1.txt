@@ -7,4 +7,5 @@
 	Remove uncessery things from the WebApp's html.
 	Add the deleted and active fillter to ViewExams
 	Add date filter to exams.
+	Add login and sign out on a diffrent page in wpf.
 ADD ICON TO THE WPF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

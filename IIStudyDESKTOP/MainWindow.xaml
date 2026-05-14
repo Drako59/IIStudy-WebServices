@@ -420,7 +420,7 @@
         </Border>
 
         <!-- Main Content Area -->
-        <Grid Background="{StaticResource GradientBackground}">
+        <Grid x:Name="MainContentArea" Background="{StaticResource GradientBackground}">
             <Frame x:Name="MainContent" 
                    NavigationUIVisibility="Hidden"
                    Margin="30"/>

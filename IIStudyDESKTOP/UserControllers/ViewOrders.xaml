@@ -226,6 +226,12 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="14"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="14"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="14"/>
+
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
@@ -270,8 +276,47 @@
                     </StackPanel>
                 </Border>
 
+                <!-- From date -->
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                    <TextBlock Text="FROM" FontSize="9" FontWeight="Bold"
+                 Foreground="#94a3b8" Margin="2,0,0,3"/>
+                    <Border Background="#f8fafc" CornerRadius="10"
+             BorderBrush="#e2e8f0" BorderThickness="1.5">
+                        <DatePicker x:Name="DateFrom"
+                    Height="36" Width="130"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    FontSize="12"
+                    SelectedDate="{Binding FromDate,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                    SelectedDateChanged="SelectedDateChanged"
+                    />
+                    </Border>
+                </StackPanel>
+
+                <!-- Arrow -->
+                <TextBlock Grid.Column="3" Text="→"
+           FontSize="14" Foreground="#94a3b8"
+           VerticalAlignment="Bottom" Margin="0,0,0,8"/>
+
+                <!-- To date -->
+                <StackPanel Grid.Column="4" VerticalAlignment="Center">
+                    <TextBlock Text="TO" FontSize="9" FontWeight="Bold"
+                Foreground="#94a3b8" Margin="2,0,0,3"/>
+                    <Border Background="#f8fafc" CornerRadius="10"
+            BorderBrush="#e2e8f0" BorderThickness="1.5">
+                        <DatePicker x:Name="DateTo"
+                    Height="36" Width="130"
+                    BorderThickness="0"
+                    Background="Transparent"
+                    FontSize="12"
+                    SelectedDate="{Binding ToDate,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                    SelectedDateChanged="SelectedDateChanged"
+                    />
+                    </Border>
+                </StackPanel>
                 <!-- Filter Chips -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                <StackPanel Grid.Column="6" Orientation="Horizontal">
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
 
                         <!-- All -->

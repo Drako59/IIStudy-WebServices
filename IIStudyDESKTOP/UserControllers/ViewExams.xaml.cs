@@ -5,6 +5,7 @@ using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Guest;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Reflection;
@@ -45,10 +46,12 @@ namespace IIStudyDESKTOP.UserControllers
         private string SelectedSubject { get; set; } = "0";
         private string SearchSubjectText { get; set; } = "";
 
-
+        public DateTime? FromDate { get; set; } = null;
+        public DateTime? ToDate { get; set; } = null;
         public ViewExams()
         {
             InitializeComponent();
+            this.DataContext = this;
             this.Init_page();
         }
 
@@ -254,7 +257,10 @@ namespace IIStudyDESKTOP.UserControllers
                     (Color)ColorConverter.ConvertFromString("#dc2626"));
             }
         }
-
+        private void SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.Filter();
+        }
         private void Filter()
         {
             
@@ -265,22 +271,35 @@ namespace IIStudyDESKTOP.UserControllers
             {
                 case FilterStatus.Active:
                     filtered = this.Exams.Where(e => !e.IsDeleted).ToList();
-                    SetSelectedChip(this.ChipActive);
                     break;
                 case FilterStatus.Deleted:
                     filtered = this.Exams.Where(e => e.IsDeleted).ToList();
-                    SetSelectedChip(this.ChipDeleted);
                     break;
                 default:
                     filtered = this.Exams;
-                    SetSelectedChip(this.ChipAll);
                     break;
             }
             filtered = filtered.Where(e => 
             {
+                const string format = "yyyy-MM-dd";
+
+                DateTime orderDate = DateTime.ParseExact(
+                                        e.Exam_Year,
+                                        format,
+                                        CultureInfo.InvariantCulture,
+                                        DateTimeStyles.None
+                                    );
+                bool date = true;
+                if (this.FromDate != null && this.ToDate != null)
+                    date = orderDate >= this.FromDate.Value.Date && orderDate <= this.ToDate.Value.Date;
+                else if (this.FromDate != null)
+                    date = orderDate >= this.FromDate.Value.Date;
+                else if (this.ToDate != null)
+                    date = orderDate <= this.ToDate.Value.Date;
+
                 bool searchBox = e.Exam_Name.ToLower().Contains(this.SearchText.ToLower());
                 bool subjectFilter = this.SelectedSubject == "0" ? true : e.SubjectID == this.SelectedSubject;
-                return searchBox && subjectFilter;
+                return searchBox && subjectFilter && date;
             }).ToList();
             this.ExamsList.ItemsSource = null;
             this.ExamsList.ItemsSource = filtered;
@@ -306,6 +325,8 @@ namespace IIStudyDESKTOP.UserControllers
                     break;
 
             }
+            SetSelectedChip(btn);
+
             this.Filter();
 
         }
