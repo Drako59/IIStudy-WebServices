@@ -134,52 +134,8 @@ namespace IIStudyDESKTOP.WindowsPages
             }
 
         }
-        private void ValidateAllFields() //Not In use
-        {
-            List<string> ProNames = new List<string>() { nameof(this.Exam.Exam_Name), nameof(this.Exam.Exam_Year) };
 
-            this.Exam.ValidateAll();
-
-            List<string> examNameErrors = this.Exam.GetErrors(nameof(this.Exam.Exam_Name))?.Cast<string>().ToList() ?? new List<string>();
-            List<string> examYearErrors = this.Exam.GetErrors(nameof(this.Exam.Exam_Year))?.Cast<string>().ToList() ?? new List<string>();
-            List<string> examFileErrors = this.Exam.GetErrors(nameof(this.Exam.File_path_url))?.Cast<string>().ToList() ?? new List<string>();
-
-
-            if (examNameErrors.Any())
-            {
-                this.ErrorExamName.Visibility = Visibility.Visible;
-                this.ErrorExamName.Text = $"ⓘ {examNameErrors[0]}";
-            }
-            else
-            {
-                this.ErrorExamName.Visibility = Visibility.Collapsed;
-            }
-            if (examYearErrors.Any())
-            {
-                this.ErrorExamYear.Visibility = Visibility.Visible;
-                this.ErrorExamYear.Text = $"ⓘ {examYearErrors[0]}";
-            }
-            else
-            {
-                this.ErrorExamYear.Visibility = Visibility.Collapsed;
-            }
-
-            if (examFileErrors.Any())
-            {
-                this.ErrorExamFile.Visibility = Visibility.Visible;
-                this.ErrorExamFile.Text = $"ⓘ {examFileErrors[0]}";
-            }
-            else
-            {
-                this.ErrorExamFile.Visibility = Visibility.Collapsed;
-            }
-
-            //Exam_Year
-        }
-        private void ValidateFields(object sender, TextChangedEventArgs e)
-        {
-            this.ValidateAllFields();
-        }
+       
         private void Close_click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -190,4 +146,53 @@ namespace IIStudyDESKTOP.WindowsPages
 
         }
     }
-}
+} 
+
+
+        //private void ValidateFields(object sender, TextChangedEventArgs e)
+        //{
+        //    this.ValidateAllFields();
+        //}
+
+        //private void ValidateAllFields() //Not In use
+        //{
+        //    List<string> ProNames = new List<string>() { nameof(this.Exam.Exam_Name), nameof(this.Exam.Exam_Year) };
+
+        //    this.Exam.ValidateAll();
+
+        //    List<string> examNameErrors = this.Exam.GetErrors(nameof(this.Exam.Exam_Name))?.Cast<string>().ToList() ?? new List<string>();
+        //    List<string> examYearErrors = this.Exam.GetErrors(nameof(this.Exam.Exam_Year))?.Cast<string>().ToList() ?? new List<string>();
+        //    List<string> examFileErrors = this.Exam.GetErrors(nameof(this.Exam.File_path_url))?.Cast<string>().ToList() ?? new List<string>();
+
+
+        //    if (examNameErrors.Any())
+        //    {
+        //        this.ErrorExamName.Visibility = Visibility.Visible;
+        //        this.ErrorExamName.Text = $"ⓘ {examNameErrors[0]}";
+        //    }
+        //    else
+        //    {
+        //        this.ErrorExamName.Visibility = Visibility.Collapsed;
+        //    }
+        //    if (examYearErrors.Any())
+        //    {
+        //        this.ErrorExamYear.Visibility = Visibility.Visible;
+        //        this.ErrorExamYear.Text = $"ⓘ {examYearErrors[0]}";
+        //    }
+        //    else
+        //    {
+        //        this.ErrorExamYear.Visibility = Visibility.Collapsed;
+        //    }
+
+        //    if (examFileErrors.Any())
+        //    {
+        //        this.ErrorExamFile.Visibility = Visibility.Visible;
+        //        this.ErrorExamFile.Text = $"ⓘ {examFileErrors[0]}";
+        //    }
+        //    else
+        //    {
+        //        this.ErrorExamFile.Visibility = Visibility.Collapsed;
+        //    }
+
+        //    //Exam_Year
+        //}

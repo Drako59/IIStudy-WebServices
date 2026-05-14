@@ -20,7 +20,7 @@ namespace LLstudyWS.Controllers
 
 
             [HttpPost]
-            public bool AddEvent(Event event_var)
+            public bool CreateEvent(Event event_var)
             {
                 try
                 {

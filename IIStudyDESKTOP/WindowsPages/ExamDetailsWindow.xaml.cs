@@ -53,6 +53,7 @@ namespace IIStudyDESKTOP.WindowsPages
             }
             else
             {
+
                 this.Exam.Exam_Name = copy.Exam_Name;
                 this.Exam.Exam_Year = copy.Exam_Year;
                 this.Exam.File_path_url = copy.File_path_url;

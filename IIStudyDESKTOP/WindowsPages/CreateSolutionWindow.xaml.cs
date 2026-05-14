@@ -107,7 +107,7 @@ namespace IIStudyDESKTOP.WindowsPages
 
 
                     ApiResultModel<bool> response = await client.PostAsyncRet<Solution, bool>(this.Solution, files_list); //this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) }
-                    if (response.Success)
+                    if (response.Success && response.Data)
                     {
 
 

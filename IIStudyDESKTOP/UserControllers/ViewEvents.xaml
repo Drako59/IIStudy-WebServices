@@ -113,6 +113,7 @@
                     <Button Grid.Column="1"
                             Height="40" BorderThickness="0"
                             Cursor="Hand"
+                            Click="CreateEvent"
                             >
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
@@ -276,6 +277,8 @@
                                         BorderThickness="0"
                                         Background="Transparent"
                                         FontSize="12"
+                                        SelectedDate="{Binding FromDate,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                                        SelectedDateChanged="SelectedDateChanged"
                                         />
                         </Border>
                     </StackPanel>
@@ -296,6 +299,8 @@
                                         BorderThickness="0"
                                         Background="Transparent"
                                         FontSize="12"
+                                        SelectedDate="{Binding ToDate,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                                        SelectedDateChanged="SelectedDateChanged"
                                         />
                         </Border>
                     </StackPanel>
@@ -306,6 +311,8 @@
                         <!-- All -->
                         <Border x:Name="ChipAll"
                                 Style="{StaticResource FilterChip}"
+                                MouseLeftButtonUp="SelectChipFilter"
+                                Tag="0"
                                 >
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -320,6 +327,8 @@
                         <Border x:Name="ChipUpcoming"
                                 Style="{StaticResource FilterChip}"
                                 Background="#eef2ff"
+                                MouseLeftButtonUp="SelectChipFilter"
+                                Tag="3"
                                 >
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="📅 " FontSize="12" VerticalAlignment="Center"/>
@@ -332,13 +341,31 @@
                         <Border x:Name="ChipToday"
                                 Style="{StaticResource FilterChip}"
                                 Background="#fffbeb"
-                                Margin="0"
+                                MouseLeftButtonUp="SelectChipFilter"
+                                Tag="2"
                                >
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="⭐ " FontSize="12" VerticalAlignment="Center"/>
                                 <TextBlock Text="Today" FontSize="12" FontWeight="Bold"
                                            Foreground="#d97706" VerticalAlignment="Center"/>
                             </StackPanel>
+                        </Border>
+                        
+                        <!--Past-->
+                        <Border x:Name="ChipPast"
+                                Style="{StaticResource FilterChip}"
+                                Background="#f1f5f9"
+                                Margin="0"
+                                MouseLeftButtonUp="SelectChipFilter"
+                                Tag="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🕓 " FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Past"
+                                                FontSize="12"
+                                                FontWeight="Bold"
+                                                Foreground="#64748b"
+                                                VerticalAlignment="Center"/>
+                                 </StackPanel>
                         </Border>
 
                     </StackPanel>
@@ -378,6 +405,10 @@
                                                 <!-- Divider -->
                                                 <ColumnDefinition Width="Auto"/>
                                                 <!-- Content -->
+                                                <ColumnDefinition Width="Auto"/>
+                                                <!-- Event date text -->
+                                                <ColumnDefinition Width="Auto"/>
+                                                <!--Space Between-->
                                                 <ColumnDefinition Width="*"/>
                                                 <!-- Actions -->
                                                 <ColumnDefinition Width="Auto"/>
@@ -474,9 +505,31 @@
                                                            TextTrimming="CharacterEllipsis"
                                                            LineHeight="18"/>
                                             </Grid>
+                                            <!-- ── EVENT DATE TEXT ── -->
+                                            <Border Grid.Column="3"
+                                                    Background="#f8fafc"
+                                                    CornerRadius="10"
+                                                    Padding="10,6"
+                                                    VerticalAlignment="Center"
+                                                    Margin="8,0,12,0"
+                                                    BorderBrush="#e2e8f0"
+                                                    BorderThickness="1">            
+                                                <StackPanel>
+                                                    <TextBlock Text="DATE"
+                                                               FontSize="9"
+                                                               FontWeight="Bold"
+                                                               Foreground="#94a3b8"
+                                                               HorizontalAlignment="Center"/>
 
+                                                    <TextBlock Text="{Binding Date_event}"
+                                                               FontSize="12"
+                                                               FontWeight="Bold"
+                                                               Foreground="#3949ab"
+                                                               HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Border>
                                             <!-- ── ACTION BUTTONS ── -->
-                                            <StackPanel Grid.Column="3"
+                                            <StackPanel Grid.Column="5"
                                                         Orientation="Vertical"
                                                         VerticalAlignment="Center"
                                                         Margin="0,0,14,0">
@@ -486,6 +539,7 @@
                                                         Background="#eef2ff"
                                                         Margin="0,0,0,6"
                                                         Tag="{Binding}"
+                                                        Click="UpdateEvent"
                                                         >
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="✏️ " FontSize="11"/>

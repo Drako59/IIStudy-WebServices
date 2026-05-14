@@ -1,10 +1,8 @@
 ﻿using IIstudyWSClient;
 using LLStudy_Models.Models;
-using LLStudy_Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,19 +18,19 @@ using System.Windows.Shapes;
 namespace IIStudyDESKTOP.WindowsPages
 {
     /// <summary>
-    /// Interaction logic for EditEventWindow.xaml
+    /// Interaction logic for CreateEventWindow.xaml
     /// </summary>
-    
-    public partial class EditEventWindow : Window
+    public partial class CreateEventWindow : Window
     {
-        private EventDetail Event { get; set; }
-        public EditEventWindow(EventDetail Event)
+        private Event Event { get; set; }
+        public CreateEventWindow()
         {
             InitializeComponent();
-            this.Event = Event;
+            this.Event = new Event()
+            {
+                EventID = "0"
+            };
             this.DataContext = this.Event;
-
-
         }
 
         private bool CheckValidation()
@@ -50,7 +48,7 @@ namespace IIStudyDESKTOP.WindowsPages
             return true;
         }
 
-        private async void UpdateEvent(object sender ,RoutedEventArgs e)
+        private async void CreateEvent(object sender, RoutedEventArgs e)
         {
             if (this.CheckValidation())
             {
@@ -60,25 +58,17 @@ namespace IIStudyDESKTOP.WindowsPages
                     client.Scheme = "http";
                     client.Host = "localhost";
                     client.Port = 5049;
-                    client.Path = "api/Admin/UpdateEvent";
+                    client.Path = "api/Admin/CreateEvent";
 
 
 
-                    
+
 
 
 
                     ApiResultModel<bool> response = await client.PostAsyncRet<Event, bool>(this.Event); //this._selectedImagePath == null ? new List<(Stream, string)>() : new List<(Stream, string)>() { (File.OpenRead(this._selectedImagePath), this.ImageFileName) }
                     if (response.Success && response.Data)
                     {
-                        const string format = "yyyy-MM-dd";
-
-                        Event.Date = DateTime.ParseExact(
-                                                Event.Date_event,
-                                                format,
-                                                CultureInfo.InvariantCulture,
-                                                DateTimeStyles.None
-                                            );
                         this.DialogResult = true;
                         this.Close();
 
@@ -103,7 +93,7 @@ namespace IIStudyDESKTOP.WindowsPages
             }
         }
 
-        private void Close_click(object sender, RoutedEventArgs e) 
+        private void Close_click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
             this.Close();

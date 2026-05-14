@@ -97,6 +97,7 @@ namespace IIStudyDESKTOP
             this.ExamsNav.Style = (Style)this.Resources["SidebarButton"];
             this.OrdersNav.Style = (Style)this.Resources["SidebarButton"];
             this.UsersNav.Style = (Style)this.Resources["SidebarButton"];
+            this.CalendarsNav.Style = (Style)this.Resources["SidebarButton"];
             //this.ReportsNav.Style = (Style)this.Resources["SidebarButton"];
             //this.SettingsNav.Style = (Style)this.Resources["SidebarButton"];
 

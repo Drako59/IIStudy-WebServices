@@ -182,7 +182,7 @@ namespace IIstudyWSClient
 
                     if (response.IsSuccessStatusCode)
                     {
-                        Console.WriteLine("here");
+                        //Console.WriteLine("here");
                         string result = await response.Content.ReadAsStringAsync();
                         await Console.Out.WriteLineAsync(result);
                         if (string.IsNullOrWhiteSpace(result))

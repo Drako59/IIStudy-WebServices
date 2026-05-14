@@ -14,7 +14,8 @@ namespace LLStudy_Models.Models
 		string date_event;
 		string details;
 		string eventID;
-		
+
+        [Required]
 		public string EventID { get;set; }
         [Required]
         [StringLength(maximumLength: 40, ErrorMessage = "Max Event name Length is 40.")]
