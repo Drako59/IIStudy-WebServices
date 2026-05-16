@@ -68,9 +68,9 @@
                 </div>
 
                 <ul class="nav-links" id="navLinks">
-                    <li><a href="https://localhost:7121/Guest/HomePage"  data-page="home">Home</a></li>
-                    <li><a href="https://localhost:7121/Guest/ViewBookCatalog" data-page="catalog">Book Catalog</a></li>
-                    <li><a href="https://localhost:7121/Guest/ViewExams" data-page="exams">Exams</a></li>
+                    <li><a href="@Url.Action("HomePage", "Guest")" data-page="home">Home</a></li>
+                    <li><a href="@Url.Action("ViewBookCatalog", "Guest")" data-page="catalog">Book Catalog</a></li>
+                    <li><a href="@Url.Action("ViewExamsPage", "Guest")" data-page="exams">Exams</a></li>
                     <li><a href="#"  data-page="about">About</a></li>
                     <li><a href="@Url.Action("ViewCalendar", "Guest")" data-page="calendar">Calendar</a></li>
                     <li><a href="https://localhost:7121/Registered/RegisteredHomePage" data-page="contact">test reg</a></li>

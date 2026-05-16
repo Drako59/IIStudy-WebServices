@@ -3,6 +3,7 @@ using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
+using NuGet.Protocol.Plugins;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 
@@ -53,20 +54,20 @@ namespace IIStudyWebApp.Controllers
             return View(bookView);
         }
 
-        public async Task<IActionResult> ViewExams(string year = null, string subjectID = null, int pages = 0)
-        {
-            ApiClient<ViewExamsModel> client = new ApiClient<ViewExamsModel>();
-            client.Scheme = "http";
-            client.Host = "localhost";
-            client.Port = 5049;
-            client.Path = "api/Guest/GetExams";
-            client.AddParameter("year", year);
-            client.AddParameter("subjectID",subjectID);
-            client.AddParameter("pages", pages);
+        //public async Task<IActionResult> ViewExams(string year = null, string subjectID = null, int pages = 0) //Not in use
+        //{
+        //    ApiClient<ViewExamsModel> client = new ApiClient<ViewExamsModel>();
+        //    client.Scheme = "http";
+        //    client.Host = "localhost";
+        //    client.Port = 5049;
+        //    client.Path = "api/Guest/GetExams";
+        //    client.AddParameter("year", year);
+        //    client.AddParameter("subjectID",subjectID);
+        //    client.AddParameter("pages", pages);
 
-            ViewExamsModel examView = await client.GetAsync();
-            return View(examView);
-        }
+        //    ViewExamsModel examView = await client.GetAsync();
+        //    return View(examView);
+        //}
         [HttpGet]
 
         public async Task<IActionResult> ViewCalendar()
@@ -174,6 +175,23 @@ namespace IIStudyWebApp.Controllers
 
             return File(file.Bytes, file.ContentType);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewExamsPage()
+        {
+            ApiClient<Dictionary<string,string>> client = new ApiClient<Dictionary<string,string>>();
+
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetAllSubjectsDict";
+            Dictionary<string, string> subjects = await client.GetAsync();
+
+            return View(subjects);
+
+
+        }
+
         private async Task<string> SendReader()
         {
             return null;

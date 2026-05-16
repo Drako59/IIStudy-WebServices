@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewData["Title"] = "ViewExamsPage";
+    Layout = "~/Views/Shared/RegisteredMasterPage.cshtml";
+}
+
+@model Dictionary<string,string>;
+
+<link href="~/css/ViewExamsPage.css" rel="stylesheet" />
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+@functions {
+    string GetSubjectIcon(string subjectName)
+    {
+        if (string.IsNullOrWhiteSpace(subjectName))
+            return "fa-solid fa-book";
+
+        string name = subjectName.ToLower();
+
+        if (name.Contains("math") || name.Contains("מתמטיקה"))
+            return "fa-solid fa-ruler-combined";
+
+        if (name.Contains("english") || name.Contains("אנגלית"))
+            return "fa-solid fa-language";
+
+        if (name.Contains("physics") || name.Contains("פיזיקה"))
+            return "fa-solid fa-atom";
+
+        if (name.Contains("chemistry") || name.Contains("כימיה"))
+            return "fa-solid fa-flask";
+
+        if (name.Contains("biology") || name.Contains("ביולוגיה"))
+            return "fa-solid fa-microscope";
+
+        if (name.Contains("history") || name.Contains("היסטוריה"))
+            return "fa-solid fa-landmark";
+
+        if (name.Contains("geography") || name.Contains("גאוגרפיה") || name.Contains("גיאוגרפיה"))
+            return "fa-solid fa-earth-americas";
+
+        if (name.Contains("bible") || name.Contains("תנך") || name.Contains("תנ\"ך"))
+            return "fa-solid fa-book-bible";
+
+        if (name.Contains("literature") || name.Contains("ספרות"))
+            return "fa-solid fa-book-open";
+
+        if (name.Contains("citizenship") || name.Contains("אזרחות"))
+            return "fa-solid fa-scale-balanced";
+
+        if (name.Contains("psychometry") || name.Contains("פסיכומטרי"))
+            return "fa-solid fa-brain";
+
+        if (name.Contains("food"))
+            return "fa-solid fa-utensils";
+
+        // 1 Math
+        if (name.Contains("math") || name.Contains("מתמטיקה"))
+            return "fa-solid fa-square-root-variable";
+
+        // 2 English
+        if (name.Contains("english") || name.Contains("אנגלית"))
+            return "fa-solid fa-language";
+
+        // 3 Physics
+        if (name.Contains("physics") || name.Contains("פיזיקה"))
+            return "fa-solid fa-atom";
+
+        // 4 Chemistry
+        if (name.Contains("chemistry") || name.Contains("כימיה"))
+            return "fa-solid fa-flask-vial";
+
+        // 5 Biology
+        if (name.Contains("biology") || name.Contains("ביולוגיה"))
+            return "fa-solid fa-dna";
+
+        // 6 History
+        if (name.Contains("history") || name.Contains("היסטוריה"))
+            return "fa-solid fa-landmark";
+
+        // 7 Geography
+        if (name.Contains("geography") || name.Contains("גאוגרפיה") || name.Contains("גיאוגרפיה"))
+            return "fa-solid fa-earth-americas";
+
+        // 8 Computer Science
+        // שמתי גם puter science כי בתמונה זה נראה חתוך
+        if (name.Contains("computer science") ||
+            name.Contains("puter science") ||
+            name.Contains("computers") ||
+            name.Contains("computer") ||
+            name.Contains("programming") ||
+            name.Contains("מדעי המחשב") ||
+            name.Contains("מחשבים") ||
+            name.Contains("תכנות"))
+            return "fa-solid fa-laptop-code";
+
+        // 9 Art
+        if (name.Contains("art") || name.Contains("אומנות") || name.Contains("אמנות"))
+            return "fa-solid fa-palette";
+
+        // 10 Music
+        if (name.Contains("music") || name.Contains("מוזיקה") || name.Contains("מוסיקה"))
+            return "fa-solid fa-music";
+
+        // 11 Food
+        if (name.Contains("food") || name.Contains("אוכל") || name.Contains("מזון"))
+            return "fa-solid fa-utensils";
+
+        // 12 Psychometry
+        if (name.Contains("psychometry") ||
+            name.Contains("psychometric") ||
+            name.Contains("פסיכומטרי") ||
+            name.Contains("פסיכומטריה"))
+            return "fa-solid fa-brain";
+
+        // 13 Ofek
+        if (name.Contains("ofek") || name.Contains("אופק"))
+            return "fa-solid fa-graduation-cap";
+
+        // 14 Other
+        if (name.Contains("other") || name.Contains("אחר"))
+            return "fa-solid fa-shapes";
+
+        // 15 test max
+        if (name.Contains("test max") || name.Contains("test") || name.Contains("max"))
+            return "fa-solid fa-vial-circle-check";
+
+        return "fa-solid fa-book";
+    }
+}
+
+
+<div class="subjects-page">
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Browse by Subject</h1>
+            <p class="page-subtitle">Explore books across different academic fields</p>
+        </div>
+
+        <div class="subjects-section">
+            <div class="subjects-grid" id="subjectsGrid">
+                <!-- Subjects will be dynamically loaded here -->
+                @foreach (var (subjectID, subject_name) in Model)
+                {
+                    string iconClass = GetSubjectIcon(subject_name);
+
+                    <div class="subject-card" onclick="selectSubject(@subjectID)">
+                        <div class="subject-icon">
+                            <i class="@iconClass"></i>
+                        </div>
+                        <div class="subject-name">@subject_name</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function selectSubject(subjectId) {
+            console.log("nothing");
+           // In a real application, this would navigate to a filtered book catalog
+           // window.location.href = '/catalog?subjectId=' + subjectId;
+       }
+</script>
+

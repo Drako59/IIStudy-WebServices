@@ -42,7 +42,10 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> Profile()
         {
             Registered registered = await GetRegisteredDeatils();
-
+            if (registered == null)
+            {
+                return RedirectToAction("ViewSignInPage", "Guest");
+            }
             //RegisteredViewModel registeredInfo = new RegisteredViewModel();
             //registeredInfo.registered = GetRegisteredDeatils().Result;
 
@@ -308,6 +311,7 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> ViewBookPreview(string bookID)
         {
             Registered registered = await GetRegisteredDeatils();
+
             //RegisteredViewModel registeredInfo = new RegisteredViewModel();
             //registeredInfo.registered = GetRegisteredDeatils().Result;
 
@@ -329,7 +333,7 @@ namespace IIStudyWebApp.Controllers
             return View(bookView);
         }
 
-        public async Task<IActionResult> ViewExams(string year = null, string subjectID = null, int pages = 0)
+        public async Task<IActionResult> ViewExams(string year = null, string subjectID = null, int pages = 0) //Not in use => remove
         {
             ApiClient<ViewExamsModel> client = new ApiClient<ViewExamsModel>();
             client.Scheme = "http";
@@ -363,6 +367,7 @@ namespace IIStudyWebApp.Controllers
             if (string.IsNullOrWhiteSpace(registeredID))
             {
                 // The is not a connected user.
+
                 return null;
             }
             ApiClient<Registered> client = new ApiClient<Registered>();
@@ -393,7 +398,7 @@ namespace IIStudyWebApp.Controllers
 
             if (formFile == null || formFile.Length == 0)
             {
-                await Console.Out.WriteLineAsync("Here, there is not any file");
+                //await Console.Out.WriteLineAsync("Here, there is not any file");
 
                 return RedirectToAction("Profile", "Registered");
                 
@@ -459,7 +464,8 @@ namespace IIStudyWebApp.Controllers
             //order.Delivered = false;
             order.DeliveryStatus = (int)OrderStatus.Pending;
             order.RegisteredID = HttpContext.Session.GetString("RegisteredID");
-
+            if (order.RegisteredID == null)
+                return RedirectToAction("viewSignInPage", "Guest");
 
             ApiClient<Order> client = new ApiClient<Order>();
 
@@ -483,6 +489,8 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> PaymentPage()
         {
             Registered registered = await GetRegisteredDeatils();
+            if (registered == null)
+                return RedirectToAction("viewSignInPage", "Guest");
             ViewData["Registered"] = registered;
 
             ApiClient<Order> client = new ApiClient<Order>();
@@ -510,7 +518,10 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Registered/GetBookFile";
             client.AddParameter("bookID", bookID);
-            client.AddParameter("registeredID", HttpContext.Session.GetString("RegisteredID"));
+            string regID = HttpContext.Session.GetString("RegisteredID");
+            if (regID == null)
+                return RedirectToAction("viewSignInPage", "Guest");
+            client.AddParameter("registeredID", regID);
 
             ApiFileResultModel file = await client.GetAsyncFile();
 
@@ -530,7 +541,12 @@ namespace IIStudyWebApp.Controllers
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Registered/GetUserBooks";
-            client.AddParameter("registeredID", HttpContext.Session.GetString("RegisteredID"));
+            string regID = HttpContext.Session.GetString("RegisteredID");
+            if (regID == null)
+                return RedirectToAction("viewSignInPage", "Guest");
+            client.AddParameter("registeredID", regID );
+
+
 
             ViewOwnedBooksModel viewOwnedBooksModels = await client.GetAsync();
             if (viewOwnedBooksModels == null ||viewOwnedBooksModels.User == null)
@@ -544,9 +560,33 @@ namespace IIStudyWebApp.Controllers
         public async Task<IActionResult> ViewCalendar()
         {
             Registered registered = await this.GetRegisteredDeatils();
+            if (registered == null)
+            {
+                return RedirectToAction("ViewCalendar", "Guest");
+            }
             ViewData["Registered"] = registered;
 
             return View();
+        }
+
+        public async Task<IActionResult> ViewExamsPage()
+        {
+            Registered reg = await this.GetRegisteredDeatils();
+            if (reg == null)
+            {
+                return RedirectToAction("ViewExamsPage", "Guest");
+            }
+            ViewData["Registered"] = reg;
+            ApiClient<Dictionary<string, string>> client = new ApiClient<Dictionary<string, string>>();
+
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetAllSubjectsDict";
+
+
+            Dictionary<string, string> subjects = await client.GetAsync();
+            return View(subjects);
         }
     }
 }

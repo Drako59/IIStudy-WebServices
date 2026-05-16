@@ -11,7 +11,7 @@ namespace LLstudyWS.ORM
 
         public Dictionary<string,string> GetSubjectsDict()
         {
-            string sql = "SELECT * FROM Subjects";
+            string sql = "SELECT * FROM Subjects ORDER BY SubjectID";
             Dictionary<string, string> subjectsDict = new Dictionary<string, string>();
             List<Subject> subjects = new List<Subject>();
             using(IDataReader reader = this.helperOledb.Select(sql))
