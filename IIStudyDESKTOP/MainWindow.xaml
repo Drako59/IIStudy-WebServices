@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IIStudyDESKTOP"
+        xmlns:convertor="clr-namespace:IIStudyDESKTOP"
         mc:Ignorable="d"
         Title="IIStudy - Admin Dashboard" 
         Height="1080" 
@@ -13,6 +14,8 @@
         WindowState="Maximized">
 
     <Window.Resources>
+        <convertor:InitialsConvertor x:Key="InitialsConvertor"></convertor:InitialsConvertor>
+        <convertor:UrlConverter x:Key="UrlConverter"></convertor:UrlConverter>
         <!-- Gradient Background Brush -->
         <LinearGradientBrush x:Key="GradientBackground" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#667eea" Offset="0"/>
@@ -305,23 +308,37 @@
                                     <DropShadowEffect Color="#667eea" BlurRadius="12" ShadowDepth="0" Opacity="0.3"/>
                                 </Border.Effect>
                                 <!-- You can replace this with an Image control -->
-                                <TextBlock Text="👤" 
-                                          FontSize="24" 
-                                          Foreground="White"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"/>
+                                <Grid>
+                                    <!-- Fallback: Initials -->
+                                    <TextBlock Text="{Binding UserName, Converter={StaticResource InitialsConvertor}}"
+                                               FontSize="15"
+                                               FontWeight="Bold"
+                                               Foreground="White"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>         
+
+                                    <!-- Real Image, shown only if image exists -->
+                                    <Ellipse>
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{Binding RegisteredID,
+                                                        Converter={StaticResource UrlConverter},
+                                                        ConverterParameter=Registered}"
+                                                        Stretch="UniformToFill"/>               
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                </Grid>
                             </Border>
 
                             <!-- User Info -->
                             <StackPanel Grid.Column="1" 
                                        Margin="12,0,0,0"
                                        VerticalAlignment="Center">
-                                <TextBlock Text="Admin User" 
+                                <TextBlock Text="{Binding UserName}" 
                                           FontWeight="Bold"
                                           FontSize="14"
                                           Foreground="#1e293b"
                                           TextTrimming="CharacterEllipsis"/>
-                                <TextBlock Text="admin@iistudy.com" 
+                                <TextBlock Text="{Binding Email}" 
                                           FontSize="11"
                                           Foreground="#64748b"
                                           TextTrimming="CharacterEllipsis"/>
@@ -331,6 +348,7 @@
                         <!-- Sign Out Button -->
                         <Button Grid.Row="2"
                                Style="{StaticResource SignOutButton}"
+                                Click="SignOut"
                                >
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="🚪" FontSize="16" Margin="0,0,8,0"/>

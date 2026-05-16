@@ -13,6 +13,7 @@
         <convertor:UrlConverter x:Key="UrlConverter">
 
         </convertor:UrlConverter>
+        <convertor:InitialsConvertor x:Key="InitialsConvertor"></convertor:InitialsConvertor>
         <Style x:Key="CloseBtn" TargetType="Button">
             <Setter Property="Width" Value="32"/>
             <Setter Property="Height" Value="32"/>
@@ -236,15 +237,21 @@
                                                 <Border Grid.Column="0"
                                                         Width="44" Height="44"
                                                         CornerRadius="22"
-                                                        Background="{Binding AvatarColor}"
                                                         Margin="0,0,12,0">
+                                                    <Border.Background>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                            <GradientStop Color="#667eea" Offset="0"/>
+                                                            <GradientStop Color="#764ba2" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
                                                     <Border.Effect>
-                                                        <DropShadowEffect Color="{Binding AvatarColor}"
+                                                        <DropShadowEffect Color="#764ba2"
                                                                           BlurRadius="12"
-                                                                          ShadowDepth="0" Opacity="0.40"/>
+                                                                          ShadowDepth="0"
+                                                                          Opacity="0.40"/>
                                                     </Border.Effect>
                                                     <Grid>
-                                                        <TextBlock Text="{Binding Initials}"
+                                                        <TextBlock Text="{Binding UserName,Converter= {StaticResource InitialsConvertor}}"
                                                                    FontSize="15" FontWeight="Bold"
                                                                    Foreground="White"
                                                                    HorizontalAlignment="Center"

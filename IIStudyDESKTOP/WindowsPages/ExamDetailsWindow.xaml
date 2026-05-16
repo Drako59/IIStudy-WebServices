@@ -4,8 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
+        
         mc:Ignorable="d"
         Title="ExamDetailsWindow" Height="620" Width="500">
+    <!--WindowStyle="None"-->
+
     <Window.Resources>
 
         <Style x:Key="InfoLabel" TargetType="TextBlock">

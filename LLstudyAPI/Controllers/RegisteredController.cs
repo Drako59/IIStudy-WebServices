@@ -103,7 +103,9 @@ namespace LLstudyWS.Controllers
             {
                 Registered reg;
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                reg = this.repositoryUOW.RegisteredRepository.GetByID(registeredID, new List<string>() {"HasErrors", "IsValid" } );
+                reg = this.repositoryUOW.RegisteredRepository.GetByID(registeredID, new List<string>() {"HasErrors", "IsValid" ,nameof(Registered.Password), nameof(Registered.RegisteredSalt)} );
+                reg.Password = "NoneNone";
+                reg.RegisteredSalt = "NoneNone";
                 return reg; 
             }
             catch(Exception ex)

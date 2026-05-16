@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
         xmlns:converter="clr-namespace:IIStudyDESKTOP"
         mc:Ignorable="d"
+        
+        
         Title="EditExamWindow"  Height="560" Width="500">
+    <!--WindowStyle="None"-->
     <Window.Resources>
         <converter:StringToDateConverter x:Key="StringToDateConverter"></converter:StringToDateConverter>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>

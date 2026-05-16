@@ -1,16 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using LLStudy_Models.Models;
 
 namespace LLStudy_Models.ViewModels
 {
-    public class SignInViewModel
+    public class SignInViewModel : Model
     {
-        public string? SignKey { get; set; }
-        public string Password { get; set; }
+        private string signKey;
+        private string password;
+
+        [Required]
+        public string SignKey { get { return this.signKey; } set { this.signKey = value; ValidateProperty(value, nameof(this.SignKey)); } }
+        [Required]
+        public string Password { get { return this.password; } set { this.password = value; ValidateProperty(value, nameof(this.Password)); } }
 
     }
 }

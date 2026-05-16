@@ -1,4 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+﻿using IIStudyDESKTOP.Pages;
+using IIStudyDESKTOP.UserControllers;
+using IIStudyDESKTOP.WindowsPages;
+using IIstudyWSClient;
+using LLStudy_Models.Models;
+using System.IO;
+using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,8 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using IIStudyDESKTOP.UserControllers;
-using IIStudyDESKTOP.WindowsPages;
 namespace IIStudyDESKTOP
 {
     /// <summary>
@@ -24,16 +29,53 @@ namespace IIStudyDESKTOP
         RegisteredsPage registeredsPage;
         ViewExams viewExams;
         ViewEvents viewEvents;
-        public MainWindow()
+        private Registered RegisteredDetails { get; set; }
+        private readonly string registeredID;
+        public MainWindow(string registeredID)
         {
             InitializeComponent();
+            this.registeredID = registeredID;
+            this.Init_Page();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Init_Page()
         {
-
+            await this.LoadUserDetails();
         }
 
+        private async Task LoadUserDetails()
+        {
+            try
+            {
+                ApiClient<Registered> client = new ApiClient<Registered>();
+                client.Scheme = "http";
+                client.Host = "localhost";
+                client.Port = 5049;
+                client.Path = "api/Registered/profile";
+                client.AddParameter("registeredID", this.registeredID);
+
+                this.RegisteredDetails = await client.GetAsync();
+
+                if (this.RegisteredDetails == null)
+                {
+                    MessageBox.Show(
+                                "The operation failed.",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                }
+
+                this.DataContext = this.RegisteredDetails;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                                "Couldn't send the request due to network error on the host or the client.",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+            }
+        }
         
 
         
@@ -131,6 +173,14 @@ namespace IIStudyDESKTOP
                 new Point(0, 0),
                 new Point(1, 1)
             );
+        }
+
+
+        private void SignOut(object sender, RoutedEventArgs e)
+        {
+            LogInPageWindow logInPageWindow = new LogInPageWindow();
+            logInPageWindow.Show();
+            this.Close();
         }
     }
 }

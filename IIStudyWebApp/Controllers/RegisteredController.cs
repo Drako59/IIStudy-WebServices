@@ -372,7 +372,7 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Registered/profile";
             client.AddParameter("registeredID", registeredID);
             Registered registered = await client.GetAsync();
-            Console.WriteLine(@$"{registered.UserName} {registeredID}");
+            //Console.WriteLine(@$"{registered.UserName} {registeredID}");
 
             return registered;
 

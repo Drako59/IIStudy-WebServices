@@ -1,0 +1,474 @@
+﻿<Window x:Class="IIStudyDESKTOP.Pages.LogInPageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IIStudyDESKTOP.Pages"
+        mc:Ignorable="d"
+        Title="IIStudy — Sign In"
+        Height="600" Width="960"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+        <Style x:Key="LoginInput" TargetType="TextBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#e2e8f0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="22,0,14,0"/>
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="14"
+                                Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#667eea"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#a5b4fc"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LoginPassword" TargetType="PasswordBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#e2e8f0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="22,0,14,0"/>
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="14"
+                                Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#667eea"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#a5b4fc"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SignInBtn" TargetType="Button">
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="b" CornerRadius="14">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#667eea" Offset="0"/>
+                                    <GradientStop Color="#764ba2" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#667eea" BlurRadius="24"
+                                                  ShadowDepth="0" Opacity="0.45"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="b" Property="Opacity" Value="0.88"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="b" Property="Opacity" Value="0.72"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Border Margin="20" CornerRadius="28" Background="White" ClipToBounds="True">
+        <Border.Effect>
+            <DropShadowEffect Color="#764ba2" BlurRadius="60" ShadowDepth="0" Opacity="0.22"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="420"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ══════════════════════════════════════════════
+                 LEFT — BRAND PANEL
+                 ══════════════════════════════════════════════ -->
+            <Border Grid.Column="0" ClipToBounds="True">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#667eea" Offset="0"/>
+                        <GradientStop Color="#764ba2" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Grid>
+                    <!-- Subtle decorative blobs -->
+                    <Ellipse Width="300" Height="300"
+                             HorizontalAlignment="Left" VerticalAlignment="Top"
+                             Margin="-100,-80,0,0" Opacity="0.15"
+                             IsHitTestVisible="False">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="220" Height="220"
+                             HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                             Margin="0,0,-60,-60" Opacity="0.12"
+                             IsHitTestVisible="False">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="White" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+
+                    <!-- Brand content -->
+                    <StackPanel VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Margin="48,0">
+
+                        <!-- ── Logo pill ── -->
+                        <Border HorizontalAlignment="Center"
+                                CornerRadius="16"
+                                Padding="20,12"
+                                Margin="0,0,0,28"
+                                Background="White">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Black" BlurRadius="16"
+                                                  ShadowDepth="0" Opacity="0.12"/>
+                            </Border.Effect>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <!-- 2×2 grid icon -->
+                                <Grid Width="22" Height="22" Margin="0,0,10,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="3"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Row="0" Grid.Column="0" CornerRadius="3" Background="#667eea"/>
+                                    <Border Grid.Row="0" Grid.Column="2" CornerRadius="3" Background="#667eea"/>
+                                    <Border Grid.Row="2" Grid.Column="0" CornerRadius="3" Background="#667eea"/>
+                                    <Border Grid.Row="2" Grid.Column="2" CornerRadius="3" Background="#667eea"/>
+                                </Grid>
+
+                                <!-- Wordmark -->
+                                <TextBlock FontSize="24" FontWeight="ExtraBold"
+                                           Foreground="#667eea" VerticalAlignment="Center">
+                                    <Run Text="II" FontWeight="Black"/>
+                                    <Run Text="Study" FontWeight="SemiBold"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Heading + subtitle -->
+                        <TextBlock Text="Welcome back."
+                                   HorizontalAlignment="Center"
+                                   FontSize="30" FontWeight="ExtraBold"
+                                   Foreground="White"
+                                   Margin="0,0,0,8"/>
+
+                        <TextBlock Text="Sign in to manage your platform"
+                                   HorizontalAlignment="Center"
+                                   FontSize="13" Foreground="#ddd6fe"
+                                   Margin="0,0,0,36"
+                                   TextAlignment="Center"/>
+
+                        <!-- Feature bullets -->
+                        <StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                <Border Width="38" Height="38" CornerRadius="11"
+                                        Background="White" Margin="0,0,16,0">
+                                    <TextBlock Text="📚" FontSize="18"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Books &amp; Exams"
+                                               FontSize="13" FontWeight="Bold"
+                                               Foreground="White"/>
+                                    <TextBlock Text="Manage your entire catalog"
+                                               FontSize="11" Foreground="#c4b5fd"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                <Border Width="38" Height="38" CornerRadius="11"
+                                        Background="White" Margin="0,0,16,0">
+                                    <TextBlock Text="👥" FontSize="18"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Users &amp; Orders"
+                                               FontSize="13" FontWeight="Bold"
+                                               Foreground="White"/>
+                                    <TextBlock Text="Full user management control"
+                                               FontSize="11" Foreground="#c4b5fd"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="38" Height="38" CornerRadius="11"
+                                        Background="White" Margin="0,0,16,0">
+                                    <TextBlock Text="📊" FontSize="18"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Analytics &amp; Events"
+                                               FontSize="13" FontWeight="Bold"
+                                               Foreground="White"/>
+                                    <TextBlock Text="Real-time insights at a glance"
+                                               FontSize="11" Foreground="#c4b5fd"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Version tag -->
+                    <TextBlock Text="v2.0  ·  IIStudy Desktop"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Bottom"
+                               Margin="0,0,0,18"
+                               FontSize="10" FontWeight="SemiBold"
+                               Foreground="#c4b5fd"/>
+                </Grid>
+            </Border>
+
+            <!-- ══════════════════════════════════════════════
+                 RIGHT — FORM PANEL
+                 ══════════════════════════════════════════════ -->
+            <Grid Grid.Column="1" Background="White">
+
+                <!-- Drag handle -->
+                <Border HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Height="40"
+                        Background="Transparent"/>
+
+                <!-- Close button -->
+                <Button HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,10,14,0"
+                        Width="30" Height="30"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="Close_click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="b" Background="Transparent" CornerRadius="8">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="b" Property="Background" Value="#fef2f2"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <TextBlock Text="✕" FontSize="14" Foreground="#94a3b8" FontWeight="Bold"/>
+                </Button>
+
+                <!-- Form content -->
+                <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Width="340">
+
+                    <TextBlock Text="Welcome back 👋"
+                               FontSize="28" FontWeight="ExtraBold"
+                               Foreground="#0f172a"
+                               Margin="0,0,0,6"/>
+                    <TextBlock Text="Sign in to your admin account"
+                               FontSize="14" Foreground="#94a3b8"
+                               Margin="0,0,0,36"/>
+
+
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding (Validation.HasError),ElementName=TxtUsername,
+
+                                                Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Viewbox Width="14" Height="14" Margin="0,0,5,0" VerticalAlignment="Center" >
+                            <Canvas Width="14" Height="14">
+                                <Ellipse Width="13" Height="13" Canvas.Left="0.5" Canvas.Top="0.5"
+                     Stroke="#e24b4a" StrokeThickness="1" Fill="Transparent"/>
+                                <Rectangle Width="1.3" Height="3.5" Canvas.Left="6.35" Canvas.Top="3.5"
+                        Fill="#e24b4a" RadiusX="0.65" RadiusY="0.65"/>
+                                <Ellipse Width="1.4" Height="1.4" Canvas.Left="6.3" Canvas.Top="9.3"
+                     Fill="#e24b4a"/>
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock FontSize="11" x:Name="ErrorExamName"
+                FontWeight="SemiBold"
+                Foreground="#ef4444"
+                Margin="4,4,0,0"
+                Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=TxtUsername}"
+                />
+
+                    </StackPanel>
+                    <!-- Username -->
+                    
+                    
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="USERNAME"
+                                   FontSize="10" FontWeight="Bold"
+                                   Foreground="#64748b" Margin="2,0,0,8"/>
+                        <Grid>
+                            <TextBox x:Name="TxtUsername" Style="{StaticResource LoginInput}" Text="{Binding SignKey}" KeyDown="Password_KeyDown"/>
+                            <TextBlock Text="👤" FontSize="16"
+                                       VerticalAlignment="Center"
+                                       Margin="14,0,0,0"
+                                       IsHitTestVisible="False"/>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Password -->
+                    <StackPanel Orientation="Horizontal" Visibility="Collapsed" x:Name="ErrorPassword">
+                                <Viewbox Width="14" Height="14" Margin="0,0,5,0" VerticalAlignment="Center" >
+                                    <Canvas Width="14" Height="14">
+                                        <Ellipse Width="13" Height="13" Canvas.Left="0.5" Canvas.Top="0.5"
+                                                Stroke="#e24b4a" StrokeThickness="1" Fill="Transparent"/>
+                                        <Rectangle Width="1.3" Height="3.5" Canvas.Left="6.35" Canvas.Top="3.5"
+                                                    Fill="#e24b4a" RadiusX="0.65" RadiusY="0.65"/>
+                                        <Ellipse Width="1.4" Height="1.4" Canvas.Left="6.3" Canvas.Top="9.3"
+                                                 Fill="#e24b4a"/>
+                                    </Canvas>
+                                </Viewbox>
+                                <TextBlock FontSize="11" 
+                        FontWeight="SemiBold"
+                        Foreground="#ef4444"
+                        Margin="4,4,0,0"
+                        Text="Required Field"
+                        />
+
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock Text="PASSWORD"
+                                   FontSize="10" FontWeight="Bold"
+                                   Foreground="#64748b" Margin="2,0,0,8"/>
+                        <Grid>
+                            <PasswordBox x:Name="TxtPassword" PasswordChanged="RequiredPassword" Style="{StaticResource LoginPassword}" KeyDown="Password_KeyDown"/>
+                            <TextBlock Text="🔒" FontSize="16"
+                                       VerticalAlignment="Center"
+                                       Margin="14,0,0,0"
+                                       IsHitTestVisible="False"/>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Error panel -->
+                    <Border x:Name="ErrorPanel"
+                            Background="#fef2f2"
+                            CornerRadius="10" Padding="12,8"
+                            Margin="0,0,0,16"
+                            Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚠  " FontSize="13" Foreground="#ef4444"/>
+                            <TextBlock x:Name="ErrorMsg"
+                                       Text=""
+                                       FontSize="12" FontWeight="SemiBold"
+                                       Foreground="#ef4444"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Sign In button -->
+                    <Button Style="{StaticResource SignInBtn}" Margin="0,0,0,24" Click="LogInButton">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="BtnText"
+                                       Text="Sign In"
+                                       FontSize="15" FontWeight="Bold"
+                                       Foreground="White"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Loading -->
+                    <Border x:Name="LoadingPanel"
+                            Visibility="Collapsed"
+                            HorizontalAlignment="Center"
+                            Margin="0,-12,0,12">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⏳  " FontSize="13" Foreground="#667eea"/>
+                            <TextBlock Text="Signing you in..."
+                                       FontSize="13" Foreground="#667eea"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Divider -->
+                    <Grid Margin="0,0,0,24">
+                        <Border Height="1" Background="#f1f5f9" VerticalAlignment="Center"/>
+                        <Border Background="White" Padding="12,0" HorizontalAlignment="Center">
+                            <TextBlock Text="IIStudy Admin"
+                                       FontSize="11" Foreground="#cbd5e1"
+                                       FontWeight="SemiBold"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- Footer note -->
+                    <TextBlock HorizontalAlignment="Center"
+                               FontSize="12" Foreground="#94a3b8"
+                               TextAlignment="Center">
+                        <Run Text="Access restricted to "/>
+                        <Run Text="administrators" FontWeight="Bold" Foreground="#667eea"/>
+                        <Run Text=" only."/>
+                    </TextBlock>
+
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+    </Border>
+</Window>

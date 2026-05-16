@@ -42,9 +42,9 @@ namespace LLstudyWS.ORM
 
         }
 
-        public string LoginID(string password,  string? SignKey = null)
+        public string LoginID(string password,  string SignKey)
         {
-            string sql = "SELECT * FROM Registereds WHERE UserName = @SignKey OR Email = @SignKey ";
+            string sql = "SELECT [RegisteredID] ,[RegisteredSalt] , [Password],  [IsBanned]  FROM Registereds WHERE UserName = @SignKey OR Email = @SignKey ";
 
             this.helperOledb.AddParameter("@SignKey", SignKey);
 
@@ -65,7 +65,37 @@ namespace LLstudyWS.ORM
                         return Convert.ToString(reader["RegisteredID"]);
 
                     }
-                    Console.WriteLine("Here");
+                    //Console.WriteLine("Here");
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        public string AdminLoginID(string password, string SignKey)
+        {
+            string sql = "SELECT [RegisteredID] ,[RegisteredSalt] , [Password], [IsBanned] FROM Registereds WHERE (UserName = @SignKey OR Email = @SignKey) AND Role = 'Admin'";
+
+            this.helperOledb.AddParameter("@SignKey", SignKey);
+
+
+
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    string salt = reader["RegisteredSalt"].ToString();
+                    string hash = reader["Password"].ToString();
+                    string CalHash = GetHash(password, salt);
+                    if (Convert.ToBoolean(reader["IsBanned"]))
+                        return "0";
+                    if (CalHash == hash)
+                    {
+                        return Convert.ToString(reader["RegisteredID"]);
+
+                    }
+                    //Console.WriteLine("Here");
                     return null;
                 }
             }

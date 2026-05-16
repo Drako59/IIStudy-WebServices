@@ -37,7 +37,7 @@ namespace LLstudyWS.Controllers
             this.repositoryUOW = new RepositoryUOW();
         }
         [HttpPost]
-        public Registered SignIn(SignInViewModel SignInModel)
+        public Registered SignIn(SignInViewModel signInModel)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace LLstudyWS.Controllers
 
                 };
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                reg.RegisteredID =  this.repositoryUOW.RegisteredRepository.LoginID(SignInModel.Password, SignKey: SignInModel.SignKey);
+                reg.RegisteredID =  this.repositoryUOW.RegisteredRepository.LoginID(signInModel.Password, SignKey: signInModel.SignKey);
                 if (reg.RegisteredID == null)
                     return null;
                 return reg;
@@ -68,6 +68,42 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
+
+        [HttpPost]
+        public Registered AdminSignIn(SignInViewModel signInModel )
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                Registered reg = new Registered()
+                {
+                    UserName = "None",
+                    Email = "None",
+                    Password = "None",
+                    RegisteredSalt = "None",
+                    Role = "User",
+                    Birth = "None",
+                    ImagePath = "None"
+
+
+                };
+                reg.RegisteredID = this.repositoryUOW.RegisteredRepository.AdminLoginID(signInModel.Password, SignKey: signInModel.SignKey);
+                if (reg.RegisteredID == null)
+                    return null;
+                return reg;
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
 
         [HttpPost]
         public Registered SignInDetails(SignInViewModel model)
