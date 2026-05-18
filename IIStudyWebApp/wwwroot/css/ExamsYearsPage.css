@@ -1,0 +1,220 @@
+﻿.exam-years-page {
+    padding: 40px 20px 80px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-title {
+    font-size: 42px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.years-section {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 60px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.years-container {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.show-all-btn {
+    min-width: 180px;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+    .show-all-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 188, 212, 0.4);
+    }
+
+.show-all-btn-line1 {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.show-all-btn-line2 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.year-link {
+    min-width: 180px;
+    padding: 30px 20px;
+    background: #e2e8f0;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 32px;
+    color: #2d3748;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+    .year-link:hover {
+        background: #cbd5e0;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+/* Modal for All Years */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+.modal-content {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.modal-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #2d3748;
+}
+
+.close-modal {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: #f7fafc;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+    .close-modal:hover {
+        background: #e2e8f0;
+    }
+
+    .close-modal svg {
+        width: 24px;
+        height: 24px;
+        stroke: #4a5568;
+        stroke-width: 2;
+    }
+
+.years-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.year-modal-link {
+    padding: 24px;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 24px;
+    color: #2d3748;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+
+    .year-modal-link:hover {
+        background: #edf2f7;
+        border-color: #00bcd4;
+        transform: translateY(-2px);
+    }
+
+@media (max-width: 1024px) {
+    .years-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .years-section {
+        padding: 30px 20px;
+    }
+
+    .years-container {
+        flex-direction: column;
+    }
+
+    .show-all-btn,
+    .year-link {
+        width: 100%;
+    }
+
+    .years-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+    }
+}

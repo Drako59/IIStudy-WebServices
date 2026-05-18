@@ -139,16 +139,16 @@
         <div class="subjects-section">
             <div class="subjects-grid" id="subjectsGrid">
                 <!-- Subjects will be dynamically loaded here -->
-                @foreach (var (subjectID, subject_name) in Model)
+                @foreach (var (SubjectID, subject_name) in Model)
                 {
                     string iconClass = GetSubjectIcon(subject_name);
 
-                    <div class="subject-card" onclick="selectSubject(@subjectID)">
+                    <a class="subject-card" href="@Url.Action("ViewExamYearsPage", "Registered", new { subjectID = SubjectID })">
                         <div class="subject-icon">
                             <i class="@iconClass"></i>
                         </div>
                         <div class="subject-name">@subject_name</div>
-                    </div>
+                    </a>
                 }
             </div>
         </div>
@@ -156,10 +156,6 @@
 </div>
 
 <script>
-    function selectSubject(subjectId) {
-            console.log("nothing");
-           // In a real application, this would navigate to a filtered book catalog
-           // window.location.href = '/catalog?subjectId=' + subjectId;
-       }
+    
 </script>
 

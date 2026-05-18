@@ -192,6 +192,22 @@ namespace IIStudyWebApp.Controllers
 
         }
 
+        public async Task<IActionResult> ViewExamYearsPage(string subjectID)
+        {
+            ApiClient<List<string>> client = new ApiClient<List<string>>();
+
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/ExamsYearsListBySubject";
+            client.AddParameter("subjectID", subjectID);
+            List<string> years = await client.GetAsync();
+
+            return View(years);
+
+
+        }
+
         private async Task<string> SendReader()
         {
             return null;

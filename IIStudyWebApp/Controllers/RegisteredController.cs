@@ -569,6 +569,9 @@ namespace IIStudyWebApp.Controllers
             return View();
         }
 
+
+        [HttpGet]
+
         public async Task<IActionResult> ViewExamsPage()
         {
             Registered reg = await this.GetRegisteredDeatils();
@@ -587,6 +590,32 @@ namespace IIStudyWebApp.Controllers
 
             Dictionary<string, string> subjects = await client.GetAsync();
             return View(subjects);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewExamYearsPage(string subjectID)
+        {
+            Registered reg = await this.GetRegisteredDeatils();
+            if(reg == null)
+            {
+                return RedirectToAction("ViewExamYearsPage", "Guest");
+            }
+
+            ViewData["Registered"] = reg;
+
+
+            ApiClient<List<string>> client = new ApiClient<List<string>>();
+
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/ExamsYearsListBySubject";
+            client.AddParameter("subjectID", subjectID);
+            List<string> years = await client.GetAsync();
+
+            return View(years);
+
+
         }
     }
 }

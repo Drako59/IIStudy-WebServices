@@ -14,7 +14,7 @@ namespace LLStudy_Models.ViewModels
         private string signKey;
         private string password;
 
-        [Required]
+        [Required(ErrorMessage = "The Identifier filed is required.")]
         public string SignKey { get { return this.signKey; } set { this.signKey = value; ValidateProperty(value, nameof(this.SignKey)); } }
         [Required]
         public string Password { get { return this.password; } set { this.password = value; ValidateProperty(value, nameof(this.Password)); } }

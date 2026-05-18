@@ -17,7 +17,12 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
-
+a,
+a:hover,
+a:visited,
+a:active {
+    text-decoration: none;
+}
 /* כותרת */
 .page-header {
     margin-bottom: 30px;

@@ -101,5 +101,22 @@ namespace LLstudyWS.ORM
             return fileName;
         }
 
+        public List<string> GetExamsYearsForSubject(string subjectID)
+        {
+            string sql = $@"SELECT DISTINCT LEFT(Exam_Year,4) AS ExamOnlyYear FROM Exams 
+                                    WHERE SubjectID = @SubjectID 
+                                    ORDER BY LEFT(Exam_Year, 4) DESC";
+            this.helperOledb.AddParameter("@SubjectID",subjectID);
+
+            List<string> years = new List<string>();
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    years.Add(Convert.ToString(reader["ExamOnlyYear"]));
+                }
+                return years;
+            }
+        }
     }
 }

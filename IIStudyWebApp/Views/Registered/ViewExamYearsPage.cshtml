@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewData["Title"] = "ViewExamYearsPage";
+    Layout = "~/Views/Shared/RegisteredMasterPage.cshtml";
+}
+
+@model List<string>
+
+<link href="~/css/ExamsYearsPage.css" rel="stylesheet" />
+
+<div class="exam-years-page">
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Select Exam Year</h1>
+            <p class="page-subtitle">Choose a year to view available exam materials</p>
+        </div>
+
+        <!-- Years Section -->
+        <div class="years-section">
+            <div class="years-container" id="yearsContainer">
+                <!-- Show All Years Button (Left) -->
+                <button class="show-all-btn" onclick="openYearModal()">
+                    <span class="show-all-btn-line1">Click here to view</span>
+                    <span class="show-all-btn-line2">All available years</span>
+                </button>
+
+                <!-- Year links will be dynamically loaded here -->
+                @{
+                    List<string> firstFourYears = Model.Take(4).ToList();
+                    firstFourYears.Reverse();
+                    foreach (string year in firstFourYears)
+                    {
+                        <a class="year-link" href="ADD LINK TO SHOW EXAMS OF YEAR AND SUBJECT">@year</a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- All Years Modal -->
+<div class="modal-overlay" id="yearModal" onclick="closeModalOnOverlay(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h3 class="modal-title">All Available Years</h3>
+            <button class="close-modal" onclick="closeYearModal()">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="years-grid" id="yearsModalGrid">
+            <!-- All years will be dynamically loaded -->
+            @{
+                List<string> OtherYears = Model.Skip(4).ToList();
+                foreach (string year in OtherYears)
+                {
+                    <a class="year-modal-link" href="ADD LINK TO SHOW EXAMS OF YEAR AND SUBJECT">@year</a>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<script src="~/js/viewexamyearspage.js"></script>
