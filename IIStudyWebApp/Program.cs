@@ -1,6 +1,9 @@
 ﻿var builder = WebApplication.CreateBuilder(args);
 
 
+//SET THAT IT WILL POSSIBLE TO CONNECT FROM OTHER DEVICES
+builder.WebHost.UseUrls("https://0.0.0.0:7121");
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

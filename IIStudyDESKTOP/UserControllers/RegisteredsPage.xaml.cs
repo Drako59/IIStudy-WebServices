@@ -46,7 +46,7 @@ namespace IIStudyDESKTOP.UserControllers
         public RegisteredsPage()
         {
             InitializeComponent();
-            Loaded += (_, __) => LoadUsers();
+            LoadUsers();
         }
 
         // ════════════════════════════════════════════════════════════
@@ -55,18 +55,15 @@ namespace IIStudyDESKTOP.UserControllers
         private async Task LoadUsers()
         {
             //_allUsers.Clear();
-            if (this.registereds != null && this.registereds.Any())
-            {
-                ApplyFilters();
-                this.registereds.Clear();
-            }
+            
             await GetRegistereds();
             UpdateStats();
+        }
 
-
-
-
-
+        private async void Refresh(object sender, RoutedEventArgs e)
+        {
+            await this.LoadUsers();
+            this.ApplyFilters();
 
         }
 
@@ -78,8 +75,9 @@ namespace IIStudyDESKTOP.UserControllers
             client.Port = 5049;
             client.Path = "api/Admin/GetAllRegistereds";
             this.registereds = await client.GetAsync();
-            
-            this.DataContext = this.registereds;
+
+            //this.DataContext = this.registereds;
+            this.UsersListView.ItemsSource = null;
             this.UsersListView.ItemsSource = this.registereds;
         }
 

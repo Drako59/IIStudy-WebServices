@@ -55,11 +55,17 @@ namespace IIStudyDESKTOP.UserControllers
             this.Init_page();
         }
 
-        private async void Init_page()
+        private async Task Init_page()
         {
             await this.LoadExams();
             await this.LoadSubjects();
             this.UpdateStatistics();
+        }
+
+        private async void Refresh(object sender, RoutedEventArgs e)
+        {
+            await this.Init_page();
+            this.Filter();
         }
         private void UpdateStatistics()
         {
@@ -81,8 +87,9 @@ namespace IIStudyDESKTOP.UserControllers
             if (this.Exams == null)
             {
                 MessageBox.Show("Faild to Load Exams", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.SubjectsDetails = new List<SubjectDetails>();
+                this.Exams = new List<ExamDetails>();
             }
+            this.ExamsList.ItemsSource = null;
             this.ExamsList.ItemsSource = this.Exams;
             
 
@@ -104,6 +111,7 @@ namespace IIStudyDESKTOP.UserControllers
 
             this.SubjectsDetails.Insert(0, new SubjectDetails() { SubjectCounter = this.Exams.Count(), SubjectID = "0", Subject_name = "All" });
 
+            this.SubjectsList.ItemsSource = null;
             this.SubjectsList.ItemsSource = this.SubjectsDetails;
             
         }

@@ -1,7 +1,7 @@
 ﻿async function AddToCart(bookId) {
     try {
         const response = await fetch(
-            `https://localhost:7121/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`,
+            `${window.location.origin}/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`,
             {
                 method: 'GET',
                 headers: {
@@ -10,7 +10,7 @@
             }
         );
 
-        // alert(`https://localhost:7121/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`);
+        // alert(`${window.location.origin}/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`);
         if (!response.ok) {
             alert("Didn't work");
             // showAddToCartError(bookId);

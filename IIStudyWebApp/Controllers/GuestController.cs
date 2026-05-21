@@ -1,6 +1,7 @@
 ﻿using IIstudyWSClient;
 using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
+using LLStudy_Models.ViewModels.Guest;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using NuGet.Protocol.Plugins;
@@ -192,19 +193,57 @@ namespace IIStudyWebApp.Controllers
 
         }
 
+        [HttpGet]
         public async Task<IActionResult> ViewExamYearsPage(string subjectID)
         {
-            ApiClient<List<string>> client = new ApiClient<List<string>>();
+            ApiClient<ExamsSubjectYearViewModel> client = new ApiClient<ExamsSubjectYearViewModel>();
 
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Guest/ExamsYearsListBySubject";
             client.AddParameter("subjectID", subjectID);
-            List<string> years = await client.GetAsync();
+            ExamsSubjectYearViewModel years = await client.GetAsync();
 
             return View(years);
 
+
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ViewExamsBySubjectAndYear(string subjectID, string year)
+        {
+            ApiClient<List<ExamDetailsWeb>> client = new ApiClient<List<ExamDetailsWeb>>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/ViewExamsBySubjectAndYear";
+            client.AddParameter("subjectID", subjectID);
+            client.AddParameter("year", year);
+            List<ExamDetailsWeb> exams = await client.GetAsync();
+
+
+
+            return View(exams);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewExamFile(string examID)
+        {
+            ApiClient<bool> client = new ApiClient<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetExamFile";
+            client.AddParameter("examID", examID);
+            ApiFileResultModel examFile = await client.GetAsyncFile();
+
+            if(examFile == null)
+            {
+                return StatusCode(404);
+            }
+            return File(examFile.Bytes, examFile.ContentType);
 
         }
 

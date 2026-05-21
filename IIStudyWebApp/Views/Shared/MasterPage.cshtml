@@ -59,7 +59,7 @@
     <header class="header">
         <div class="container">
             <nav class="nav-container">
-                <span class="logo" onclick="showPage('home')">📚IIStudy</span>
+                <span class="logo" onclick="@Url.Action("HomePage", "Guest")">📚IIStudy</span>
 
                 <div class="mobile-menu-toggle" id="mobileToggle" onclick="toggleMobileMenu()">
                     <span></span>
@@ -73,12 +73,12 @@
                     <li><a href="@Url.Action("ViewExamsPage", "Guest")" data-page="exams">Exams</a></li>
                     <li><a href="#"  data-page="about">About</a></li>
                     <li><a href="@Url.Action("ViewCalendar", "Guest")" data-page="calendar">Calendar</a></li>
-                    <li><a href="https://localhost:7121/Registered/RegisteredHomePage" data-page="contact">test reg</a></li>
+                    @* <li><a href="@Url.Action(" RegisteredHomePage", "Guest" )" data-page="contact">test reg</a></li> *@
 
                 </ul>
                 <div class="auth-buttons">
-                    <a href="https://localhost:7121/Guest/viewSignUpPage" class="btn btn-outline">Sign Up</a>
-                    <a href="https://localhost:7121/Guest/viewSignInPage" class="btn btn-primary">Sign In</a>
+                    <a href="@Url.Action("viewSignUpPage","Guest")" class="btn btn-outline">Sign Up</a>
+                    <a href="@Url.Action("viewSignInPage", "Guest")" class="btn btn-primary">Sign In</a>
                 </div>
             </nav>
         </div>
@@ -90,3 +90,15 @@
     
 </body>
 </html>
+<script>
+    function toggleMobileMenu() {
+            const mobileToggle = document.getElementById('mobileToggle');
+            const navLinks = document.getElementById('navLinks');
+            mobileToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        }
+
+   
+
+        
+</script>

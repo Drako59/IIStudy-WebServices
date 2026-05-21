@@ -40,7 +40,8 @@
                     {
                         bool isPurchased = Model.OwnedOnlineBooksIDs != null && Model.OwnedOnlineBooksIDs.Contains(book.BookID);
                         bool isInCart = Model.OnlineBooksInShoppingCartIDs != null && Model.OnlineBooksInShoppingCartIDs.Contains(book.BookID);
-                        string path = $"https://localhost:7121/Registered/ViewBookPreview?bookID={book.BookID}";
+                        string path = $"{@Url.Action("ViewBookPreview", "Registered", new { bookID = book.BookID })}";
+                        
                         <div class="book-card" data-title="@book.Book_name">
                             <a href=@path class="book-cover"><img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"></a>
                             <div class="book-info">
@@ -66,7 +67,7 @@
                     }
                     else
                     {
-                        string path = $"https://localhost:7121/Registered/ViewBookPreview?bookID={book.BookID}";
+                        string path = $"{@Url.Action("ViewBookPreview", "Registered", new { bookID = book.BookID })}";
                         <div class="book-card" data-title="@book.Book_name">
                             <a href=@path class="book-cover"><img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"></a>
                             <div class="book-info">
@@ -100,10 +101,11 @@
 </main>
 
 <script>
+    
     async function AddToCart(bookId) {
         try {
             const response = await fetch(
-                `https://localhost:7121/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`,
+                `@(Url.Action("AddToCart", "Registered"))?bookID=${encodeURIComponent(bookId)}`,
                 {
                     method: 'GET',
                     headers: {

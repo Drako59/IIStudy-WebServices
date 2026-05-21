@@ -59,10 +59,16 @@ namespace IIStudyDESKTOP.UserControllers
 
 
 
-        private async void Init_page()
+        private async Task Init_page()
         {
             await this.GetEvents();
             this.UpdateStatistics();
+        }
+
+        private async void Refresh(object sender, RoutedEventArgs e)
+        {
+            await this.Init_page();
+            this.ApplyFilters();
         }
 
         private async void UpdateStatistics()
@@ -85,14 +91,16 @@ namespace IIStudyDESKTOP.UserControllers
                 client.Port = 5049;
                 client.Path = "api/Guest/GetEventsDetails";
                 List<EventDetail> events = await client.GetAsync();
-                this.Events = new ObservableCollection<EventDetail>(events);
 
-                if (this.Events == null)
+                if (events == null)
                 {
                     this.Events = new ObservableCollection<EventDetail>();
                     MessageBox.Show("Failed in reciving the Events from web service", "Request Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 }
+
+                this.Events = new ObservableCollection<EventDetail>(events);
+
                 this.EventsList.ItemsSource = null;
                 this.EventsList.ItemsSource = this.Events;
 

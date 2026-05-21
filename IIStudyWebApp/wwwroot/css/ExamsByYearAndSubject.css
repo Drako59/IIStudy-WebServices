@@ -1,0 +1,296 @@
+﻿.exams-page {
+    padding: 40px 20px 80px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.breadcrumb {
+    color: white;
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+    .breadcrumb a {
+        color: white;
+        text-decoration: none;
+        opacity: 0.8;
+    }
+
+        .breadcrumb a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+.page-title {
+    font-size: 42px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Search Bar */
+.search-section {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    margin-bottom: 30px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+    .search-box:focus-within {
+        border-color: #4299e1;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    }
+
+    .search-box svg {
+        width: 24px;
+        height: 24px;
+        stroke: #718096;
+        stroke-width: 2;
+        fill: none;
+        flex-shrink: 0;
+    }
+
+    .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 16px;
+        font-weight: 500;
+        color: #2d3748;
+        width: 100%;
+    }
+
+        .search-box input::placeholder {
+            color: #a0aec0;
+        }
+
+/* Exams List */
+.exams-section {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #2d3748;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .section-title::before {
+        content: '';
+        width: 5px;
+        height: 28px;
+        background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+        border-radius: 3px;
+    }
+
+.results-count {
+    font-size: 14px;
+    color: #718096;
+    font-weight: 600;
+}
+
+.exams-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.exam-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    padding: 24px;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    align-items: center;
+}
+
+    .exam-row:hover {
+        border-color: #4299e1;
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(66, 153, 225, 0.15);
+    }
+
+.exam-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.exam-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: #2d3748;
+    margin-bottom: 4px;
+}
+
+.exam-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.exam-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #718096;
+}
+
+    .exam-meta-item svg {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+    }
+
+    .exam-meta-item strong {
+        color: #4a5568;
+        font-weight: 700;
+    }
+
+.exam-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.exam-btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+    .exam-btn svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+    }
+
+.btn-view {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+}
+
+    .btn-view:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(66, 153, 225, 0.4);
+    }
+
+.btn-solutions {
+    background: white;
+    color: #48bb78;
+    border: 2px solid #48bb78;
+}
+
+    .btn-solutions:hover {
+        background: #48bb78;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: #718096;
+}
+
+    .no-results svg {
+        width: 80px;
+        height: 80px;
+        stroke: #cbd5e0;
+        stroke-width: 1.5;
+        margin-bottom: 16px;
+    }
+
+    .no-results h3 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 8px;
+    }
+
+@media (max-width: 768px) {
+    .exams-section,
+    .search-section {
+        padding: 24px;
+    }
+
+    .exam-row {
+        grid-template-columns: 1fr;
+    }
+
+    .exam-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .exam-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .exam-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+    }
+}

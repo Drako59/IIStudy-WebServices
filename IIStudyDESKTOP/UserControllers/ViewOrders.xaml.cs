@@ -33,18 +33,10 @@ namespace IIStudyDESKTOP.UserControllers
         private OrderStatus FilterStatus { get; set; } = (OrderStatus)(-1);
         private string SearchText { get; set; } = "";
         private OrderBooksWindow orderBooksWindow { get; set; }
-
         public DateTime? FromDate { get; set; } = null;
         public DateTime? ToDate { get; set; } = null;
 
-        public ViewOrders()
-        {
-            InitializeComponent();
-            this.GetOrders();
-            this.DataContext = this;
-
-            //Loaded += (_, __) => LoadOrders();
-        }
+       
 
 
 
@@ -62,19 +54,16 @@ namespace IIStudyDESKTOP.UserControllers
         };
 
 
-        // ════════════════════════════════════════════════════════════
-        //  LOAD DATA FROM DATABASE
-        // ════════════════════════════════════════════════════════════
-        private void LoadOrders()
+        public ViewOrders()
         {
-            EmptyState.Visibility = Visibility.Collapsed;
-            this.Filter();
-            UpdateStats();
+            InitializeComponent();
+            this.GetOrders();
+            this.DataContext = this;
+
+            //Loaded += (_, __) => LoadOrders();
         }
 
-        // ════════════════════════════════════════════════════════════
-        //  FILTER + SEARCH
-        // ════════════════════════════════════════════════════════════
+       
         
 
         private void UpdateStats()
@@ -87,9 +76,7 @@ namespace IIStudyDESKTOP.UserControllers
                 ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        // ════════════════════════════════════════════════════════════
-        //  EVENT HANDLERS
-        // ════════════════════════════════════════════════════════════
+        
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             this.SearchText = this.SearchBox.Text;
@@ -114,7 +101,7 @@ namespace IIStudyDESKTOP.UserControllers
         }
 
 
-        private async void GetOrders()
+        private async Task GetOrders()
         {
             ApiClient<List<Order>> client = new ApiClient<List<Order>>();
             client.Scheme = "http";
@@ -124,9 +111,15 @@ namespace IIStudyDESKTOP.UserControllers
             this.orders = await client.GetAsync();
             if (this.orders == null)
                 this.orders = new List<Order>();
+            this.OrdersListView.ItemsSource = null;
             this.OrdersListView.ItemsSource = this.orders;
             this.UpdateStats();
 
+        }
+        private async void Refresh(object sender, RoutedEventArgs e)
+        {
+            await this.GetOrders();
+            this.Filter();
         }
 
         private void UpdateStatus(object sender, RoutedEventArgs e)

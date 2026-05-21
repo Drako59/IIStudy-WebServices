@@ -118,5 +118,29 @@ namespace LLstudyWS.ORM
                 return years;
             }
         }
+        public List<ExamDetailsWeb> GetExamsByYearAndSubject(string subjectID, string year)
+        {
+            string sql = @$"SELECT Exams.SubjectID AS SubjectID ,* FROM Exams INNER JOIN Subjects 
+                                    ON Exams.SubjectID = Subjects.SubjectID
+                                        WHERE LEFT(Exam_Year,4) = @Year AND Exams.SubjectID = @SubjectID";
+            this.helperOledb.AddParameter("@Year", year);
+            this.helperOledb.AddParameter("@SubjectID", subjectID);
+            List<ExamDetailsWeb> exams = new List<ExamDetailsWeb>();
+
+            using(IDataReader  reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    ExamDetailsWeb exam = this.moderlRefCreator.CreateModel<ExamDetailsWeb>(reader, exludes: new List<string>() { nameof(ExamDetailsWeb.HasFile)});
+                    exam.HasFile = exam.File_path_url.ToLower() == "none" || !exam.File_path_url.StartsWith( $"Exam{exam.ExamID}") ? false : true; 
+                    exams.Add(exam);
+                    
+                    
+                }
+                return exams;
+            }
+
+
+        }
     }
 }

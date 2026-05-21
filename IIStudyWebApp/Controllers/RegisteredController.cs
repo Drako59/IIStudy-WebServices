@@ -1,6 +1,7 @@
 ﻿using IIstudyWSClient;
 using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
+using LLStudy_Models.ViewModels.Guest;
 using LLStudy_Models.ViewModels.Registerd;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -511,7 +512,7 @@ namespace IIStudyWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBookFile(string bookID)
         {
-            ApiClient<Registered> client = new ApiClient<Registered>();
+            ApiClient<bool> client = new ApiClient<bool>();
 
             client.Scheme = "http";
             client.Host = "localhost";
@@ -604,18 +605,48 @@ namespace IIStudyWebApp.Controllers
             ViewData["Registered"] = reg;
 
 
-            ApiClient<List<string>> client = new ApiClient<List<string>>();
+            ApiClient<ExamsSubjectYearViewModel> client = new ApiClient<ExamsSubjectYearViewModel>();
 
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
             client.Path = "api/Guest/ExamsYearsListBySubject";
             client.AddParameter("subjectID", subjectID);
-            List<string> years = await client.GetAsync();
+            ExamsSubjectYearViewModel years = await client.GetAsync();
 
             return View(years);
 
 
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ViewExamsBySubjectAndYear(string subjectID, string year)
+        {
+            Registered reg = await this.GetRegisteredDeatils();
+            if (reg == null)
+            {
+                return RedirectToAction("ViewExamYearsPage", "Guest");
+            }
+
+            ViewData["Registered"] = reg;
+
+
+            ApiClient<List<ExamDetailsWeb>> client = new ApiClient<List<ExamDetailsWeb>>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/ViewExamsBySubjectAndYear";
+            client.AddParameter("subjectID", subjectID);
+            client.AddParameter("year", year);
+            List<ExamDetailsWeb> exams = await client.GetAsync();
+
+
+
+            return View(exams);
+        }
+
+       
+
     }
 }

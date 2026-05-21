@@ -3,7 +3,8 @@
     ViewData["Title"] = "ViewExamYearsPage";
     Layout = "~/Views/Shared/MasterPage.cshtml";
 }
-@model List<string>
+@using LLStudy_Models.ViewModels;
+@model ExamsSubjectYearViewModel;
 
 <link href="~/css/ExamsYearsPage.css" rel="stylesheet" />
 
@@ -25,11 +26,11 @@
 
                 <!-- Year links will be dynamically loaded here -->
                 @{
-                    List<string> firstFourYears = Model.Take(4).ToList();
+                    List<string> firstFourYears = Model.Years.Take(4).ToList();
                     firstFourYears.Reverse();
                     foreach(string year in firstFourYears)
                     {
-                        <a class="year-link" href="ADD LINK TO SHOW EXAMS OF YEAR AND SUBJECT">@year</a>
+                        <a class="year-link" href="@Url.Action("ViewExamsBySubjectAndYear", "Guest", new { year, Model.SubjectID })">@year</a>
                     }
                 }
             </div>
@@ -53,10 +54,10 @@
         <div class="years-grid" id="yearsModalGrid">
             <!-- All years will be dynamically loaded -->
             @{
-                List<string> OtherYears = Model.Skip(4).ToList();
+                List<string> OtherYears = Model.Years.Skip(4).ToList();
                 foreach(string year in OtherYears)
                 {
-                        <a class="year-modal-link" href="ADD LINK TO SHOW EXAMS OF YEAR AND SUBJECT">@year</a>
+                    <a class="year-modal-link" href="@Url.Action("ViewExamsBySubjectAndYear", "Guest", new {year, Model.SubjectID})">@year</a>
                 }
             }
         </div>

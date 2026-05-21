@@ -27,7 +27,7 @@ async function removeOneItem(btn, bookID) {
         }
 
         const response = await fetch(
-            `https://localhost:7121/Registered/RemoveFromCart?bookID=${encodeURIComponent(bookID)}`,
+            `${window.location.origin}/Registered/RemoveFromCart?bookID=${encodeURIComponent(bookID)}`,
             {
                 method: 'GET',
                 headers: {
@@ -71,7 +71,7 @@ async function removeItem(btn, bookID) {
 
 
         const response = await fetch(
-            `https://localhost:7121/Registered/RemoveAllBooksFromCart?bookID=${encodeURIComponent(bookID)}`,
+            `${window.location.origin}/Registered/RemoveAllBooksFromCart?bookID=${encodeURIComponent(bookID)}`,
             {
                 method: 'GET',
                 headers: {
@@ -167,7 +167,7 @@ function checkout() {
         ShowEmptyToast("The cart is empty....🤓");
         return;
     }
-    window.location.href = `https://localhost:7121/Registered/PaymentPage`;
+    window.location.href = `${window.location.origin}/Registered/PaymentPage`;
 }
 
 function ShowEmptyToast(msg){
@@ -182,7 +182,7 @@ function ShowEmptyToast(msg){
 }
 
 function continueShopping() {
-    window.location.href = `https://localhost:7121/Registered/ViewBookCatalog`;
+    window.location.href = `${window.location.origin}/Registered/ViewBookCatalog`;
 }
 
 
@@ -192,7 +192,7 @@ function continueShopping() {
 async function AddToCart(btn,bookId) {
     try {
         const response = await fetch(
-            `https://localhost:7121/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`,
+            `${window.location.origin}/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`,
             {
                 method: 'GET',
                 headers: {
@@ -201,7 +201,7 @@ async function AddToCart(btn,bookId) {
             }
         );
 
-        // alert(`https://localhost:7121/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`);
+        // alert(`${window.location.origin}/Registered/AddToCart?bookID=${encodeURIComponent(bookId)}`);
         if (!response.ok) {
             alert("Didn't work");
             // showAddToCartError(bookId);

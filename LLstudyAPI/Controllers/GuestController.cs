@@ -21,7 +21,8 @@ namespace LLstudyWS.Controllers
     public class GuestController : ControllerBase
     {
         readonly string BooksPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Images", "BooksImages");
-
+        readonly string ExamsPdfPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Files", "ExamsFiles");
+        readonly string SolutionsPdfPath = Path.Combine(Directory.GetCurrentDirectory()!, "wwwroot", "Files", "SolutionsFiles");
         Dictionary<string, string> subjectsDict;
 
         private void debugList<T>(List<T> list)
@@ -609,17 +610,97 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpGet]
-        public List<string> ExamsYearsListBySubject(string subjectID)
+        public ExamsSubjectYearViewModel ExamsYearsListBySubject(string subjectID)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return this.repositoryUOW.ExamRepository.GetExamsYearsForSubject(subjectID);
+
+                ExamsSubjectYearViewModel examsViewModel = new ExamsSubjectYearViewModel();
+
+                examsViewModel.Years =  this.repositoryUOW.ExamRepository.GetExamsYearsForSubject(subjectID);
+                examsViewModel.SubjectID = subjectID;
+                return examsViewModel;
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public List<ExamDetailsWeb> ViewExamsBySubjectAndYear(string subjectID, string year)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.ExamRepository.GetExamsByYearAndSubject(subjectID, year);
+            }
+            catch(Exception ex){
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetExamFile(string examID)
+        {
+            try
+            {
+                string AbsoultePath;
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                Exam exam = this.repositoryUOW.ExamRepository.GetByID(examID);
+                AbsoultePath = Path.Combine(this.ExamsPdfPath, exam.File_path_url);
+                if (!(exam != null && exam.File_path_url != null && exam.File_path_url.ToLower() != "none" && System.IO.File.Exists(AbsoultePath)))
+                    return StatusCode(404);
+
+
+                var (stream, contentType) = this.repositoryUOW.ExamRepository.GetPdf(AbsoultePath);
+
+                return File(stream, contentType);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetSolutionFile(string solutionID)
+        {
+            try
+            {
+                string AbsoultePath;
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                Solution solution = this.repositoryUOW.SolutionRepository.GetByID(solutionID);
+                AbsoultePath = Path.Combine(this.SolutionsPdfPath, solution.File_path_url);
+
+                if (!(solution != null && solution.File_path_url != null && solution.File_path_url.ToLower() != "none" && System.IO.File.Exists(AbsoultePath)))
+                    return StatusCode(404);
+
+
+                var (stream, contentType) = this.repositoryUOW.SolutionRepository.GetPdf(AbsoultePath);
+
+                return File(stream, contentType);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
             }
             finally
             {

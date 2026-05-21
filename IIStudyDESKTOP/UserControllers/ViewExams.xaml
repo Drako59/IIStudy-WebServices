@@ -240,10 +240,19 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="14"/>
 
+                            <!-- Date From -->
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="14"/>
+
+                            <!-- Date To -->
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="16"/>
+
+                            <!-- Chips -->
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+
+                            <!-- Refresh -->
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
@@ -347,6 +356,49 @@
                             </Border>
 
                         </StackPanel>
+                        <!-- Refresh Button -->
+                        <Button Grid.Column="8"
+                                Height="40"
+                                Padding="14,0"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Click="Refresh"
+                                Background="#e3f2fd">
+
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="b"
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="10"
+                                            Padding="{TemplateBinding Padding}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⟳"
+                                                       FontSize="16"
+                                                       FontWeight="ExtraBold"
+                                                       Foreground="#1565c0"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,6,0"/>
+
+                                            <TextBlock Text="Refresh"
+                                                       FontSize="12"
+                                                       FontWeight="Bold"
+                                                       Foreground="#1565c0"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="b" Property="Opacity" Value="0.82"/>
+                                        </Trigger>
+
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="b" Property="Opacity" Value="0.65"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                     </Grid>
                 </Border>
 
