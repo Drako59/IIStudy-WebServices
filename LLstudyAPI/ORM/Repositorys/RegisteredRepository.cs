@@ -65,7 +65,10 @@ namespace LLstudyWS.ORM
                         return Convert.ToString(reader["RegisteredID"]);
 
                     }
-                    //Console.WriteLine("Here");
+                    //
+                    //
+                    //
+                    //Line("Here");
                     return null;
                 }
             }

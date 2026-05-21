@@ -74,7 +74,8 @@ namespace LLstudyWS.ORM
             Directory.CreateDirectory(path);
 
             string ext = Path.GetExtension(file.FileName);
-            //Console.WriteLine($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
+            //
+            //Line($"FileName = '{file.FileName}', ContentType = '{file.ContentType}'");
 
             if (string.IsNullOrEmpty(ext))
             {
