@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -15,10 +16,11 @@ namespace IIstudyWSClient
         UriBuilder uriBuilder = new UriBuilder();
         public string Scheme
         {
-            set {
+            set
+            {
                 this.uriBuilder.Scheme = value;
             }
-            
+
         }
 
         public int Port
@@ -42,6 +44,9 @@ namespace IIstudyWSClient
                 this.uriBuilder.Path = value;
             }
         }
+
+        
+
         public void AddParameter(string key, object value)
         {
             if(this.uriBuilder.Query == string.Empty)

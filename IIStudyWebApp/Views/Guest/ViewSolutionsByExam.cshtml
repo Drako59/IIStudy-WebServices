@@ -1,0 +1,208 @@
+﻿
+@{
+    ViewData["Title"] = "ViewSolutionsByExam";
+    Layout = "~/Views/Shared/MasterPage.cshtml";
+}
+@using LLStudy_Models.ViewModels;
+@model List<SolutionDetailsWeb>
+
+<link href="~/css/viewsolutionsbyexam.css" rel="stylesheet" />
+<div class="solutions-page">
+    <div class="container">
+        <div class="page-header">
+            <div class="breadcrumb">
+                @{
+                    var first = Model?.FirstOrDefault();
+
+                    var subjectID = first?.SubjectID ?? "1";
+                    var subjectName = first?.Subject_name ?? "Failed";
+
+                    var year = (!string.IsNullOrEmpty(first?.Exam_Year) && first.Exam_Year.Length >= 4)
+                    ? first.Exam_Year.Substring(0, 4)
+                    : "2026";
+                }
+                <a href="@Url.Action("ViewExamsPage", "Guest")">Home</a> 
+                / <a href="@Url.Action("ViewExamYearsPage", "Guest", new { subjectID = subjectID })"> @subjectName </a>
+                / <a href="@Url.Action("ViewExamsBySubjectAndYear", "Guest", new { subjectID = subjectID, year = year })"> @year </a>
+                /<strong>Solutions</strong>
+            </div>
+            <h1 class="page-title">Exam Solutions</h1>
+            <p class="page-subtitle">Access detailed solutions for your exams</p>
+        </div>
+
+        <!-- Solutions Section -->
+        <div class="solutions-section">
+            <div class="section-header">
+                <h2 class="section-title">Available Solutions</h2>
+                <p class="section-description">Select a solution to view comprehensive step-by-step explanations</p>
+            </div>
+
+            <div class="solutions-grid" id="solutionsGrid">
+                <!-- Solutions will be dynamically loaded here -->
+                @if(Model == null && !Model.Any())
+                {
+                    <div class="no-solutions">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M9 11l3 3L22 4"></path>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                        </svg>
+                        <h3>No Solutions Available</h3>
+                        <p>Solutions for this exam are not yet available</p>
+                    </div>
+                }
+                else
+                {
+                    foreach(SolutionDetailsWeb solution in Model)
+                    {
+                        <div class="solution-card">
+                            <div class="solution-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 11l3 3L22 4"></path>
+                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                                </svg>
+                            </div>
+                            <h3 class="solution-title">@solution.Solution_Name</h3>
+                            <div class="solution-details">
+                                <div class="solution-detail-item">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                    </svg>
+                                    <div>
+                                        <strong>Subject:</strong>@solution.Subject_name
+                                    </div>
+                                </div>
+                                <div class="solution-detail-item">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <div>
+                                        <strong>Date:</strong> @solution.Solution_Year
+                                    </div>
+                                </div>
+                                <div class="solution-detail-item">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                    </svg>
+                                    <div>
+                                        <strong>Exam Name:</strong> @solution.Exam_Name
+                                    </div>
+                                </div>
+                            </div>
+                            @if(solution.HasFile){
+                                <a class="solution-btn" href="@Url.Action("ViewSolutionFile","Guest", new {solutionID = solution.SolutionID})" target="_blank">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    View Solution
+                                </a>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mock solutions data - Replace with actual database/API call
+    let solutionsData = [];
+
+    // Fetch solutions from database
+    function fetchSolutionsFromDB() {
+        // In production, this would be an API call:
+        // fetch('/api/solutions?examId=123')
+        //   .then(response => response.json())
+        //   .then(data => {
+        //       solutionsData = data;
+        //       renderSolutions(solutionsData);
+        //   });
+
+        // Mock data for demonstration
+        
+
+        renderSolutions(solutionsData);
+    }
+
+    // Render solutions grid
+    function renderSolutions(solutions) {
+        const grid = document.getElementById('solutionsGrid');
+        grid.innerHTML = '';
+
+        if (solutions.length === 0) {
+            grid.innerHTML = `
+                <div class="no-solutions">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                    <h3>No Solutions Available</h3>
+                    <p>Solutions for this exam are not yet available</p>
+                </div>
+            `;
+            return;
+        }
+
+        solutions.forEach(solution => {
+            const card = document.createElement('div');
+            card.className = 'solution-card';
+            card.innerHTML = `
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                </div>
+                <h3 class="solution-title">${solution.solutionName}</h3>
+                <div class="solution-details">
+                    <div class="solution-detail-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                        <div>
+                            <strong>Subject:</strong> ${solution.subjectName}
+                        </div>
+                    </div>
+                    <div class="solution-detail-item">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <div>
+                            <strong>Year:</strong> ${solution.solutionYear}
+                        </div>
+                    </div>
+                    <div class="solution-detail-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <div>
+                            <strong>Exam ID:</strong> ${solution.examId}
+                        </div>
+                    </div>
+                </div>
+                <button class="solution-btn" onclick="viewSolution(${solution.solutionId})">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    View Solution
+                </button>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    
+
+    // Initialize on page load
+    // window.addEventListener('DOMContentLoaded', () => {
+    //     fetchSolutionsFromDB();
+    // });
+</script>

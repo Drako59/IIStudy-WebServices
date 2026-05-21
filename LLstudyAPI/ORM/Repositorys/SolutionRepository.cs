@@ -44,15 +44,41 @@ namespace LLstudyWS.ORM
 
         public List<Solution> GetSolutionsByExam(string examID)
         {
-            string sql = $@"SELECT * FROM Solutions WHERE ExamID = @examID ORDER BY SolutionID";
-            this.helperOledb.AddParameter("@examID", examID);
+            string sql = $@"SELECT * FROM Solutions WHERE ExamID = @ExamID ORDER BY SolutionID";
 
-            using(IDataReader reader = this.helperOledb.Select(sql))
+            this.helperOledb.AddParameter("@ExamID", examID);
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 List<Solution> solutions = new List<Solution>();
                 while (reader.Read())
                 {
                     solutions.Add(this.moderlRefCreator.CreateModel<Solution>(reader));
+
+                }
+                return solutions;
+            }
+        }
+
+        public List<SolutionDetailsWeb> GetSolutionsDetailsByExam(string examID)
+        {
+            string sql = $@"SELECT *, Subjects.SubjectID AS [SubjectID], Exams.ExamID AS [ExamID], Solutions.File_path_url as [File_path_url] FROM Solutions INNER JOIN 
+                                    (
+                                     Exams INNER JOIN Subjects ON Exams.SubjectID = Subjects.SubjectID 
+                                    ) ON Solutions.ExamID = Exams.ExamID 
+                                    WHERE Exams.ExamID = @ExamID ORDER BY SolutionID DESC";
+            
+            this.helperOledb.AddParameter("@ExamID", examID);
+
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                List<SolutionDetailsWeb> solutions = new List<SolutionDetailsWeb>();
+                while (reader.Read())
+                {
+                    SolutionDetailsWeb solution = this.moderlRefCreator.CreateModel<SolutionDetailsWeb>(reader, exludes: new List<string>() { nameof(SolutionDetailsWeb.HasFile) });
+                    solution.HasFile = solution.File_path_url.ToLower() == "none" || !solution.File_path_url.StartsWith($"Solution{solution.SolutionID}") ? false : true;
+                    solutions.Add(solution);
+
                 }
                 return solutions;
             }

@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace IIStudyWebApp.Controllers
 {
@@ -70,6 +71,10 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("registeredID", registeredID);
 
             ViewOwnedBooksModel books = await client.GetAsync();
+
+            if (books == null)
+                return StatusCode(500);
+
             return View(books);
         }
 
@@ -98,6 +103,12 @@ namespace IIStudyWebApp.Controllers
             ViewShoppingCartModel shoppingCart = await client.GetAsync();
 
             ViewData["Registered"] = shoppingCart.User;
+
+            if (shoppingCart == null)
+            {
+                return StatusCode(500);
+            }
+
             return View(shoppingCart);
         }
         [HttpGet]
@@ -115,6 +126,12 @@ namespace IIStudyWebApp.Controllers
 
             ViewOrdersModel orders = await client.GetAsync();
             ViewData["Registered"] = orders.User;
+
+            if(orders == null)
+            {
+                return StatusCode(500);
+            }
+
             return View(orders);
         }
 
@@ -129,6 +146,10 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("orderID", orderID);
 
             Order order = await client.GetAsync();
+            if(order == null)
+            {
+                return StatusCode(404);
+            }
             return View(order);
         }
 
@@ -143,6 +164,12 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("orderID", orderID);
 
             ViewOrderDetailsModel orderDetailsModel = await client.GetAsync();
+
+            if(orderDetailsModel == null)
+            {
+                return StatusCode(404);
+            }
+
             return View(orderDetailsModel);
         }
 
@@ -331,6 +358,11 @@ namespace IIStudyWebApp.Controllers
             ViewRegisteredBookPreviewModel bookView = await client.GetAsync();
             ViewData["Registered"] = registered;
             
+            if(bookView == null)
+            {
+                return StatusCode(500);
+            }
+
             return View(bookView);
         }
 
@@ -358,6 +390,10 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Guest/GetExams";
 
             List<Event> calender = await client.GetAsync();
+            if(calender == null)
+            {
+                calender = new List<Event>();
+            }
             return View(calender);
         }
 
@@ -417,9 +453,9 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Registered/ChangeImage";
             
-            bool success = client.PostAsync(reg, new List<(Stream,string)>() { 
+            bool success = await client.PostAsync(reg, new List<(Stream,string)>() { 
                 (formFile.OpenReadStream(),formFile.FileName) 
-            }).Result;
+            });
 
             //await Console.Out.WriteLineAsync("here*************************************" + success.ToString());
 
@@ -444,10 +480,10 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("registeredID", registeredID);
             ApiFileResultModel file = await client.GetAsyncFile();
 
-            //if(file == null)
-            //{
-            //    return 
-            //}
+            if(file == null)
+            {
+                return StatusCode(404); 
+            }
             
             return File(file.Bytes, file.ContentType);
         }
@@ -590,6 +626,12 @@ namespace IIStudyWebApp.Controllers
 
 
             Dictionary<string, string> subjects = await client.GetAsync();
+
+            if(subjects == null)
+            {
+                subjects = new Dictionary<string, string>();
+            }
+
             return View(subjects);
         }
 
@@ -613,6 +655,11 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Guest/ExamsYearsListBySubject";
             client.AddParameter("subjectID", subjectID);
             ExamsSubjectYearViewModel years = await client.GetAsync();
+
+            if(years == null)
+            {
+                years = new ExamsSubjectYearViewModel();
+            }
 
             return View(years);
 
@@ -641,12 +688,43 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("year", year);
             List<ExamDetailsWeb> exams = await client.GetAsync();
 
-
+            if(exams == null)
+            {
+                exams = new List<ExamDetailsWeb>();
+            }
 
             return View(exams);
         }
 
-       
+        [HttpGet]
+        public async Task<IActionResult> ViewSolutionsByExam(string examID)
+        {
+            Registered reg = await this.GetRegisteredDeatils();
+            if (reg == null)
+            {
+                return RedirectToAction("ViewExamYearsPage", "Guest");
+            }
+
+            ViewData["Registered"] = reg;
+
+            ApiClient<List<SolutionDetailsWeb>> client = new ApiClient<List<SolutionDetailsWeb>>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetSolutionsByExam";
+            client.AddParameter("examID", examID);
+
+            List<SolutionDetailsWeb> solutions = await client.GetAsync();
+
+            if(solutions == null)
+            {
+                solutions = new List<SolutionDetailsWeb>();
+            }
+
+            return View(solutions);
+
+        }
+
 
     }
 }

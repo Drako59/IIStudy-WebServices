@@ -39,6 +39,11 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Guest/GetBooks";
             List<Book> books = await client.GetAsync();
+
+            if(books == null)
+            {
+                books = new List<Book>();
+            }
             return View(books);
         }
 
@@ -52,6 +57,12 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("bookID", bookID);
 
             ViewBookViewModel bookView = await client.GetAsync();
+
+            if(bookView == null)
+            {
+                return StatusCode(404);
+            }
+
             return View(bookView);
         }
 
@@ -169,10 +180,10 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("bookID", bookID);
             ApiFileResultModel file = client.GetAsyncFile().Result;
 
-            //if(file == null)
-            //{
-            //    return 
-            //}
+            if(file == null)
+            {
+                return StatusCode(404);
+            }
 
             return File(file.Bytes, file.ContentType);
         }
@@ -187,6 +198,11 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Guest/GetAllSubjectsDict";
             Dictionary<string, string> subjects = await client.GetAsync();
+
+            if(subjects == null)
+            {
+                subjects = new Dictionary<string, string>();
+            }
 
             return View(subjects);
 
@@ -204,6 +220,10 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Guest/ExamsYearsListBySubject";
             client.AddParameter("subjectID", subjectID);
             ExamsSubjectYearViewModel years = await client.GetAsync();
+            if(years == null)
+            {
+                years = new ExamsSubjectYearViewModel();
+            }
 
             return View(years);
 
@@ -222,7 +242,10 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("subjectID", subjectID);
             client.AddParameter("year", year);
             List<ExamDetailsWeb> exams = await client.GetAsync();
-
+            if(exams == null)
+            {
+                exams = new List<ExamDetailsWeb>();
+            }
 
 
             return View(exams);
@@ -244,6 +267,46 @@ namespace IIStudyWebApp.Controllers
                 return StatusCode(404);
             }
             return File(examFile.Bytes, examFile.ContentType);
+
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> ViewSolutionsByExam(string examID)
+        {
+            ApiClient<List<SolutionDetailsWeb>> client = new ApiClient<List<SolutionDetailsWeb>>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetSolutionsByExam";
+            client.AddParameter("examID", examID);
+
+            List<SolutionDetailsWeb> solutions = await client.GetAsync();
+
+            if(solutions == null)
+            {
+                solutions = new List<SolutionDetailsWeb>();
+            }
+            return View(solutions);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewSolutionFile(string solutionID)
+        {
+            ApiClient<bool> client = new ApiClient<bool>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetSolutionFile";
+            client.AddParameter("solutionID", solutionID);
+            ApiFileResultModel solutionFile = await client.GetAsyncFile();
+
+            if (solutionFile == null)
+            {
+                return StatusCode(404);
+            }
+            return File(solutionFile.Bytes, solutionFile.ContentType);
 
         }
 

@@ -280,15 +280,15 @@ namespace LLstudyWS.Controllers
             }
         }
 
-        [HttpGet] 
-        public List<Solution> GetSolutions(string examID)
+        [HttpGet]
+        public List<Solution> GetSolutions(string examID) //NOT IN USE
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 return this.repositoryUOW.SolutionRepository.GetSolutionsByExam(examID);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return null;
@@ -672,6 +672,25 @@ namespace LLstudyWS.Controllers
             {
                 Console.WriteLine(ex.ToString());
                 return StatusCode(500);
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public List<SolutionDetailsWeb> GetSolutionsByExam(string examID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.SolutionRepository.GetSolutionsDetailsByExam(examID);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
             }
             finally
             {
