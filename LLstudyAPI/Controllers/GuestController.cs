@@ -727,5 +727,24 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        [HttpGet]
+        public List<Event> GetEventsByMonthAndYear(string year, string month)
+        {
+            try 
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.EventRepository.GetEventsByDate(year, month);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
     }
 }

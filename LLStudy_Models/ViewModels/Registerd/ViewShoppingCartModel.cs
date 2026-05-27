@@ -10,5 +10,6 @@ namespace LLStudy_Models.ViewModels
     {
         public Registered User { get; set; }
         public List<CartBookViewModel> CartBooks { get; set; }
+        public List<string> OutOfStockBooks { get; set; }
     }
 }

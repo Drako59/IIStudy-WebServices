@@ -3,6 +3,7 @@ using LLstudyWS.ORM.CreatorsModels;
 using System.Data;
 using System.Diagnostics.Contracts;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace LLstudyWS.ORM
 {
@@ -234,6 +235,44 @@ namespace LLstudyWS.ORM
                 }
                 else return false;
             }
+        }
+
+        public List<string> OutOfStockBooks(string registeredID)
+        {
+            string sql = $@"SELECT Books.BookID AS [BookID], StockCount, CountBooks FROM Books INNER JOIN
+                                                Shopping_carts ON Shopping_carts.BookID = Books.BookID
+                                                    WHERE RegisteredID = @RegisteredID AND IsOnline = False AND StockCount < CountBooks
+                                                ";
+
+            this.helperOledb.AddParameter("@RegisteredID",registeredID);
+
+            List<string> outOfStockBooks = new List<string>();
+
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    outOfStockBooks.Add(Convert.ToString(reader["BookID"]));
+                }
+                return outOfStockBooks;
+            }
+
+        }
+
+        public bool SubtractFromStock(string registeredID)
+        {
+            string sql = $@"UPDATE Books 
+                                INNER JOIN Shopping_carts 
+                                ON Books.BookID = Shopping_carts.BookID
+                                SET 
+                                    Books.StockCount = Books.StockCount - Shopping_carts.CountBooks,
+                                    Books.In_stock = IIF(Books.StockCount - Shopping_carts.CountBooks <= 0, False, True)
+                                WHERE 
+                                    Shopping_carts.RegisteredID = @RegisteredID
+                                    AND Books.IsOnline = False
+                                    AND Books.StockCount >= Shopping_carts.CountBooks;";
+            this.helperOledb.AddParameter("@RegisteredID",registeredID);
+            return this.helperOledb.Update(sql) > 0;
         }
     }
 }

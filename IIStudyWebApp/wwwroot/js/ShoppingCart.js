@@ -224,3 +224,43 @@ async function AddToCart(btn,bookId) {
         //showAddToCartError(bookId);
     }
 }
+
+async function removeAndUpdate(button, bookID) {
+    await removeOneItem(button, bookID);
+    updateStockWarning(button);
+}
+
+async function addAndUpdate(button, bookID) {
+    await AddToCart(button, bookID);
+    updateStockWarning(button);
+}
+function updateStockWarning(button) {
+    const cartItem = button.closest(".cart-item");
+
+    if (!cartItem) {
+        return;
+    }
+
+    const qtyElement = cartItem.querySelector(".qty-value");
+    const stockElement = cartItem.querySelector(".stock-count-value");
+    const warningElement = cartItem.querySelector(".stock-warning");
+
+    if (!qtyElement || !stockElement || !warningElement) {
+        return;
+    }
+
+    const quantity = parseInt(qtyElement.textContent.trim(), 10);
+    const stockCount = parseInt(stockElement.textContent.trim(), 10);
+
+    if (isNaN(quantity) || isNaN(stockCount)) {
+        return;
+    }
+
+    if (quantity > stockCount || stockCount <= 0) {
+        warningElement.classList.remove("stock-warning-hidden");
+        cartItem.classList.add("out-of-stock-item");
+    } else {
+        warningElement.classList.add("stock-warning-hidden");
+        cartItem.classList.remove("out-of-stock-item");
+    }
+}

@@ -22,6 +22,7 @@ namespace LLStudy_Models.Models
         string bookImagePath;
         string type;
         string bookDetails;
+        int stockCount;
         //[Required]
         [IsDigits(ErrorMessage = "ID must contain only digits.")]
         public string BookID {  get { return book_ID; } set {  book_ID = value; } }
@@ -44,9 +45,11 @@ namespace LLStudy_Models.Models
         [Required]
         [ValidFile(ErrorMessage = "File format isn't valid.")]
         public string Pdf_url_book { get { return pdf_url_book; } set { pdf_url_book = value; ValidateProperty(value, "Pdf_url_book"); } }
+        
         [StringLength(maximumLength: 255, ErrorMessage = "Max Book_name Length is 255.")]
-
         public string BookDetails { get { return bookDetails; } set {bookDetails = value; ValidateProperty(value, "BookDetails"); } }
+
+        public int StockCount { get { return this.stockCount;} set { this.stockCount = value; ValidateProperty(value, nameof(this.StockCount)); } }
         public string BookImagePath { get {return bookImagePath; } set {bookImagePath = value; ValidateProperty(value, "BookImagePath"); } }
 
         public bool IsDeleted { get; set; }

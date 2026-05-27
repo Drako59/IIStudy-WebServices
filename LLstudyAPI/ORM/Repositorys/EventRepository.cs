@@ -42,5 +42,24 @@ namespace LLstudyWS.ORM
                 return events;
             }
         }
+
+
+        public List<Event> GetEventsByDate(string year, string month)
+        {
+            string sql = $@"SELECT * FROM EVENTS WHERE LEFT(Date_event,7) = @YearAndMonth ORDER BY Date_event";
+            this.helperOledb.AddParameter("@YearAndMonth",$"{year}-{month:D2}");
+
+            List<Event> events = new List<Event>();
+
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    events.Add(this.moderlRefCreator.CreateModel<Event>(reader));
+                }
+                return events;
+            }
+
+        }
     }
 }

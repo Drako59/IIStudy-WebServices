@@ -511,9 +511,11 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Registered/Pay";
             
-            ApiResultModel<bool> status = await client.PostAsyncRet<Order, bool>(order);
-            if(status.Success && status.Data)
+            ApiResultModel<PaymentResult> status = await client.PostAsyncRet<Order, PaymentResult>(order);
+            if(status.Success && status.Data.Success)
                 return RedirectToAction("RegisteredHomePage", "Registered");
+            if (status.Success && !status.Data.Success)
+                return RedirectToAction("ViewShoppingCart","Registered");
             return RedirectToAction("PaymentPage", "Registered", order);
 
             //if (status.Success && status.Data)

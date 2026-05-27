@@ -414,3 +414,116 @@
             font-weight: 600;
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
+
+
+/*Out of stock warning*/
+
+.stock-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 8px;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+    border: 2px solid #feb2b2;
+    border-radius: 12px;
+    color: #742a2a;
+    box-shadow: 0 6px 14px rgba(229, 62, 62, 0.12);
+}
+
+.stock-warning-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border-radius: 50%;
+    background: #e53e3e;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stock-warning-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stock-warning-content strong {
+    font-size: 14px;
+    font-weight: 800;
+    color: #c53030;
+}
+
+.stock-warning-content span {
+    font-size: 13px;
+    font-weight: 500;
+    color: #742a2a;
+    line-height: 1.4;
+}
+
+.cart-item.out-of-stock-item {
+    border-color: #feb2b2;
+    background: linear-gradient(135deg, #fffafa 0%, #f7fafc 100%);
+}
+
+.cart-item.out-of-stock-item:hover {
+    border-color: #e53e3e;
+    box-shadow: 0 8px 22px rgba(229, 62, 62, 0.12);
+}
+
+/*.stock-warning.inactive {
+    opacity: 0.75;
+    filter: grayscale(15%);
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe4e4 100%);
+    border: 2px dashed #fc8181;
+    box-shadow: 0 6px 14px rgba(229, 62, 62, 0.10);
+}
+
+    .stock-warning.inactive .stock-warning-icon {
+        background: #c53030;
+    }
+
+    .stock-warning.inactive .stock-warning-content strong {
+        color: #c53030;
+    }
+
+    .stock-warning.inactive .stock-warning-content span {
+        color: #742a2a;
+    }*/
+.stock-warning-hidden {
+    display: none !important;
+}
+
+.stock-count-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    margin-top: 4px;
+    padding: 7px 12px;
+    background: #edf2f7;
+    border: 2px solid #e2e8f0;
+    border-radius: 999px;
+    color: #4a5568;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.stock-count-label {
+    color: #718096;
+    font-weight: 600;
+}
+
+.stock-count-value {
+    min-width: 24px;
+    padding: 2px 8px;
+    background: white;
+    border-radius: 999px;
+    color: #2d3748;
+    text-align: center;
+    font-weight: 800;
+}

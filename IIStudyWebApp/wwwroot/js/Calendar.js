@@ -11,64 +11,35 @@ function connectToWebSocket() {
 }
 
 // Simulate fetching events from WebSocket
-function fetchEventsFromWS() {
+async function fetchEventsFromWS() {
     // Show loading state
     document.getElementById('loadingState').style.display = 'block';
     document.getElementById('calendarGrid').style.display = 'none';
-
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
     // Simulate API delay
-    setTimeout(() => {
-        // Mock events data - In production, this would come from WebSocket
-        eventsData = [
-            {
-                id: 1,
-                title: "Book Club Meeting",
-                date: "2026-01-15",
-                time: "14:00",
-                location: "Main Hall",
-                type: "meeting"
-            },
-            {
-                id: 2,
-                title: "Author Seminar",
-                date: "2026-01-20",
-                time: "10:00",
-                location: "Conference Room A",
-                type: "seminar"
-            },
-            {
-                id: 3,
-                title: "Writing Workshop",
-                date: "2026-01-25",
-                time: "15:30",
-                location: "Room 203",
-                type: "workshop"
-            },
-            {
-                id: 4,
-                title: "Literature Exam",
-                date: "2026-01-28",
-                time: "09:00",
-                location: "Exam Hall",
-                type: "exam"
-            },
-            {
-                id: 5,
-                title: "Reading Workshop",
-                date: "2026-02-05",
-                time: "16:00",
-                location: "Library",
-                type: "workshop"
+    // Mock events data - In production, this would come from WebSocket
+    try {
+        const response = await fetch(`${window.location.origin}/Guest/GetEventsByMonthAndYear?year=${year}&month=${month}`)
+
+        if (response.ok)
+            if (!response.ok) {
+                throw new Error("Failed to load events");
             }
-        ];
 
-        // Hide loading state
-        document.getElementById('loadingState').style.display = 'none';
-        document.getElementById('calendarGrid').style.display = 'block';
+        eventsData = await response.json();
+    }
+    catch (error) {
+        console.error(error);
+        eventsData = [];
+    }
 
-        renderCalendar();
-        renderEventsList();
-    }, 1000);
+    // Hide loading state
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('calendarGrid').style.display = 'block';
+
+    renderCalendar();
+    //renderEventsList();
 }
 
 function renderCalendar() {
@@ -132,7 +103,7 @@ function createDayElement(day, isOtherMonth, year, month) {
 
     // Add events for this day
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    const dayEvents = eventsData.filter(event => event.date === dateStr);
+    const dayEvents = eventsData.filter(event => event.date_event === dateStr);
 
     if (dayEvents.length > 0) {
         const eventsContainer = document.createElement('div');
@@ -141,8 +112,8 @@ function createDayElement(day, isOtherMonth, year, month) {
         dayEvents.forEach(event => {
             const eventDot = document.createElement('div');
             eventDot.className = `event-dot ${event.type}`;
-            eventDot.textContent = event.title;
-            eventDot.title = `${event.title} - ${event.time}`;
+            eventDot.textContent = event.event_name;
+            eventDot.title = `${event.event_name} - ${event.time}`;
             eventsContainer.appendChild(eventDot);
         });
 
@@ -159,8 +130,8 @@ function renderEventsList() {
     // Filter and sort upcoming events
     const today = new Date();
     const upcomingEvents = eventsData
-        .filter(event => new Date(event.date) >= today)
-        .sort((a, b) => new Date(a.date) - new Date(b.date));
+        .filter(event => new Date(event.date_event) >= today)
+        .sort((a, b) => new Date(a.date_event) - new Date(b.date_event));
 
     if (upcomingEvents.length === 0) {
         eventsList.innerHTML = '<p style="text-align: center; color: #718096; padding: 40px;">No upcoming events</p>';
@@ -168,55 +139,55 @@ function renderEventsList() {
     }
 
     upcomingEvents.forEach(event => {
-        const eventDate = new Date(event.date);
+        const eventDate = new Date(event.date_event);
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
         const eventItem = document.createElement('div');
         eventItem.className = 'event-item';
         eventItem.innerHTML = `
-                    <div class="event-date-badge">
-                        <div class="event-month">${monthNames[eventDate.getMonth()]}</div>
-                        <div class="event-day">${eventDate.getDate()}</div>
+            <div class="event-date-badge">
+                <div class="event-month">${monthNames[eventDate.getMonth()]}</div>
+                <div class="event-day">${eventDate.getDate()}</div>
+            </div>
+            <div class="event-details">
+                <div class="event-title">${event.event_name}</div>
+                <div class="event-info">
+                    <div class="event-info-item">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        ${event.time}
                     </div>
-                    <div class="event-details">
-                        <div class="event-title">${event.title}</div>
-                        <div class="event-info">
-                            <div class="event-info-item">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                ${event.time}
-                            </div>
-                            <div class="event-info-item">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                                ${event.location}
-                            </div>
-                        </div>
+                    <div class="event-info-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        ${event.details}
                     </div>
-                    <div class="event-type-badge ${event.type}">${event.type}</div>
-                `;
+                </div>
+            </div>
+            
+        `;//<div class="event-type-badge ${event.type}">${event.type}</div>
         eventsList.appendChild(eventItem);
     });
 }
 
-function previousMonth() {
+async function previousMonth() {
     currentDate.setMonth(currentDate.getMonth() - 1);
-    renderCalendar();
+    await fetchEventsFromWS();
 }
 
-function nextMonth() {
+async function nextMonth() {
     currentDate.setMonth(currentDate.getMonth() + 1);
-    renderCalendar();
+     await fetchEventsFromWS();
 }
 
-function goToToday() {
+async function goToToday() {
     currentDate = new Date();
-    renderCalendar();
+     await fetchEventsFromWS();
 }
 
 // Initialize calendar on page load

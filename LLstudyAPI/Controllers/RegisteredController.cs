@@ -130,6 +130,7 @@ namespace LLstudyWS.Controllers
                 viewModel.CartBooks = new List<CartBookViewModel>();
                 viewModel.User = this.repositoryUOW.RegisteredRepository.GetByID(registeredID);
                 viewModel.CartBooks = this.repositoryUOW.BookRepository.GetShoppingCartBooks(registeredID);
+                viewModel.OutOfStockBooks = this.repositoryUOW.ShoppingCartRepository.OutOfStockBooks(registeredID);
                 return Ok(viewModel);
 
             }
@@ -195,18 +196,38 @@ namespace LLstudyWS.Controllers
 
         //return ID
         [HttpPost]
-        public bool Pay(Order order) 
+        public PaymentResult Pay(Order order) 
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 this.repositoryUOW.HelperOledb.OpenTransaction();
-                if (this.repositoryUOW.ShoppingCartRepository.CartIsEmpty(order.RegisteredID)) 
-                    return false;
+                PaymentResult paymentResult = new PaymentResult();
+                if (this.repositoryUOW.ShoppingCartRepository.CartIsEmpty(order.RegisteredID))
+                {    
+                    paymentResult.Success = false;
+                    paymentResult.CartIsEmpty = true;
+                    paymentResult.OutOfStockBooks = false;
+                    return paymentResult;
+                }
+
+                List<string> outofStockBooks = this.repositoryUOW.ShoppingCartRepository.OutOfStockBooks(order.RegisteredID);
+
+                if (outofStockBooks.Any())
+                {
+                    paymentResult.Success = false;
+                    paymentResult.CartIsEmpty = false;
+                    paymentResult.OutOfStockBooks = true;
+                    return paymentResult;
+                }
+
 
                 //Create the order
                 if (!(this.repositoryUOW.ShoppingCartRepository.GetRegCartPhysicalBooksIDs(order.RegisteredID).Any()))
                     order.DeliveryStatus = (int)OrderStatus.Delivered;
+
+                //Substract from stock
+                this.repositoryUOW.ShoppingCartRepository.SubtractFromStock(order.RegisteredID);
 
                 order.Total_price = this.repositoryUOW.ShoppingCartRepository.GetTotalPriceForUser(order.RegisteredID);
                 this.repositoryUOW.OrderRepository.Create(order);
@@ -222,15 +243,17 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.ShoppingCartRepository.RemoveAllBooksForUser(order.RegisteredID);
                 
                 this.repositoryUOW.HelperOledb.Commit();
-
-                return true ;
+                paymentResult.Success = true;
+                paymentResult.CartIsEmpty = false;
+                paymentResult.OutOfStockBooks = false;
+                return paymentResult ;
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 this.repositoryUOW.HelperOledb.RollBack();
-                return false;
+                return null;
             }
             finally
             {

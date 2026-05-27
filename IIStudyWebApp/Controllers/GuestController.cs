@@ -3,6 +3,7 @@ using LLStudy_Models.Models;
 using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Guest;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.VisualBasic;
 using NuGet.Protocol.Plugins;
 using System.Net;
@@ -308,6 +309,25 @@ namespace IIStudyWebApp.Controllers
             }
             return File(solutionFile.Bytes, solutionFile.ContentType);
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetEventsByMonthAndYear(string year, string month)
+        {
+            ApiClient<List<Event>> client = new ApiClient<List<Event>>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Guest/GetEventsByMonthAndYear";
+            client.AddParameter("year", year);
+            client.AddParameter("month", month);
+
+            List<Event> events = await client.GetAsync();
+            if (events == null)
+            {
+                return StatusCode(404);
+            }
+            return Ok(events);
         }
 
         private async Task<string> SendReader()

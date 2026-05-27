@@ -28,7 +28,8 @@
                 {
                     foreach (CartBookViewModel cartBook in Model.CartBooks)
                     {
-                        <div class="cart-item" >
+                        bool InStock = Model.OutOfStockBooks.Contains(cartBook.Book.BookID);
+                        <div class="cart-item @(InStock ? "out-of-stock-item" : "")">
                             <div class="item-image">
                                 <img src="@Url.Action("GetBookImage", "Guest", new { bookID = cartBook.Book.BookID })"
                                      onerror="this.src='/images/books/placeholder.png'"
@@ -40,11 +41,23 @@
                                 <h3 class="item-title">@cartBook.Book.Book_name</h3>
                                 <p class="item-author">@cartBook.Book.Author_name</p>
                                 <p class="item-meta">@(cartBook.Book.IsOnline? "Online" : "Physical") format</p>
+                                <div class="stock-count-info">
+                                    <span class="stock-count-label">Available stock:</span>
+                                    <span class="stock-count-value">@cartBook.Book.StockCount</span>
+                                </div>
+                                <div class="stock-warning @(InStock ? "" : "stock-warning-hidden" )">
+                                    <div class="stock-warning-icon">!</div>
+                                    <div class="stock-warning-content">
+                                        <strong>Out of stock</strong>
+                                        <span>This book is currently out of this amount stock.</span>
+                                    </div>
+                                </div>
+                                
                                 <div class="item-actions">
                                     <div class="quantity-control">
-                                        <button class="qty-btn" onclick="removeOneItem(this,@cartBook.Book.BookID)">−</button>
+                                        <button class="qty-btn" onclick="removeAndUpdate(this,@cartBook.Book.BookID)">−</button>
                                         <span class="qty-value">@cartBook.CountBooks</span>
-                                        <button class="qty-btn" onclick="AddToCart(this,@cartBook.Book.BookID)">+</button>
+                                        <button class="qty-btn" onclick="addAndUpdate(this,@cartBook.Book.BookID)">+</button>
                                     </div>
                                     <button class="remove-btn" onclick="removeItem(this,@cartBook.Book.BookID)" id="book-@cartBook.Book.BookID">Remove</button> <!--window.location.href=`https://localhost:7121/Registered/RemoveFromCart?BookID=${@cartBook.Book.BookID};-->
                                 </div>
@@ -112,9 +125,7 @@
         </div>
     </div>
 </div>
-<script src="~/js/shoppingcart.js"></script>
-<script>
-    
-</script>
+<script src="~/js/ShoppingCart.js"></script>
+
 
 

@@ -295,6 +295,7 @@ namespace LLstudyWS.ORM
                     b.BookImagePath,
                     b.IsDeleted,
                     b.IsOnline,
+                    b.StockCount,
                     IIf(IsNull(b.BookDetails), '', b.BookDetails) AS BookDetails,
                     s.Subject_name,
                     COUNT(r.ReviewID) AS ReviewsNumber,
@@ -317,6 +318,7 @@ namespace LLstudyWS.ORM
                     b.BookImagePath,
                     b.IsDeleted,
                     b.IsOnline,
+                    b.StockCount,
                     b.BookDetails,
                     s.Subject_name";
             this.helperOledb.AddParameter("@BookID", bookID);
@@ -359,6 +361,7 @@ namespace LLstudyWS.ORM
                     b.BookImagePath,
                     b.IsDeleted,
                     b.IsOnline,
+                    b.StockCount
                     IIf(IsNull(b.BookDetails), '', b.BookDetails) AS BookDetails,
                     s.Subject_name,
                     COUNT(r.ReviewID) AS ReviewsNumber,
@@ -379,7 +382,8 @@ namespace LLstudyWS.ORM
                     b.pdf_url_book,
                     b.BookImagePath,
                     b.IsDeleted,
-                    b.IsOnline, 
+                    b.IsOnline,
+                    b.StockCount,
                     b.BookDetails,
                     s.Subject_name;";
             ViewBookViewModel model;
@@ -422,6 +426,7 @@ namespace LLstudyWS.ORM
                     b.BookImagePath,
                     b.IsDeleted,
                     b.IsOnline,
+                    b.StockCount,
                     IIf(IsNull(b.BookDetails), '', b.BookDetails) AS BookDetails,
                     s.Subject_name,
                     COUNT(r.ReviewID) AS ReviewsNum,
@@ -443,6 +448,7 @@ namespace LLstudyWS.ORM
                     b.BookImagePath,
                     b.IsDeleted,
                     b.IsOnline, 
+                    b.StockCount,
                     b.BookDetails,
                     s.Subject_name;";
 
