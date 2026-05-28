@@ -297,5 +297,49 @@ namespace IIStudyDESKTOP.WindowsPages
             }
         }
 
+
+        private void EditStockCount_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !e.Text.All(char.IsDigit);
+        }
+
+        private void EditStockCount_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!int.TryParse(EditStockCount.Text, out int value) || value < 0)
+            {
+                EditStockCount.Text = "0";
+            }
+        }
+
+        private void StockUp_Click(object sender, RoutedEventArgs e)
+        {
+            int current = 0;
+
+            if (int.TryParse(EditStockCount.Text, out int value))
+            {
+                current = value;
+            }
+
+            EditStockCount.Text = (current + 1).ToString();
+        }
+
+        private void StockDown_Click(object sender, RoutedEventArgs e)
+        {
+            int current = 0;
+
+            if (int.TryParse(EditStockCount.Text, out int value))
+            {
+                current = value;
+            }
+
+            if (current > 0)
+            {
+                EditStockCount.Text = (current - 1).ToString();
+            }
+            else
+            {
+                this.book.StockCount = 0;
+            }
+        }
     }
 }

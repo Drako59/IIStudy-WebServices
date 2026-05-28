@@ -9,5 +9,5 @@
 	Add date filter to exams.
 	Add login and sign out on a diffrent page in wpf.
 	Add if payment add succeed page with order details.
-	Add pagging and synamic loadin gto the reviews in wpf and in Book Preview
+	Add pagging and dynamic loadin gto the reviews in wpf and in Book Preview
 ADD ICON TO THE WPF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -29,6 +29,7 @@ namespace IIStudyDESKTOP
         RegisteredsPage registeredsPage;
         ViewExams viewExams;
         ViewEvents viewEvents;
+        HomePage homePage;
         private Registered RegisteredDetails { get; set; }
         private readonly string registeredID;
         public MainWindow(string registeredID)
@@ -41,6 +42,7 @@ namespace IIStudyDESKTOP
         private async void Init_Page()
         {
             await this.LoadUserDetails();
+            this.ViewHomePage(this.HomeNav, null);
         }
 
         private async Task LoadUserDetails()
@@ -78,11 +80,18 @@ namespace IIStudyDESKTOP
         }
         
 
-        
+        public void ViewHomePage(object sender, RoutedEventArgs e)
+        {
+            if (this.homePage == null)
+                this.homePage = new HomePage();
+            this.MainContent.Content = this.homePage;
+            this.ClickButtonNav(sender);
+            this.SetMainBackground2("#667eea", "#764ba2");
+        }
 
         
 
-        private void ViewBooks(object sender, RoutedEventArgs e)
+        public void ViewBooks(object sender, RoutedEventArgs e)
         {
             if (this.viewBooksCatalog == null)
                 this.viewBooksCatalog = new ViewBooksCatalog();
@@ -93,7 +102,7 @@ namespace IIStudyDESKTOP
 
         }
 
-        private void ViewExams(object sender, RoutedEventArgs e)
+        public void ViewExams(object sender, RoutedEventArgs e)
         {
             if (this.viewExams == null)
                 this.viewExams = new ViewExams();
@@ -103,7 +112,7 @@ namespace IIStudyDESKTOP
             
         }
 
-        private void ViewOrders(object sender, RoutedEventArgs e)
+        public void ViewOrders(object sender, RoutedEventArgs e)
         {
             if (this.viewOrders == null)
                 this.viewOrders = new ViewOrders();
@@ -113,7 +122,7 @@ namespace IIStudyDESKTOP
 
         }
 
-        private void ViewRegistereds(object sender, RoutedEventArgs e)
+        public void ViewRegistereds(object sender, RoutedEventArgs e)
         {
             if (this.registeredsPage == null)
                 this.registeredsPage = new RegisteredsPage();
@@ -122,7 +131,7 @@ namespace IIStudyDESKTOP
             this.ClickButtonNav(sender);
         }
 
-        private void ViewEvents(object sender, RoutedEventArgs e)
+        public void ViewEvents(object sender, RoutedEventArgs e)
         {
             
             if (this.viewEvents == null)
@@ -132,7 +141,7 @@ namespace IIStudyDESKTOP
             this.ClickButtonNav(sender);
         }
 
-        private void ClickButtonNav(object sender)
+        public void ClickButtonNav(object sender)
         {
             this.HomeNav.Style = (Style)this.Resources["SidebarButton"];
             this.BooksNav.Style = (Style)this.Resources["SidebarButton"];
@@ -176,7 +185,7 @@ namespace IIStudyDESKTOP
         }
 
 
-        private void SignOut(object sender, RoutedEventArgs e)
+       private void SignOut(object sender, RoutedEventArgs e)
         {
             LogInPageWindow logInPageWindow = new LogInPageWindow();
             logInPageWindow.Show();

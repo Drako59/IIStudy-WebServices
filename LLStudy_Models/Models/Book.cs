@@ -20,7 +20,6 @@ namespace LLStudy_Models.Models
         string subjectID;
         string pdf_url_book;
         string bookImagePath;
-        string type;
         string bookDetails;
         int stockCount;
         //[Required]
@@ -49,6 +48,7 @@ namespace LLStudy_Models.Models
         [StringLength(maximumLength: 255, ErrorMessage = "Max Book_name Length is 255.")]
         public string BookDetails { get { return bookDetails; } set {bookDetails = value; ValidateProperty(value, "BookDetails"); } }
 
+        [Range(0, int.MaxValue, ErrorMessage = "Stock count cannot be below 0")]
         public int StockCount { get { return this.stockCount;} set { this.stockCount = value; ValidateProperty(value, nameof(this.StockCount)); } }
         public string BookImagePath { get {return bookImagePath; } set {bookImagePath = value; ValidateProperty(value, "BookImagePath"); } }
 

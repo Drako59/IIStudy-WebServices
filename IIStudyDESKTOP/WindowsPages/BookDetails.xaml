@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
         mc:Ignorable="d"
         xmlns:convertor="clr-namespace:IIStudyDESKTOP"
-        
+        Icon="/Assets/IIStudy_WPF_Icon.ico"
         Title="BookDetails" Height="700" Width="520"
         >
     <Window.Resources>

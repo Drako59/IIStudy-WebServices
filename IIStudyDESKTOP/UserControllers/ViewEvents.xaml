@@ -105,7 +105,7 @@
                                    FontSize="24" FontWeight="ExtraBold"
                                    Foreground="White"/>
                         <TextBlock Text="Manage your calendar events"
-                                   FontSize="12" Foreground="#9fa8da"
+                                   FontSize="12" Foreground="#b9faf3"
                                    Margin="0,3,0,0"/>
                     </StackPanel>
 

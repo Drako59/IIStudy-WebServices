@@ -254,6 +254,50 @@ namespace IIStudyDESKTOP.WindowsPages
             timer.Start();
         }
 
+        private void InputStockCount_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !e.Text.All(char.IsDigit);
+        }
+
+        private void InputStockCount_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!int.TryParse(InputStockCount.Text, out int value) || value < 0)
+            {
+                InputStockCount.Text = "0";
+            }
+        }
+
+        private void StockUp_Click(object sender, RoutedEventArgs e)
+        {
+            int current = 0;
+
+            if (int.TryParse(InputStockCount.Text, out int value))
+            {
+                current = value;
+            }
+
+            InputStockCount.Text = (current + 1).ToString();
+        }
+
+        private void StockDown_Click(object sender, RoutedEventArgs e)
+        {
+            int current = 0;
+
+            if (int.TryParse(InputStockCount.Text, out int value))
+            {
+                current = value;
+            }
+
+            if (current > 0)
+            {
+                InputStockCount.Text = (current - 1).ToString();
+            }
+            else
+            {
+                this.Book.StockCount = 0;
+            }
+        }
+
         // ════════════════════════════════════════════════════════════
         //  CANCEL / CLOSE
         // ════════════════════════════════════════════════════════════

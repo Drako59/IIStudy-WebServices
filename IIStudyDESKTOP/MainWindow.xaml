@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IIStudyDESKTOP"
         xmlns:convertor="clr-namespace:IIStudyDESKTOP"
+        Icon="/Assets/IIStudy_WPF_Icon.ico"
         mc:Ignorable="d"
         Title="IIStudy - Admin Dashboard" 
         Height="1080" 
@@ -202,7 +203,7 @@
                                   Margin="25,0,0,12"/>
 
                         <!-- Home Button -->
-                        <Button Style="{StaticResource ActiveSidebarButton}" x:Name="HomeNav">
+                        <Button Style="{StaticResource ActiveSidebarButton}" x:Name="HomeNav" Click="ViewHomePage">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="🏠" FontSize="18" Margin="0,0,12,0"/>
                                 <TextBlock Text="Home" VerticalAlignment="Center"/>

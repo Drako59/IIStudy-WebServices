@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
         xmlns:converter="clr-namespace:IIStudyDESKTOP"
+        Icon="/Assets/IIStudy_WPF_Icon.ico"
         mc:Ignorable="d"
         Title="OrderBooksWindow" Height="620" Width="580">
     <Window.Resources>

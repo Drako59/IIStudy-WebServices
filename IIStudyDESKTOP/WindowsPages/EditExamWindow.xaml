@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IIStudyDESKTOP.WindowsPages"
         xmlns:converter="clr-namespace:IIStudyDESKTOP"
         mc:Ignorable="d"
-        
+        Icon="/Assets/IIStudy_WPF_Icon.ico"
         
         Title="EditExamWindow"  Height="560" Width="500">
     <!--WindowStyle="None"-->
