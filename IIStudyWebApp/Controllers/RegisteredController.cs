@@ -27,7 +27,7 @@ namespace IIStudyWebApp.Controllers
             //registeredInfo.registered = GetRegisteredDeatils().Result;
             if (registeredID == null)
             {
-                return RedirectToAction("ViewBookPreview", "Guest");
+                return RedirectToAction("HomePage", "Guest");
             }
             ApiClient<Registered> client = new ApiClient<Registered>();
             client.Scheme = "http";

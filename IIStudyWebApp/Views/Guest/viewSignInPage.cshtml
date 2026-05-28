@@ -33,7 +33,14 @@
                 @* <div class="divider">
                     <span>or sign up with email</span>
                 </div> *@
-
+                @if (ViewBag.WrongDetails == true) 
+                {
+                    <span class="field-error">Wrong User name/ Email Or password.</span>
+                }
+                @if (ViewBag.ErroOccured == true)
+                {
+                    <span class="field-error">Failed to login into your account, please try again.</span>
+                }
                 <div class="form-group">
                     <label class="form-label" for="email">Email or UserName</label>
                     <input asp-for="SignKey" type="text" id="email" value="noam98038@gmail.com" class="form-input" placeholder="your@email.com or UserName">

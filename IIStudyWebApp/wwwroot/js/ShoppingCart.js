@@ -244,6 +244,10 @@ function updateStockWarning(button) {
     const qtyElement = cartItem.querySelector(".qty-value");
     const stockElement = cartItem.querySelector(".stock-count-value");
     const warningElement = cartItem.querySelector(".stock-warning");
+    const type = cartItem.querySelector(".item-meta").dataset.type.toLowerCase();
+    if (type == "online")
+        return;
+    
 
     if (!qtyElement || !stockElement || !warningElement) {
         return;

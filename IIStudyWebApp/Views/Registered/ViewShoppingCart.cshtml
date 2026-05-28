@@ -40,7 +40,7 @@
                             <div class="item-details">
                                 <h3 class="item-title">@cartBook.Book.Book_name</h3>
                                 <p class="item-author">@cartBook.Book.Author_name</p>
-                                <p class="item-meta">@(cartBook.Book.IsOnline? "Online" : "Physical") format</p>
+                                <p class="item-meta" data-type="@(cartBook.Book.IsOnline ? "Online" : "Physical")">@(cartBook.Book.IsOnline ? "Online" : "Physical") format</p>
                                 <div class="stock-count-info">
                                     <span class="stock-count-label">Available stock:</span>
                                     <span class="stock-count-value">@cartBook.Book.StockCount</span>

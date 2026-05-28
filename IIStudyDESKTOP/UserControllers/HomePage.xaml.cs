@@ -23,6 +23,26 @@ namespace IIStudyDESKTOP.UserControllers
         public HomePage()
         {
             InitializeComponent();
+
+            // Greeting based on time of day
+            var hour = DateTime.Now.Hour;
+            TxtWelcomeGreeting.Text = hour switch
+            {
+                < 12 => "Good morning, Admin 👋",
+                < 17 => "Good afternoon, Admin 👋",
+                _ => "Good evening, Admin 👋"
+            };
+
+            // Live date + time
+            TxtDate.Text = DateTime.Now.ToString("dddd, MMM dd yyyy");
+            TxtTime.Text = DateTime.Now.ToString("hh:mm tt");
+
+            // Optional: tick every minute to keep time fresh
+            var timer = new System.Windows.Threading.DispatcherTimer
+            { Interval = TimeSpan.FromMinutes(1) };
+            timer.Tick += (_, __) =>
+                TxtTime.Text = DateTime.Now.ToString("hh:mm tt");
+            timer.Start();
         }
         private async void GoToBooks_Click(object sender, RoutedEventArgs e)
         {

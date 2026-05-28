@@ -132,7 +132,7 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public Registered SignUp([FromBody]Registered model) //Registered
+        public SignUpResultModel SignUp([FromBody]Registered model) //Registered
         {
             //string json = HttpContext.Request.Form["model"];
             //Registered user = JsonSerializer
@@ -151,20 +151,46 @@ namespace LLstudyWS.Controllers
             {
                 //return null;
                 this.repositoryUOW.HelperOledb.OpenConnection();
+                SignUpResultModel result = new SignUpResultModel()
+                {
+                    Birth = model.Birth,
+                    Email = model.Email,
+                    IsBanned = model.IsBanned,
+                    Password = model.Password,
+                    ImagePath = model.ImagePath,
+                    Phone = model.Phone,
+                    Role = model.Role,
+                    UserName = model.UserName,
+                    RegisteredSalt = "NoneNone",
+                    RegisteredID = "0"
+                };
+                
                 string regID;
+                result.EmailAlreadyInUse = this.repositoryUOW.RegisteredRepository.IsUserNameOrEmailExist(model.Email);
+                result.UserNameAlreadyInUse = this.repositoryUOW.RegisteredRepository.IsUserNameOrEmailExist(model.UserName);
+                if (result.EmailAlreadyInUse || result.UserNameAlreadyInUse )
+                {
+                    return result;
+                }
+                
+                this.repositoryUOW.HelperOledb.OpenTransaction();
+
                 this.repositoryUOW.RegisteredRepository.CreateWithHash(model);
                 regID = this.repositoryUOW.RegisteredRepository.LoginID(model.Password, SignKey: model.UserName);
                 //string path = @$"{Directory.GetCurrentDirectory()}\wwwroot\Images\[DIRNAME]\{reg.RegisteredID}";
-                model.RegisteredID = regID;
+                result.RegisteredID = regID;
 
-                if (model.RegisteredID == null)
-                    return null;
-
-                return model;
+                if (result.RegisteredID == null)
+                {
+                    throw new Exception("There was a problem in creating the registered");
+                }
+                this.repositoryUOW.HelperOledb.Commit();
+                return result;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                this.repositoryUOW.HelperOledb.RollBack();
                 return null;
             }
             finally

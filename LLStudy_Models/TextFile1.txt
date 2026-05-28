@@ -10,4 +10,7 @@
 	Add login and sign out on a diffrent page in wpf.
 	Add if payment add succeed page with order details.
 	Add pagging and dynamic loadin gto the reviews in wpf and in Book Preview
+	Add the view Order and add the order status for the orders page.
+	Add recepice page after payment.
+	Add update profile.
 ADD ICON TO THE WPF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

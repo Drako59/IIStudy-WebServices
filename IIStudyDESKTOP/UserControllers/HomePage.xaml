@@ -51,25 +51,26 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <!-- Hero header -->
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <!-- Cards grid -->
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- ══════════════════════════════════════════════════════
                  HERO HEADER
                  ══════════════════════════════════════════════════════ -->
-            <Border Grid.Row="0">
-                <!--<Border.Background>
+            <!--<Border Grid.Row="0">
+                --><!--<Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                         <GradientStop Color="#667eea" Offset="0"/>
                         <GradientStop Color="#764ba2" Offset="1"/>
                     </LinearGradientBrush>
-                </Border.Background>-->
+                </Border.Background>--><!--
 
                 <Grid Margin="32,26,32,26">
-                    <!-- Decorative blob -->
+                    --><!-- Decorative blob --><!--
                     <Ellipse Width="220" Height="220"
                              HorizontalAlignment="Right" VerticalAlignment="Top"
                              Margin="0,-80,-60,0" Opacity="0.10"
@@ -83,7 +84,7 @@
                     </Ellipse>
 
                     <StackPanel>
-                        <!-- Logo pill -->
+                        --><!-- Logo pill --><!--
                         <Border HorizontalAlignment="Left"
                                 CornerRadius="12" Padding="14,8"
                                 Background="White" Margin="0,0,0,16">
@@ -119,12 +120,220 @@
                                    Margin="0,6,0,0"/>
                     </StackPanel>
                 </Grid>
+            </Border>-->
+
+            <!-- ══════════════════════════════════════════════════════
+     ANIMATED WELCOME BANNER
+     ══════════════════════════════════════════════════════ -->
+            <Border Grid.Row="1" Margin="28,20,28,0"
+                    CornerRadius="20" ClipToBounds="True"
+                    Height="130">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#667eea" Offset="0"/>
+                        <GradientStop Color="#764ba2" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect Color="#667eea" BlurRadius="22"
+                          ShadowDepth="0" Opacity="0.30"/>
+                </Border.Effect>
+
+                <Grid>
+
+                    <!-- Animated background circles -->
+                    <Canvas ClipToBounds="True">
+
+                        <!-- Circle 1 — pulses slowly -->
+                        <Ellipse x:Name="BgCircle1"
+                                 Width="200" Height="200"
+                                 Canvas.Left="-40" Canvas.Top="-60"
+                                 Opacity="0.12">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                            <Ellipse.RenderTransform>
+                                <ScaleTransform x:Name="Circle1Scale" ScaleX="1" ScaleY="1"
+                                    CenterX="100" CenterY="100"/>
+                            </Ellipse.RenderTransform>
+                            <Ellipse.Triggers>
+                                <EventTrigger RoutedEvent="Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever"
+                                        AutoReverse="True">
+                                            <DoubleAnimation Storyboard.TargetName="Circle1Scale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 From="1" To="1.4"
+                                                 Duration="0:0:4"
+                                                 EasingFunction="{x:Null}"/>
+                                            <DoubleAnimation Storyboard.TargetName="Circle1Scale"
+                                                 Storyboard.TargetProperty="ScaleY"
+                                                 From="1" To="1.4"
+                                                 Duration="0:0:4"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Ellipse.Triggers>
+                        </Ellipse>
+
+                        <!-- Circle 2 — drifts from right -->
+                        <Ellipse x:Name="BgCircle2"
+                                 Width="160" Height="160"
+                                 Canvas.Right="-30" Canvas.Bottom="-40"
+                                 Opacity="0.14">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                            <Ellipse.RenderTransform>
+                                <ScaleTransform x:Name="Circle2Scale" ScaleX="1" ScaleY="1"
+                                    CenterX="80" CenterY="80"/>
+                            </Ellipse.RenderTransform>
+                            <Ellipse.Triggers>
+                                <EventTrigger RoutedEvent="Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever"
+                                        AutoReverse="True"
+                                        BeginTime="0:0:2">
+                                            <DoubleAnimation Storyboard.TargetName="Circle2Scale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 From="1" To="1.5"
+                                                 Duration="0:0:5"/>
+                                            <DoubleAnimation Storyboard.TargetName="Circle2Scale"
+                                                 Storyboard.TargetProperty="ScaleY"
+                                                 From="1" To="1.5"
+                                                 Duration="0:0:5"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Ellipse.Triggers>
+                        </Ellipse>
+
+                        <!-- Circle 3 — small shimmer top-right -->
+                        <Ellipse Width="80" Height="80"
+                                 Canvas.Right="180" Canvas.Top="-20"
+                                 Opacity="0.18">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </Canvas>
+
+                    <!-- Main content — fades + slides in on load -->
+                    <Border x:Name="WelcomeContent" Opacity="0">
+                        <Border.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!-- Fade in -->
+                                        <DoubleAnimation Storyboard.TargetName="WelcomeContent"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="0" To="1"
+                                             Duration="0:0:0.8"
+                                             BeginTime="0:0:0.1"/>
+                                        <!-- Slide up -->
+                                        <DoubleAnimation Storyboard.TargetName="WelcomeSlide"
+                                             Storyboard.TargetProperty="Y"
+                                             From="22" To="0"
+                                             Duration="0:0:0.7"
+                                             BeginTime="0:0:0.1">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Border.Triggers>
+                        <Border.RenderTransform>
+                            <TranslateTransform x:Name="WelcomeSlide" Y="22"/>
+                        </Border.RenderTransform>
+
+                        <Grid Margin="28,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Logo pill -->
+                            <Border Grid.Column="0"
+                                    CornerRadius="14" Padding="16,10"
+                                    Background="White"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,22,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Grid Width="18" Height="18" Margin="0,0,9,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="2.5"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="2.5"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Row="0" Grid.Column="0" CornerRadius="2.5" Background="#667eea"/>
+                                        <Border Grid.Row="0" Grid.Column="2" CornerRadius="2.5" Background="#667eea"/>
+                                        <Border Grid.Row="2" Grid.Column="0" CornerRadius="2.5" Background="#667eea"/>
+                                        <Border Grid.Row="2" Grid.Column="2" CornerRadius="2.5" Background="#667eea"/>
+                                    </Grid>
+                                    <TextBlock FontSize="20" FontWeight="ExtraBold"
+                                   Foreground="#667eea" VerticalAlignment="Center">
+                            <Run Text="II" FontWeight="Black"/>
+                            <Run Text="Study" FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Welcome text -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock x:Name="TxtWelcomeGreeting"
+                               Text="Good morning, Admin 👋"
+                               FontSize="21" FontWeight="ExtraBold"
+                               Foreground="White"/>
+                                <TextBlock Text="Here's what's happening across your platform today."
+                               FontSize="12" Foreground="#ddd6fe"
+                               Margin="0,5,0,0"/>
+                            </StackPanel>
+
+                            <!-- Date / time badge -->
+                            <Border Grid.Column="2"
+                        Background="White"
+                        CornerRadius="12" Padding="14,8"
+                        VerticalAlignment="Center">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock x:Name="TxtDate"
+                                   Text="—"
+                                   FontSize="13" FontWeight="ExtraBold"
+                                   Foreground="#667eea"
+                                   HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtTime"
+                                   Text="—"
+                                   FontSize="11" Foreground="#af9eff"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,2,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                        </Grid>
+                    </Border>
+                </Grid>
             </Border>
 
             <!-- ══════════════════════════════════════════════════════
                  SECTION CARDS GRID
                  ══════════════════════════════════════════════════════ -->
-            <UniformGrid Grid.Row="1" Columns="3" Margin="28,24,28,28">
+            <UniformGrid Grid.Row="2" Columns="3" Margin="28,24,28,28">
 
                 <!-- ─────────────────────────────────────
                      📚 BOOKS

@@ -30,6 +30,7 @@ namespace LLStudy_Models.Models
         string role;
         string imagePath;
         string password;
+        string phone;
         public string RegisteredID { get; set; }
 
         public string RegisteredSalt { get; set; }
@@ -41,7 +42,7 @@ namespace LLStudy_Models.Models
         
         [Required]
         //[FirstLetterCapital(ErrorMessage = "Valid Password is requierd")]
-        [MinLength(8)]
+        [MinLength(8,ErrorMessage ="The minimum length is '8'.")]
         public string Password { get { return password; } set { password = value;  } }
         [EmailAddress(ErrorMessage = "Valid email is required")]
         public string Email { get; set; }
@@ -49,7 +50,11 @@ namespace LLStudy_Models.Models
         [ValidDate]
         public string Birth { get; set; }
 
+        [ValidPhone(ErrorMessage ="Ivalid phone number. Try 05XXXXXXXX")]
+        public string Phone { get; set; }
+
         public string ImagePath { get { return imagePath; } set { this.imagePath = value;  } }
         public bool IsBanned { get; set; }
+
     }
 }

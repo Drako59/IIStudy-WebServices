@@ -7,6 +7,8 @@ using System.Data;
 using System.Runtime.CompilerServices;
 
 using System.IO;
+using System.ComponentModel;
+using System.Diagnostics;
 
 
 namespace LLstudyWS.ORM
@@ -173,6 +175,21 @@ namespace LLstudyWS.ORM
 
             return fileName;
         }
+
+        public bool IsUserNameOrEmailExist(string signKey)
+        {
+            string sql = $@"SELECT COUNT(*) AS [IsExist] FROM Registereds WHERE Email = @SignKey OR UserName = @SignKey";
+            this.helperOledb.AddParameter("@SignKey", signKey);
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt16(reader["IsExist"]) > 0;
+                }
+                return false;
+            }
+        }
+
         //public override Registered GetByID(string UserName)
         //{
         //    string sql = "SELECT * FROM Registereds WHERE UserName = @UserName";

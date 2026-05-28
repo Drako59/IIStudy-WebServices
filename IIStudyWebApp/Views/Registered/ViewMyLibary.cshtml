@@ -110,8 +110,12 @@
                 <!-- Books-->
                 @foreach (ViewOwnedBook book in Model.Books)
                 {
+                    bool hasFile = !string.IsNullOrEmpty(book.Pdf_url_book) && book.Pdf_url_book.ToLower() != "none";
+                   
+                    string bookUrl = Url.Action("GetBookFile", "Registered", new { bookID = book.BookID });
                     //@Url.Action("GetBookImage", "Guest", new { bookID = Model.book.BookID })
-                    <a class="book-card" data-title="@book.Book_name" href="@Url.Action("GetBookFile", "Registered", new { bookID = book.BookID })" target="_blank">
+                    <a class="book-card" data-book-url="@bookUrl" data-has-file="@hasFile"
+                       data-book-name="@book.Book_name"  data-title="@book.Book_name" href="@Url.Action("GetBookFile", "Registered", new { bookID = book.BookID })" target="_blank">
                         <div class="book-cover">
                             @if (book.BookImagePath.ToLower() != "none")
                             {
@@ -125,6 +129,7 @@
                                 </svg>
                             }
                             <div class="book-badge">@book.Subject_name</div>
+                            
                         </div>
                         <div class="book-info">
                             <h3 class="book-title">@book.Book_name</h3>
@@ -139,8 +144,23 @@
                                 </div>
                             </div>
                             <div class="book-meta-item">
-                                <span class="meta-label">Price</span>
-                                <span class="meta-value price">$@book.Book_price</span>
+                                @if (hasFile)
+                                {
+                                    <button type="button"
+                                            class="qr-meta-btn"
+                                            title="Continue on phone"
+                                            onclick="openQrModal(event, this)">
+                                        <svg viewBox="0 0 24 24">
+                                            <rect x="3" y="3" width="7" height="7"></rect>
+                                            <rect x="14" y="3" width="7" height="7"></rect>
+                                            <rect x="3" y="14" width="7" height="7"></rect>
+                                            <rect x="5" y="5" width="3" height="3"></rect>
+                                            <rect x="16" y="5" width="3" height="3"></rect>
+                                            <rect x="5" y="16" width="3" height="3"></rect>
+                                            <path d="M14 14h2v2h-2zM18 14h3v2h-3zM14 18h2v3h-2zM18 18h1v1h2v2h-3z"></path>
+                                        </svg>
+                                    </button>
+                                }
                             </div>
                         </div>
                     </a>
@@ -150,28 +170,30 @@
         </div>
     </div>
 </div>
+<div id="qrModal" class="qr-modal hidden" onclick="closeQrModal()">
+    <div class="qr-modal-box" onclick="event.stopPropagation()">
+        <button type="button" class="qr-close-btn" onclick="closeQrModal()">×</button>
 
+        <div class="qr-modal-icon">
+            <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+                <path d="M14 14h2v2h-2zM18 14h3v2h-3zM14 18h2v3h-2zM18 18h1v1h2v2h-3z"></path>
+            </svg>
+        </div>
+
+        <h2>Continue on phone</h2>
+        <p id="qrBookName" class="qr-book-name"></p>
+        <p class="qr-description">Scan this QR code to open the book on another device.</p>
+
+        <div class="qr-image-box">
+            <img id="qrImage" src="" alt="Book QR Code" />
+        </div>
+    </div>
+</div>
 <script>
-    function openBook(bookTitle) {
-        // alert(`Opening "${bookTitle}"...\n\nThe book reader will open in a new window.`);
-        
-        // In a real application, this would open a PDF viewer or book reader
-        // window.open('/reader?book=' + encodeURIComponent(bookTitle), '_blank');
-    }
-
-    function searchBooks() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const bookCards = document.querySelectorAll('.book-card');
-
-        bookCards.forEach(card => {
-            const title = card.dataset.title.toLowerCase();
-            const author = card.querySelector(".book-author").textContent.toLowerCase();
-            if (title.includes(searchTerm) || author.includes(searchTerm)) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    }
+    
 </script>
 
+<script src="~/js/mylibary.js"></script>

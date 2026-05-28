@@ -4,9 +4,13 @@ using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Guest;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.VisualBasic;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using NuGet.Protocol.Plugins;
+using System.Data;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
 namespace IIStudyWebApp.Controllers
@@ -23,11 +27,14 @@ namespace IIStudyWebApp.Controllers
 
         public async Task<IActionResult> viewSignUpPage()
         {
+            ViewBag.WasSubmitted = false;
             return View();
         }
 
         public async Task<IActionResult> viewSignInPage()
         {
+            ViewBag.WrongDetails = false;
+            ViewBag.ErroOccured = false;
             return View();
         }
         public async Task<IActionResult> ViewBookCatalog()
@@ -105,9 +112,9 @@ namespace IIStudyWebApp.Controllers
             client.Path = "api/Guest/SignIn";
 
 
-            ApiResultModel<Registered> success = client.PostAsyncRet<SignInViewModel, Registered>(SignInModel).Result;
+            ApiResultModel<Registered> success = await client.PostAsyncRet<SignInViewModel, Registered>(SignInModel);
 
-            
+
             if (success.Success && success.Data != null && Convert.ToInt64(success.Data.RegisteredID) > 0)
             {
                 //Console.WriteLine($@"{success.Data.RegisteredID}");
@@ -115,14 +122,17 @@ namespace IIStudyWebApp.Controllers
                 HttpContext.Session.SetString("RegisteredID", success.Data.RegisteredID);
                 return RedirectToAction("RegisteredHomePage", "Registered");
             }
-
-            return RedirectToAction("ViewSignInPage");
+            else {
+                ViewBag.WrongDetails = true;
+                return View("ViewSignInPage"); 
+            }
+            
         }
 
         [HttpPost]
         public async Task<IActionResult> SignUp(Registered reg)
         {
-            ApiClient<Registered> client = new ApiClient<Registered>();
+            ApiClient<SignUpResultModel> client = new ApiClient<SignUpResultModel>();
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
@@ -145,27 +155,36 @@ namespace IIStudyWebApp.Controllers
             //    }
             //}
             
-             ApiResultModel<Registered> success = client.PostAsyncRet<Registered, Registered>(reg).Result;
+             ApiResultModel<SignUpResultModel> success = await client.PostAsyncRet<Registered, SignUpResultModel>(reg);
 
-            //888888888888888888888888888888888888
-
-            //888888888888888888888888888888888888
-            //ApiResultModel<string> success = client.PostAsync(reg).Result;
-            await Console.Out.WriteLineAsync(  "here****************************************");
-            await Console.Out.WriteLineAsync(success.Success + "HEREHREREHREHEHREHRHEEH");
-
-            //Console.WriteLine($@"{success.Data.RegisteredID}");
-            if (success.Success && success.Data != null)
+            if (success.Success && success.Data.RegisteredID != "0" && !success.Data.EmailAlreadyInUse && !success.Data.UserNameAlreadyInUse)
             {
-
                 HttpContext.Session.SetString("RegisteredID", success.Data.RegisteredID);
                 return RedirectToAction("RegisteredHomePage", "Registered");
             }
-
-            return RedirectToAction("ViewSignUpPage");
-            //if (!success)
-            //    return View("Failed to sign up.");
-            //return View("User has been signed up.");
+            else if (success.Success && success.Data.EmailAlreadyInUse && success.Data.UserNameAlreadyInUse)
+            {
+                ViewBag.WasSubmitted = true;
+                return View("ViewSignUpPage", success.Data);
+            }
+            else
+            {
+                SignUpResultModel result = new SignUpResultModel()
+                {
+                    Birth = reg.Birth,
+                    Email = reg.Email,
+                    IsBanned = reg.IsBanned,
+                    Password = reg.Password,
+                    ImagePath = reg.ImagePath,
+                    Phone = reg.Phone,
+                    Role = reg.Role,
+                    UserName = reg.UserName,
+                    RegisteredSalt = reg.RegisteredSalt,
+                    RegisteredID = reg.RegisteredID
+                };
+                ViewBag.WasSubmitted = true;
+                return View("ViewSignUpPage", result);
+            }
 
         }
 

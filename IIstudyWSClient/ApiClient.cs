@@ -45,6 +45,12 @@ namespace IIstudyWSClient
             }
         }
 
+        public ApiClient()
+        {
+            this.Scheme = "http";
+            this.Host = "localhost";
+            this.Port = 5049;
+        }
         
 
         public void AddParameter(string key, object value)

@@ -393,7 +393,7 @@
                            Orientation="Horizontal" 
                            VerticalAlignment="Center"
                            >
-                    <!-- Notifications -->
+                    <!-- Notifications --><!--
                     <Border Width="45" 
                            Height="45" 
                            Background="#f8fafc"
@@ -405,7 +405,7 @@
                         <Viewbox>
                             <TextBlock Text="🔔" VerticalAlignment="Center"/>
                         </Viewbox>
-                        <!-- Notification Badge -->
+                        --><!-- Notification Badge --><!--
                         <Border Width="18" 
                                Height="18" 
                                CornerRadius="9"
@@ -423,7 +423,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- Search -->
+                    --><!-- Search --><!--
                     <Border Width="45" 
                            Height="45" 
                            Background="#f8fafc"
@@ -433,7 +433,7 @@
                         <Viewbox>
                             <TextBlock Text="🔍" VerticalAlignment="Center"/>
                         </Viewbox>
-                    </Border>
+                    </Border>-->
                 </StackPanel>
             </Grid>
         </Border>

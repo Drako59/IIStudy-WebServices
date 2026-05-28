@@ -526,8 +526,14 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="8"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+
                                                     <!-- REVIEWS -->
-                                                    <StackPanel Grid.Column="0">
+                                                    <StackPanel Grid.Column="0" Grid.Row="0">
                                                         <TextBlock Text="REVIEWS" Style="{StaticResource MetaLabel}"/>
                                                         <TextBlock Text="{Binding reviewsNum}"
                                                                    FontSize="14"
@@ -536,10 +542,10 @@
                                                     </StackPanel>
 
                                                     <!-- מפריד -->
-                                                    <Border Grid.Column="1" Width="1" Background="#e5e7eb" Margin="4,0"/>
+                                                    <Border Grid.Column="1" Grid.Row="0" Width="1" Background="#e5e7eb" Margin="4,0"/>
 
                                                     <!-- RATE -->
-                                                    <StackPanel Grid.Column="2">
+                                                    <StackPanel Grid.Column="2" Grid.Row="0">
                                                         <TextBlock Text="RATING" Style="{StaticResource MetaLabel}"/>
                                                         <StackPanel Orientation="Horizontal">
                                                             <TextBlock Text="⭐" Margin="0,0,4,0"/>
@@ -551,10 +557,10 @@
                                                     </StackPanel>
 
                                                     <!-- מפריד -->
-                                                    <Border Grid.Column="3" Width="1" Background="#e5e7eb" Margin="4,0"/>
+                                                    <Border Grid.Column="3" Grid.Row="0" Width="1" Background="#e5e7eb" Margin="4,0"/>
 
                                                     <!-- SOLD (חדש) -->
-                                                    <StackPanel Grid.Column="4">
+                                                    <StackPanel Grid.Column="0" Grid.Row="2">
                                                         <TextBlock Text="SOLD" Style="{StaticResource MetaLabel}"/>
                                                         <TextBlock Text="{Binding SoldCount}"
                                                                    FontSize="13"
@@ -563,10 +569,10 @@
                                                     </StackPanel>
 
                                                     <!-- מפריד -->
-                                                    <Border Grid.Column="5" Width="1" Background="#e5e7eb" Margin="4,0"/>
+                                                    <Border Grid.Column="1" Width="0" Grid.Row="2" Background="#e5e7eb" Margin="4,0"/>
 
                                                     <!-- STOCK COUNT (חדש) -->
-                                                    <StackPanel Grid.Column="6">
+                                                    <StackPanel Grid.Column="2" Grid.Row="2">
                                                         <TextBlock Text="STOCK" Style="{StaticResource MetaLabel}"/>
                                                         <TextBlock Text="{Binding StockCount}"
                                                                     FontSize="13"
@@ -876,6 +882,7 @@
                                                     BorderBrush="#ede9fe"
                                                     BorderThickness="1"
                                                     Padding="12,9"
+                                                    Cursor="Hand"
                                                     MouseLeftButtonUp="SubjectFilter"
                                                     Tag="{Binding SubjectID}">
                                                 <Border.Effect>
