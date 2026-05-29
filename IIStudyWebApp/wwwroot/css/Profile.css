@@ -71,6 +71,24 @@
     margin-bottom: 10px;
     color: white;
 }
+.profile-initials {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 56px;
+    position: relative;
+    overflow: hidden;
+    border: 6px solid white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
 
 .profile-body {
     padding: 40px;
@@ -175,4 +193,232 @@
     overflow-y: auto;
     height: 92%;
     padding: 20px;
+}
+
+
+
+/*Update profile pop up*/
+.profile-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.profile-action-btn {
+    border: none;
+    outline: none;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .profile-action-btn.primary {
+        background: white;
+        color: #667eea;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+    }
+
+        .profile-action-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+        }
+
+    .profile-action-btn.secondary {
+        background: rgba(255, 255, 255, 0.16);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(10px);
+    }
+
+        .profile-action-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.28);
+            transform: translateY(-3px);
+        }
+
+
+/* Popup */
+
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+    .popup-overlay.active {
+        display: flex;
+    }
+
+.popup-box {
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    border-radius: 24px;
+    padding: 34px;
+    position: relative;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.28);
+    animation: popupIn 0.25s ease;
+}
+
+@keyframes popupIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.popup-close {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f3ff;
+    color: #667eea;
+    font-size: 1.7rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+    .popup-close:hover {
+        background: #667eea;
+        color: white;
+        transform: rotate(90deg);
+    }
+
+.popup-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+    .popup-header h2 {
+        margin: 0 0 8px;
+        font-size: 1.8rem;
+        color: #1f2937;
+    }
+
+    .popup-header p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 0.95rem;
+    }
+
+.update-profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+    .form-row label {
+        font-size: 0.9rem;
+        color: #374151;
+        font-weight: 700;
+    }
+
+    .form-row input {
+        width: 100%;
+        padding: 13px 15px;
+        border-radius: 12px;
+        border: 2px solid #e5e7eb;
+        background: #f9fafb;
+        font-size: 1rem;
+        color: #1f2937;
+        transition: all 0.25s ease;
+    }
+
+        .form-row input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.13);
+        }
+
+.password-warning {
+    background: #fff7ed;
+    color: #9a3412;
+    border: 1px solid #fed7aa;
+    padding: 13px 15px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.cancel-btn,
+.save-btn {
+    border: none;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.cancel-btn {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+    .cancel-btn:hover {
+        background: #e5e7eb;
+    }
+
+.save-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 8px 18px rgba(102, 126, 234, 0.28);
+}
+
+    .save-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(102, 126, 234, 0.36);
+    }
+
+@media (max-width: 600px) {
+    .popup-box {
+        padding: 28px 22px;
+    }
+
+    .popup-buttons {
+        flex-direction: column;
+    }
+
+    .cancel-btn,
+    .save-btn {
+        width: 100%;
+    }
 }

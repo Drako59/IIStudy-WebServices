@@ -54,7 +54,7 @@
                 {
                     foreach (ExamDetailsWeb exam in Model)
                     {
-                        <div class="exam-row">
+                        <div class="exam-row" data-search="@exam.Exam_Name">
                             <div class="exam-info">
                                 <div class="exam-name">@exam.Exam_Name</div>
                                 <div class="exam-meta">
@@ -110,43 +110,4 @@
     </div>
 </div>
 
-<script>
-    
-
-
-
-    // Format date
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
-    }
-
-    // Search exams
-    function searchExams() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-
-        const filteredExams = examsData.filter(exam => {
-            return exam.examName.toLowerCase().includes(searchTerm) ||
-                   exam.subjectName.toLowerCase().includes(searchTerm);
-        });
-
-    }
-
-    // View exam
-    function viewExam(examId) {
-        alert(`Opening exam with ID: ${examId}`);
-        // In production: window.location.href = `/exams/view/${examId}`;
-    }
-
-    // View solutions
-    function viewSolutions(examId) {
-        alert(`Opening solutions for exam ID: ${examId}`);
-        // In production: window.location.href = `/exams/solutions/${examId}`;
-    }
-
-    // Initialize on page load
-    // window.addEventListener('DOMContentLoaded', () => {
-    //     fetchExamsFromDB();
-    // });
-
+<script src="~/js/ViewExamsBySubjectAndYear.js"></script>
