@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.ViewModels
 {
-    public class PaymentResult
+    public class UpdateProfileResult
     {
+        public bool EmailIsTaken { get; set; }
+        public bool UserNameIsTaken { get; set; }
         public bool Success { get; set; }
-        public bool CartIsEmpty { get; set; }
-        public bool OutOfStockBooks { get; set; } 
-        public string OrderID { get; set; }
-        
+
     }
 }

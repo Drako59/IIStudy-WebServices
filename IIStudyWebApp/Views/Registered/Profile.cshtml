@@ -1,4 +1,5 @@
 ﻿@using LLStudy_Models.Models
+@using LLStudy_Models.ViewModels;
 
 @model Registered
 @{
@@ -6,7 +7,27 @@
     Layout = "~/Views/Shared/RegisteredMasterPage.cshtml";
 }
 
+@{
+    Registered regSession = ViewData["Registered"] as Registered;
+}
 
+
+
+@if (regSession == null)
+{
+    regSession = new Registered()
+    {
+        UserName = "None",
+        Email = "None",
+        Birth = "None",
+        
+    };
+}
+@{
+    UpdateProfileResult error = ViewBag.ErrorStatus;
+    if (error == null)
+        error = new UpdateProfileResult();
+}
 
 
 <link href="../Css/profile.css" rel="stylesheet" />
@@ -35,9 +56,9 @@
                 {
                     if (Model.UserName.Contains(" "))
                     {
-                        string[] parts = Model.UserName.Split(" ");
+                        string[] parts = regSession.UserName.Split(" ");
                         <span class="profile-initials">
-
+                            
                             @parts[0][0]@parts[1][0]
 
                         </span>
@@ -46,13 +67,13 @@
                     {
                         <span class="profile-initials">
 
-                            @Model.UserName[0]@Model.UserName[1]
+                            @regSession.UserName[0]@regSession.UserName[1]
                         </span>
                     }
                 }
                 else
                 {
-                    <img id="profileImage" src="@Url.Action("GetProfileImage", "Registered", new { registeredID = Model.RegisteredID })" alt="Profile" class="profile-image">
+                    <img id="profileImage" src="@Url.Action("GetProfileImage", "Registered", new { registeredID = regSession.RegisteredID })" alt="Profile" class="profile-image">
                 }
                 <button class="change-photo-btn" onclick="document.getElementById('imageInput').click()">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,7 +85,7 @@
                     <input type="file" name="image" id="imageInput" accept="image/*" onchange="this.form.submit();">
                 </form>
             </div>
-            <h1 class="profile-name" id="userName">@Model.UserName</h1>
+            <h1 class="profile-name" id="userName">@regSession.UserName</h1>
             <div class="profile-actions">
                 <button type="button" class="profile-action-btn primary" onclick="openUpdatePopup()">
                     Edit Profile
@@ -87,7 +108,7 @@
                     </div>
                     <div class="info-content">
                         <div class="info-label">Full Name</div>
-                        <div class="info-value" id="displayName">@Model.UserName</div>
+                        <div class="info-value" id="displayName">@regSession.UserName</div>
                     </div>
                 </div>
 
@@ -102,7 +123,7 @@
                         int age;
                         DateTime now = DateTime.Now;
                         if(!DateTime.TryParseExact(
-                                                    Model.Birth,
+                                                    regSession.Birth,
                                                     "yyyy-MM-dd",
                                                     System.Globalization.CultureInfo.InvariantCulture,
                                                     System.Globalization.DateTimeStyles.None,
@@ -135,7 +156,7 @@
                     </div>
                     <div class="info-content">
                         <div class="info-label">Birthday</div>
-                        <div class="info-value" id="displayBirthday">@Model.Birth</div>
+                        <div class="info-value" id="displayBirthday">@regSession.Birth</div>
                     </div>
                 </div>
 
@@ -147,7 +168,7 @@
                     </div>
                     <div class="info-content">
                         <div class="info-label"></div>
-                        <div class="info-value" id="displayEmail">@Model.Email</div>
+                        <div class="info-value" id="displayEmail">@regSession.Email</div>
                     </div>
                 </div>
 
@@ -159,7 +180,7 @@
                     </div>
                     <div class="info-content">
                         <div class="info-label">Phone</div>
-                        <div class="info-value" id="displayPhone">@Model.Phone</div>
+                        <div class="info-value" id="displayPhone">@regSession.Phone</div>
                     </div>
                 </div>
             </div>
@@ -189,23 +210,35 @@
         <form asp-action="UpdateProfile" asp-controller="Registered" method="post" class="update-profile-form">
 
             <div class="form-row">
+                @if (error.UserNameIsTaken)
+                {
+                    <span class="field-error">User name is already taken</span>
+                }
+                <span asp-validation-for="UserName" class="field-error"></span>
                 <label>User Name</label>
-                <input asp-for="UserName" type="text" name="UserName" value="@Model.UserName" required />
+                <input asp-for="UserName" type="text"  required />
             </div>
 
             <div class="form-row">
+                @if (error.EmailIsTaken)
+                {
+                    <span class="field-error">Email is already taken</span>
+                }
+                <span asp-validation-for="Email" class="field-error"></span>
                 <label>Email</label>
-                <input asp-for="Email" type="email" name="Email" value="@Model.Email" required />
+                <input asp-for="Email" type="email"  required />
             </div>
 
             <div class="form-row">
+                <span asp-validation-for="Birth" class="field-error"></span>
                 <label>Birthday</label>
-                <input asp-for="Birth" type="date" name="Birth" value="@Model.Birth" />
+                <input asp-for="Birth" type="date"  />
             </div>
 
             <div class="form-row">
+                <span asp-validation-for="Phone" class="field-error"></span>
                 <label>Phone</label>
-                <input asp-for="Phone" type="text" name="Phone" value="" placeholder="Enter your phone number" />
+                <input asp-for="Phone" type="text"  placeholder="Enter your phone number" />
             </div>
 
             <div class="password-warning">
@@ -220,5 +253,12 @@
         </form>
     </div>
 </div>
-
+    
 <script src="~/js/profile.js"></script>
+@if (!ViewData.ModelState.IsValid || (ViewBag.ErrorStatus != null && (ViewBag.ErrorStatus.UserNameIsTaken || ViewBag.ErrorStatus.EmailIsTaken)))
+{
+    <script>
+        openUpdatePopup();
+    </script>
+
+}

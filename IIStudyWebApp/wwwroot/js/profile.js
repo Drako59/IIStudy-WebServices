@@ -23,13 +23,13 @@ function closeUpdatePopup() {
     }
 }
 
-document.addEventListener("click", function (event) {
-    const popup = document.getElementById("updateProfilePopup");
+//document.addEventListener("click", function (event) {
+//    const popup = document.getElementById("updateProfilePopup");
 
-    if (popup && event.target === popup) {
-        closeUpdatePopup();
-    }
-});
+//    if (popup && event.target === popup) {
+//        closeUpdatePopup();
+//    }
+//});
 
 document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {

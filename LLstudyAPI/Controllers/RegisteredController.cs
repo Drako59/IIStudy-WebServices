@@ -118,6 +118,37 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        [HttpPost]
+        public UpdateProfileResult UpdateProfile(Registered reg)
+        {
+            try
+            {
+                
+                
+                UpdateProfileResult result = new UpdateProfileResult();
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                result.UserNameIsTaken = this.repositoryUOW.RegisteredRepository.UserNameAlreadyExistForAnotherUser(reg.UserName, reg.RegisteredID);
+                result.EmailIsTaken = this.repositoryUOW.RegisteredRepository.EmailAlreadyExistForAnotherUser(reg.Email, reg.RegisteredID);
+                if(result.EmailIsTaken || result.UserNameIsTaken)
+                {
+                    result.Success = false;
+                    return result;
+                }
+                result.Success = this.repositoryUOW.RegisteredRepository.Update(reg, new List<string>() { nameof(Registered.Password), nameof(Registered.RegisteredSalt), nameof(Registered.Role), nameof(Registered.IsBanned), nameof(Registered.ImagePath) });
+                return result;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
 
         [HttpGet]
         public IActionResult GetShoppingCart(string registeredID)
@@ -176,12 +207,15 @@ namespace LLstudyWS.Controllers
 
         [HttpGet]
 
-        public Order GetOrderDetails(string orderID)
+        public ViewOrderDetailsModel GetOrderDetails(string registeredID,string orderID)
         {
             try
             {
+                ViewOrderDetailsModel model = new ViewOrderDetailsModel();
                 this.repositoryUOW.HelperOledb.OpenConnection();
-                return this.repositoryUOW.OrderRepository.GetByID(orderID, new List<string>() { "IsValid", "HasErrors"});
+                model.Order =  this.repositoryUOW.OrderRepository.GetUserOrder(registeredID,orderID);
+                model.Books = this.repositoryUOW.OrderRepository.GetOrderBooks(orderID);
+                return model;
             }
             catch (Exception ex)
             {
@@ -208,6 +242,7 @@ namespace LLstudyWS.Controllers
                     paymentResult.Success = false;
                     paymentResult.CartIsEmpty = true;
                     paymentResult.OutOfStockBooks = false;
+                    paymentResult.OrderID = "0";
                     return paymentResult;
                 }
 
@@ -218,6 +253,8 @@ namespace LLstudyWS.Controllers
                     paymentResult.Success = false;
                     paymentResult.CartIsEmpty = false;
                     paymentResult.OutOfStockBooks = true;
+                    paymentResult.OrderID = "0";
+
                     return paymentResult;
                 }
 
@@ -246,6 +283,8 @@ namespace LLstudyWS.Controllers
                 paymentResult.Success = true;
                 paymentResult.CartIsEmpty = false;
                 paymentResult.OutOfStockBooks = false;
+                paymentResult.OrderID = orderID;
+
                 return paymentResult ;
 
             }

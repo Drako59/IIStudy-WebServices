@@ -47,6 +47,22 @@ namespace LLstudyWS.ORM
             return orders;
         }
 
+        public Order GetUserOrder(string registeredID, string orderID)
+        {
+            string sql = $@"SELECT * FROM Orders WHERE RegisteredID = @RegisteredID AND OrderID = @OrderID";
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            this.helperOledb.AddParameter("@OrderID", orderID);
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return this.moderlRefCreator.CreateModel<Order>(reader);
+                }
+                return null;
+            }
+        }
+
         public List<OrderBook> GetOrderBooks(string orderID)
         {
             string sql = @$"SELECT Books.BookID AS [BookID], Subjects.SubjectID AS [SubjectID],
@@ -77,6 +93,9 @@ namespace LLstudyWS.ORM
 
 
         }
+
+        
+
 
         public bool CheckIfBookExistForUser(string bookID, string registeredID)
         {

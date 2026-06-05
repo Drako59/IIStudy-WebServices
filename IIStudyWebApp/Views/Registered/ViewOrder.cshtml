@@ -1,0 +1,348 @@
+﻿
+@{
+    ViewData["Title"] = "ViewOrder";
+    Layout = "~/Views/Shared/RegisteredMasterPage.cshtml";
+}
+
+@using LLStudy_Models.ViewModels;
+@using LLStudy_Models.Models;
+@model ViewOrderDetailsModel;
+
+@{
+    var deliveryDetails = (OrderStatus)Model.Order.DeliveryStatus switch
+    {
+        OrderStatus.Pending => new { Status = "Pending", ClassName = "pending", Icon =  "<circle cx='12' cy='12' r='10'></circle><polyline points='12 6 12 12 16 14'></polyline>" },
+        OrderStatus.Processing => new { Status = "Processing", ClassName = "Processing", Icon = "<circle cx='12' cy='12' r='10'></circle><polyline points='12 6 12 12 16 14'></polyline>" },
+        OrderStatus.Shipped => new { Status = "Shipped", ClassName = "shipped", Icon = "<rect x='1' y='3' width='15' height='13'></rect><polygon points='16 8 20 8 23 11 23 16 16 16 16 8'></polygon><circle cx='5.5' cy='18.5' r='2.5'></circle><circle cx='18.5' cy='18.5' r='2.5'></circle>" },
+        OrderStatus.Delivered => new { Status = "Delivered", ClassName = "delivered", Icon = "<polyline points='20 6 9 17 4 12'></polyline>" },
+        OrderStatus.Canceled => new { Status = "Canceled", ClassName = "canceled", Icon = "<circle cx='12' cy='12' r='10'></circle><line x1='15' y1='9' x2='9' y2='15'></line><line x1='9' y1='9' x2='15' y2='15'></line>" },
+        OrderStatus.Refund => new { Status = "Refund", ClassName = "refund", Icon = "<polyline points='1 4 1 10 7 10'></polyline><path d='M3.51 15a9 9 0 1 0 .49-3.31'></path>" },
+        _ => new { Status = "Processing", ClassName = "Processing", Icon = "<circle cx='12' cy='12' r='10'></circle><polyline points='12 6 12 12 16 14'></polyline>" }
+    };
+}
+
+<link href="~/css/vieworder.css" rel="stylesheet" />
+<div class="order-page">
+    <div class="container">
+
+        <div class="page-header">
+            <div class="breadcrumb">
+                <a href="@Url.Action("RegisteredHomePage", "Registered")">Home</a> / <a href="@Url.Action("ViewUserOrders", "Registered")">My Orders</a> / <strong>Order #@(Model.Order.OrderID)</strong>
+            </div>
+            <h1 class="page-title">Order Details</h1>
+            <p class="page-subtitle">Full summary of your order</p>
+        </div>
+
+        <div class="order-layout">
+
+            <!-- Left Column -->
+            <div>
+                <!-- Order Summary Header -->
+                <div class="card order-header-card">
+                    <div class="order-top-row">
+                        <div class="order-id-block">
+                            <h2>Order #@Model.Order.OrderID</h2>
+                        </div>
+                        <div class="delivery-badge @deliveryDetails.ClassName" id="deliveredBadge">
+                            <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;">
+                                @Html.Raw(deliveryDetails.Icon)
+                            </svg>
+                            @deliveryDetails.Status
+                        </div>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                @Model.Order.Date;
+                            </div>
+                            <div class="info-item-value" id="orderDate">Jan 15, 2026</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                @Model.Order.Total_price
+                            </div>
+                            <div class="info-item-value price" id="totalPrice">@Model.Order.Total_price</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                @Model.Order.Location
+                            </div>
+                            <div class="info-item-value" id="orderLocation">New York, USA</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="1" y="3" width="15" height="13"></rect>
+                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                </svg>
+                                @deliveryDetails.Status
+                            </div>
+                            <div class="info-item-value" id="deliveryStatus">Delivered</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Address -->
+                <div class="card">
+                    <h3 class="section-title">Shipping Address</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                </svg>
+                                @Model.Order.City
+                            </div>
+                            <div class="info-item-value" id="city">New York</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                @Model.Order.Postal
+                            </div>
+                            <div class="info-item-value" id="postal">10001</div>
+                        </div>
+
+                        <div class="info-item" style="grid-column: span 2;">
+                            <div class="info-item-label">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                                @Model.Order.Country
+                            </div>
+                            <div class="info-item-value" id="country">United States</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                @{
+                    OrderStatus orderStatus = (OrderStatus)Model.Order.DeliveryStatus;
+
+                    string StepClass(OrderStatus orderStatus,OrderStatus current)
+                    {
+                        if (current > orderStatus)
+                        {
+                            return "done";
+                        }
+                        else if (current == orderStatus)
+                        {
+                            return "active";
+                        }
+
+                        return "future";
+                    }
+                }
+                <!-- Delivery Progress -->
+                <div class="card">
+                    <h3 class="section-title">Delivery Progress</h3>
+                    <div class="status-steps">
+                        <div class="status-step @(StepClass(OrderStatus.Pending, orderStatus))">
+                            <div class="step-icon @(StepClass(OrderStatus.Pending, orderStatus))">
+                                @if (OrderStatus.Pending >= orderStatus)
+                                {
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx='12' cy='12' r='10'></circle>
+                                        <polyline points='12 6 12 12 16 14'></polyline>
+                                    </svg>
+                                }
+                                else
+                                {
+                                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                }
+                            </div>
+                            <div class="step-info">
+                                <div class="step-title">Order Placed</div>
+                            </div>
+                        </div>
+                        <div class="status-step @(StepClass(OrderStatus.Processing, orderStatus))">
+                            <div class="step-icon @(StepClass(OrderStatus.Processing, orderStatus))">
+                                @if (OrderStatus.Processing >= orderStatus)
+                                {
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx='12' cy='12' r='10'></circle>
+                                        <polyline points='12 6 12 12 16 14'></polyline> 
+                                    </svg>
+                                }
+                                else
+                                {
+                                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                }
+                            </div>
+                            <div class="step-info">
+                                <div class="step-title">Processing</div>
+                            </div>
+                        </div>
+                        <div class="status-step @(StepClass(OrderStatus.Shipped, orderStatus))">
+                            <div class="step-icon @(StepClass(OrderStatus.Shipped, orderStatus))">
+                                @if(OrderStatus.Shipped >= orderStatus)
+                                {
+                                    <svg viewBox="0 0 24 24">
+                                        <rect x='1' y='3' width='15' height='13'></rect>
+                                        <polygon points='16 8 20 8 23 11 23 16 16 16 16 8'></polygon>
+                                        <circle cx='5.5' cy='18.5' r='2.5'></circle>
+                                        <circle cx='18.5' cy='18.5' r='2.5'></circle>
+                                    </svg>
+                                }
+                                else
+                                {
+                                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                }
+                            </div>
+                            <div class="step-info">
+                                <div class="step-title">Shipped</div>
+                            </div>
+                        </div>
+                        <div class="status-step @(StepClass(OrderStatus.Delivered, orderStatus))">
+                            <div class="step-icon @(StepClass(OrderStatus.Delivered, orderStatus))">
+                                @if (OrderStatus.Delivered >= orderStatus)
+                                {
+                                    <svg viewBox="0 0 24 24">
+                                        <rect x="1" y="3" width="15" height="13"></rect>
+                                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                    </svg>
+                                }
+                                else
+                                {
+                                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                }
+
+                            </div>
+                            <div class="step-info">
+                                <div class="step-title">Delivered</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Summary -->
+                <div class="card">
+                    <h3 class="section-title">Price Summary</h3>
+                    <div class="summary-row">
+                        <span class="summary-label">Subtotal</span>
+                        <span class="summary-value">$@Model.Order.Total_price</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Shipping</span>
+                        <span class="summary-value">$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Tax (0%)</span>
+                        <span class="summary-value">$0.00</span>
+                    </div>
+                    <div class="summary-divider"></div>
+                    <div class="total-row">
+                        <span class="total-label">Total Price</span>
+                        <span class="total-value">$@Model.Order.Total_price</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Order Books -->
+            <div class="card" style="margin-top: 30px;">
+                <h3 class="section-title">Books in This Order</h3>
+                <div id="orderBooksList">
+                    @if (Model.Books.Count == 0)
+                    {
+                        <p style="text-align:center;color:#718096;padding:40px;">No books found in this order.</p>
+                    }
+                    else
+                    {
+                        foreach(OrderBook book in Model.Books)
+                        {
+                            string formatClass = book.IsOnline ? "format-pdf" : "format-physical";
+
+                            <div class="books-list">
+                                <div class="book-row">
+                                    <div class="book-cover-thumb">
+                                        
+
+                                        @if(book.BookImagePath.ToLower() != "none"){
+                                            <img src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })" alt="@book.Book_name">
+                                        }
+                                        else{
+                                            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M7 8h10M7 12h8M7 16h6" /></svg>
+                                        }
+                                    </div>
+                                    <div class="book-row-info">
+                                        <div class="book-row-title">@book.Book_name</div>
+                                        <div class="book-row-author">by @book.Author_name</div>
+                                        <div class="book-row-meta">
+                                            <span class="book-row-tag ${formatClass}">
+                                                <svg viewBox="0 0 24 24">
+                                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                                </svg>
+                                                @(book.IsOnline? "Online" : "Physial")
+                                            </span>
+                                            <span class="book-row-tag">
+                                                <svg viewBox="0 0 24 24">
+                                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                                </svg>
+                                                @book.Subject_name
+                                            </span>
+                                            @if(!book.IsOnline)
+                                            { 
+                                                <span class="book-row-tag">
+                                                <svg viewBox="0 0 24 24">
+                                                    <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path>
+                                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                                </svg>
+                                                Qty: @(book.Amount)
+                                            </span>
+                                            
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="book-row-price-col">
+                                        <div class="book-row-price">$@book.Book_price</div>
+                                        @if(!book.IsOnline)
+                                        { 
+                                            <div class="book-row-qty">x@(book.Amount) = $@(Math.Round(book.Book_price * book.Amount,3))</div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

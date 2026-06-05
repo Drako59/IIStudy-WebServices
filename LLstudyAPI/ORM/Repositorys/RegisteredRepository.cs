@@ -190,6 +190,37 @@ namespace LLstudyWS.ORM
             }
         }
 
+        public bool UserNameAlreadyExistForAnotherUser(string userName, string registeredID)
+        {
+            string sql = "SELECT COUNT(*) AS [IsExist] FROM Registereds WHERE UserName = @UserName AND NOT RegisteredID = @RegisteredID";
+            this.helperOledb.AddParameter("@UserName", userName);
+            this.helperOledb.AddParameter("@RegisteredID",registeredID);
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt16(reader["IsExist"]) > 0;
+                }
+                return false;
+            }
+        }
+
+        public bool EmailAlreadyExistForAnotherUser(string email, string registeredID)
+        {
+            string sql = "SELECT COUNT(*) AS [IsExist] FROM Registereds WHERE Email = @Email AND NOT RegisteredID = @RegisteredID";
+            this.helperOledb.AddParameter("@Email", email);
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt16(reader["IsExist"]) > 0;
+                }
+                return false;
+            }
+        }
+
         //public override Registered GetByID(string UserName)
         //{
         //    string sql = "SELECT * FROM Registereds WHERE UserName = @UserName";

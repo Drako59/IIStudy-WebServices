@@ -6,6 +6,7 @@ using LLStudy_Models.ViewModels.Registerd;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
@@ -513,7 +514,7 @@ namespace IIStudyWebApp.Controllers
             
             ApiResultModel<PaymentResult> status = await client.PostAsyncRet<Order, PaymentResult>(order);
             if(status.Success && status.Data.Success)
-                return RedirectToAction("RegisteredHomePage", "Registered");
+                return RedirectToAction("ViewOrder", "Registered", status.Data.OrderID);
             if (status.Success && !status.Data.Success)
                 return RedirectToAction("ViewShoppingCart","Registered");
             return RedirectToAction("PaymentPage", "Registered", order);
@@ -726,6 +727,62 @@ namespace IIStudyWebApp.Controllers
             return View(solutions);
 
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfile(Registered reg)
+        {
+            reg.ImagePath = "None";
+            reg.Password = "NoneNone";
+            reg.RegisteredSalt = "None";
+            reg.Role = "User";
+            Registered registered = await this.GetRegisteredDeatils();
+            if (reg == null)
+            {
+                return RedirectToAction("ViewExamYearsPage", "Guest");
+            }
+
+            ViewData["Registered"] = registered;
+
+            reg.RegisteredID = registered.RegisteredID;
+
+            ApiClient<bool> client = new ApiClient<bool>();
+            client.Path = "api/Registered/UpdateProfile";
+
+            ApiResultModel<UpdateProfileResult> success = await client.PostAsyncRet<Registered, UpdateProfileResult>(reg);
+
+            if (success.Success && success.Data != null && success.Data.Success)
+                return RedirectToAction("Profile");
+            else
+            {
+                ViewBag.ErrorStatus = success.Success? success.Data: null;
+                return View("Profile", reg);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewOrder(string orderID)
+        {
+            Registered registered = await GetRegisteredDeatils();
+            if (registered == null)
+                return RedirectToAction("viewSignInPage", "Guest");
+            ViewData["Registered"] = registered;
+
+
+            ApiClient<ViewOrderDetailsModel> client = new ApiClient<ViewOrderDetailsModel>();
+            client.Path = "api/Registered/GetOrderDetails";
+            client.AddParameter("registeredID", registered.RegisteredID);
+            client.AddParameter("orderID", orderID);
+
+            ViewOrderDetailsModel order = await client.GetAsync();
+            if (order == null)
+            {
+                RedirectToAction("ViewUserOrders","Registered");
+            }
+
+            return View(order);
+        }
+
+        
 
 
     }

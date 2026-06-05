@@ -398,3 +398,51 @@
     border-radius: 10px;
     padding: 10px 14px;
 }
+
+/*.order-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}*/
+
+    /* 0 - Pending */
+    .order-status.pending {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        color: white;
+    }
+
+    /* 1 - Processing */
+    .order-status.processing {
+        background: linear-gradient(135deg, #667eea 0%, #5568d3 100%);
+        color: white;
+    }
+
+    /* 2 - Shipped */
+    .order-status.shipped {
+        background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        color: white;
+    }
+
+    /* 3 - Delivered */
+    .order-status.delivered {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+    }
+
+    /* 4 - Canceled */
+    .order-status.canceled {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    /* 5 - Refund */
+    .order-status.refund {
+        background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+        color: white;
+    }
