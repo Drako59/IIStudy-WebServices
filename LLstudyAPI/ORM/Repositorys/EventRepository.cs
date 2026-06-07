@@ -10,7 +10,7 @@ namespace LLstudyWS.ORM
 {
     public class EventRepository : Repository<Event>, IRepository<Event>
     {
-        public EventRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+        public EventRepository(DbHelperOledb helper,  ModelCreatorReflection modelCretorRef) : base(helper,  modelCretorRef) { }
 
         public List<EventDetail> GetEventsDetails()
         {

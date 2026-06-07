@@ -12,12 +12,10 @@ namespace LLstudyWS.ORM
     public class Repository<T>: IRepository<T> where T: new()
     {
         protected DbHelperOledb helperOledb;
-        protected ModelCreators modelCreators;
         protected ModelCreatorReflection moderlRefCreator;
 
-        public Repository(DbHelperOledb helperOledb,ModelCreators modelCreator, ModelCreatorReflection modelCreatorReflection)
+        public Repository(DbHelperOledb helperOledb, ModelCreatorReflection modelCreatorReflection)
         {
-            this.modelCreators = modelCreator;
             this.moderlRefCreator = modelCreatorReflection;
             this.helperOledb = helperOledb;
         }
@@ -213,10 +211,7 @@ namespace LLstudyWS.ORM
             if (exludes != null)
                 exludePROP.AddRange(exludes);
             PropertyInfo[] propertys = OBJtype.GetProperties().Where(p => (!exludePROP.Contains(p.Name) && (!p.Name.Equals(OBJtype.Name + "ID")))).ToArray();
-            //foreach (PropertyInfo pro in propertys)
-            //{
-            //    Console.WriteLine(@$"Property Name: {pro.Name}");
-            //}
+            
             string columns = string.Join(", ", propertys.Select(p => $@"[{p.Name}]"));
             string placeholders = string.Join(", ", propertys.Select(p => ("@" + p.Name)));
             string sql = $@"INSERT INTO {OBJtype.Name}s ({columns}) VALUES({placeholders})";
@@ -233,7 +228,6 @@ namespace LLstudyWS.ORM
 
 
                     PropretyType = pro.PropertyType;
-                    //value = Convert.ToString(Convert.ChangeType(pro.GetValue(model, null), PropretyType));
                     if (pro.Name.Equals($@"{OBJtype.Name}Salt"))
                     {
                         this.helperOledb.AddParameter(("@" + pro.Name.ToString()), salt);
@@ -245,7 +239,6 @@ namespace LLstudyWS.ORM
 
 
 
-                    Console.WriteLine(@$"{"@" + pro.Name}:  {pro.GetValue(model, null)?.ToString() ?? ""} ");
                 }
 
                 this.helperOledb.Insert(sql);

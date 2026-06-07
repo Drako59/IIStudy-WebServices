@@ -9,7 +9,7 @@ namespace LLstudyWS.ORM
 {
     public class ShoppingCartRepository : Repository<Shopping_Cart>, IRepository<Shopping_Cart>
     {
-        public ShoppingCartRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+        public ShoppingCartRepository(DbHelperOledb helper,  ModelCreatorReflection modelCretorRef) : base(helper,  modelCretorRef) { }
 
 
         public override Shopping_Cart GetByID(string RegisteredID, List<string>? exludes = null)

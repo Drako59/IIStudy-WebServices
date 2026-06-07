@@ -8,7 +8,7 @@ namespace LLstudyWS.ORM
 {
     public class ExamRepository : Repository<Exam>, IRepository<Exam>
     {
-        public ExamRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+        public ExamRepository(DbHelperOledb helper, ModelCreatorReflection modelCretorRef) : base(helper, modelCretorRef) { }
         public List<Exam> GetByYear(string year)
         {
             string sql = $@"SELECT * FROM Exams WHERE Exam_year = @year";

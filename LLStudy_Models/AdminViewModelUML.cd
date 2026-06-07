@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LLStudy_Models.ViewModels.EventDetail" Collapsed="true">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Admin\EventDetail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.RegisteredComments" Collapsed="true">
+    <Position X="9.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAQAAEAEABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Admin\RegisteredComments.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Book" Collapsed="true">
+    <Position X="9.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hQAQCKQAEAIhAAACAYAAAAAAACCAAAAAAEAAAQFAACA=</HashCode>
+      <FileName>Models\Book.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Event" Collapsed="true">
+    <Position X="7.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAIAAgAAABAAAAAQAAEAAAABAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Models\Event.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -12,7 +12,6 @@ namespace LLStudy_Models.Models
       
         string examID;
         string subjectID;
-        bool access;
         string file_path_url;
         string exam_Name;
         string exam_Year;
@@ -23,7 +22,6 @@ namespace LLStudy_Models.Models
         [Required]
         public string SubjectID { get { return subjectID; } set { subjectID = value; ValidateProperty(value, "SubjectID"); } }
         
-        public bool Access { get { return access; } set { access = value; } }
         [Required]
         [ValidFile(ErrorMessage ="File format isn't valid.")]
         public string File_path_url { get { return file_path_url; } set { file_path_url = value; ValidateProperty(value, "File_path_url");  } }

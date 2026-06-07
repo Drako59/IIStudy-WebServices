@@ -5,12 +5,12 @@
 	Add the missing details for book catalog and ViewBooks user control in wpf.
 	Fixed the Profile page in WebApp and add Update.
 	Remove uncessery things from the WebApp's html.
-	Add the deleted and active fillter to ViewExams
-	Add date filter to exams.
-	Add login and sign out on a diffrent page in wpf.
-	Add if payment add succeed page with order details.
+	Add the deleted and active fillter to ViewExams v
+	Add date filter to exams. v
+	Add login and sign out on a diffrent page in wpf. v
+	Add if payment add succeed page with order details. v
 	Add pagging and dynamic loadin gto the reviews in wpf and in Book Preview
-	Add the view Order and add the order status for the orders page.
-	Add recepice page after payment.
-	Add update profile.
+	Add the view Order and add the order status for the orders page. v
+	Add recepice page after payment. v
+	Add update profile. v
 ADD ICON TO THE WPF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

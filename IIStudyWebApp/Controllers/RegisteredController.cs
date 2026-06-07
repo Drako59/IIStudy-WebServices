@@ -49,10 +49,8 @@ namespace IIStudyWebApp.Controllers
             {
                 return RedirectToAction("ViewSignInPage", "Guest");
             }
-            //RegisteredViewModel registeredInfo = new RegisteredViewModel();
-            //registeredInfo.registered = GetRegisteredDeatils().Result;
 
-            if (registered == null) //registeredInfo.registered;
+            if (registered == null) 
             {
                 return RedirectToAction("HomePage", "Guest");
             }
@@ -514,7 +512,7 @@ namespace IIStudyWebApp.Controllers
             
             ApiResultModel<PaymentResult> status = await client.PostAsyncRet<Order, PaymentResult>(order);
             if(status.Success && status.Data.Success)
-                return RedirectToAction("ViewOrder", "Registered", status.Data.OrderID);
+                return RedirectToAction("ViewOrder", "Registered",new { orderID = status.Data.OrderID });
             if (status.Success && !status.Data.Success)
                 return RedirectToAction("ViewShoppingCart","Registered");
             return RedirectToAction("PaymentPage", "Registered", order);
@@ -776,7 +774,7 @@ namespace IIStudyWebApp.Controllers
             ViewOrderDetailsModel order = await client.GetAsync();
             if (order == null)
             {
-                RedirectToAction("ViewUserOrders","Registered");
+                return RedirectToAction("ViewUserOrders","Registered");
             }
 
             return View(order);

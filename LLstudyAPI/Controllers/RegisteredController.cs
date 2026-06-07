@@ -331,7 +331,6 @@ namespace LLstudyWS.Controllers
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 int exist = this.repositoryUOW.ShoppingCartRepository.CheckIfExist(record.BookID, record.RegisteredID);
-                //Console.WriteLine(@$"exist: {exist}");
                 if (this.repositoryUOW.BookRepository.IsOwnedOnlineBook(record.BookID, record.RegisteredID))
                     return false;
                 if (exist == 1)

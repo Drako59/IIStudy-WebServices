@@ -7,7 +7,7 @@ namespace LLstudyWS.ORM
 {
     public class SubjectRepository : Repository<Subject>, IRepository<Subject>
     {
-        public SubjectRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+        public SubjectRepository(DbHelperOledb helper,  ModelCreatorReflection modelCretorRef) : base(helper,  modelCretorRef) { }
 
         public Dictionary<string,string> GetSubjectsDict()
         {

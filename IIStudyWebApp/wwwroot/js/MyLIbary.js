@@ -42,7 +42,7 @@ function openQrModal(event, button) {
 
     qrBookName.textContent = bookName;
 
-    // רק כאן מתבצעת הפנייה ל-API, רק אחרי לחיצה
+    // רק אחרי הלחיצה מתמבצע הבקשה ל API החיצוני.
     qrImage.src =
         "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data="
     + encodeURIComponent(`${window.location.origin}${bookUrl}`);

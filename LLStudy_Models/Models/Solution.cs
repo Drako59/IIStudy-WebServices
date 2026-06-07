@@ -11,9 +11,7 @@ namespace LLStudy_Models.Models
     public class Solution: Model
     {
         string solution_ID;
-        //string subjectID;
         string exam_ID;
-        bool access;
         string file_path_url;
         string solution_Name;
         string solution_Year;
@@ -39,11 +37,6 @@ namespace LLStudy_Models.Models
 
 
 
-        //public bool Access { get { return access; } set { access = value; } }
-
-
-        //[Required]
-        //[IsDigits(ErrorMessage = "ID must be a numebr.")]
-        //public string CategoryID { get { return subjectID; } set { subjectID = value; } }
+        
     }
 }

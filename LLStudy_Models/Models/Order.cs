@@ -42,7 +42,6 @@ namespace LLStudy_Models.Models
         public string City { get; set; }
 
 
-        //public bool Delivered { get { return delivered; } set { delivered = value; } }
 
     }
 }

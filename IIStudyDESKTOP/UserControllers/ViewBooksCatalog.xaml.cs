@@ -100,7 +100,6 @@ namespace IIStudyDESKTOP.UserControllers
             this.SubjectsNames = this.Subjects.Values.ToList();
             this.Subjects.Add("0", "All");
            
-            //this.SubjectsList.ItemsSource = this.Subjects;
             this.TxtSubjectBadge.Text = this.books.Count().ToString();
             this.SubjectsNames.Insert(0, "All");
 

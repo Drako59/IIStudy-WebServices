@@ -9,7 +9,7 @@ namespace LLstudyWS.ORM
 {
     public class OrderRepository : Repository<Order>, IRepository<Order>
     {
-        public OrderRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+        public OrderRepository(DbHelperOledb helper,  ModelCreatorReflection modelCretorRef) : base(helper,  modelCretorRef) { }
 
         
         public bool AddRealationOfBooksAndOrder(string orderID, string registeredID)

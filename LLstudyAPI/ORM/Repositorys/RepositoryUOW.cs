@@ -14,21 +14,19 @@ namespace LLstudyWS.ORM.Repositorys
         ExamRepository examRepository;
         RegisteredRepository registeredRepository;
         DbHelperOledb helperOledb;
-        ModelCreators modelCreators;
         ModelCreatorReflection modelCreatorReflection;
 
 
         public RepositoryUOW()
         {
             this.modelCreatorReflection = new ModelCreatorReflection();
-            this.modelCreators = new ModelCreators();
             this.helperOledb = new DbHelperOledb();
         }
 
         public BookRepository BookRepository { get { 
                 
                 if (bookRepository == null) {
-                    this.bookRepository = new BookRepository(this.helperOledb, this.modelCreators,this.modelCreatorReflection);
+                    this.bookRepository = new BookRepository(this.helperOledb, this.modelCreatorReflection);
                 }
                 return bookRepository;
             }
@@ -37,21 +35,21 @@ namespace LLstudyWS.ORM.Repositorys
         { get {
                 if (subjectRepository == null)
                 {
-                    this.subjectRepository = new SubjectRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                    this.subjectRepository = new SubjectRepository(this.helperOledb, this.modelCreatorReflection);
                 }
                 return subjectRepository;
             } }
         public OrderRepository OrderRepository { get
             {
                 if (orderRepository == null)
-                    this.orderRepository = new OrderRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                    this.orderRepository = new OrderRepository(this.helperOledb,  this.modelCreatorReflection);
                 return this.orderRepository;
             } }
 
         public ReviewRepository ReviewRepository
         {
             get {if (this.reviewRepository == null)
-                    this.reviewRepository = new ReviewRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                    this.reviewRepository = new ReviewRepository(this.helperOledb,  this.modelCreatorReflection);
                 return reviewRepository; }
         }
 
@@ -60,7 +58,7 @@ namespace LLstudyWS.ORM.Repositorys
             get
             {
                 if (this.eventRepository == null)
-                    this.eventRepository = new EventRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                    this.eventRepository = new EventRepository(this.helperOledb,  this.modelCreatorReflection);
                 return this.eventRepository;
             }
         }
@@ -69,7 +67,7 @@ namespace LLstudyWS.ORM.Repositorys
             get
             {
                 if (this.examRepository == null)
-                    this.examRepository = new ExamRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                    this.examRepository = new ExamRepository(this.helperOledb,  this.modelCreatorReflection);
                 return this.examRepository;
             }
         }
@@ -78,7 +76,7 @@ namespace LLstudyWS.ORM.Repositorys
             get
             {
                 if (this.solutionRepository == null)
-                    this.solutionRepository = new SolutionRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                    this.solutionRepository = new SolutionRepository(this.helperOledb,  this.modelCreatorReflection);
                 return this.solutionRepository;
             }
         }
@@ -87,7 +85,7 @@ namespace LLstudyWS.ORM.Repositorys
             get
             {
                 if (this.registeredRepository == null)
-                    this.registeredRepository = new RegisteredRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                    this.registeredRepository = new RegisteredRepository(this.helperOledb,  this.modelCreatorReflection);
                 return this.registeredRepository;
             }
         }
@@ -96,7 +94,7 @@ namespace LLstudyWS.ORM.Repositorys
             get
             {
                 if (this.shoppingCartRepository == null)
-                    this.shoppingCartRepository = new ShoppingCartRepository(this.helperOledb, this.modelCreators, this.modelCreatorReflection);
+                    this.shoppingCartRepository = new ShoppingCartRepository(this.helperOledb, this.modelCreatorReflection);
                 return this.shoppingCartRepository;
             }
         }

@@ -1,4 +1,7 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateBuilder(args);
+
+// ה-API יאזין בכל כרטיסי הרשת של המחשב
+builder.WebHost.UseUrls("http://0.0.0.0:5049");
 
 // Add services to the container.
 

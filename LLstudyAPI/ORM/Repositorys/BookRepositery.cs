@@ -17,7 +17,7 @@ namespace LLstudyWS.ORM
     public class BookRepository :Repository<Book>, IRepository<Book>
     {
 
-        public BookRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+        public BookRepository(DbHelperOledb helper,  ModelCreatorReflection modelCretorRef) : base(helper, modelCretorRef) { }
 
        
 

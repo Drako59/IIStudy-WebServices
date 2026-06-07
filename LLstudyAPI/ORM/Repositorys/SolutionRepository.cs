@@ -8,7 +8,7 @@ namespace LLstudyWS.ORM
 {
     public class SolutionRepository : Repository<Solution>, IRepository<Solution>
     {
-        public SolutionRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+        public SolutionRepository(DbHelperOledb helper,  ModelCreatorReflection modelCretorRef) : base(helper,  modelCretorRef) { }
 
         public List<Solution> GetByYear(string year)
         {

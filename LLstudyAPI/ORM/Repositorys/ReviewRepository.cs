@@ -7,7 +7,7 @@ namespace LLstudyWS.ORM
 {
     public class ReviewRepository : Repository<Review>, IRepository<Review>
     {
-        public ReviewRepository(DbHelperOledb helper, ModelCreators modelCreator, ModelCreatorReflection modelCretorRef) : base(helper, modelCreator, modelCretorRef) { }
+        public ReviewRepository(DbHelperOledb helper, ModelCreatorReflection modelCretorRef) : base(helper,  modelCretorRef) { }
 
         public List<ViewReview> GetReviewsByBook(string bookID)
         {
