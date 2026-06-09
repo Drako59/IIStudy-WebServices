@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LLStudy_Models.ViewModels.CartBookViewModel">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\CartBookViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.PaymentResult">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAgAAAAAAIQAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\PaymentResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.RegisteredViewModel">
+    <Position X="4" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\RegisterdViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.UpdateProfileResult">
+    <Position X="5.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAABAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\UpdateProfileResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.ViewCalenderModel">
+    <Position X="7.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\ViewCalenderModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.ViewOrderDetailsModel">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\ViewOrderDetailsModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.ViewOrdersModel">
+    <Position X="4" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\ViewOrdersModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.ViewOwnedBook">
+    <Position X="11.75" Y="2.5" Width="1.5" />
+    <InheritanceLine Type="LLStudy_Models.Models.Book" FixedFromPoint="true">
+      <Path>
+        <Point X="11.75" Y="2.191" />
+        <Point X="11.75" Y="2.346" />
+        <Point X="12.5" Y="2.346" />
+        <Point X="12.5" Y="2.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAgAAA=</HashCode>
+      <FileName>ViewModels\Registerd\ViewOwnedBook.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.ViewOwnedBooksModel">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\ViewOwnedBooksModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.ViewProfileModel">
+    <Position X="7.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>ViewModels\Registerd\ViewProfileModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.ViewRegisterdBookCatalogModel">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAgAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\ViewRegisterdBookCatalogModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.ViewRegisteredBookPreviewModel">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAACAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\ViewRegisteredBookPreviewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.ViewShoppingCartModel">
+    <Position X="5.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAEAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\ViewShoppingCartModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OrderBook">
+    <Position X="9.75" Y="2.5" Width="1.5" />
+    <InheritanceLine Type="LLStudy_Models.Models.Book" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="11.438" Y="2.191" />
+        <Point X="11.438" Y="2.365" />
+        <Point X="10.5" Y="2.365" />
+        <Point X="10.5" Y="2.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\OrderBook.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.ViewModels.Registerd.PaymentViewModel">
+    <Position X="7.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Registerd\PaymentViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Book" Collapsed="true">
+    <Position X="10.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hQAQCKQAEAIhAAACAYAAAAAAACCAAAAAAEAAAQFAACA=</HashCode>
+      <FileName>Models\Book.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Model" Collapsed="true">
+    <Position X="10.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEiACAIBIAkAAAAAAAEAAAAIAAAAAAABIAA=</HashCode>
+      <FileName>Models\Model.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

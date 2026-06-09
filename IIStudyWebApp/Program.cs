@@ -12,7 +12,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);          // כמה זמן שה-Session חי
+    options.IdleTimeout = TimeSpan.FromMinutes(30);          //כמה זמן שה-Session חי
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // שיחזיק גם ב-HTTP מקומי וגם HTTPS

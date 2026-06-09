@@ -43,7 +43,7 @@ namespace LLStudy_Models.Models
         [Required]
         //[FirstLetterCapital(ErrorMessage = "Valid Password is requierd")]
         [MinLength(8,ErrorMessage ="The minimum length is '8'.")]
-        public string Password { get { return password; } set { password = value;  } }
+        public string Password { get { return password; } set { password = value; } }
         [EmailAddress(ErrorMessage = "Valid email is required")]
         public string Email { get; set; }
         public string Role { get; set; }

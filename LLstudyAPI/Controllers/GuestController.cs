@@ -169,7 +169,7 @@ namespace LLstudyWS.Controllers
                 result.EmailAlreadyInUse = this.repositoryUOW.RegisteredRepository.IsUserNameOrEmailExist(model.Email);
                 result.UserNameAlreadyInUse = this.repositoryUOW.RegisteredRepository.IsUserNameOrEmailExist(model.UserName);
                 if (result.EmailAlreadyInUse || result.UserNameAlreadyInUse )
-                {
+                {       
                     return result;
                 }
                 

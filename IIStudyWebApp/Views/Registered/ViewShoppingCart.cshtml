@@ -54,11 +54,13 @@
                                 </div>
                                 
                                 <div class="item-actions">
-                                    <div class="quantity-control">
-                                        <button class="qty-btn" onclick="removeAndUpdate(this,@cartBook.Book.BookID)">−</button>
+                                    @if (!cartBook.Book.IsOnline) {
+                                        <div class="quantity-control">
+                                            <button class="qty-btn" onclick="removeAndUpdate(this,@cartBook.Book.BookID)">−</button>
                                         <span class="qty-value">@cartBook.CountBooks</span>
                                         <button class="qty-btn" onclick="addAndUpdate(this,@cartBook.Book.BookID)">+</button>
                                     </div>
+                                    }
                                     <button class="remove-btn" onclick="removeItem(this,@cartBook.Book.BookID)" id="book-@cartBook.Book.BookID">Remove</button> <!--window.location.href=`https://localhost:7121/Registered/RemoveFromCart?BookID=${@cartBook.Book.BookID};-->
                                 </div>
                             </div>

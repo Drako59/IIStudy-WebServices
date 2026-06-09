@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LLStudy_Models.Models.Book">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>hQAQCKQAEAIhAAACAYAAAAAAACCAAAAAAEAAAQFAACA=</HashCode>
+      <FileName>Models\Book.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Event">
+    <Position X="9.75" Y="7" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ACAAIAAgAAABAAAAAQAAEAAAABAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Models\Event.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Exam">
+    <Position X="13.75" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAUAAAAEAAAAAAAAAAAAAACAAAAAgABAIIAAQCCBAA=</HashCode>
+      <FileName>Models\Exam.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Model">
+    <Position X="13.75" Y="4" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Events" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEiACAIBIAkAAAAAAAEAAAAIAAAAAAABIAA=</HashCode>
+      <FileName>Models\Model.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LLStudy_Models.Models.Order">
+    <Position X="11.75" Y="4.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="LLStudy_Models.Models.Model" ManuallyRouted="true">
+      <Path>
+        <Point X="13.75" Y="5.765" />
+        <Point X="13.25" Y="5.765" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gAAAAJAAAAAAABAIAAIAAgACAAIAAQABEAEAAAABAAA=</HashCode>
+      <FileName>Models\Order.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Registered">
+    <Position X="17.5" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>gAAAAoCAACAAgBAAkAAAAJAAAAAAAAAiAQAAIgAAAAA=</HashCode>
+      <FileName>Models\Registered.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Review">
+    <Position X="11.5" Y="1" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="LLStudy_Models.Models.Model" FixedFromPoint="true">
+      <Path>
+        <Point X="14.25" Y="4" />
+        <Point X="14.25" Y="3.636" />
+        <Point X="12.25" Y="3.636" />
+        <Point X="12.25" Y="3.261" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>wAQACEAEABgAAAAAAAAIAAAAABAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Models\Review.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Shopping_Cart">
+    <Position X="16.25" Y="7.75" Width="1.5" />
+    <InheritanceLine Type="LLStudy_Models.Models.Model" ManuallyRouted="true">
+      <Path>
+        <Point X="14.5" Y="7.997" />
+        <Point X="14.5" Y="8.372" />
+        <Point X="15.625" Y="8.372" />
+        <Point X="15.625" Y="7.375" />
+        <Point X="17" Y="7.375" />
+        <Point X="17" Y="7.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gACACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Shopping_Cart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Solution">
+    <Position X="15.5" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="LLStudy_Models.Models.Model" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="14.812" Y="4" />
+        <Point X="14.812" Y="3.876" />
+        <Point X="14.989" Y="3.876" />
+        <Point X="14.989" Y="3.625" />
+        <Point X="16.25" Y="3.625" />
+        <Point X="16.25" Y="3.011" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAEAQAAgQAAAAAAEAAAAAAgAAAAAAAAAAABAACABAA=</HashCode>
+      <FileName>Models\Solution.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LLStudy_Models.Models.Subject">
+    <Position X="15.75" Y="5.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="LLStudy_Models.Models.Model" ManuallyRouted="true">
+      <Path>
+        <Point X="15.25" Y="6.092" />
+        <Point X="15.75" Y="6.092" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAEAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAA=</HashCode>
+      <FileName>Models\Subject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="LLStudy_Models.Models.OrderStatus">
+    <Position X="12" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAgAAAAAACAAIAAAABAAAAIAAAAAA=</HashCode>
+      <FileName>Models\Enums\OrderStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

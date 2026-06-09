@@ -14,12 +14,195 @@
 
 <section class="search-section">
     <div class="container">
-        <div class="search-container">
-            <input type="text" id="search-input" class="search-input" placeholder="Search for books, authors, categories..." oninput="searchBooks()">
-            <div class="search-icon">🔍</div>
+
+        <div class="catalog-toolbar">
+
+            <!-- כפתור שלושת הקווים -->
+            <button type="button"
+                    class="filters-menu-button"
+                    onclick="openFiltersSidebar()"
+                    aria-label="Open filters">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+
+            <!-- החיפוש הקיים -->
+            <div class="search-container">
+                <input type="text"
+                       id="search-input"
+                       class="search-input"
+                       placeholder="Search for books, authors, categories..."
+                       oninput="searchBooks()">
+
+                <div class="search-icon">🔍</div>
+            </div>
+
         </div>
+
     </div>
 </section>
+
+<!-- רקע כהה מאחורי ה-Sidebar -->
+<div id="filters-overlay"
+     class="filters-overlay"
+     onclick="closeFiltersSidebar()">
+</div>
+
+
+<!-- Sidebar Filters -->
+<aside id="filters-sidebar"
+       class="filters-sidebar">
+
+    <div class="filters-sidebar-header">
+
+        <div>
+            <h2>Book Filters</h2>
+            <p>Choose the books you want to display</p>
+        </div>
+
+        <button type="button"
+                class="close-filters-button"
+                onclick="closeFiltersSidebar()">
+            ×
+        </button>
+
+    </div>
+
+
+    <form method="get"
+          action="@Url.Action("ViewBookCatalog", "Registered")"
+          class="filters-form">
+
+        <!-- Subject -->
+        <div class="filter-group">
+
+            <label for="subjectID">
+                Subject
+            </label>
+
+            <select id="subjectID"
+                    name="subjectID"
+                    class="filter-select">
+
+                <option value="">
+                    All Subjects
+                </option>
+
+                
+
+            </select>
+
+        </div>
+
+
+        <!-- Price -->
+        <div class="filter-group">
+
+            <label>
+                Price Range
+            </label>
+
+            <div class="price-inputs">
+
+                <div class="price-input-wrapper">
+                    <span>$</span>
+
+                    <input type="number"
+                           name="minPrice"
+                           placeholder="Min"
+                           min="0"
+                           step="0.01">
+                </div>
+
+                <span class="price-divider">—</span>
+
+                <div class="price-input-wrapper">
+                    <span>$</span>
+
+                    <input type="number"
+                           name="maxPrice"
+                           placeholder="Max"
+                           min="0"
+                           step="0.01">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- In Stock -->
+        <div class="filter-group">
+
+            <label class="filter-option">
+
+                <input type="checkbox"
+                       name="inStockOnly"
+                       value="true">
+
+                <span class="filter-option-checkbox">
+                    ✓
+                </span>
+
+                <span class="filter-option-information">
+                    <strong>In Stock</strong>
+                    <small>Show books currently in stock</small>
+                </span>
+
+                <span class="filter-option-dot stock-dot"></span>
+
+            </label>
+
+        </div>
+
+
+        <!-- Online Books -->
+        <div class="filter-group">
+
+            <label class="filter-option">
+
+                <input type="checkbox"
+                       name="onlineOnly"
+                       value="true">
+
+                <span class="filter-option-checkbox">
+                    ✓
+                </span>
+
+                <span class="filter-option-information">
+                    <strong>Online Books</strong>
+                    <small>Show online books only</small>
+                </span>
+
+                <span class="filter-option-dot online-dot"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="filters-form-buttons">
+
+            <!-- מאפס את הפילטרים באמצעות מעבר לעמוד בלי Query String -->
+            <a href="@Url.Action("ViewBookCatalog", "Registered")"
+               class="clear-filters-button">
+                Clear
+            </a>
+
+            <!-- שולח את הטופס לשרת -->
+            <button type="submit"
+                    class="apply-filters-button">
+                Apply Filters
+            </button>
+
+        </div>
+
+    </form>
+
+</aside>
 
 <!-- Main Content -->
 <main class="main-content">
@@ -43,7 +226,15 @@
                         string path = $"{@Url.Action("ViewBookPreview", "Registered", new { bookID = book.BookID })}";
                         
                         <div class="book-card" data-title="@book.Book_name">
-                            <a href=@path class="book-cover"><img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"></a>
+                            <a href=@path class="book-cover">
+                                @if (!string.IsNullOrWhiteSpace(book.SubjectID))
+                                {
+                                    <span class="book-subject-tag">
+                                        @book.SubjectID
+                                    </span>
+                                }
+                                <img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })">
+                            </a>
                             <div class="book-info">
                                 <h3>@book.Book_name</h3>
                                 <p class="book-author">@book.Author_name</p>
@@ -69,7 +260,15 @@
                     {
                         string path = $"{@Url.Action("ViewBookPreview", "Registered", new { bookID = book.BookID })}";
                         <div class="book-card" data-title="@book.Book_name">
-                            <a href=@path class="book-cover"><img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })"></a>
+                            <a href=@path class="book-cover">
+                                @if (!string.IsNullOrWhiteSpace(book.SubjectID))
+                                {
+                                    <span class="book-subject-tag">
+                                        @book.SubjectID
+                                    </span>
+                                }
+                                <img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })">
+                             </a>
                             <div class="book-info">
                                 <h3>@book.Book_name</h3>
                                 <p class="book-author">@book.Author_name</p>
@@ -182,6 +381,34 @@
             }
         });
     }
+
+        function openFiltersSidebar() {
+        const sidebar = document.getElementById("filters-sidebar");
+        const overlay = document.getElementById("filters-overlay");
+
+        sidebar.classList.add("open");
+        overlay.classList.add("visible");
+
+        document.body.classList.add("filters-sidebar-open");
+    }
+
+
+    function closeFiltersSidebar() {
+        const sidebar = document.getElementById("filters-sidebar");
+        const overlay = document.getElementById("filters-overlay");
+
+        sidebar.classList.remove("open");
+        overlay.classList.remove("visible");
+
+        document.body.classList.remove("filters-sidebar-open");
+    }
+
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeFiltersSidebar();
+        }
+    });
 </script>
 
 
