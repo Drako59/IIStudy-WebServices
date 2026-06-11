@@ -1,6 +1,7 @@
 ﻿
 @using LLStudy_Models.Models
-@model List<Book>
+@using LLStudy_Models.ViewModels;
+@model ViewBookCatalogModel
 @{
     ViewData["Title"] = "ViewBookCatalog";
     Layout = "~/Views/Shared/MasterPage.cshtml";
@@ -99,7 +100,7 @@
 
 
     <form method="get"
-          action="@Url.Action("ViewBookCatalog", "Registered")"
+          action="@Url.Action("ViewBookCatalog", "Guest")"
           class="filters-form">
 
         <!-- Subject -->
@@ -110,14 +111,19 @@
             </label>
 
             <select id="subjectID"
-                    name="subjectID"
-                    class="filter-select">
-
+                    class="filter-select" asp-for="SubjectID">
+                    
                 <option value="">
                     All Subjects
                 </option>
-
-
+                @if(Model != null && Model.Subjects != null && Model.Subjects.Any()){
+                @foreach(Subject subject in Model.Subjects)
+                {
+                    <option value="@subject.SubjectID">
+                        @subject.Subject_name
+                    </option>
+                }
+                }
 
             </select>
 
@@ -140,7 +146,9 @@
                            name="minPrice"
                            placeholder="Min"
                            min="0"
-                           step="0.01">
+                           step="0.01"
+                           asp-for="MinPrice"
+                    >
                 </div>
 
                 <span class="price-divider">—</span>
@@ -152,7 +160,8 @@
                            name="maxPrice"
                            placeholder="Max"
                            min="0"
-                           step="0.01">
+                           step="0.01"
+                           asp-for="MaxPrice">
                 </div>
 
             </div>
@@ -166,8 +175,8 @@
             <label class="filter-option">
 
                 <input type="checkbox"
-                       name="inStockOnly"
-                       value="true">
+                       name="inStock"
+                       asp-for="In_stock">
 
                 <span class="filter-option-checkbox">
                     ✓
@@ -191,8 +200,8 @@
             <label class="filter-option">
 
                 <input type="checkbox"
-                       name="onlineOnly"
-                       value="true">
+                       name="isOnline"
+                       asp-for="IsOnline">
 
                 <span class="filter-option-checkbox">
                     ✓
@@ -213,7 +222,7 @@
         <div class="filters-form-buttons">
 
             <!-- מאפס את הפילטרים באמצעות מעבר לעמוד בלי Query String -->
-            <a href="@Url.Action("ViewBookCatalog", "Registered")"
+            <a href="@Url.Action("ViewBookCatalog", "Guest")"
                class="clear-filters-button">
                 Clear
             </a>
@@ -258,9 +267,9 @@
 
 
 
-            @if (Model != null && Model.Any())
+            @if (Model != null && Model.Books != null && Model.Books.Any())
             {
-                @foreach (Book book in Model)
+                @foreach (GuestBookDetails book in Model.Books)
                 {
                     if (book.In_stock)
                     {
@@ -270,7 +279,7 @@
                                 @if (!string.IsNullOrWhiteSpace(book.SubjectID))
                                 {
                                     <span class="book-subject-tag">
-                                        @book.SubjectID
+                                        @book.Subject_name
                                     </span>
                                 }
                                 <img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })">
@@ -298,7 +307,7 @@
                                 @if (!string.IsNullOrWhiteSpace(book.SubjectID))
                                 {
                                     <span class="book-subject-tag">
-                                        @book.SubjectID
+                                        @book.Subject_name
                                     </span>
                                 }
                                 <img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })">
@@ -324,9 +333,56 @@
 
         
         </div>
-
         
+        
+        @if(true) //(totalPages > 1)
+            {
+        <div class="catalog-pagination">
+        
+            @if (true) //currentPage > 1
+            {
+                <a class="pagination-arrow"
+                   href="@Url.Action("ViewBookCatalog", "Guest", new {
+                       pageNumber = Model.PageNumber - 1,
+                       subjectID = Model?.SubjectID,
+                       minPrice = Model?.MinPrice,
+                       maxPrice = Model?.MaxPrice,
+                       inStock = Model?.In_stock,
+                       isOnline = Model?.IsOnline
+                   })">
+                    ‹
+                </a>
+            }
+            else
+            {
+                <span class="pagination-arrow disabled">‹</span>
+            }
 
+            <span class="pagination-page-number">
+                @Model.PageNumber
+            </span>
+
+            @if (true) //currentPage < totalPages
+            {
+                <a class="pagination-arrow"
+                   href="@Url.Action("ViewBookCatalog", "Guest", new {
+                       pageNumber = Model.PageNumber + 1,
+                       subjectID = Model?.SubjectID,
+                       minPrice = Model?.MinPrice,
+                       maxPrice = Model?.MaxPrice,
+                       inStock = Model?.In_stock,
+                       isOnline = Model?.IsOnline
+                   })">
+                    ›
+                </a>
+            }
+            else
+            {
+                <span class="pagination-arrow disabled">›</span>
+            }
+
+    </div>
+    }
         
 
 
@@ -348,4 +404,33 @@
             }
         });
     }
+
+
+            function openFiltersSidebar() {
+        const sidebar = document.getElementById("filters-sidebar");
+        const overlay = document.getElementById("filters-overlay");
+
+        sidebar.classList.add("open");
+        overlay.classList.add("visible");
+
+        document.body.classList.add("filters-sidebar-open");
+    }
+
+
+    function closeFiltersSidebar() {
+        const sidebar = document.getElementById("filters-sidebar");
+        const overlay = document.getElementById("filters-overlay");
+
+        sidebar.classList.remove("open");
+        overlay.classList.remove("visible");
+
+        document.body.classList.remove("filters-sidebar-open");
+    }
+
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeFiltersSidebar();
+        }
+    });
 </script>

@@ -26,7 +26,7 @@ namespace LLstudyWS.Controllers
 
 
         [HttpGet]
-        public ViewRegisterdBookCatalogModel GetBooks(string registeredID,string? subjectID = null, string? author_name = null, string? search = null, string? book_name = null, string? price_min = null, string? price_max = null, string? type = null)
+        public ViewRegisterdBookCatalogModel GetBooks(string registeredID,int pageNumber = 1, string? subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool isPhysical = false)
         {
 
             try
@@ -35,17 +35,21 @@ namespace LLstudyWS.Controllers
 
 
                 ViewRegisterdBookCatalogModel viewModel = new ViewRegisterdBookCatalogModel();
-                List<Book> books = new List<Book>();
 
-                if (search == null && subjectID == null && author_name == null && book_name == null && price_min == null && price_max == null && type == null)
-                    books =  this.repositoryUOW.BookRepository.GetExistBooks();
+                if (pageNumber < 1)
+                    pageNumber = 1;
+
+                viewModel.Books =  this.repositoryUOW.BookRepository.GetBooksByFilter( pageNumber,subjectID ,  minPrice, maxPrice, inStock, isOnline, isPhysical);
                 //return this.repositoryUOW.BookRepository.GetAll();
+                viewModel.Subjects = this.repositoryUOW.SubjectRepository.GetAll();
+                viewModel.IsPhysical = isPhysical;
+                viewModel.IsOnline = isOnline;
+                viewModel.In_stock = inStock;
+                viewModel.PageNumber = pageNumber;
+                viewModel.SubjectID = subjectID;
+                viewModel.MinPrice = minPrice;
+                viewModel.MaxPrice = maxPrice;
 
-
-                if (search != null)
-                    books.AddRange(this.repositoryUOW.BookRepository.GetByName(search));
-
-                viewModel.books = books;
                 viewModel.OwnedOnlineBooksIDs = this.repositoryUOW.BookRepository.GetOwnedOnlineBooksIDsForUser(registeredID);
                 viewModel.OnlineBooksInShoppingCartIDs = this.repositoryUOW.ShoppingCartRepository.GetRegCartOnlieBooksIDs(registeredID);
     

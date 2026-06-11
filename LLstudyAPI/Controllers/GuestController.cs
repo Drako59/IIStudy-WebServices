@@ -12,6 +12,7 @@ using LLStudy_Models.ViewModels;
 using System.Text.Json;
 using System.Reflection.Metadata.Ecma335;
 using LLStudy_Models.ViewModels.Guest;
+using Microsoft.AspNetCore.SignalR.Protocol;
 namespace LLstudyWS.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -760,6 +761,39 @@ namespace LLstudyWS.Controllers
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
                 return this.repositoryUOW.EventRepository.GetEventsByDate(year, month);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
+        [HttpGet]
+        public ViewBookCatalogModel GetBooksByFilter(int pageNumber = 1,string? subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool isPhysical = false)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                if (pageNumber < 1)
+                    pageNumber = 1;
+
+                ViewBookCatalogModel model = new ViewBookCatalogModel();
+                model.PageNumber = pageNumber;
+                model.SubjectID = subjectID;
+                model.MinPrice = minPrice;
+                model.MaxPrice = maxPrice;
+                model.In_stock = inStock;
+                model.IsOnline = isOnline;
+                model.IsPhysical = isPhysical;
+                model.Books = this.repositoryUOW.BookRepository.GetBooksByFilter(pageNumber, subjectID,minPrice,maxPrice,inStock,isOnline,isPhysical);
+                model.Subjects = this.repositoryUOW.SubjectRepository.GetAll();
+                return model;
             }
             catch(Exception ex)
             {

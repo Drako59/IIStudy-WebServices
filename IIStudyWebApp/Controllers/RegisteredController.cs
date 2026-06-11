@@ -313,7 +313,7 @@ namespace IIStudyWebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ViewBookCatalog()
+        public async Task<IActionResult> ViewBookCatalog(int pageNumber = 1, string? subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool isPhysical = false)
         {
             Registered registered = await GetRegisteredDeatils();
             //RegisteredViewModel registeredInfo = new RegisteredViewModel();
@@ -330,6 +330,17 @@ namespace IIStudyWebApp.Controllers
             client.Port = 5049;
             client.Path = "api/Registered/GetBooks";
             client.AddParameter("registeredID", registered.RegisteredID);
+            client.AddParameter("pageNumber", pageNumber);
+            if (subjectID != null)
+                client.AddParameter("subjectID", subjectID);
+            client.AddParameter("minPrice", minPrice);
+            client.AddParameter("maxPrice", maxPrice);
+            client.AddParameter("inStock", inStock);
+            client.AddParameter("isOnline", isOnline);
+            client.AddParameter("isPhysical", isPhysical);
+
+
+
             ViewRegisterdBookCatalogModel books = await client.GetAsync();
             ViewData["Registered"] = registered;
             return View(books);

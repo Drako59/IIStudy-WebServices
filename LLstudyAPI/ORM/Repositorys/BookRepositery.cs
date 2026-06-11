@@ -589,5 +589,74 @@ namespace LLstudyWS.ORM
                 else return false;
             }
         }
+
+        public List<GuestBookDetails> GetBooksByFilter(int pageNumber = 1,string subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool IsPhysical = false)
+        {
+            int offset = 8 * (pageNumber - 1);
+
+            string sqlFilter = $@"";
+
+            if(subjectID != null)
+            {
+                sqlFilter += "AND Books.SubjectID = @SubjectID ";
+                this.helperOledb.AddParameter("@SubjectID", subjectID );
+            }
+
+            if (minPrice != null && minPrice >= 0)
+            {
+                sqlFilter += "AND Book_price >= @MinPrice ";
+                this.helperOledb.AddParameter("@MinPrice", minPrice);
+            }
+
+            if (maxPrice != null && maxPrice >= 0)
+            {
+                sqlFilter += "AND Book_price <= @MaxPrice ";
+                this.helperOledb.AddParameter("@MaxPrice", maxPrice);
+            }
+
+            if (inStock)
+            {
+                sqlFilter += "AND In_stock = True ";
+            }
+
+            if (isOnline)
+            {
+                sqlFilter += "AND IsOnline = True ";
+            }
+            if (IsPhysical)
+            {
+                sqlFilter += "AND IsOnline = False ";
+            }
+
+            string sql = $@"SELECT TOP 8 *, Subjects.SubjectID AS [SubjectID] FROM Books 
+                                     INNER JOIN Subjects ON Books.SubjectID = Subjects.SubjectID 
+                                        WHERE 1 = 1 AND IsDeleted = False {sqlFilter} ";
+            if (offset != 0)
+            {
+                sql += @$"AND BookID NOT IN 
+                                            (
+                                                SELECT TOP {offset} BookID FROM Books
+                                                WHERE 1 = 1 AND IsDeleted = False {sqlFilter} ORDER BY BookID ASC
+                                            ) ";
+            }
+
+            sql += @"
+                     ORDER BY Books.BookID ASC
+                        ";
+
+            Console.WriteLine(sql);
+
+            List<GuestBookDetails> books = new List<GuestBookDetails>();
+
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                while (reader.Read())
+                {
+                    books.Add(this.moderlRefCreator.CreateModel<GuestBookDetails>(reader));
+                }
+                return books;
+            }
+
+        }
     }
 }

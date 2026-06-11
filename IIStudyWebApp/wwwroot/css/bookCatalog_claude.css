@@ -874,3 +874,93 @@ body.filters-sidebar-open {
     transform: translateY(-2px);
     box-shadow: 0 9px 20px rgba(44, 38, 100, 0.4);
 }
+
+
+
+/* ======================================
+   FLOATING CATALOG PAGINATION
+   ====================================== */
+
+.main-content {
+    padding-bottom: 150px;
+}
+
+.catalog-pagination {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%);
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.22);
+}
+
+.pagination-arrow {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+    transition: all 0.25s ease;
+}
+
+    .pagination-arrow:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 22px rgba(102, 126, 234, 0.35);
+    }
+
+    .pagination-arrow.disabled {
+        opacity: 0.35;
+        cursor: default;
+        pointer-events: none;
+        background: #94a3b8;
+    }
+
+.pagination-page-number {
+    min-width: 48px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: #2d3748;
+    background: #f8fafc;
+    font-size: 18px;
+    font-weight: 900;
+    border: 2px solid #e2e8f0;
+}
+
+@media (max-width: 600px) {
+    .catalog-pagination {
+        bottom: 18px;
+        padding: 12px 16px;
+        gap: 13px;
+    }
+
+    .pagination-arrow {
+        width: 42px;
+        height: 42px;
+        font-size: 30px;
+    }
+
+    .pagination-page-number {
+        height: 42px;
+        min-width: 42px;
+        font-size: 16px;
+    }
+}

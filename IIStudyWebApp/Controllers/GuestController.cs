@@ -37,20 +37,34 @@ namespace IIStudyWebApp.Controllers
             ViewBag.ErroOccured = false;
             return View();
         }
-        public async Task<IActionResult> ViewBookCatalog()
+        public async Task<IActionResult> ViewBookCatalog(int pageNumber = 1,string? subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool isPhysical = false)
         {
 
-            ApiClient<List<Book>> client = new ApiClient<List<Book>>();
+            ApiClient<ViewBookCatalogModel> client = new ApiClient<ViewBookCatalogModel>();
 
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
-            client.Path = "api/Guest/GetBooks";
-            List<Book> books = await client.GetAsync();
+            client.Path = "api/Guest/GetBooksByFilter";
+            client.AddParameter("pageNumber", pageNumber);
+            if(subjectID != null)
+                client.AddParameter("subjectID", subjectID);
+            client.AddParameter("minPrice", minPrice);
+            client.AddParameter("maxPrice", maxPrice);
+            client.AddParameter("inStock", inStock);
+            client.AddParameter("isOnline", isOnline);
+            client.AddParameter("isPhysical", isPhysical);
+
+
+
+
+
+
+            ViewBookCatalogModel books = await client.GetAsync();
 
             if(books == null)
             {
-                books = new List<Book>();
+                books = new ViewBookCatalogModel();
             }
             return View(books);
         }
