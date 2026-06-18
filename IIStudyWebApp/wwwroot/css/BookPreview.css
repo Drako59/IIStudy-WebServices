@@ -1006,3 +1006,28 @@ button.btn-add-to-cart.purchased {
     transform: none;
     box-shadow: none;
 }
+
+
+
+.book-details-description-section {
+    margin-top: 40px;
+    padding-top: 35px;
+    border-top: 2px solid #e2e8f0;
+}
+
+.book-details-description-card {
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 28px 32px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.book-details-description-text {
+    font-size: 16px;
+    line-height: 1.9;
+    color: #4a5568;
+    margin: 0;
+    white-space: pre-line;
+    overflow-wrap: break-word;
+}

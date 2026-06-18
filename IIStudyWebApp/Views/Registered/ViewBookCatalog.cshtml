@@ -74,7 +74,7 @@
 
 
     <form method="get"
-          action="@Url.Action("ViewBookCatalog", "Guest")"
+          action="@Url.Action("ViewBookCatalog", "Registered")"
           class="filters-form">
 
         <!-- Subject -->
@@ -309,7 +309,7 @@
             @if (currentPage > 1)
             {
                 <a class="pagination-arrow"
-                   href="@Url.Action("ViewBookCatalog", "Guest", new {
+                   href="@Url.Action("ViewBookCatalog", "Registered", new {
                        pageNumber = Model.PageNumber - 1,
                        subjectID = Model?.SubjectID,
                        minPrice = Model?.MinPrice,
@@ -333,7 +333,7 @@
             @if (currentPage < totalPages)
             {
                 <a class="pagination-arrow"
-                   href="@Url.Action("ViewBookCatalog", "Guest", new {
+                   href="@Url.Action("ViewBookCatalog", "Registered", new {
                        pageNumber = Model.PageNumber + 1,
                        subjectID = Model?.SubjectID,
                        minPrice = Model?.MinPrice,

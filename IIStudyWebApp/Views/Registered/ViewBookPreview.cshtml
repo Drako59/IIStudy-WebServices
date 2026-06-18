@@ -196,10 +196,23 @@
                     </div>
                 </div>
             </div>
+            @if (!string.IsNullOrWhiteSpace(Model.BookViewModel.book.BookDetails)
+                        && Model.BookViewModel.book.BookDetails.ToLower() != "none")
+            {
+                <div class="book-details-description-section">
+                    <h2 class="section-title">Book Details</h2>
+
+                    <div class="book-details-description-card">
+                        <p class="book-details-description-text">
+                            @Model.BookViewModel.book.BookDetails
+                        </p>
+                    </div>
+                </div>
+            }
         </div>
 
         <!-- Book Gallery -->
-        <div class="book-gallery">
+        @*<div class="book-gallery">
             <h2 class="section-title">Book Preview Gallery</h2>
             <div class="gallery-grid">
                 <div class="gallery-item">
@@ -223,7 +236,7 @@
                          class="gallery-image" />
                 </div>
             </div>
-        </div>
+        </div>*@
 
         <!-- Reviews Section -->
         <div class="reviews-section">

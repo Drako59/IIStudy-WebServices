@@ -37,7 +37,7 @@ namespace LLStudy_Models.Models
         [Required]
         public string SubjectID { get { return subjectID; } set { subjectID = value; ValidateProperty(value, "SubjectID"); } }
         [Required]
-        [IsDigits(ErrorMessage = "ID must contain only digits.")]
+        [IsDigits(ErrorMessage = "Price Can only conatain digits.")]
 
         public double Book_price { get { return book_price; } set { book_price = value; ValidateProperty(value, "Book_price"); } }
         
