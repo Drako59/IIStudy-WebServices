@@ -14,12 +14,12 @@ using static System.Reflection.Metadata.BlobBuilder;
 namespace LLstudyWS.ORM
 
 {
-    public class BookRepository :Repository<Book>, IRepository<Book>
+    public class BookRepository : Repository<Book>, IRepository<Book>
     {
 
-        public BookRepository(DbHelperOledb helper,  ModelCreatorReflection modelCretorRef) : base(helper, modelCretorRef) { }
+        public BookRepository(DbHelperOledb helper, ModelCreatorReflection modelCretorRef) : base(helper, modelCretorRef) { }
 
-       
+
 
         public List<ViewOwnedBook> GetUserNameBooks(string RegisteredID)
         {
@@ -66,7 +66,7 @@ namespace LLstudyWS.ORM
                             Books
                         WHERE
                             book_name LIKE @Name  OR author_name LIKE  @Name";
-            this.helperOledb.AddParameter("@Name","%" + name +"%");
+            this.helperOledb.AddParameter("@Name", "%" + name + "%");
             List<Book> books = new List<Book>();
 
 
@@ -126,34 +126,34 @@ namespace LLstudyWS.ORM
                             (Registereds.RegisteredID = @RegisteredID)";
 
             CartBookViewModel CartBook;
-            
+
             List<CartBookViewModel> books = new List<CartBookViewModel>();
             this.helperOledb.AddParameter("@RegisteredID", userID);
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
-                while(reader.Read())
+                while (reader.Read())
                 {
                     CartBook = new CartBookViewModel()
                     {
                         Book = this.moderlRefCreator.CreateModel<Book>(reader)
-                        
+
                     };
                     CartBook.CountBooks = Convert.ToInt32(reader["CountBooks"]);
                     books.Add(CartBook);
-                    
+
                 }
             }
             return books;
         }
 
 
-       public int BooksCount()
+        public int BooksCount()
         {
             string sql = "SELECT Count(BookID) as BookCount FROM Books";
             int count;
-            using(IDataReader reader = this.helperOledb.Select(sql)) 
+            using (IDataReader reader = this.helperOledb.Select(sql))
             {
-                if(reader.Read())
+                if (reader.Read())
                 {
                     return count = Convert.ToInt32(reader["BookCount"]);
                 }
@@ -169,7 +169,8 @@ namespace LLstudyWS.ORM
                             FROM Reviews
                             WHERE BookID = @BookID;";
             this.helperOledb.AddParameter("@BookID", bookID);
-            using(IDataReader reader = this.helperOledb.Select(sql)){
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
                 if (reader.Read())
                 {
                     sumRate = Convert.ToDouble(reader["SumRate"]);
@@ -178,18 +179,18 @@ namespace LLstudyWS.ORM
                 else return 0;
             }
 
-            
-                  
+
+
             if (devider == 0 || sumRate == 0) return 0;
-            return Math.Round(sumRate / devider,1);
+            return Math.Round(sumRate / devider, 1);
         }
-            
+
 
 
         public string ChangeImage(IFormFile file, string bookID)
         {
 
-           
+
             if (file == null || file.Length == 0)
                 throw new Exception("Empty file");
 
@@ -276,7 +277,7 @@ namespace LLstudyWS.ORM
             return fileName;
         }
 
-        
+
 
         public ViewBookViewModel GetFullBook(string bookID)
         {
@@ -322,7 +323,7 @@ namespace LLstudyWS.ORM
                     b.BookDetails,
                     s.Subject_name";
             this.helperOledb.AddParameter("@BookID", bookID);
-                
+
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 if (reader.Read())
@@ -330,14 +331,14 @@ namespace LLstudyWS.ORM
                     book = this.moderlRefCreator.CreateModel<ViewBookViewModel>(reader, exludes: new List<string> { "book", "reviews", "PurchaseNum" });
                     book.book = this.moderlRefCreator.CreateModel<Book>(reader);
 
-                    
+
 
                 }
-                else  
+                else
                     return null;
             }
 
-            
+
             //book.Rate = this.GetBookRate(book.book.BookID);
             book.reviews = this.GetReviewsByBook(book.book.BookID);
             book.PurchaseNum = this.HowManyPurchased(book.book.BookID);
@@ -391,15 +392,15 @@ namespace LLstudyWS.ORM
             {
                 while (reader.Read())
                 {
-                    model = this.moderlRefCreator.CreateModel<ViewBookViewModel>(reader,exludes : new List<string> { "book" , "reviews", "PurchaseNum" });
+                    model = this.moderlRefCreator.CreateModel<ViewBookViewModel>(reader, exludes: new List<string> { "book", "reviews", "PurchaseNum" });
                     model.book = this.moderlRefCreator.CreateModel<Book>(reader);
-                    
+
                     books.Add(model);
-                    
+
                 }
             }
 
-            foreach(ViewBookViewModel book in books)
+            foreach (ViewBookViewModel book in books)
             {
                 //book.Rate = this.GetBookRate(book.book.BookID);
                 book.reviews = this.GetReviewsByBook(book.book.BookID);
@@ -468,7 +469,7 @@ namespace LLstudyWS.ORM
             //{
             //    book.Rate = this.GetBookRate(book.BookID);
             //    book.reviewsNum = this.reviewNumber(book.BookID);
-                
+
             //}
             return books;
         }
@@ -503,8 +504,9 @@ namespace LLstudyWS.ORM
 
                     books.Add(this.moderlRefCreator.CreateModel<Book>(reader));
 
-                };
-                
+                }
+                ;
+
             }
             return books;
         }
@@ -536,12 +538,12 @@ namespace LLstudyWS.ORM
                                     WHERE Orders.RegisteredID = @RegisteredID AND IsOnline = True;
                                     ";
 
-            this.helperOledb.AddParameter("@RegisteredID", registeredID);   
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
             List<string> booksIDs = new List<string>();
 
-            using(IDataReader reader = this.helperOledb.Select(sql))
+            using (IDataReader reader = this.helperOledb.Select(sql))
             {
-                while(reader.Read())
+                while (reader.Read())
                 {
                     booksIDs.Add(Convert.ToString(reader["BookID"]));
                 }
@@ -549,7 +551,7 @@ namespace LLstudyWS.ORM
             }
         }
 
-        public bool IsOwnedOnlineBook(string bookID, string registeredID) 
+        public bool IsOwnedOnlineBook(string bookID, string registeredID)
         {
             string sql = $@"SELECT COUNT(*) as count_exist FROM Books INNER JOIN (
                                             Orders_Books INNER JOIN Orders
@@ -564,7 +566,7 @@ namespace LLstudyWS.ORM
 
             using (IDataReader reader = this.helperOledb.Select(sql))
             {
-                if(reader.Read())
+                if (reader.Read())
                 {
                     return Convert.ToInt32(reader["count_exist"]) > 0;
                 }
@@ -579,7 +581,7 @@ namespace LLstudyWS.ORM
         {
             string sql = @$"SELECT COUNT(*) as CountBooks FROM Books WHERE BookID = @BookID AND Books.IsOnline = True";
             this.helperOledb.AddParameter("@BookID", bookID);
-            using(IDataReader reader = this.helperOledb.Select(sql))
+            using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 if (reader.Read())
                 {
@@ -590,16 +592,17 @@ namespace LLstudyWS.ORM
             }
         }
 
-        public List<GuestBookDetails> GetBooksByFilter(int pageNumber = 1,string subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool IsPhysical = false)
+        public List<GuestBookDetails> GetBooksByFilter(string? search = null, int pageNumber = 1, string subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool IsPhysical = false)
         {
-            int offset = 8 * (pageNumber - 1);
+            int numberOfBooksInPage = 8;
+            int offset = numberOfBooksInPage * (pageNumber - 1);
 
             string sqlFilter = $@"";
 
-            if(subjectID != null)
+            if (subjectID != null)
             {
                 sqlFilter += "AND Books.SubjectID = @SubjectID ";
-                this.helperOledb.AddParameter("@SubjectID", subjectID );
+                this.helperOledb.AddParameter("@SubjectID", subjectID);
             }
 
             if (minPrice != null && minPrice >= 0)
@@ -628,9 +631,35 @@ namespace LLstudyWS.ORM
                 sqlFilter += "AND IsOnline = False ";
             }
 
-            string sql = $@"SELECT TOP 8 *, Subjects.SubjectID AS [SubjectID] FROM Books 
+            if (search != null)
+            {
+                sqlFilter += "AND ( LCase(Book_name) LIKE @Search  OR LCase(Author_name) LIKE  @Search )";
+                this.helperOledb.AddParameter("@Search", "%" + search.ToLower() + "%");
+            }
+
+            string sql = $@"SELECT TOP {numberOfBooksInPage} *, Subjects.SubjectID AS [SubjectID] FROM Books 
                                      INNER JOIN Subjects ON Books.SubjectID = Subjects.SubjectID 
                                         WHERE 1 = 1 AND IsDeleted = False {sqlFilter} ";
+            if (subjectID != null)
+            {
+                this.helperOledb.AddParameter("@SubjectID", subjectID);
+            }
+
+            if (minPrice != null && minPrice >= 0)
+            {
+                this.helperOledb.AddParameter("@MinPrice", minPrice);
+            }
+
+            if (maxPrice != null && maxPrice >= 0)
+            {
+                this.helperOledb.AddParameter("@MaxPrice", maxPrice);
+            }
+
+            if (search != null)
+            {
+                this.helperOledb.AddParameter("@Search", "%" + search.ToLower() + "%");
+            }
+
             if (offset != 0)
             {
                 sql += @$"AND BookID NOT IN 
@@ -648,13 +677,99 @@ namespace LLstudyWS.ORM
 
             List<GuestBookDetails> books = new List<GuestBookDetails>();
 
-            using(IDataReader reader = this.helperOledb.Select(sql))
+
+            using (IDataReader reader = this.helperOledb.Select(sql))
             {
                 while (reader.Read())
                 {
                     books.Add(this.moderlRefCreator.CreateModel<GuestBookDetails>(reader));
                 }
+
+
+
                 return books;
+            }
+
+        }
+
+
+        public int GetNumberOfTotalPages(string? search = null,int pageNumber = 1, string subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool IsPhysical = false)
+        {
+            int numberOfBooksInPage = 8;
+
+            string sqlFilter = $@"";
+
+            if (subjectID != null)
+            {
+                sqlFilter += "AND Books.SubjectID = @SubjectID ";
+                this.helperOledb.AddParameter("@SubjectID", subjectID);
+            }
+
+            if (minPrice != null && minPrice >= 0)
+            {
+                sqlFilter += "AND Book_price >= @MinPrice ";
+                this.helperOledb.AddParameter("@MinPrice", minPrice);
+            }
+
+            if (maxPrice != null && maxPrice >= 0)
+            {
+                sqlFilter += "AND Book_price <= @MaxPrice ";
+                this.helperOledb.AddParameter("@MaxPrice", maxPrice);
+            }
+
+            if (inStock)
+            {
+                sqlFilter += "AND In_stock = True ";
+            }
+
+            if (isOnline)
+            {
+                sqlFilter += "AND IsOnline = True ";
+            }
+            if (IsPhysical)
+            {
+                sqlFilter += "AND IsOnline = False ";
+            }
+
+            if(search != null)
+            {
+                sqlFilter += "AND ( LCase(Book_name) LIKE @Search  OR LCase(Author_name) LIKE  @Search )";
+                this.helperOledb.AddParameter("@Search", "%" + search.ToLower() + "%");
+            }
+
+            if (subjectID != null)
+            {
+                this.helperOledb.AddParameter("@SubjectID", subjectID);
+            }
+
+            if (minPrice != null && minPrice >= 0)
+            {
+                this.helperOledb.AddParameter("@MinPrice", minPrice);
+            }
+
+            if (maxPrice != null && maxPrice >= 0)
+            {
+                this.helperOledb.AddParameter("@MaxPrice", maxPrice);
+            }
+
+            if (search != null)
+            {
+                this.helperOledb.AddParameter("@Search", "%" + search.ToLower() + "%");
+            }
+
+            string sql = $@"SELECT  COUNT(*) AS [TotalBooks] FROM Books 
+                                    INNER JOIN Subjects ON Books.SubjectID = Subjects.SubjectID 
+                                    WHERE 1 = 1 AND IsDeleted = False {sqlFilter} ";
+
+            int totalPages = 0;
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    int totalBooks = Convert.ToInt32(reader["TotalBooks"]);
+                    totalPages = totalBooks % numberOfBooksInPage == 0 ? totalBooks / numberOfBooksInPage : totalBooks / numberOfBooksInPage + 1;
+                }
+                return totalPages;
             }
 
         }

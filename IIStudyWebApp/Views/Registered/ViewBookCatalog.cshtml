@@ -33,9 +33,10 @@
             <div class="search-container">
                 <input type="text"
                        id="search-input"
+                       name="SEARCH"
                        class="search-input"
-                       placeholder="Search for books, authors, categories..."
-                       oninput="searchBooks()">
+                       value="@Model?.Search"
+                       placeholder="Search for books, authors, categories...">
 
                 <div class="search-icon">🔍</div>
             </div>
@@ -190,6 +191,7 @@
 
         </div>
 
+        <input type="hidden" name="search" asp-for="Search"/>
 
         <div class="filters-form-buttons">
 
@@ -298,11 +300,13 @@
 
         </div>
 
-        @if(true) //(totalPages > 1)
+        @if(Model != null && Model.TotalPages > 1)
             {
+                int currentPage = Model.PageNumber;
+                int totalPages = Model.TotalPages;
         <div class="catalog-pagination">
         
-            @if (true) //currentPage > 1
+            @if (currentPage > 1)
             {
                 <a class="pagination-arrow"
                    href="@Url.Action("ViewBookCatalog", "Guest", new {
@@ -311,7 +315,8 @@
                        minPrice = Model?.MinPrice,
                        maxPrice = Model?.MaxPrice,
                        inStock = Model?.In_stock,
-                       isOnline = Model?.IsOnline
+                       isOnline = Model?.IsOnline,
+                       search = Model?.Search
                    })">
                     ‹
                 </a>
@@ -325,7 +330,7 @@
                 @Model.PageNumber
             </span>
 
-            @if (true) //currentPage < totalPages
+            @if (currentPage < totalPages)
             {
                 <a class="pagination-arrow"
                    href="@Url.Action("ViewBookCatalog", "Guest", new {
@@ -334,7 +339,8 @@
                        minPrice = Model?.MinPrice,
                        maxPrice = Model?.MaxPrice,
                        inStock = Model?.In_stock,
-                       isOnline = Model?.IsOnline
+                       isOnline = Model?.IsOnline,
+                       search = Model?.Search
                    })">
                     ›
                 </a>
@@ -352,7 +358,7 @@
 
     </div>
 </main>
-
+<script src="~/js/BookCatalogReg.js"></script>
 <script>
     
     async function AddToCart(bookId) {

@@ -37,7 +37,7 @@ namespace IIStudyWebApp.Controllers
             ViewBag.ErroOccured = false;
             return View();
         }
-        public async Task<IActionResult> ViewBookCatalog(int pageNumber = 1,string? subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool isPhysical = false)
+        public async Task<IActionResult> ViewBookCatalog(string? search = null, int pageNumber = 1,string? subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool isPhysical = false)
         {
 
             ApiClient<ViewBookCatalogModel> client = new ApiClient<ViewBookCatalogModel>();
@@ -54,7 +54,7 @@ namespace IIStudyWebApp.Controllers
             client.AddParameter("inStock", inStock);
             client.AddParameter("isOnline", isOnline);
             client.AddParameter("isPhysical", isPhysical);
-
+            client.AddParameter("search", search);
 
 
 

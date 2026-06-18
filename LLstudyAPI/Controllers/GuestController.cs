@@ -774,7 +774,7 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpGet]
-        public ViewBookCatalogModel GetBooksByFilter(int pageNumber = 1,string? subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool isPhysical = false)
+        public ViewBookCatalogModel GetBooksByFilter(string? search,int pageNumber = 1,string? subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool isPhysical = false)
         {
             try
             {
@@ -791,7 +791,9 @@ namespace LLstudyWS.Controllers
                 model.In_stock = inStock;
                 model.IsOnline = isOnline;
                 model.IsPhysical = isPhysical;
-                model.Books = this.repositoryUOW.BookRepository.GetBooksByFilter(pageNumber, subjectID,minPrice,maxPrice,inStock,isOnline,isPhysical);
+                model.Search = search;
+                model.Books = this.repositoryUOW.BookRepository.GetBooksByFilter(search,pageNumber, subjectID,minPrice,maxPrice,inStock,isOnline,isPhysical);
+                model.TotalPages = this.repositoryUOW.BookRepository.GetNumberOfTotalPages(search,pageNumber, subjectID, minPrice, maxPrice, inStock, isOnline, isPhysical);
                 model.Subjects = this.repositoryUOW.SubjectRepository.GetAll();
                 return model;
             }

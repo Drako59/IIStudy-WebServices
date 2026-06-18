@@ -18,5 +18,8 @@ namespace LLStudy_Models.ViewModels
         public bool In_stock { get; set; }
         public bool IsOnline { get; set; }
         public bool IsPhysical { get; set; }
+        public int TotalPages { get; set; }
+
+        public string? Search { get; set; }
     }
 }

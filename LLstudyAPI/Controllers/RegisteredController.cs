@@ -2,11 +2,12 @@
 using LLStudy_Models.ViewModels;
 using LLStudy_Models.ViewModels.Registerd;
 using LLstudyWS.ORM.Repositorys;
-using System.IO;
-using System.Net.Mime;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Contracts;
+using System.IO;
+using System.Net.Mime;
+using System.Reflection;
+using System.Text.Json;
 
 namespace LLstudyWS.Controllers
 {
@@ -26,7 +27,7 @@ namespace LLstudyWS.Controllers
 
 
         [HttpGet]
-        public ViewRegisterdBookCatalogModel GetBooks(string registeredID,int pageNumber = 1, string? subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool isPhysical = false)
+        public ViewRegisterdBookCatalogModel GetBooks(string registeredID, string? search = null, int pageNumber = 1, string? subjectID = null, int? minPrice = null, int? maxPrice = null, bool inStock = false, bool isOnline = false, bool isPhysical = false)
         {
 
             try
@@ -39,8 +40,8 @@ namespace LLstudyWS.Controllers
                 if (pageNumber < 1)
                     pageNumber = 1;
 
-                viewModel.Books =  this.repositoryUOW.BookRepository.GetBooksByFilter( pageNumber,subjectID ,  minPrice, maxPrice, inStock, isOnline, isPhysical);
-                //return this.repositoryUOW.BookRepository.GetAll();
+                viewModel.Books =  this.repositoryUOW.BookRepository.GetBooksByFilter( search,pageNumber,subjectID ,  minPrice, maxPrice, inStock, isOnline, isPhysical);
+                viewModel.TotalPages = this.repositoryUOW.BookRepository.GetNumberOfTotalPages(search,pageNumber, subjectID, minPrice, maxPrice, inStock, isOnline, isPhysical);
                 viewModel.Subjects = this.repositoryUOW.SubjectRepository.GetAll();
                 viewModel.IsPhysical = isPhysical;
                 viewModel.IsOnline = isOnline;
@@ -49,7 +50,7 @@ namespace LLstudyWS.Controllers
                 viewModel.SubjectID = subjectID;
                 viewModel.MinPrice = minPrice;
                 viewModel.MaxPrice = maxPrice;
-
+                viewModel.Search = search;
                 viewModel.OwnedOnlineBooksIDs = this.repositoryUOW.BookRepository.GetOwnedOnlineBooksIDsForUser(registeredID);
                 viewModel.OnlineBooksInShoppingCartIDs = this.repositoryUOW.ShoppingCartRepository.GetRegCartOnlieBooksIDs(registeredID);
     
