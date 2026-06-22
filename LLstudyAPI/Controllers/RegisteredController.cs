@@ -599,5 +599,61 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
+
+        [HttpPost]
+        public bool AddLikeToReview(string reviewID,string registeredID,bool like, bool dislike)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+
+                string likeID = this.repositoryUOW.LikeRepository.LikeExistForUserAndReview(registeredID, reviewID);
+                Likes like_model = new Likes
+                {
+                    ReviewID = reviewID,
+                    LikeID = likeID,
+                    RegisteredID = registeredID,
+                };
+
+                if (like)
+                {
+                    like_model.Like = true;
+                    like_model.Dislike = false;
+                }
+                else
+                {
+                    like_model.Like = false;
+                    like_model.Dislike = true;
+                }
+
+                bool result;
+
+                if (!like && !dislike && like_model.LikeID != "0")
+                    result = this.repositoryUOW.LikeRepository.Delete(like_model.LikeID);
+                else if (like_model.LikeID != "0")
+                {
+                    result = this.repositoryUOW.LikeRepository.Update(like_model);
+                }
+                else
+                {
+                   result = this.repositoryUOW.LikeRepository.Create(like_model);
+                }
+
+                return result;
+
+                
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+
+        }
     }
 }

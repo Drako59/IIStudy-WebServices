@@ -423,7 +423,7 @@
                                                                     <StackPanel Orientation="Horizontal">
                                                                         <TextBlock Text="👍" FontSize="11"
                                                                                Margin="0,0,3,0"/>
-                                                                        <TextBlock Text="{Binding Likes}"
+                                                                        <TextBlock Text="{Binding LikesCount}"
                                                                                FontSize="11" FontWeight="Bold"
                                                                                Foreground="#16a34a"
                                                                                VerticalAlignment="Center"/>

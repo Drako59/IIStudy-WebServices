@@ -370,7 +370,10 @@ namespace LLstudyWS.ORM
         {
             List<ViewReview> reviews = new List<ViewReview>();
             //string sql = "SELECT * FROM Reviews WHERE BookID = @BookID";
-            string sql = $@"SELECT   Reviews.RegisteredID AS [RegisteredID],* FROM  Reviews
+            string sql = $@"SELECT   Reviews.RegisteredID AS [RegisteredID],
+                                (SELECT COUNT(*) FROM Likes WHERE ReviewID = Reviews.ReviewID AND [Like] = True) AS [LikesCount]
+                               , (SELECT COUNT(*) FROM Likes WHERE ReviewID = Reviews.ReviewID AND Dislike = True) AS [Dislikes]   
+                               ,* FROM  Reviews
                                     INNER JOIN ( Registereds
                                        
                                     ) ON Registereds.RegisteredID = Reviews.RegisteredID

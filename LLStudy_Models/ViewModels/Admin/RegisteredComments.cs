@@ -22,5 +22,8 @@ namespace LLStudy_Models.ViewModels
         public string Comment { get { return comment; } set { comment = value; } }
 
         public string RegisteredID { get; set; }
+
+        public int LikesCount { get; set; }
+        public int Dislikes { get; set; }
     }
 }

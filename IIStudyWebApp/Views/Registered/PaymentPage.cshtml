@@ -193,7 +193,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Postal Code</label>
-                        <input asp-for="Postal" type="text" class="form-input" placeholder="10001" required>
+                        <input asp-for="Postal" type="text" maxlength="7" minlength="7" class="form-input" placeholder="10001" required>
                     </div>
                 </div>
 
@@ -216,25 +216,25 @@
 
                 <!-- Order Information -->
                 <div class="order-info-card">
-                    <div class="info-row">
+                    @* <div class="info-row">
                         <span class="info-label">Order ID</span>
                         <span class="info-value">#ORD-2024-1312</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Registered ID</span>
                         <span class="info-value">REG-45892</span>
-                    </div>
+                    </div> *@
                     <div class="info-row">
                         <span class="info-label">Delivered</span>
                         <span class="info-value">Standard Shipping</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Location</span>
-                        <span class="info-value">New York, USA</span>
+                        <span class="info-value">@Model?.Location</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Date</span>
-                        <span class="info-value">Jan 28, 2026</span>
+                        <span class="info-value">@Model?.Date</span>
                     </div>
                 </div>
 
@@ -243,17 +243,17 @@
                 <!-- Price Breakdown -->
                 <div class="summary-row">
                     <span class="summary-label">Subtotal</span>
-                    <span class="summary-value">$163.00</span>
+                    <span class="summary-value">@Model?.Total_price</span>
                 </div>
 
                 <div class="summary-row">
                     <span class="summary-label">Shipping</span>
-                    <span class="summary-value">$5.00</span>
+                    <span class="summary-value">$0.00</span>
                 </div>
 
                 <div class="summary-row">
-                    <span class="summary-label">Tax (10%)</span>
-                    <span class="summary-value">$16.30</span>
+                    <span class="summary-label">Tax (0%)</span>
+                    <span class="summary-value">$0.00</span>
                 </div>
 
                 <div class="summary-divider"></div>
@@ -261,7 +261,7 @@
                 <!-- Total -->
                 <div class="total-row">
                     <span class="total-label">Total Price</span>
-                    <span class="total-value">$184.30</span>
+                    <span class="total-value">@Model?.Total_price</span>
                 </div>
 
                 <!-- Pay Button -->

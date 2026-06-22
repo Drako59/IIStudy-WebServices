@@ -11,5 +11,7 @@ namespace LLStudy_Models.ViewModels
     {
         public string UserName { get; set; }
         public string ImagePath { get; set; }
+        public int LikesCount { get; set; }
+        public int Dislikes { get; set; }
     }
 }

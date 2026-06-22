@@ -15,7 +15,7 @@ namespace LLstudyWS.ORM.Repositorys
         RegisteredRepository registeredRepository;
         DbHelperOledb helperOledb;
         ModelCreatorReflection modelCreatorReflection;
-
+        LikeRepository likeRepository;
 
         public RepositoryUOW()
         {
@@ -96,6 +96,16 @@ namespace LLstudyWS.ORM.Repositorys
                 if (this.shoppingCartRepository == null)
                     this.shoppingCartRepository = new ShoppingCartRepository(this.helperOledb, this.modelCreatorReflection);
                 return this.shoppingCartRepository;
+            }
+        }
+
+        public LikeRepository LikeRepository
+        {
+            get
+            {
+                if (this.likeRepository == null)
+                    this.likeRepository = new LikeRepository(this.helperOledb,this.modelCreatorReflection);
+                return this.likeRepository;
             }
         }
 

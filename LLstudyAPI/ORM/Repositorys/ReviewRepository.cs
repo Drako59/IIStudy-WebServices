@@ -9,32 +9,35 @@ namespace LLstudyWS.ORM
     {
         public ReviewRepository(DbHelperOledb helper, ModelCreatorReflection modelCretorRef) : base(helper,  modelCretorRef) { }
 
-        public List<ViewReview> GetReviewsByBook(string bookID)
-        {
-            List<ViewReview> reviews = new List<ViewReview>();
-            //string sql = "SELECT * FROM Reviews WHERE BookID = @BookID";
-            string sql = $@"SELECT   Reviews.RegisteredID AS [RegisteredID],* FROM  Reviews
-                                    INNER JOIN ( Registereds
+        //public List<ViewReview> GetReviewsByBook(string bookID)
+        //{
+        //    List<ViewReview> reviews = new List<ViewReview>();
+        //    //string sql = "SELECT * FROM Reviews WHERE BookID = @BookID";
+        //    string sql = $@"SELECT   Reviews.RegisteredID AS [RegisteredID],* FROM  Reviews
+        //                            INNER JOIN ( Registereds
                                        
-                                    ) ON Registereds.RegisteredID = Reviews.RegisteredID
-                                WHERE
-                                    BookID = @BookID";
-            this.helperOledb.AddParameter("@BookID",bookID);
+        //                            ) ON Registereds.RegisteredID = Reviews.RegisteredID
+        //                        WHERE
+        //                            BookID = @BookID";
+        //    this.helperOledb.AddParameter("@BookID",bookID);
 
-            using(IDataReader reader = this.helperOledb.Select(sql))
-            {
-                while (reader.Read())
-                {
-                    reviews.Add(this.moderlRefCreator.CreateModel<ViewReview>(reader));
-                }
-            }
-            return reviews;
-        }
+        //    using(IDataReader reader = this.helperOledb.Select(sql))
+        //    {
+        //        while (reader.Read())
+        //        {
+        //            reviews.Add(this.moderlRefCreator.CreateModel<ViewReview>(reader));
+        //        }
+        //    }
+        //    return reviews;
+        //}
 
         public List<RegisteredComments> GetReviewsByRegistered(string registeredID)
         {
             List<RegisteredComments> regReviews = new List<RegisteredComments>();
-            string sql = @$"SELECT  Books.BookID  AS [BookID], * FROM Reviews 
+            string sql = @$"SELECT  Books.BookID  AS [BookID], * 
+                                    ,(SELECT COUNT(*) FROM Likes WHERE ReviewID = Reviews.ReviewID AND Dislike = True) AS [Dislikes]
+                                    ,(SELECT COUNT(*) FROM Likes WHERE ReviewID = Reviews.ReviewID AND [Like] = True) AS [LikesCount]
+                                    FROM Reviews
                                     INNER JOIN ( Books
 
                                     ) ON Books.BookID = Reviews.BookID 
@@ -68,5 +71,7 @@ namespace LLstudyWS.ORM
             }
 
         }
+
+      
     }
 }

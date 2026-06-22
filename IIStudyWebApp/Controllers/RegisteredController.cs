@@ -792,7 +792,30 @@ namespace IIStudyWebApp.Controllers
             return View(order);
         }
 
-        
+        [HttpGet]
+        public async Task<IActionResult> AddLikeToReview(string reviewID, bool like, bool dislike)
+        {
+            Registered registered = await GetRegisteredDeatils();
+            if (registered == null)
+                return RedirectToAction("viewSignInPage", "Guest");
+            ViewData["Registered"] = registered;
+
+
+            ApiClient<ViewOrderDetailsModel> client = new ApiClient<ViewOrderDetailsModel>();
+            client.Path = "api/Registered/AddLikeToReview";
+
+            object obj = new { ReviewID = reviewID, Like = like, Dislike = dislike, RegisteredID = registered.RegisteredID };
+
+            ApiResultModel<bool> result = await client.PostAsyncRet<object,bool>(obj);
+
+            if (result != null && result.Success && result.Data)
+                return Ok();
+            return StatusCode(500);
+
+        }
+
+
+
 
 
     }
