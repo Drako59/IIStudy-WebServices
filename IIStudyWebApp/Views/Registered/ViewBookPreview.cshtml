@@ -358,17 +358,17 @@
                         </div>
                         <div class="review-actions">
                             <span style="color: #718096; font-size: 14px; margin-right: 8px;">Was this helpful?</span>
-                            <button class="vote-btn" onclick="">
+                            <button class="vote-btn @(Model.DislikedReviews.Contains(review.ReviewID)? "active" : "")" id="dislike-btn-@review.ReviewID" onclick="AddLike(@review.ReviewID,false,true)">
                                 <svg viewBox="0 0 24 24">
                                     <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9A2 2 0 0 0 4.32 15H10zM17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path>
                                 </svg>
-                                <span>@review.Dislikes</span>
+                                <span id="dislike-count-@review.ReviewID">@review.Dislikes</span>
                             </button>
-                            <button class="vote-btn" onclick="">
+                            <button class="vote-btn @(Model.LikedReviews.Contains(review.ReviewID) ? "active" : "")" id="like-btn-@review.ReviewID" onclick="AddLike(@review.ReviewID,true,false)">
                                 <svg viewBox="0 0 24 24">
                                     <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
                                 </svg>
-                                <span>@review.LikesCount</span>
+                                <span id="like-count-@review.ReviewID">@review.LikesCount</span>
                             </button>
                         </div>
                     </div>
@@ -455,6 +455,7 @@
     </div>
 </div>
 <script src="~/js/addtocart.js"></script>
+<script src="~/js/addlike.js"></script>
 <script>
     // Review Form Functions
     let selectedRating = 0;

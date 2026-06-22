@@ -1031,3 +1031,14 @@ button.btn-add-to-cart.purchased {
     white-space: pre-line;
     overflow-wrap: break-word;
 }
+
+.vote-btn.active {
+    background: #eef2ff;
+    color: #667eea;
+    border-color: #667eea;
+}
+
+.vote-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

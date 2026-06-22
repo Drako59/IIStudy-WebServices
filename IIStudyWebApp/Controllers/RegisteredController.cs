@@ -804,9 +804,9 @@ namespace IIStudyWebApp.Controllers
             ApiClient<ViewOrderDetailsModel> client = new ApiClient<ViewOrderDetailsModel>();
             client.Path = "api/Registered/AddLikeToReview";
 
-            object obj = new { ReviewID = reviewID, Like = like, Dislike = dislike, RegisteredID = registered.RegisteredID };
+            Like like_model = new Like(){LikeID="0" ,ReviewID = reviewID, IsLike = like, IsDislike = dislike, RegisteredID = registered.RegisteredID };
 
-            ApiResultModel<bool> result = await client.PostAsyncRet<object,bool>(obj);
+            ApiResultModel<bool> result = await client.PostAsyncRet<Like,bool>(like_model);
 
             if (result != null && result.Success && result.Data)
                 return Ok();

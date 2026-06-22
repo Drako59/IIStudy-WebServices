@@ -32,8 +32,8 @@ namespace IIStudyDESKTOP.WindowsPages
 
             TxtBookTitle.Text = string.IsNullOrWhiteSpace(book.Book_name)
                 ? $"Book #{book.BookID}" : book.Book_name;
-            this.TxtTotalLikes.Text = likes.ToString();
-            this.TxtTotalDislikes.Text = dislikes.ToString();
+            //this.TxtTotalLikes.Text = likes.ToString();
+            //this.TxtTotalDislikes.Text = dislikes.ToString();
             this.TxtTotalReviews.Text = reviewsAmount.ToString();
             this.TxtAvgRating.Text = avgRate.ToString();
 

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace LLStudy_Models.Models
 {
-    public class Likes : Model
+    public class Like : Model
     {
         public string LikeID { get; set; }
         [Required]
         public string ReviewID { get; set; }
         [Required]
         public string RegisteredID { get; set; }
-        public bool Like { get; set; }
-        public bool Dislike { get; set; }
+        public bool IsLike { get; set; }
+        public bool IsDislike { get; set; }
 
     }
 }

@@ -586,6 +586,8 @@ namespace LLstudyWS.Controllers
                 viewModel.BookViewModel = this.repositoryUOW.BookRepository.GetFullBook(bookID);
                 viewModel.IsOwned = this.repositoryUOW.BookRepository.IsOwnedOnlineBook(bookID,registeredID);
                 viewModel.IsInShoppingCart = this.repositoryUOW.ShoppingCartRepository.IsOnlineBookInCart(registeredID,bookID);
+                viewModel.LikedReviews = this.repositoryUOW.LikeRepository.GetReviewsLikedByUserForBook(registeredID,bookID);
+                viewModel.DislikedReviews = this.repositoryUOW.LikeRepository.GetReviewsDislikedByUserForBook(registeredID, bookID);
                 return viewModel;
 
             }
@@ -601,35 +603,32 @@ namespace LLstudyWS.Controllers
         }
 
         [HttpPost]
-        public bool AddLikeToReview(string reviewID,string registeredID,bool like, bool dislike)
+        public bool AddLikeToReview(Like like_model)
         {
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
 
+                bool isLike = like_model.IsLike;
+                bool isDislike = like_model.IsDislike;
 
-                string likeID = this.repositoryUOW.LikeRepository.LikeExistForUserAndReview(registeredID, reviewID);
-                Likes like_model = new Likes
-                {
-                    ReviewID = reviewID,
-                    LikeID = likeID,
-                    RegisteredID = registeredID,
-                };
+                string likeID = this.repositoryUOW.LikeRepository.LikeExistForUserAndReview(like_model.RegisteredID, like_model.ReviewID);
+                like_model.LikeID = likeID;
 
-                if (like)
+                if (isLike)
                 {
-                    like_model.Like = true;
-                    like_model.Dislike = false;
+                    like_model.IsLike = true;
+                    like_model.IsDislike = false;
                 }
                 else
                 {
-                    like_model.Like = false;
-                    like_model.Dislike = true;
+                    like_model.IsLike = false;
+                    like_model.IsDislike = true;
                 }
 
                 bool result;
 
-                if (!like && !dislike && like_model.LikeID != "0")
+                if (!isLike && !isDislike && like_model.LikeID != "0")
                     result = this.repositoryUOW.LikeRepository.Delete(like_model.LikeID);
                 else if (like_model.LikeID != "0")
                 {
