@@ -367,6 +367,8 @@ namespace LLstudyWS.Controllers
             try
             {
                 this.repositoryUOW.HelperOledb.OpenConnection();
+                if (!this.repositoryUOW.BookRepository.IsOwnedBook(model.BookID, model.RegisteredID))
+                    return false;
                 model.ReviewID = this.repositoryUOW.ReviewRepository.GetUserReviewOnBook(model.RegisteredID, model.BookID);
                 if (model.ReviewID != "0")
                     return this.repositoryUOW.ReviewRepository.Update(model);
@@ -653,6 +655,34 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
 
+        }
+
+        [HttpGet]
+        public PaymentPageInfoViewModel GetPaymentPageInfo(string registeredID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+
+                PaymentPageInfoViewModel infoModel = new PaymentPageInfoViewModel();
+
+                if (!(this.repositoryUOW.ShoppingCartRepository.GetRegCartPhysicalBooksIDs(registeredID).Any()))
+                {
+                    infoModel.AllDigitalBooks = true;
+                }
+                infoModel.TotalPrice = this.repositoryUOW.ShoppingCartRepository.GetTotalPriceForUser(registeredID);
+                return infoModel;
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
         }
     }
 }

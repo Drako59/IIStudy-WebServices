@@ -293,9 +293,9 @@ namespace IIStudyWebApp.Controllers
             
             record.RegisteredID = registeredID;
             record.ReviewID = "0";
-            bool success = await client.PostAsync(record);
+            ApiResultModel<bool> result = await client.PostAsyncRet<Review,bool>(record);
 
-            if (!success)
+            if (result == null || !result.Success || !result.Data)
                 return RedirectToAction("ViewBookPreview","Registered", new { bookID = record.BookID });
             return RedirectToAction("ViewBookPreview", "Registered", new { bookID = record.BookID });
         }
@@ -536,25 +536,33 @@ namespace IIStudyWebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PaymentPage()
+        public async Task<IActionResult> PaymentPage(Order order = null)
         {
             Registered registered = await GetRegisteredDeatils();
             if (registered == null)
                 return RedirectToAction("viewSignInPage", "Guest");
             ViewData["Registered"] = registered;
 
-            ApiClient<Order> client = new ApiClient<Order>();
-
+            ApiClient<PaymentPageInfoViewModel> client = new ApiClient<PaymentPageInfoViewModel>();
+            if (order == null)
+            {
+                order = new Order();
+            }
             client.Scheme = "http";
             client.Host = "localhost";
             client.Port = 5049;
-            client.Path = "api/Registered/Pay";
+            client.Path = "api/Registered/GetPaymentPageInfo";
+            client.AddParameter("registeredID", registered.RegisteredID);
 
+            PaymentPageInfoViewModel viewModel = await client.GetAsync();
+
+            order.Total_price = viewModel.TotalPrice;
+            ViewBag.IsAllDigital = viewModel.AllDigitalBooks;
             //string totalPrice = client.GetAsync();
 
             //To continue
 
-            return View();
+            return View(order);
             
         }
 

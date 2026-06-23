@@ -551,6 +551,27 @@ namespace LLstudyWS.ORM
             }
         }
 
+        public bool IsOwnedBook(string bookID, string registeredID)
+        {
+            string sql = $@"SELECT COUNT(*) AS [IsExist] FROM Orders_Books 
+                                                            INNER JOIN Orders 
+                                                                ON Orders_Books.OrderID = Orders.OrderID
+                                                        WHERE Orders.RegisteredID = @RegisteredID AND Orders_Books.BookID = @BookID";
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+            this.helperOledb.AddParameter("@BookID", bookID);
+            using (IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt32(reader["IsExist"]) > 0;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
         public bool IsOwnedOnlineBook(string bookID, string registeredID)
         {
             string sql = $@"SELECT COUNT(*) as count_exist FROM Books INNER JOIN (

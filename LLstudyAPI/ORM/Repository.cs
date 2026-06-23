@@ -378,7 +378,9 @@ namespace LLstudyWS.ORM
                                        
                                     ) ON Registereds.RegisteredID = Reviews.RegisteredID
                                 WHERE
-                                    BookID = @BookID";
+                                    BookID = @BookID
+                                ORDER BY Reviews.ReviewID DESC";
+                                        
             this.helperOledb.AddParameter("@BookID", bookID);
 
             using (IDataReader reader = this.helperOledb.Select(sql))
