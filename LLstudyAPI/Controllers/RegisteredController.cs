@@ -123,6 +123,25 @@ namespace LLstudyWS.Controllers
             }
         }
 
+        [HttpGet]
+        public ProfileInfoViewModel ProfilePageInfo(string registeredID)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                return this.repositoryUOW.RegisteredRepository.NumberOfBooksInLibary(registeredID);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
+
         [HttpPost]
         public UpdateProfileResult UpdateProfile(Registered reg)
         {
@@ -590,6 +609,7 @@ namespace LLstudyWS.Controllers
                 viewModel.IsInShoppingCart = this.repositoryUOW.ShoppingCartRepository.IsOnlineBookInCart(registeredID,bookID);
                 viewModel.LikedReviews = this.repositoryUOW.LikeRepository.GetReviewsLikedByUserForBook(registeredID,bookID);
                 viewModel.DislikedReviews = this.repositoryUOW.LikeRepository.GetReviewsDislikedByUserForBook(registeredID, bookID);
+                viewModel.HasPurchased = this.repositoryUOW.BookRepository.IsOwnedBook(bookID,registeredID);
                 return viewModel;
 
             }

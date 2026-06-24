@@ -245,7 +245,42 @@
                                 <img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })">
                             </a>
                             <div class="book-info">
-                                <h3>@book.Book_name</h3>
+                                <div class="book-title-row">
+                                    <h3>@book.Book_name</h3>
+
+                                    @if (book.IsOnline)
+                                    {
+                                        <span class="digital-pdf-badge" title="Digital PDF Book">
+                                            <svg viewBox="0 0 24 24">
+                                                <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+                                                <path d="M14 2v6h6"></path>
+                                                <path d="M8 13h1.8a1.4 1.4 0 0 1 0 2.8H8z"></path>
+                                                <path d="M13 13v5"></path>
+                                                <path d="M13 13h1.2a2.5 2.5 0 0 1 0 5H13"></path>
+                                                <path d="M18 13h2"></path>
+                                                <path d="M18 15.5h1.5"></path>
+                                                <path d="M18 13v5"></path>
+                                            </svg>
+                                            PDF
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <div class="title-stock-box">
+                                            <span class="stock-side-badge @(book.StockCount <= 3 ? "low" : "")" title="Books in stock">
+                                                <svg viewBox="0 0 24 24">
+                                                    <path d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                                    <path d="M3.3 7L12 12l8.7-5"></path>
+                                                    <path d="M12 22V12"></path>
+                                                </svg>
+
+                                                <span>@book.StockCount</span>
+                                            </span>
+
+                                            <small class="stock-side-label">in stock</small>
+                                        </div>
+                                    }
+                                </div>
                                 <p class="book-author">@book.Author_name</p>
                                 <p class="book-price">$@book.Book_price</p>
                                 <button class="add-to-cart @(Model.OwnedOnlineBooksIDs.Contains(book.BookID) ? "purchased" : isInCart ? "in-cart" : "")" id="book-@book.BookID"
@@ -279,7 +314,26 @@
                                 <img class="image_div" src="@Url.Action("GetBookImage", "Guest", new { bookID = book.BookID })">
                              </a>
                             <div class="book-info">
-                                <h3>@book.Book_name</h3>
+                                <div class="book-title-row">
+                                    <h3>@book.Book_name</h3>
+
+                                    @if (book.IsOnline)
+                                    {
+                                        <span class="digital-pdf-badge" title="Digital PDF Book">
+                                            <svg viewBox="0 0 24 24">
+                                                <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+                                                <path d="M14 2v6h6"></path>
+                                                <path d="M8 13h1.8a1.4 1.4 0 0 1 0 2.8H8z"></path>
+                                                <path d="M13 13v5"></path>
+                                                <path d="M13 13h1.2a2.5 2.5 0 0 1 0 5H13"></path>
+                                                <path d="M18 13h2"></path>
+                                                <path d="M18 15.5h1.5"></path>
+                                                <path d="M18 13v5"></path>
+                                            </svg>
+                                            PDF
+                                        </span>
+                                    }
+                                </div>
                                 <p class="book-author">@book.Author_name</p>
                                 <p class="book-price">$@book.Book_price</p>
                                 <button class="add-to-cart error" id="book-@book.BookID" disabled onclick="AddToCart(@book.BookID)">

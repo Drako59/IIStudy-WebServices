@@ -12,7 +12,7 @@ namespace LLStudy_Models.ViewModels
         public ViewBookViewModel BookViewModel { get; set; }
         public bool IsOwned { get; set; }
         public bool IsInShoppingCart { get; set; }
-
+        public bool HasPurchased {get;set;}
         public List<string> LikedReviews { get; set; }
         public List<string> DislikedReviews { get; set; }
     }

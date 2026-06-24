@@ -10,6 +10,10 @@ using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+
+
 using static NuGet.Packaging.PackagingConstants;
 
 namespace IIStudyWebApp.Controllers
@@ -55,8 +59,19 @@ namespace IIStudyWebApp.Controllers
                 return RedirectToAction("HomePage", "Guest");
             }
             ViewData["Registered"] = registered;
+            ApiClient<ProfileInfoViewModel> client = new ApiClient<ProfileInfoViewModel>();
+            client.Scheme = "http";
+            client.Host = "localhost";
+            client.Port = 5049;
+            client.Path = "api/Registered/ProfilePageInfo";
+            client.AddParameter("registeredID", registered.RegisteredID);
 
-            return View(registered);
+            ProfileInfoViewModel model = await client.GetAsync();
+
+            if (model == null)
+                return StatusCode(500);
+            ViewBag.NumOfBooksInLibary = model.NumOfBooksInLibary;
+            return View(model);
         }
 
         [HttpGet]
@@ -527,7 +542,9 @@ namespace IIStudyWebApp.Controllers
                 return RedirectToAction("ViewOrder", "Registered",new { orderID = status.Data.OrderID });
             if (status.Success && !status.Data.Success)
                 return RedirectToAction("ViewShoppingCart","Registered");
-            return RedirectToAction("PaymentPage", "Registered", order);
+
+            TempData["OrderJson"] = JsonSerializer.Serialize(order);
+            return RedirectToAction("PaymentPage", "Registered", new { failed = true } );
 
             //if (status.Success && status.Data)
             //    return View();
@@ -536,17 +553,30 @@ namespace IIStudyWebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PaymentPage(Order order = null)
+        public async Task<IActionResult> PaymentPage(bool failed = false)
         {
             Registered registered = await GetRegisteredDeatils();
             if (registered == null)
                 return RedirectToAction("viewSignInPage", "Guest");
             ViewData["Registered"] = registered;
+            Order order = null;
+            if (TempData["OrderJson"] is string orderJson)
+            {
+                order = JsonSerializer.Deserialize<Order>(orderJson) ?? new Order();
+            }
 
             ApiClient<PaymentPageInfoViewModel> client = new ApiClient<PaymentPageInfoViewModel>();
-            if (order == null)
+            
+            if(order == null)
             {
                 order = new Order();
+            }
+            ViewBag.WasSubmited = false;
+
+            if (failed){
+                ModelState.Clear();
+                TryValidateModel(order);
+                ViewBag.WasSubmited = true;
             }
             client.Scheme = "http";
             client.Host = "localhost";
@@ -556,8 +586,8 @@ namespace IIStudyWebApp.Controllers
 
             PaymentPageInfoViewModel viewModel = await client.GetAsync();
 
-            order.Total_price = viewModel.TotalPrice;
-            ViewBag.IsAllDigital = viewModel.AllDigitalBooks;
+            order.Total_price = viewModel?.TotalPrice ?? 0;
+            ViewBag.IsAllDigital = viewModel?.AllDigitalBooks ?? true;
             //string totalPrice = client.GetAsync();
 
             //To continue

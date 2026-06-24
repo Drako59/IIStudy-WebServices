@@ -242,7 +242,26 @@
         <div class="reviews-section">
             <div class="reviews-header">
                 <h2 class="section-title">Customer Reviews</h2>
-                <button class="write-review-btn" onclick="openReviewForm()">Write a Review</button>
+                @if (Model.HasPurchased)
+                {
+                    <button class="write-review-btn" onclick="openReviewForm()">Write a Review</button>
+                }
+                else
+                {
+                    <div class="review-locked-box">
+                        <svg viewBox="0 0 24 24" class="review-locked-icon">
+                            <rect x="4" y="11" width="16" height="9" rx="2"></rect>
+                            <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                        </svg>
+
+                        <div>
+                            <div class="review-locked-title">Purchase required</div>
+                            <div class="review-locked-text">
+                                Only users who purchased this book can write a review.
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
             @if (Model.BookViewModel.reviews != null && Model.BookViewModel.reviews.Any())
             {
@@ -408,52 +427,55 @@
         </div>
     </div>
 </div>
-<div class="review-form-overlay" id="reviewFormOverlay">
-    <div class="review-form-container">
-        <div class="review-form-header">
-            <h2 class="review-form-title">Write a Review</h2>
-            <button class="close-form-btn" onclick="closeReviewForm()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
+@if (Model.HasPurchased)
+{
+    <div class="review-form-overlay" id="reviewFormOverlay">
+        <div class="review-form-container">
+            <div class="review-form-header">
+                <h2 class="review-form-title">Write a Review</h2>
+                <button class="close-form-btn" onclick="closeReviewForm()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
 
-        <form asp-action="AddReview" asp-controller="Registered" id="reviewForm" method="post">  
-            <!--onsubmit ="submitReview(event)" -->
-            <!-- Rating Input -->
-            <div class="rating-input-section">
-                <label class="rating-input-label">Your Rating</label>
-                <div class="star-rating-input" id="starRating">
-                    <span class="star-input" data-rating="1" onclick="setRating(1)">★</span>
-                    <span class="star-input" data-rating="2" onclick="setRating(2)">★</span>
-                    <span class="star-input" data-rating="3" onclick="setRating(3)">★</span>
-                    <span class="star-input" data-rating="4" onclick="setRating(4)">★</span>
-                    <span class="star-input" data-rating="5" onclick="setRating(5)">★</span>
+            <form asp-action="AddReview" asp-controller="Registered" id="reviewForm" method="post">  
+                <!--onsubmit ="submitReview(event)" -->
+                <!-- Rating Input -->
+                <div class="rating-input-section">
+                    <label class="rating-input-label">Your Rating</label>
+                    <div class="star-rating-input" id="starRating">
+                        <span class="star-input" data-rating="1" onclick="setRating(1)">★</span>
+                        <span class="star-input" data-rating="2" onclick="setRating(2)">★</span>
+                        <span class="star-input" data-rating="3" onclick="setRating(3)">★</span>
+                        <span class="star-input" data-rating="4" onclick="setRating(4)">★</span>
+                        <span class="star-input" data-rating="5" onclick="setRating(5)">★</span>
+                    </div>
+                    <input type="hidden" id="ratingValue" name="Rate" value="0" required>
                 </div>
-                <input type="hidden" id="ratingValue" name="Rate" value="0" required>
-            </div>
 
-            <!-- Review Text -->
-            <div class="review-text-section">
-                <label class="rating-input-label">Your Review</label>
-                <textarea class="review-textarea"
-                          id="reviewText"
-                          name="Comment"
-                          placeholder="Share your thoughts about this book... What did you like? What could be improved? Would you recommend it to others?"
-                          required
-                          minlength="10"></textarea>
-            </div>
-            <input name="BookID" value="@Model.BookViewModel.book.BookID" style="display: none;" />
+                <!-- Review Text -->
+                <div class="review-text-section">
+                    <label class="rating-input-label">Your Review</label>
+                    <textarea class="review-textarea"
+                              id="reviewText"
+                              name="Comment"
+                              placeholder="Share your thoughts about this book... What did you like? What could be improved? Would you recommend it to others?"
+                              required
+                              minlength="10"></textarea>
+                </div>
+                <input name="BookID" value="@Model.BookViewModel.book.BookID" style="display: none;" />
 
-            <!-- Form Actions -->
-            <div class="form-actions">
-                <button type="button" class="cancel-review-btn" onclick="closeReviewForm()">Cancel</button>
-                <button type="submit" class="submit-review-btn">Submit Review</button>
-            </div>
-        </form>
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="cancel-review-btn" onclick="closeReviewForm()">Cancel</button>
+                    <button type="submit" class="submit-review-btn">Submit Review</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+}
 <script src="~/js/addtocart.js"></script>
 <script src="~/js/addlike.js"></script>
 <script>
@@ -519,11 +541,16 @@
     }
 
     // Close overlay when clicking outside the form
-    document.getElementById('reviewFormOverlay').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeReviewForm();
-        }
-    });
+    try{
+        document.getElementById('reviewFormOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeReviewForm();
+            }
+        });
+    }
+    catch (error) {
+        console.log("There is not review overlay.")
+    }
 
     // Add to cart functionality
     

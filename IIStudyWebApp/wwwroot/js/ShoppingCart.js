@@ -124,7 +124,7 @@ function updateTotal() {
         const items = document.getElementsByClassName("cart-item");
         for (const item of items) {
             price = parseFloat(item.querySelector(".item-price").textContent.slice(1), 10);
-            amount = parseFloat(item.querySelector(".qty-value").textContent, 10);
+            amount = parseFloat(item.querySelector(".qty-value")?.textContent ?? "1", 10);
             sum += amount * price;
         }
         const totalPay = document.querySelector(".total-value");

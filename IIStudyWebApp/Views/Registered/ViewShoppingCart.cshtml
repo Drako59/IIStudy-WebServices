@@ -41,18 +41,22 @@
                                 <h3 class="item-title">@cartBook.Book.Book_name</h3>
                                 <p class="item-author">@cartBook.Book.Author_name</p>
                                 <p class="item-meta" data-type="@(cartBook.Book.IsOnline ? "Online" : "Physical")">@(cartBook.Book.IsOnline ? "Online" : "Physical") format</p>
-                                <div class="stock-count-info">
-                                    <span class="stock-count-label">Available stock:</span>
-                                    <span class="stock-count-value">@cartBook.Book.StockCount</span>
-                                </div>
-                                <div class="stock-warning @(InStock ? "" : "stock-warning-hidden" )">
-                                    <div class="stock-warning-icon">!</div>
-                                    <div class="stock-warning-content">
-                                        <strong>Out of stock</strong>
-                                        <span>This book is currently out of this amount stock.</span>
-                                    </div>
-                                </div>
                                 
+                                @if(!cartBook.Book.IsOnline)
+                                {
+                                    <div class="stock-count-info">
+                                        <span class="stock-count-label">Available stock:</span>
+                                        <span class="stock-count-value">@cartBook.Book.StockCount</span>
+                                    </div>
+
+                                    <div class="stock-warning @(InStock ? "" : "stock-warning-hidden" )">
+                                        <div class="stock-warning-icon">!</div>
+                                        <div class="stock-warning-content">
+                                            <strong>Out of stock</strong>
+                                            <span>This book is currently out of this amount stock.</span>
+                                        </div>
+                                    </div>
+                                }
                                 <div class="item-actions">
                                     @if (!cartBook.Book.IsOnline) {
                                         <div class="quantity-control">

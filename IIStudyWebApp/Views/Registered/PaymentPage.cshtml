@@ -71,7 +71,7 @@
 
                     <div class="form-group">
                         <label class="form-label">Card Number</label>
-                        <input type="text" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
+                        <input type="text" id="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19" >
                     </div>
 
                     <div class="form-group">
@@ -183,24 +183,40 @@
                     <h2 class="section-title" style="margin-top: 40px;">Billing Address</h2>
 
                     <div class="form-group">
-                        <label class="form-label">Street Address</label>
-                        <input asp-for="Location" type="text" class="form-input" placeholder="@order.Location" required>
+                        <label class="form-label">Location</label>
+                        @if (ViewBag?.WasSubmited == true)
+                        {
+                            <span asp-validation-for="Location" class="field-error"></span>
+                        }
+                        <input asp-for="Location" type="text" class="form-input" placeholder="@order.Location"> @* required *@
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">City</label>
-                            <input asp-for="City" type="text" class="form-input" placeholder="New York" required>
+                            @if (ViewBag?.WasSubmited == true)
+                            {
+                                <span asp-validation-for="City" class="field-error"></span>
+                            }
+                            <input asp-for="City" type="text" class="form-input" placeholder="New York"> @* required *@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Postal Code</label>
-                            <input asp-for="Postal" type="text" maxlength="7" minlength="7" class="form-input" placeholder="10001" required>
+                            @if (ViewBag?.WasSubmited == true)
+                            {
+                                <span asp-validation-for="Postal" class="field-error"></span>
+                            }
+                            <input asp-for="Postal" type="text" class="form-input" placeholder="10001"> @* maxlength="7" minlength="7"  required*@
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Country</label>
-                        <input asp-for="Country" type="text" class="form-input" placeholder="United States" required>
+                        @if (ViewBag?.WasSubmited == true)
+                        {
+                            <span asp-validation-for="Country" class="field-error"></span>
+                        }
+                        <input asp-for="Country" type="text" class="form-input" placeholder="United States"> @* required *@
                     </div>
                 }
                 else

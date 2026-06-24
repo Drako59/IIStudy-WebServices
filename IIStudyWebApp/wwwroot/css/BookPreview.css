@@ -1042,3 +1042,37 @@ button.btn-add-to-cart.purchased {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.review-locked-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    max-width: 360px;
+}
+
+.review-locked-icon {
+    width: 24px;
+    height: 24px;
+    stroke: #667eea;
+    fill: none;
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+.review-locked-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+
+.review-locked-text {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.4;
+}

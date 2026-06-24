@@ -19,6 +19,7 @@ namespace LLStudy_Models.Models
         public string OrderID { get { return orderID; } set { orderID = value; } }
 
         [Required]
+        [StringLength(maximumLength: 255, ErrorMessage = "Max Location Length is 255.")]
         public string Location { get { return location; } set { location = value; } }
         
         [Required]
@@ -34,11 +35,14 @@ namespace LLStudy_Models.Models
 
         [Postal(ErrorMessage = "Postal number isn't valid for ISRAEL.")]
         [Required]
+        [StringLength(maximumLength: 7, ErrorMessage = "Max postal Length is 7.")]
         public string Postal { get; set; }
 
         [Required]
+        [StringLength(maximumLength: 255, ErrorMessage = "Max country Length is 255.")]
         public string Country { get; set; }
         [Required]
+        [StringLength(maximumLength: 255, ErrorMessage = "Max city Length is 255.")]
         public string City { get; set; }
 
 

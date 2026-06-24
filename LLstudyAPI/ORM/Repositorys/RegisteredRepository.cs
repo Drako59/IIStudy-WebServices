@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
+using LLStudy_Models.ViewModels;
 
 
 namespace LLstudyWS.ORM
@@ -218,6 +219,34 @@ namespace LLstudyWS.ORM
                     return Convert.ToInt16(reader["IsExist"]) > 0;
                 }
                 return false;
+            }
+        }
+
+        public ProfileInfoViewModel NumberOfBooksInLibary(string registeredID)
+        {
+            string sql = $@"SELECT 
+                                *
+                                , (
+                                    SELECT COUNT(*)  FROM Orders INNER JOIN 
+                                        (
+                                            Orders_Books INNER JOIN Books ON Books.BookID = Orders_Books.BookID
+                                        ) ON Orders.OrderID = Orders_Books.OrderID
+                                    WHERE Orders.RegisteredID = Registereds.RegisteredID AND Books.IsOnline = True
+                                  ) AS [NumOfBooksInLibary]
+                                FROM Registereds
+                            WHERE RegisteredID = @RegisteredID";
+            this.helperOledb.AddParameter("@RegisteredID", registeredID);
+
+            using(IDataReader reader = this.helperOledb.Select(sql))
+            {
+                if (reader.Read())
+                {
+                    ProfileInfoViewModel model =  this.moderlRefCreator.CreateModel<ProfileInfoViewModel>(reader, exludes: new List<string>() {nameof(Registered.RegisteredSalt), nameof(Registered.Password) });
+                    model.Password = "NoneNone";
+                    model.RegisteredSalt = "None";
+                    return model;
+                }
+                return null;
             }
         }
 
