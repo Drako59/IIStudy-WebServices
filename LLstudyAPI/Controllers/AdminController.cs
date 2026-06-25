@@ -888,7 +888,7 @@ namespace LLstudyWS.Controllers
                 {
                     reg.Role = "Admin";
                     this.repositoryUOW.HelperOledb.OpenConnection();
-                    return this.repositoryUOW.RegisteredRepository.Update(reg);
+                    return this.repositoryUOW.RegisteredRepository.Update(reg, exludes: new List<string>() { nameof(Registered.Password), nameof(Registered.RegisteredSalt),nameof(Registered.Phone),nameof(Registered.IsBanned),nameof(Registered.Email),nameof(Registered.UserName)});
 
                 }
                 catch (Exception ex) 
@@ -910,7 +910,7 @@ namespace LLstudyWS.Controllers
                 {
                     reg.Role = "User";
                     this.repositoryUOW.HelperOledb.OpenConnection();
-                    return this.repositoryUOW.RegisteredRepository.Update(reg);
+                    return this.repositoryUOW.RegisteredRepository.Update(reg, exludes: new List<string>() { nameof(Registered.Password), nameof(Registered.RegisteredSalt), nameof(Registered.Phone), nameof(Registered.IsBanned), nameof(Registered.Email), nameof(Registered.UserName) });
 
                 }
                 catch (Exception ex)

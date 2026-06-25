@@ -29,6 +29,8 @@ namespace IIStudyDESKTOP.Pages
         private SignInViewModel SignInViewModel { get; set; } = new SignInViewModel();
         private MainWindow MainWindow { get; set; }
 
+        private bool isPasswordKeyDownEnabled = true;
+
         public LogInPageWindow()
         {
             InitializeComponent();
@@ -39,7 +41,7 @@ namespace IIStudyDESKTOP.Pages
 
         private void Password_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) this.LogInButton(sender, null);
+            if (e.Key == Key.Enter && this.isPasswordKeyDownEnabled) this.LogInButton(sender, null);
         }
 
         private bool CheckValidation()
@@ -59,12 +61,14 @@ namespace IIStudyDESKTOP.Pages
 
         private void LogInButton(object sender , RoutedEventArgs e)
         {
+            
             this.LogIn();
         }
 
         private async void LogIn()
         {
-
+            this.SignInButton.IsEnabled = false;
+            this.isPasswordKeyDownEnabled = false;
             this.SignInViewModel.Password = this.TxtPassword.Password;
 
             if (this.CheckValidation())
@@ -95,6 +99,9 @@ namespace IIStudyDESKTOP.Pages
                     {
                         this.ErrorMsg.Text = "User is banned.";
                         this.ErrorPanel.Visibility = Visibility.Visible;
+                        this.isPasswordKeyDownEnabled = true;
+                        this.SignInButton.IsEnabled = true;
+
                     }
                     else
                     {
@@ -105,6 +112,8 @@ namespace IIStudyDESKTOP.Pages
                         //            MessageBoxImage.Error);
                         this.ErrorMsg.Text = "Failed, wrong password / UserName / Email.";
                         this.ErrorPanel.Visibility = Visibility.Visible;
+                        this.isPasswordKeyDownEnabled = true;
+                        this.SignInButton.IsEnabled = true;
                     }
                 }
                 catch (Exception ex)
@@ -114,8 +123,15 @@ namespace IIStudyDESKTOP.Pages
                                     "Error",
                                     MessageBoxButton.OK,
                                     MessageBoxImage.Error);
+                    this.isPasswordKeyDownEnabled = true;
+                    this.SignInButton.IsEnabled = true;
+
                 }
+                
+                
             }
+            this.isPasswordKeyDownEnabled = true;
+            this.SignInButton.IsEnabled = true;
         }
 
         public void RequiredPassword(object sender, RoutedEventArgs e)

@@ -704,5 +704,29 @@ namespace LLstudyWS.Controllers
                 this.repositoryUOW.HelperOledb.CloseConnection();
             }
         }
+
+        [HttpPost]
+        public bool ChangePassword(ChangePasswordViewModel newPassword)
+        {
+            try
+            {
+                this.repositoryUOW.HelperOledb.OpenConnection();
+                Registered? reg = this.repositoryUOW.RegisteredRepository.GetByID(newPassword.RegisteredID);
+
+                if (reg == null)
+                    return false;
+
+                return this.repositoryUOW.RegisteredRepository.ChangePassword(reg,newPassword.NewPassword);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                this.repositoryUOW.HelperOledb.CloseConnection();
+            }
+        }
     }
 }

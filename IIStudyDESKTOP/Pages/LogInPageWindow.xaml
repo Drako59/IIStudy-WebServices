@@ -424,7 +424,7 @@
                     </Border>
 
                     <!-- Sign In button -->
-                    <Button Style="{StaticResource SignInBtn}" Margin="0,0,0,24" Click="LogInButton">
+                    <Button x:Name="SignInButton" Style="{StaticResource SignInBtn}" Margin="0,0,0,24" Click="LogInButton">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock x:Name="BtnText"
                                        Text="Sign In"

@@ -176,7 +176,7 @@ namespace IIStudyWebApp.Controllers
                 HttpContext.Session.SetString("RegisteredID", success.Data.RegisteredID);
                 return RedirectToAction("RegisteredHomePage", "Registered");
             }
-            else if (success.Success && success.Data.EmailAlreadyInUse && success.Data.UserNameAlreadyInUse)
+            else if (success.Success && (success.Data.EmailAlreadyInUse || success.Data.UserNameAlreadyInUse))
             {
                 ViewBag.WasSubmitted = true;
                 return View("ViewSignUpPage", success.Data);

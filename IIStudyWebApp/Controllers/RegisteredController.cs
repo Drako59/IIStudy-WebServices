@@ -15,6 +15,8 @@ using System.Text.Json;
 
 
 using static NuGet.Packaging.PackagingConstants;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.ComponentModel;
 
 namespace IIStudyWebApp.Controllers
 {
@@ -46,7 +48,7 @@ namespace IIStudyWebApp.Controllers
             return View(registered);
         }
         [HttpGet]
-        public async Task<IActionResult> Profile()
+        public async Task<IActionResult> Profile(bool? passwordChanged = null)
         {
             Registered registered = await GetRegisteredDeatils();
             if (registered == null)
@@ -71,6 +73,9 @@ namespace IIStudyWebApp.Controllers
             if (model == null)
                 return StatusCode(500);
             ViewBag.NumOfBooksInLibary = model.NumOfBooksInLibary;
+
+            ViewBag.PasswordChanged = passwordChanged;
+
             return View(model);
         }
 
@@ -784,9 +789,9 @@ namespace IIStudyWebApp.Controllers
             reg.RegisteredSalt = "None";
             reg.Role = "User";
             Registered registered = await this.GetRegisteredDeatils();
-            if (reg == null)
+            if (registered == null)
             {
-                return RedirectToAction("ViewExamYearsPage", "Guest");
+                return RedirectToAction("viewSignInPage", "Guest");
             }
 
             ViewData["Registered"] = registered;
@@ -802,8 +807,21 @@ namespace IIStudyWebApp.Controllers
                 return RedirectToAction("Profile");
             else
             {
+                ApiClient<ProfileInfoViewModel> client2 = new ApiClient<ProfileInfoViewModel>();
+                client2.Scheme = "http";
+                client2.Host = "localhost";
+                client2.Port = 5049;
+                client2.Path = "api/Registered/ProfilePageInfo";
+                client2.AddParameter("registeredID", registered.RegisteredID);
+
+                ProfileInfoViewModel model = await client2.GetAsync();
+
+                if (model == null)
+                    return StatusCode(500);
+                ViewBag.NumOfBooksInLibary = model.NumOfBooksInLibary;
+
                 ViewBag.ErrorStatus = success.Success? success.Data: null;
-                return View("Profile", reg);
+                return View("Profile", model);
             }
         }
 
@@ -852,6 +870,31 @@ namespace IIStudyWebApp.Controllers
 
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            Registered registered = await this.GetRegisteredDeatils();
+            if (registered == null)
+            {
+                return RedirectToAction("viewSignInPage", "Guest");
+            }
+
+            ViewData["Registered"] = registered;
+
+            model.RegisteredID = registered.RegisteredID;
+
+            ApiClient<bool> client = new ApiClient<bool>();
+            client.Path = "api/Registered/ChangePassword";
+
+            ApiResultModel<bool> result = await client.PostAsyncRet<ChangePasswordViewModel,bool>(model);
+
+            if(result != null && result.Success && result.Data)
+            {
+                return RedirectToAction("Profile", new { passwordChanged = true });
+            }
+            return RedirectToAction("Profile", new { passwordChanged = false });
+
+        }
 
 
 

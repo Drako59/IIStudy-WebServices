@@ -449,14 +449,28 @@
                                                     <ColumnDefinition Width="12"/>
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="12"/>
-                                                    <ColumnDefinition Width="80"/>
+
+                                                    <!-- FORMAT -->
+                                                    <ColumnDefinition Width="85"/>
                                                     <ColumnDefinition Width="12"/>
+
+                                                    <!-- SUBJECT -->
                                                     <ColumnDefinition Width="90"/>
                                                     <ColumnDefinition Width="12"/>
+
+                                                    <!-- REVIEWS / RATE / SOLD / STOCK -->
+                                                    <ColumnDefinition Width="130"/>
+                                                    <ColumnDefinition Width="12"/>
+
+                                                    <!-- PRICE -->
                                                     <ColumnDefinition Width="76"/>
                                                     <ColumnDefinition Width="12"/>
+
+                                                    <!-- STOCK BADGE -->
                                                     <ColumnDefinition Width="96"/>
                                                     <ColumnDefinition Width="12"/>
+
+                                                    <!-- ACTIONS -->
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
 
@@ -505,8 +519,71 @@
                                                                Margin="0,3,0,0"/>
                                                 </StackPanel>
 
-                                                <!-- Subject -->
                                                 <StackPanel Grid.Column="4" VerticalAlignment="Center">
+                                                    <TextBlock Text="FORMAT" Style="{StaticResource MetaLabel}"/>
+
+                                                    <Border CornerRadius="14"
+                                                            Padding="9,5"
+                                                            HorizontalAlignment="Left"
+                                                            BorderThickness="1">
+
+                                                        <Border.Style>
+                                                            <Style TargetType="Border">
+                                                                <!-- Default = PHYSICAL -->
+                                                                <Setter Property="Background" Value="#eef2ff"/>
+                                                                <Setter Property="BorderBrush" Value="#c7d2fe"/>
+
+                                                                <Style.Triggers>
+                                                                    <!-- Online / PDF style -->
+                                                                    <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                                                        <Setter Property="Background" Value="#fee2e2"/>
+                                                                        <Setter Property="BorderBrush" Value="#fecaca"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <!-- Icon -->
+                                                            <TextBlock FontSize="11" Margin="0,0,5,0">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Setter Property="Text" Value="📦"/>
+                                                                        <Setter Property="Foreground" Value="#4f46e5"/>
+
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                                                                <Setter Property="Text" Value="📄"/>
+                                                                                <Setter Property="Foreground" Value="#dc2626"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+
+                                                            <!-- Text -->
+                                                            <TextBlock FontSize="11"
+                                                                FontWeight="Bold">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Setter Property="Text" Value="Physical"/>
+                                                                        <Setter Property="Foreground" Value="#4f46e5"/>
+
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                                                                <Setter Property="Text" Value="PDF"/>
+                                                                                <Setter Property="Foreground" Value="#dc2626"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </StackPanel>
+
+                                                <!-- Subject -->
+                                                <StackPanel Grid.Column="6" VerticalAlignment="Center">
                                                     <TextBlock Text="SUBJECT" Style="{StaticResource MetaLabel}"/>
                                                     <TextBlock Text="{Binding Subject_name}"
                                                                Style="{StaticResource MetaValue}"/>
@@ -514,7 +591,7 @@
 
                                                 <!-- Reviews + Rating -->
 
-                                                <Grid Grid.Column="6" VerticalAlignment="Center">
+                                                <Grid Grid.Column="8" VerticalAlignment="Center">
 
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto"/>
@@ -561,11 +638,83 @@
 
                                                     <!-- SOLD (חדש) -->
                                                     <StackPanel Grid.Column="0" Grid.Row="2">
-                                                        <TextBlock Text="SOLD" Style="{StaticResource MetaLabel}"/>
-                                                        <TextBlock Text="{Binding SoldCount}"
-                                                                   FontSize="13"
-                                                                   FontWeight="Bold"
-                                                                   Foreground="#16a34a"/>
+                                                        <TextBlock Text="FILE" Style="{StaticResource MetaLabel}"/>
+
+                                                        <Border CornerRadius="14"
+                                                                Padding="9,5"
+                                                                HorizontalAlignment="Left"
+                                                                BorderThickness="1">
+
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+                                                                    <!-- Default: יש קובץ -->
+                                                                    <Setter Property="Background" Value="#dcfce7"/>
+                                                                    <Setter Property="BorderBrush" Value="#bbf7d0"/>
+
+                                                                    <Style.Triggers>
+                                                                        <!-- אם אין קובץ -->
+                                                                        <DataTrigger Binding="{Binding Pdf_url_book}" Value="None">
+                                                                            <Setter Property="Background" Value="#fee2e2"/>
+                                                                            <Setter Property="BorderBrush" Value="#fecaca"/>
+                                                                        </DataTrigger>
+
+                                                                        <DataTrigger Binding="{Binding Pdf_url_book}" Value="none">
+                                                                            <Setter Property="Background" Value="#fee2e2"/>
+                                                                            <Setter Property="BorderBrush" Value="#fecaca"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Border.Style>
+
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <!-- Icon -->
+                                                                <TextBlock FontSize="11" Margin="0,0,5,0">
+                                                                    <TextBlock.Style>
+                                                                        <Style TargetType="TextBlock">
+                                                                            <!-- Default: יש קובץ -->
+                                                                            <Setter Property="Text" Value="📄"/>
+                                                                            <Setter Property="Foreground" Value="#16a34a"/>
+
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding Pdf_url_book}" Value="None">
+                                                                                    <Setter Property="Text" Value="✖"/>
+                                                                                    <Setter Property="Foreground" Value="#dc2626"/>
+                                                                                </DataTrigger>
+
+                                                                                <DataTrigger Binding="{Binding Pdf_url_book}" Value="none">
+                                                                                    <Setter Property="Text" Value="✖"/>
+                                                                                    <Setter Property="Foreground" Value="#dc2626"/>
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </TextBlock.Style>
+                                                                </TextBlock>
+
+                                                                <!-- Text -->
+                                                                <TextBlock FontSize="11"
+                                                                           FontWeight="Bold">
+                                                                    <TextBlock.Style>
+                                                                        <Style TargetType="TextBlock">
+                                                                            <!-- Default: יש קובץ -->
+                                                                            <Setter Property="Text" Value="Has File"/>
+                                                                            <Setter Property="Foreground" Value="#16a34a"/>
+
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding Pdf_url_book}" Value="None">
+                                                                                    <Setter Property="Text" Value="No File"/>
+                                                                                    <Setter Property="Foreground" Value="#dc2626"/>
+                                                                                </DataTrigger>
+
+                                                                                <DataTrigger Binding="{Binding Pdf_url_book}" Value="none">
+                                                                                    <Setter Property="Text" Value="No File"/>
+                                                                                    <Setter Property="Foreground" Value="#dc2626"/>
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </TextBlock.Style>
+                                                                </TextBlock>
+                                                            </StackPanel>
+                                                        </Border>
                                                     </StackPanel>
 
                                                     <!-- מפריד -->
@@ -573,11 +722,25 @@
 
                                                     <!-- STOCK COUNT (חדש) -->
                                                     <StackPanel Grid.Column="2" Grid.Row="2">
+                                                        <StackPanel.Style>
+                                                            <Style TargetType="StackPanel">
+                                                                <!-- ברירת מחדל: לא מופיע -->
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+
+                                                                <Style.Triggers>
+                                                                    <!-- רק אם IsOnline == True -->
+                                                                    <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </StackPanel.Style>
+
                                                         <TextBlock Text="STOCK" Style="{StaticResource MetaLabel}"/>
                                                         <TextBlock Text="{Binding StockCount}"
-                                                                    FontSize="13"
-                                                                    FontWeight="Bold"
-                                                                    Foreground="#0ea5e9"/>
+                                                                   FontSize="13"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="#0ea5e9"/>
                                                     </StackPanel>
 
                                                 </Grid>
@@ -617,9 +780,9 @@
                                                 </StackPanel>-->
 
                                                 <!-- Price -->
-                                                <StackPanel Grid.Column="8" VerticalAlignment="Center">
+                                                <StackPanel Grid.Column="10" VerticalAlignment="Center">
                                                     <TextBlock Text="PRICE" Style="{StaticResource MetaLabel}"/>
-                                                    <TextBlock Text="{Binding Book_price, StringFormat=\{0:C\}}"
+                                                    <TextBlock Text="{Binding Book_price, StringFormat='₪ {0:N2}'}"
                                                                FontSize="14" FontWeight="ExtraBold">
                                                         <TextBlock.Foreground>
                                                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -631,7 +794,7 @@
                                                 </StackPanel>
 
                                                 <!-- Stock badge -->
-                                                <Border Grid.Column="10"
+                                                <Border Grid.Column="12"
                                                     CornerRadius="20"
                                                     Padding="10,5"
                                                     VerticalAlignment="Center"
@@ -680,7 +843,7 @@
                                                 </Border>
 
                                                 <!-- Actions -->
-                                                <StackPanel Grid.Column="12"
+                                                <StackPanel Grid.Column="14"
                                                             Orientation="Vertical"
                                                             VerticalAlignment="Center"
                                                             >

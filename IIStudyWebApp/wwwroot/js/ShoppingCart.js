@@ -132,9 +132,9 @@ function updateTotal() {
 
         const taxPay = document.querySelector(".tax-value");
 
-        sumPay.textContent = `$${sum.toFixed(2)}`;
-        taxPay.textContent = `$0.00`; //${(sum / 10).toFixed(2)}
-        totalPay.textContent = `$${(sum).toFixed(2)}`;// + (sum / 10)
+        sumPay.textContent = `₪${sum.toFixed(2)}`;
+        taxPay.textContent = `₪0.00`; //${(sum / 10).toFixed(2)}
+        totalPay.textContent = `₪${(sum).toFixed(2)}`;// + (sum / 10)
 
     }
     catch (err) {

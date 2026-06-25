@@ -82,7 +82,7 @@ namespace IIStudyDESKTOP.WindowsPages
             client.Path = "api/Admin/GetRegisteredReviews";
             client.AddParameter("registeredID", this.reg.RegisteredID);
             this.regComments = await client.GetAsync();
-            if (!this.regComments.Any()) return;
+            if (this.regComments == null || !this.regComments.Any()) return;
             TxtReviewCount.Text = this.regComments.Count.ToString();
             EmptyReviews.Visibility = this.regComments.Count == 0
                 ? Visibility.Visible : Visibility.Collapsed;

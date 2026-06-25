@@ -252,13 +252,13 @@ namespace LLstudyWS.ORM
 
         }
 
-        protected int GetRandomNumber()
+        public int GetRandomNumber()
         {
             Random random = new Random();
             return random.Next(8, 16);
         }
         
-        protected string GetHash(string password, string salt)
+        public string GetHash(string password, string salt)
         {
             string combine = password + salt;
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(combine);
@@ -269,7 +269,7 @@ namespace LLstudyWS.ORM
             }
         }
 
-        private string GetSalt(int length)
+        public string GetSalt(int length)
         {
             byte[] bytes = new byte[length];
             RandomNumberGenerator.Fill(bytes);

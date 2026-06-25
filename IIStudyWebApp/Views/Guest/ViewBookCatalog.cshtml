@@ -141,7 +141,7 @@
             <div class="price-inputs">
 
                 <div class="price-input-wrapper">
-                    <span>$</span>
+                    <span>₪</span>
 
                     <input type="number"
                            name="minPrice"
@@ -155,7 +155,7 @@
                 <span class="price-divider">—</span>
 
                 <div class="price-input-wrapper">
-                    <span>$</span>
+                    <span>₪</span>
 
                     <input type="number"
                            name="maxPrice"
@@ -324,7 +324,7 @@
                                 }
                             </div>
                             <p class="book-author">@book.Author_name</p>
-                            <p class="book-price">$@book.Book_price</p>
+                            <p class="book-price">₪@book.Book_price</p>
                                 <button class="add-to-cart" onclick="window.location.href='@(Url.Action("viewSignInPage", "Guest"))';">
                                 @* <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
                                     <circle cx="9" cy="21" r="1"></circle>
@@ -372,7 +372,7 @@
                                     
                                 </div>
                                 <p class="book-author">@book.Author_name</p>
-                                <p class="book-price">$@book.Book_price</p>
+                                <p class="book-price">₪@book.Book_price</p>
                                 <button class="add-to-cart error" disabled onclick="window.location.href='@(Url.Action("viewSignInPage", "Guest"))';">
                                     @* <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
                                     <circle cx="9" cy="21" r="1"></circle>

@@ -36,3 +36,11 @@ document.addEventListener("keydown", function (event) {
         closeUpdatePopup();
     }
 });
+
+function openChangePasswordPopup() {
+    document.getElementById("changePasswordPopup").classList.add("active");
+}
+
+function closeChangePasswordPopup() {
+    document.getElementById("changePasswordPopup").classList.remove("active");
+}

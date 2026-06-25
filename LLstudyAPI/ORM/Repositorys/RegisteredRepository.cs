@@ -250,6 +250,15 @@ namespace LLstudyWS.ORM
             }
         }
 
+        public bool ChangePassword(Registered reg, string newPassword)
+        {
+            string newSalt = this.GetSalt(this.GetRandomNumber());
+            string newHash = this.GetHash(newPassword, newSalt);
+            reg.RegisteredSalt = newSalt;
+            reg.Password = newHash;
+            return this.Update(reg, exludes: new List<string>() { nameof(Registered.IsBanned), nameof(Registered.Role), nameof(Registered.UserName), nameof(Registered.Birth), nameof(Registered.Email), nameof(Registered.Phone), nameof(Registered.ImagePath) });
+        }
+
         //public override Registered GetByID(string UserName)
         //{
         //    string sql = "SELECT * FROM Registereds WHERE UserName = @UserName";

@@ -35,8 +35,8 @@ namespace LLstudyWS.ORM
         {
             List<RegisteredComments> regReviews = new List<RegisteredComments>();
             string sql = @$"SELECT  Books.BookID  AS [BookID], * 
-                                    ,(SELECT COUNT(*) FROM Likes WHERE ReviewID = Reviews.ReviewID AND Dislike = True) AS [Dislikes]
-                                    ,(SELECT COUNT(*) FROM Likes WHERE ReviewID = Reviews.ReviewID AND [Like] = True) AS [LikesCount]
+                                    ,(SELECT COUNT(*) FROM Likes WHERE ReviewID = Reviews.ReviewID AND IsDislike = True) AS [Dislikes]
+                                    ,(SELECT COUNT(*) FROM Likes WHERE ReviewID = Reviews.ReviewID AND [IsLike] = True) AS [LikesCount]
                                     FROM Reviews
                                     INNER JOIN ( Books
 

@@ -73,7 +73,7 @@
                                 </svg>
                                 @Model.Order.Total_price
                             </div>
-                            <div class="info-item-value price" id="totalPrice">$@Model.Order.Total_price</div>
+                            <div class="info-item-value price" id="totalPrice">₪@Model.Order.Total_price</div>
                         </div>
 
                         <div class="info-item">
@@ -250,20 +250,20 @@
                     <h3 class="section-title">Price Summary</h3>
                     <div class="summary-row">
                         <span class="summary-label">Subtotal</span>
-                        <span class="summary-value">$@Model.Order.Total_price</span>
+                        <span class="summary-value">₪@Model.Order.Total_price</span>
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">Shipping</span>
-                        <span class="summary-value">$0.00</span>
+                        <span class="summary-value">₪0.00</span>
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">Tax (0%)</span>
-                        <span class="summary-value">$0.00</span>
+                        <span class="summary-value">₪0.00</span>
                     </div>
                     <div class="summary-divider"></div>
                     <div class="total-row">
                         <span class="total-label">Total Price</span>
-                        <span class="total-value">$@Model.Order.Total_price</span>
+                        <span class="total-value">₪@Model.Order.Total_price</span>
                     </div>
                 </div>
 
@@ -299,7 +299,7 @@
                                         <div class="book-row-title">@book.Book_name</div>
                                         <div class="book-row-author">by @book.Author_name</div>
                                         <div class="book-row-meta">
-                                            <span class="book-row-tag ${formatClass}">
+                                            <span class="book-row-tag @(book.IsOnline ? "format-pdf" : "format-physical")">
                                                 <svg viewBox="0 0 24 24">
                                                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                                     <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -327,10 +327,10 @@
                                         </div>
                                     </div>
                                     <div class="book-row-price-col">
-                                        <div class="book-row-price">$@book.Book_price</div>
+                                        <div class="book-row-price">₪@book.Book_price</div>
                                         @if(!book.IsOnline)
-                                        { 
-                                            <div class="book-row-qty">x@(book.Amount) = $@(Math.Round(book.Book_price * book.Amount,3))</div>
+                                        {
+                                            <div class="book-row-qty">x@(book.Amount) = ₪@(Math.Round(book.Book_price * book.Amount, 3))</div>
                                         }
                                     </div>
                                 </div>

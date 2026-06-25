@@ -57,9 +57,40 @@
 
         <!-- Upcoming Events List -->
         <div class="events-list-section">
-            <h2 class="section-title">Upcoming Events</h2>
+            <h2 class="section-title">Events This Month</h2>
             <div id="eventsList">
                 <!-- Events will be dynamically loaded -->
+            </div>
+        </div>
+    </div>
+</div>
+<div id="eventPopup" class="event-popup-overlay">
+    <div class="event-popup-box">
+        <button type="button" class="event-popup-close" onclick="closeEventPopup()">×</button>
+
+        <div class="event-popup-header">
+            <div class="event-popup-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M8 7V3"></path>
+                    <path d="M16 7V3"></path>
+                    <path d="M4 11H20"></path>
+                    <rect x="4" y="5" width="16" height="16" rx="2"></rect>
+                </svg>
+            </div>
+
+            <h2 id="popupEventName">Event Name</h2>
+            <p id="popupEventDate">Event Date</p>
+        </div>
+
+        <div class="event-popup-content">
+            <div class="event-popup-row">
+                <span class="event-popup-label">Event ID</span>
+                <span class="event-popup-value" id="popupEventID"></span>
+            </div>
+
+            <div class="event-popup-row details-row">
+                <span class="event-popup-label">Details</span>
+                <p class="event-popup-details" id="popupEventDetails"></p>
             </div>
         </div>
     </div>

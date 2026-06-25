@@ -29,6 +29,18 @@
         error = new UpdateProfileResult();
 }
 
+@{
+    bool? changedPassword = null;
+
+    if (ViewBag.PasswordChanged != null)
+    {
+        bool parsedValue;
+        if (bool.TryParse(ViewBag.PasswordChanged.ToString(), out parsedValue))
+        {
+            changedPassword = parsedValue;
+        }
+    }
+}
 
 <link href="../Css/profile.css" rel="stylesheet" />
 <div class="content-wrapper">
@@ -91,14 +103,20 @@
                     Edit Profile
                 </button>
 
-                <a href="@Url.Action("ChangePasswordPage", "Registered")" class="profile-action-btn secondary">
+                <button type="button" class="profile-action-btn secondary" onclick="openChangePasswordPopup()">
                     Change Password
-                </a>
+                </button>
             </div>
         </div>
 
         <!-- Profile Body -->
         <div class="profile-body">
+            @if (changedPassword == true)
+            {
+                <div class="password-success-message">
+                    Password changed successfully.
+                </div>
+            }
             <div class="info-grid">
                 <div class="info-item">
                     <div class="info-icon">
@@ -253,6 +271,39 @@
         </form>
     </div>
 </div>
+
+<div id="changePasswordPopup" class="popup-overlay">
+    <div class="popup-box">
+        <button type="button" class="popup-close" onclick="closeChangePasswordPopup()">×</button>
+
+        <div class="popup-header">
+            <h2>Change Password</h2>
+            <p>Enter your new password.</p>
+        </div>
+
+        <form asp-action="ChangePassword" asp-controller="Registered" method="post" class="update-profile-form">
+            @Html.AntiForgeryToken()
+
+            @if (changedPassword == false)
+            {
+                <div class="password-error-message">
+                    Password was not changed. Please try again with atleast 8 characters.
+                </div>
+            }
+
+            <div class="form-row">
+                <label>New Password</label>
+                <input name="newPassword" type="password" required placeholder="Enter new password" />
+                <input name="RegisteredID" type="hidden" value="0" />
+            </div>
+
+            <div class="popup-buttons">
+                <button type="button" class="cancel-btn" onclick="closeChangePasswordPopup()">Cancel</button>
+                <button type="submit" class="save-btn">Change Password</button>
+            </div>
+        </form>
+    </div>
+</div>
     
 <script src="~/js/profile.js"></script>
 @if (!ViewData.ModelState.IsValid || (ViewBag.ErrorStatus != null && (ViewBag.ErrorStatus.UserNameIsTaken || ViewBag.ErrorStatus.EmailIsTaken)))
@@ -261,4 +312,11 @@
         openUpdatePopup();
     </script>
 
+}
+
+@if (changedPassword == false)
+{
+    <script>
+        openChangePasswordPopup();
+    </script>
 }

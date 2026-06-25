@@ -114,7 +114,7 @@
             <div class="price-inputs">
 
                 <div class="price-input-wrapper">
-                    <span>$</span>
+                    <span>₪</span>
 
                     <input type="number"
                            name="minPrice"
@@ -127,7 +127,7 @@
                 <span class="price-divider">—</span>
 
                 <div class="price-input-wrapper">
-                    <span>$</span>
+                    <span>₪</span>
 
                     <input type="number"
                            name="maxPrice"
@@ -282,7 +282,7 @@
                                     }
                                 </div>
                                 <p class="book-author">@book.Author_name</p>
-                                <p class="book-price">$@book.Book_price</p>
+                                <p class="book-price">₪@book.Book_price</p>
                                 <button class="add-to-cart @(Model.OwnedOnlineBooksIDs.Contains(book.BookID) ? "purchased" : isInCart ? "in-cart" : "")" id="book-@book.BookID"
                                         @((isPurchased || isInCart) ? "disabled" : "")
                                         onclick="@((isPurchased || isInCart) ? "" : $"AddToCart({book.BookID})")">
@@ -335,7 +335,7 @@
                                     }
                                 </div>
                                 <p class="book-author">@book.Author_name</p>
-                                <p class="book-price">$@book.Book_price</p>
+                                <p class="book-price">₪@book.Book_price</p>
                                 <button class="add-to-cart error" id="book-@book.BookID" disabled onclick="AddToCart(@book.BookID)">
                                     @* <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: currentColor; fill: none;">
                                     <circle cx="9" cy="21" r="1"></circle>

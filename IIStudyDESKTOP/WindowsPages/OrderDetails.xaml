@@ -200,7 +200,7 @@
                                 <TextBlock Text="TOTAL PRICE" Style="{StaticResource InfoLabel}"/>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="💰 " FontSize="14"/>
-                                    <TextBlock x:Name="TxtTotalPrice" Text="{Binding Total_price}"
+                                    <TextBlock x:Name="TxtTotalPrice" Text="{Binding Total_price, StringFormat='₪ {0:N2}'}"
                                                FontSize="18" FontWeight="ExtraBold">
                                         <TextBlock.Foreground>
                                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
