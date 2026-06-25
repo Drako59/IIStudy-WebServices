@@ -218,6 +218,29 @@
             </label>
 
         </div>
+         <!-- Physical Books -->
+        <div class="filter-group">
+
+            <label class="filter-option">
+
+                <input type="checkbox"
+                       name="isPhysical"
+                       asp-for="IsPhysical">
+
+                <span class="filter-option-checkbox">
+                    ✓
+                </span>
+
+                <span class="filter-option-information">
+                    <strong>Physical Books</strong>
+                    <small>Show Physical books only</small>
+                </span>
+
+                <span class="filter-option-dot online-dot"></span>
+
+            </label>
+
+        </div>
 
          <input type="hidden" name="search" asp-for="Search"/>
 
