@@ -44,3 +44,13 @@ function openChangePasswordPopup() {
 function closeChangePasswordPopup() {
     document.getElementById("changePasswordPopup").classList.remove("active");
 }
+
+function toggleNewPassword() {
+    const passwordInput = document.getElementById("newPasswordInput");
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+    } else {
+        passwordInput.type = "password";
+    }
+}

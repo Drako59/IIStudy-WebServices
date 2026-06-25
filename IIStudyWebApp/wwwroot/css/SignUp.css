@@ -276,3 +276,29 @@
         transform: translateY(0);
     }
 }
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-input {
+    padding-right: 48px;
+}
+
+.show-password-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+    color: #667eea;
+    padding: 4px;
+}
+
+    .show-password-btn:hover {
+        transform: translateY(-50%) scale(1.1);
+    }

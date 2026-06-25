@@ -341,7 +341,7 @@ namespace IIStudyWebApp.Controllers
 
             if (registered == null)
             {
-                return RedirectToAction("ViewBookPreview", "Guest");
+                return RedirectToAction("ViewBookCatalog", "Guest");
             }
             
             ApiClient<ViewRegisterdBookCatalogModel> client = new ApiClient<ViewRegisterdBookCatalogModel>();

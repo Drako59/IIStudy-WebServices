@@ -105,7 +105,7 @@ namespace LLstudyWS.ORM
                                         INNER JOIN Orders ON Orders.orderID = Orders_Books.OrderID
                                     ) ON Books.bookID = Orders_Books.BookID
                                 WHERE
-                                    Orders.RegisteredID = @RegisteredID AND Books.BookID = @BookID";
+                                    Orders.RegisteredID = @RegisteredID AND Books.BookID = @BookID AND Orders.DeliveryStatus <> {(int)OrderStatus.Refund} AND Orders.DeliveryStatus <> {(int)OrderStatus.Canceled}";
 
             this.helperOledb.AddParameter("@RegisteredID", registeredID);
             this.helperOledb.AddParameter("@BookID", bookID);

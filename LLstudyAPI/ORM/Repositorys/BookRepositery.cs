@@ -535,7 +535,7 @@ namespace LLstudyWS.ORM
                                           Orders_Books INNER JOIN Orders 
                                           ON Orders_Books.OrderID = Orders.OrderID
                                           ) ON Books.BookID = Orders_Books.BookID
-                                    WHERE Orders.RegisteredID = @RegisteredID AND IsOnline = True;
+                                    WHERE Orders.RegisteredID = @RegisteredID AND IsOnline = True AND Orders.DeliveryStatus <> {(int)OrderStatus.Refund} AND Orders.DeliveryStatus <> {(int)OrderStatus.Canceled};
                                     ";
 
             this.helperOledb.AddParameter("@RegisteredID", registeredID);
@@ -578,7 +578,7 @@ namespace LLstudyWS.ORM
                                             Orders_Books INNER JOIN Orders
                                             ON Orders_Books.OrderID = Orders.OrderID
                                             ) ON Books.BookID = Orders_Books.BookID
-                                        WHERE Orders.RegisteredID = @RegisteredID AND Books.BookID = @BookID AND IsOnline = True;
+                                        WHERE Orders.RegisteredID = @RegisteredID AND Books.BookID = @BookID AND IsOnline = True AND Orders.DeliveryStatus <> {(int)OrderStatus.Refund} AND Orders.DeliveryStatus <> {(int)OrderStatus.Canceled};
                                             ";
 
 

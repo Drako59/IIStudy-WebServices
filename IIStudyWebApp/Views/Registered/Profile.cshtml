@@ -293,7 +293,20 @@
 
             <div class="form-row">
                 <label>New Password</label>
-                <input name="newPassword" type="password" required placeholder="Enter new password" />
+
+                <div class="password-wrapper">
+                    <input name="newPassword"
+                           id="newPasswordInput"
+                           type="password"
+                           required
+                           class="password-input"
+                           placeholder="Enter new password" />
+
+                    <button type="button" class="show-password-btn" onclick="toggleNewPassword()">
+                        👁
+                    </button>
+                </div>
+
                 <input name="RegisteredID" type="hidden" value="0" />
             </div>
 

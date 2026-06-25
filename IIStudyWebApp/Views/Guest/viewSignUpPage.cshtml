@@ -40,12 +40,24 @@
             </div>
 
             <div class="form-group">
-                    @if (ViewBag.WasSubmitted == true)
-                    {
-                        <span asp-validation-for="Password" class="field-error"></span>
-                    }
-                    <label class="form-label" for="password">Password</label>
-                    <input asp-for="Password" type="password"  id="password" class="form-input" placeholder="Create a strong password">
+                @if (ViewBag.WasSubmitted == true)
+                {
+                    <span asp-validation-for="Password" class="field-error"></span>
+                }
+
+                <label class="form-label" for="password">Password</label>
+
+                <div class="password-wrapper">
+                    <input asp-for="Password"
+                            type="password"
+                            id="password"
+                            class="form-input password-input"
+                            placeholder="Create a strong password">
+
+                    <button type="button" class="show-password-btn" onclick="togglePassword()">
+                        👁
+                    </button>
+                </div>
             </div>
 
             <div class="form-group">
@@ -96,3 +108,14 @@
     </form>
 </main>
 
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById("password");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+</script>
